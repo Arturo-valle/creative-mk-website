@@ -1,0 +1,31 @@
+/* ============================================
+   FAQ Section
+   ============================================ */
+
+.faq {
+  padding-block: var(--space-section);
+}
+
+.faq__header {
+  margin-bottom: var(--space-12);
+}
+
+.faq__title {
+  font-size: clamp(var(--text-3xl), 3vw, var(--text-5xl));
+  font-weight: var(--weight-bold);
+  letter-spacing: var(--tracking-tight);
+}
+
+.faq__list {
+  max-width: 900px;
+}
+
+/* Reuses .accordion-item styles from capabilities.css */
+.faq .accordion-content__inner {
+  grid-template-columns: 1fr;
+  max-width: 700px;
+}
+
+.faq .accordion-text {
+  max-width: 100%;
+}

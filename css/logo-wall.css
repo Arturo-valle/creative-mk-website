@@ -1,0 +1,80 @@
+/* ============================================
+   Logo Wall / Clients
+   ============================================ */
+
+.logo-wall {
+  padding-block: var(--space-section);
+  background-color: var(--color-gray-50);
+}
+
+.logo-wall__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-12);
+}
+
+.logo-wall__title {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-wider);
+  color: var(--color-text-muted);
+}
+
+.logo-wall__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--space-8);
+  align-items: center;
+  justify-items: center;
+}
+
+.logo-wall__item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-4);
+  opacity: 0.5;
+  filter: grayscale(100%);
+  transition: opacity var(--duration-normal) var(--ease-out),
+              filter var(--duration-normal) var(--ease-out);
+}
+
+.logo-wall__item:hover {
+  opacity: 1;
+  filter: grayscale(0%);
+}
+
+.logo-wall__item img {
+  max-height: 36px;
+  width: auto;
+  max-width: 120px;
+  object-fit: contain;
+}
+
+.logo-wall__item svg {
+  max-height: 36px;
+  width: auto;
+  max-width: 120px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 768px) {
+  .logo-wall__grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+  }
+
+  .logo-wall__header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-wall__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}

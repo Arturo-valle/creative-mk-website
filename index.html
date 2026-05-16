@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CREATIVE MK | Digital Marketing & Design Agency</title>
+  <meta name="description" content="CREATIVE MK is a technology-driven digital marketing agency specialized in creating modern digital systems to help businesses grow, sell more and position themselves online.">
+  <!-- Open Graph -->
+  <meta property="og:title" content="CREATIVE MK | Digital Marketing & Design Agency">
+  <meta property="og:description" content="We create modern digital systems to help businesses grow.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://creativemk.com">
+  <meta property="og:site_name" content="CREATIVE MK">
+  <meta property="og:image" content="Logos/logo-dark.png">
+  <!-- Twitter Cards -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="CREATIVE MK | Digital Marketing & Design Agency">
+  <meta name="twitter:description" content="We create modern digital systems to help businesses grow.">
+  <meta name="twitter:image" content="Logos/logo-dark.png">
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/reset.css">
+  <link rel="stylesheet" href="css/global.css">
+  <link rel="stylesheet" href="css/header.css">
+  <link rel="stylesheet" href="css/hero.css">
+  <link rel="stylesheet" href="css/capabilities.css">
+  <link rel="stylesheet" href="css/logo-wall.css">
+  <link rel="stylesheet" href="css/work-grid.css">
+  <link rel="stylesheet" href="css/about.css">
+  <link rel="stylesheet" href="css/news.css">
+  <link rel="stylesheet" href="css/faq.css">
+  <link rel="stylesheet" href="css/footer.css">
+</head>
+<body>
+
+  <!-- Skip Navigation (Accessibility) -->
+  <a href="#main-content" class="skip-nav">Skip to content</a>
+
+  <!-- ========== HEADER ========== -->
+  <header class="header" id="header">
+    <div class="header__inner">
+      <a href="/" class="header__logo">
+        <img src="Logos/logo-dark.png" alt="CREATIVE MK" id="header-logo">
+      </a>
+      <nav class="header__nav" id="main-nav" aria-label="Main navigation">
+        <a href="#work" class="header__nav-link" data-i18n="nav.work">Work</a>
+        <a href="#clients" class="header__nav-link" data-i18n="nav.clients">Clients</a>
+        <div class="header__dropdown">
+          <button class="header__dropdown-trigger" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav.services">Services</span>
+            <svg class="header__dropdown-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="header__dropdown-menu" role="menu">
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.webDesign">Web Design</a>
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.landingPages">Landing Pages</a>
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.salesFunnels">Sales Funnels</a>
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.metaAds">Meta Ads</a>
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.branding">Branding</a>
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.appDev">App Development</a>
+            <a href="#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.allServices">All Services</a>
+          </div>
+        </div>
+        <a href="#about" class="header__nav-link" data-i18n="nav.about">About</a>
+        <a href="#news" class="header__nav-link" data-i18n="nav.blog">Blog</a>
+      </nav>
+      <div class="header__right">
+        <div class="lang-switch" id="lang-switch">
+          <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
+          <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Español">ES</button>
+        </div>
+        <a href="#contact" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
+      </div>
+      <button class="header__menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <nav class="header__mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="#work" class="header__mobile-nav-link" data-i18n="nav.work">Work</a>
+      <a href="#clients" class="header__mobile-nav-link" data-i18n="nav.clients">Clients</a>
+      <a href="#capabilities" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
+      <a href="#about" class="header__mobile-nav-link" data-i18n="nav.about">About</a>
+      <a href="#news" class="header__mobile-nav-link" data-i18n="nav.blog">Blog</a>
+      <a href="#contact" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
+      <div class="lang-switch" style="margin-top:auto;">
+        <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
+        <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Español">ES</button>
+      </div>
+    </nav>
+  </header>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main id="main-content">
+
+  <!-- ========== HERO ========== -->
+  <section class="hero section" id="hero">
+    <div class="container">
+      <h1 class="hero__title" id="hero-title" data-i18n="hero.title">
+        CREATIVE MK is a technology-driven digital marketing agency building modern digital systems
+      </h1>
+    </div>
+  </section>
+
+  <!-- ========== CAPABILITIES / SERVICES ========== -->
+  <section class="capabilities section" id="capabilities">
+    <div class="container">
+      <p class="capabilities__intro reveal" data-i18n="capabilities.intro">
+        We specialize in creating comprehensive digital solutions that help businesses grow, sell more and establish a powerful online presence.
+      </p>
+      <div class="capabilities__list" id="capabilities-list" role="region" aria-label="Services">
+        <!-- Items generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LOGO WALL ========== -->
+  <section class="logo-wall section" id="clients">
+    <div class="container">
+      <div class="logo-wall__header reveal">
+        <span class="logo-wall__title" data-i18n="clients.title">Trusted by innovative brands</span>
+        <a href="#capabilities" class="link-arrow" data-i18n="clients.viewAll">View our clients</a>
+      </div>
+      <div class="logo-wall__grid" id="logo-grid">
+        <!-- Logos generated by JS with SVG placeholders -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WORK / PORTFOLIO ========== -->
+  <section class="work section" id="work">
+    <div class="container">
+      <div class="work__header reveal">
+        <h2 class="work__title" data-i18n="work.title">Selected Work</h2>
+        <a href="#work" class="link-arrow" data-i18n="work.viewAll">View all work</a>
+      </div>
+      <div class="work__grid" id="work-grid">
+        <!-- Cards generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="about__content reveal">
+        <h2 class="about__title" data-i18n="about.title">We transform businesses through digital innovation</h2>
+        <div>
+          <p class="about__text" data-i18n="about.text">CREATIVE MK is a technology-driven digital marketing agency specialized in creating modern digital systems to help businesses grow, sell more and position themselves online.</p>
+          <a href="#capabilities" class="link-arrow" data-i18n="about.viewServices">View our services</a>
+        </div>
+      </div>
+    </div>
+    <div class="about__carousel">
+      <div class="about__carousel-track" id="carousel-track">
+        <!-- Carousel items generated by JS -->
+      </div>
+    </div>
+    <div class="container">
+      <div class="about__bottom reveal">
+        <p class="about__bottom-text" data-i18n="about.bottomText">Our team combines creativity with cutting-edge technology to deliver results that matter. From branding to full-stack development, we are your partner in digital growth.</p>
+        <a href="#contact" class="link-arrow" data-i18n="about.learnMore">Learn about CREATIVE MK</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURED NEWS ========== -->
+  <section class="news section" id="news">
+    <div class="container">
+      <div class="news__header reveal">
+        <h2 class="news__title" data-i18n="news.title">Featured News</h2>
+        <a href="#news" class="link-arrow text-white" data-i18n="news.visitBlog">Visit blog</a>
+      </div>
+      <div class="news__grid" id="news-grid">
+        <!-- News cards generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="faq__header reveal">
+        <h2 class="faq__title" data-i18n="faq.title">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq__list" id="faq-list" role="region" aria-label="FAQ">
+        <!-- FAQ items generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  </main>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer__cta reveal">
+        <p class="footer__cta-label" data-i18n="footer.ctaLabel">Start a project</p>
+        <a href="mailto:hello@creativemk.com" class="footer__cta-title" data-i18n="footer.ctaTitle">Let's Talk</a>
+      </div>
+      <div class="footer__contact">
+        <div class="footer__contact-item">
+          <span class="footer__contact-label" data-i18n="footer.emailLabel">New Business</span>
+          <a href="mailto:hello@creativemk.com" class="footer__contact-value">hello@creativemk.com</a>
+        </div>
+        <div class="footer__contact-item">
+          <span class="footer__contact-label" data-i18n="footer.phoneLabel">Call Us</span>
+          <a href="tel:+1234567890" class="footer__contact-value">+1 (234) 567-890</a>
+        </div>
+      </div>
+      <div class="footer__main">
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.navigation">Navigation</h4>
+          <ul class="footer__nav-list">
+            <li><a href="#work" class="footer__nav-link" data-i18n="nav.work">Work</a></li>
+            <li><a href="#clients" class="footer__nav-link" data-i18n="nav.clients">Clients</a></li>
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.services">Services</a></li>
+            <li><a href="#about" class="footer__nav-link" data-i18n="nav.about">About</a></li>
+            <li><a href="#news" class="footer__nav-link" data-i18n="nav.blog">Blog</a></li>
+            <li><a href="#contact" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.services">Services</h4>
+          <ul class="footer__nav-list">
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.webDesign">Web Design</a></li>
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.landingPages">Landing Pages</a></li>
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.salesFunnels">Sales Funnels</a></li>
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.metaAds">Meta Ads</a></li>
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.branding">Branding</a></li>
+            <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.uxui">UX/UI Design</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.office">Office</h4>
+          <div class="footer__offices">
+            <div class="footer__office">
+              <span class="footer__office-city">CREATIVE MK HQ</span>
+              <span class="footer__office-address" data-i18n="footer.address">Digital-first agency<br>Available worldwide</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.stayUpdated">Stay Updated</h4>
+          <div class="footer__newsletter">
+            <p class="footer__newsletter-text" data-i18n="footer.newsletterText">Subscribe to our newsletter for the latest insights on digital marketing and design.</p>
+            <form class="footer__newsletter-form" id="newsletter-form">
+              <input type="email" class="footer__newsletter-input" placeholder="Your email" data-i18n-placeholder="footer.emailPlaceholder" required>
+              <button type="submit" class="footer__newsletter-btn" data-i18n="footer.subscribe">Subscribe</button>
+            </form>
+            <p class="footer__newsletter-success" id="newsletter-success" hidden>✓ <span data-i18n="footer.subscribeSuccess">Thanks for subscribing!</span></p>
+            <div class="footer__social">
+              <a href="#" class="footer__social-link" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>
+              <a href="#" class="footer__social-link" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg></a>
+              <a href="#" class="footer__social-link" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg></a>
+              <a href="#" class="footer__social-link" aria-label="TikTok"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/></svg></a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 CREATIVE MK. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <div class="footer__legal">
+          <a href="#" class="footer__legal-link" data-i18n="footer.privacy">Privacy Policy</a>
+          <a href="#" class="footer__legal-link" data-i18n="footer.terms">Terms of Service</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="js/i18n.js"></script>
+  <script src="js/accordion.js"></script>
+  <script src="js/animations.js"></script>
+  <script src="js/header.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
