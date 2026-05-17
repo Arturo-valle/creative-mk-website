@@ -1,22 +1,31 @@
 /* ============================================
-   Hero Section
+   Hero Section — Vertical Layout with Full-Width Video
+   Inspired by Clay.global's panoramic hero layout
    ============================================ */
 
 .hero {
-  padding-top: calc(var(--header-height) + var(--space-20));
+  padding-top: calc(var(--header-height) + var(--space-12));
   padding-bottom: var(--space-section);
-  min-height: 70vh;
+}
+
+/* Vertical stack: text on top, video below */
+.hero__container {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+/* ---- Text Block ---- */
+.hero__text {
+  max-width: 900px;
+  text-align: left;
 }
 
 .hero__title {
-  font-size: var(--text-hero);
+  font-size: clamp(var(--text-3xl), 4.5vw, var(--text-5xl));
   font-weight: var(--weight-bold);
   line-height: var(--leading-tight);
   letter-spacing: var(--tracking-tight);
-  color: var(--color-black);
-  max-width: 1100px;
 }
 
 .hero__title .word {
@@ -27,21 +36,127 @@
 }
 
 @keyframes wordFadeIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ---- Video Block — Full-Width Panoramic ---- */
+.hero__visual {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hero__video {
+  width: 100%;
+  max-width: none;
+  border-radius: 16px;
+  object-fit: cover;
+  aspect-ratio: 16 / 9;
+  display: block;
+}
+
+/* ---- Play Showreel Button ---- */
+.hero__play-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: #1a1a1a;
+  letter-spacing: 0.02em;
+  transition: all 0.35s var(--ease-out);
+  z-index: 2;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12);
+}
+
+.hero__play-btn:hover {
+  background: #ffffff;
+  transform: translate(-50%, -50%) scale(1.06);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+}
+
+.hero__play-btn svg {
+  width: 18px;
+  height: 18px;
+  fill: #1a1a1a;
+  flex-shrink: 0;
+}
+
+/* Active state: when sound is playing */
+.hero__play-btn--active {
+  background: rgba(10, 10, 10, 0.88);
+  color: #ffffff;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.25);
+}
+
+.hero__play-btn--active svg {
+  fill: #ffffff;
+}
+
+.hero__play-btn--active:hover {
+  background: rgba(10, 10, 10, 0.95);
+}
+
+/* Pulse animation when sound is blocked by browser */
+.hero__play-btn--pulse {
+  animation: soundPulse 2s ease-in-out infinite;
+}
+
+@keyframes soundPulse {
+  0%, 100% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); }
+  50% { box-shadow: 0 4px 20px rgba(0, 0, 0, 0.22), 0 0 0 6px rgba(0, 0, 0, 0.06); }
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 1024px) {
+  .hero {
+    padding-top: calc(var(--header-height) + var(--space-8));
+  }
+  .hero__text {
+    max-width: 100%;
+  }
+  .hero__video {
+    border-radius: 12px;
+  }
+  .hero__play-btn {
+    padding: 12px 22px;
+    font-size: 13px;
   }
 }
 
-/* Accent color for brand name */
-.hero__title .accent {
-  color: var(--color-primary);
-}
-
-@media (max-width: 768px) {
+@media (max-width: 640px) {
   .hero {
-    padding-top: calc(var(--header-height) + var(--space-12));
-    min-height: auto;
-    padding-bottom: var(--space-16);
+    padding-top: calc(var(--header-height) + var(--space-6));
+    padding-bottom: var(--space-12);
+  }
+  .hero__title {
+    font-size: clamp(var(--text-2xl), 6vw, var(--text-3xl));
+  }
+  .hero__video {
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+  }
+  .hero__play-btn {
+    padding: 10px 18px;
+    font-size: 12px;
+    gap: 6px;
+  }
+  .hero__play-btn svg {
+    width: 14px;
+    height: 14px;
   }
 }

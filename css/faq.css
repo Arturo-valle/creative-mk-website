@@ -1,9 +1,11 @@
 /* ============================================
-   FAQ Section
+   FAQ Section — Dark Background
    ============================================ */
 
 .faq {
   padding-block: var(--space-section);
+  background-color: #0d1b3e;
+  color: #ffffff;
 }
 
 .faq__header {
@@ -14,18 +16,38 @@
   font-size: clamp(var(--text-3xl), 3vw, var(--text-5xl));
   font-weight: var(--weight-bold);
   letter-spacing: var(--tracking-tight);
+  color: #ffffff;
 }
 
 .faq__list {
   max-width: 900px;
 }
 
+/* Override accordion styles for dark background */
+.faq .accordion-item {
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.faq .accordion-header {
+  color: #ffffff;
+}
+
+.faq .accordion-header:hover {
+  color: #a5b4fc;
+}
+
+.faq .accordion-icon::before,
+.faq .accordion-icon::after {
+  background-color: #ffffff;
+}
+
+.faq .accordion-text {
+  color: #94a3b8;
+  max-width: 100%;
+}
+
 /* Reuses .accordion-item styles from capabilities.css */
 .faq .accordion-content__inner {
   grid-template-columns: 1fr;
   max-width: 700px;
-}
-
-.faq .accordion-text {
-  max-width: 100%;
 }

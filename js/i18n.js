@@ -5,7 +5,6 @@ const translations = {
   en: {
     // Nav
     "nav.work": "Work",
-    "nav.clients": "Clients",
     "nav.services": "Services",
     "nav.about": "About",
     "nav.blog": "Blog",
@@ -25,9 +24,15 @@ const translations = {
     "hero.title": "CREATIVE MK is a technology-driven digital marketing agency building modern digital systems",
     // Capabilities
     "capabilities.intro": "We specialize in creating comprehensive digital solutions that help businesses grow, sell more and establish a powerful online presence.",
-    // Clients
-    "clients.title": "Trusted by innovative brands",
-    "clients.viewAll": "View our clients",
+    // AI Automation
+    "ai.label": "AI-Powered Solutions",
+    "ai.title": "The Future of Digital is Intelligent Automation",
+    "ai.text": "We integrate artificial intelligence and automation into every digital system we build — from AI-powered chatbots and dynamic content personalization to automated marketing funnels that work 24/7.",
+    "ai.cta": "Explore AI Solutions →",
+    "ai.metricResponse": "Response Time",
+    "ai.metricTasks": "Tasks Automated",
+    "ai.metricROI": "ROI Increase",
+    "hero.playBtn": "Play Showreel",
     // Work
     "work.title": "Selected Work",
     "work.viewAll": "View all work",
@@ -62,7 +67,6 @@ const translations = {
   },
   es: {
     "nav.work": "Proyectos",
-    "nav.clients": "Clientes",
     "nav.services": "Servicios",
     "nav.about": "Nosotros",
     "nav.blog": "Blog",
@@ -80,8 +84,14 @@ const translations = {
     "nav.allServices": "Todos los servicios →",
     "hero.title": "CREATIVE MK es una agencia de marketing digital tecnológica que construye sistemas digitales modernos",
     "capabilities.intro": "Nos especializamos en crear soluciones digitales integrales que ayudan a los negocios a crecer, vender más y establecer una presencia online poderosa.",
-    "clients.title": "Marcas innovadoras confían en nosotros",
-    "clients.viewAll": "Ver nuestros clientes",
+    "ai.label": "Soluciones con IA",
+    "ai.title": "El Futuro Digital es la Automatización Inteligente",
+    "ai.text": "Integramos inteligencia artificial y automatización en cada sistema digital que construimos — desde chatbots con IA y personalización dinámica de contenido hasta embudos de marketing automatizados que funcionan 24/7.",
+    "ai.cta": "Explorar Soluciones IA →",
+    "ai.metricResponse": "Tiempo de Respuesta",
+    "ai.metricTasks": "Tareas Automatizadas",
+    "ai.metricROI": "Incremento de ROI",
+    "hero.playBtn": "Reproducir",
     "work.title": "Proyectos Destacados",
     "work.viewAll": "Ver todos los proyectos",
     "about.title": "Transformamos negocios a través de la innovación digital",
@@ -132,7 +142,7 @@ function setLanguage(lang) {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
   });
-  // Reset accordion tracking before re-render to prevent duplicate listeners
+  // Reset accordion tracking before re-render
   if (typeof resetAccordion === 'function') {
     resetAccordion('#capabilities-list');
     resetAccordion('#faq-list');

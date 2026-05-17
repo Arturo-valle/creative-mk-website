@@ -1,5 +1,5 @@
 /* ============================================
-   About Section
+   About Section — with Carousel Navigation
    ============================================ */
 
 .about {
@@ -28,12 +28,16 @@
   margin-bottom: var(--space-6);
 }
 
-/* Photo Carousel / Ticker */
-.about__carousel {
+/* Photo Carousel / Ticker with Navigation */
+.about__carousel-wrapper {
+  position: relative;
   width: 100vw;
   margin-left: calc(-1 * var(--container-padding));
-  overflow: hidden;
   margin-bottom: var(--space-16);
+}
+
+.about__carousel {
+  overflow: hidden;
 }
 
 .about__carousel-track {
@@ -48,18 +52,14 @@
 }
 
 @keyframes ticker {
-  0% {
-    transform: translateX(0);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .about__carousel-item {
   flex-shrink: 0;
-  width: 320px;
-  height: 220px;
+  width: 380px;
+  height: 260px;
   border-radius: var(--radius-lg);
   overflow: hidden;
 }
@@ -68,6 +68,48 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform var(--duration-slower) var(--ease-out);
+}
+
+.about__carousel-item:hover img {
+  transform: scale(1.05);
+}
+
+/* Navigation Buttons */
+.about__carousel-btn {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  border: none;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--color-black);
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast) var(--ease-out);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+}
+
+.about__carousel-btn:hover {
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+  transform: translateY(-50%) scale(1.05);
+}
+
+.about__carousel-btn--prev {
+  left: var(--space-4);
+}
+
+.about__carousel-btn--next {
+  right: var(--space-4);
 }
 
 /* Bottom text block */
@@ -90,7 +132,13 @@
   }
 
   .about__carousel-item {
-    width: 260px;
-    height: 180px;
+    width: 280px;
+    height: 190px;
+  }
+
+  .about__carousel-btn {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
   }
 }
