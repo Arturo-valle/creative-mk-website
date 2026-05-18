@@ -18,30 +18,54 @@ const serviceImages = [
 
 const servicesData = {
   en: [
-    { title: "Web Design", desc: "Custom website design that converts visitors into customers. We craft beautiful, responsive sites tailored to your brand identity.", tags: ["Responsive", "Custom Design", "CMS"] },
-    { title: "Landing Pages", desc: "High-converting landing pages designed to maximize your marketing ROI. Every element is optimized for conversion.", tags: ["A/B Testing", "Conversion", "Speed"] },
-    { title: "Sales Funnels", desc: "End-to-end sales funnels that guide your prospects from awareness to purchase with strategic automation.", tags: ["Automation", "Email", "Strategy"] },
-    { title: "Meta Ads", desc: "Data-driven Meta advertising campaigns that reach your ideal audience and deliver measurable results across Facebook and Instagram.", tags: ["Facebook", "Instagram", "Analytics"] },
-    { title: "Social Media Management", desc: "Strategic social media management that builds your brand presence, engages your audience, and drives growth.", tags: ["Content", "Engagement", "Growth"] },
-    { title: "Branding", desc: "Comprehensive brand identity development that positions your business for success in the digital landscape.", tags: ["Identity", "Strategy", "Positioning"] },
-    { title: "Logo Creation", desc: "Distinctive, memorable logos that capture the essence of your brand and stand out in competitive markets.", tags: ["Vectorial", "Versatile", "Iconic"] },
-    { title: "Brand Manual", desc: "Complete brand guidelines that ensure consistency across all your digital and physical touchpoints.", tags: ["Guidelines", "Typography", "Colors"] },
-    { title: "App Development", desc: "Custom application development for mobile and web platforms, built with modern frameworks and scalable architecture.", tags: ["Mobile", "Web Apps", "APIs"] },
-    { title: "UX/UI Design", desc: "User-centered interface design that creates intuitive, delightful digital experiences driving engagement and retention.", tags: ["Research", "Prototyping", "Testing"] }
+    { title: "Web Design", desc: "Fast, premium websites that turn attention into trust and trust into qualified inquiries. Every page is shaped around positioning, UX, SEO foundations, and conversion.", tags: ["Positioning", "UX", "Speed"] },
+    { title: "Landing Pages", desc: "Campaign pages engineered for one decisive action. We align message, offer, proof, speed, and analytics so every visitor gets a clear path to convert.", tags: ["Message Match", "CRO", "Analytics"] },
+    { title: "Sales Funnels", desc: "Automated journeys that move prospects from first touch to booked call or purchase. We connect lead magnets, email, retargeting, and CRM logic into one measurable pipeline.", tags: ["Lead Flow", "Email", "CRM"] },
+    { title: "Meta Ads", desc: "Facebook and Instagram campaigns built on sharp creative, audience signals, AI-assisted optimization, and disciplined testing so budget moves toward buyers, not guesses.", tags: ["Creative Testing", "Advantage+", "ROAS"] },
+    { title: "Social Media Management", desc: "Content systems that make your brand visible, useful, and remembered. We plan short-form video, community touchpoints, captions, and reporting around growth.", tags: ["Short-form", "Community", "Reporting"] },
+    { title: "Branding", desc: "A strategic identity system that makes your business easier to recognize, trust, and choose. We define positioning, voice, visuals, and distinctive assets for every touchpoint.", tags: ["Strategy", "Voice", "Assets"] },
+    { title: "Logo Creation", desc: "A memorable mark built to work everywhere: profile photo, website header, packaging, ads, and app icon. We design for recognition first, then refine the details.", tags: ["Recognition", "Versatile", "Mark System"] },
+    { title: "Brand Manual", desc: "A practical brand operating guide for teams, vendors, and future campaigns. It turns your logo, colors, typography, tone, and usage rules into a repeatable standard.", tags: ["Guidelines", "Governance", "Consistency"] },
+    { title: "App Development", desc: "Web and mobile apps designed around real workflows, not feature lists. We map journeys, build scalable interfaces, integrate APIs, and ship products that feel fast and dependable.", tags: ["Web Apps", "APIs", "Scalable"] },
+    { title: "UX/UI Design", desc: "Research-led interfaces that reduce friction and make complex actions feel simple. We prototype, test, and refine flows so users know what to do next.", tags: ["Research", "Flows", "Prototypes"] }
   ],
   es: [
-    { title: "Diseño Web", desc: "Diseño web personalizado que convierte visitantes en clientes. Creamos sitios hermosos y responsivos adaptados a tu identidad de marca.", tags: ["Responsivo", "Diseño Custom", "CMS"] },
-    { title: "Landing Pages", desc: "Landing pages de alta conversión diseñadas para maximizar tu ROI de marketing. Cada elemento está optimizado para convertir.", tags: ["A/B Testing", "Conversión", "Velocidad"] },
-    { title: "Embudos de Venta", desc: "Embudos de venta completos que guían a tus prospectos desde el conocimiento hasta la compra con automatización estratégica.", tags: ["Automatización", "Email", "Estrategia"] },
-    { title: "Meta Ads", desc: "Campañas publicitarias en Meta basadas en datos que alcanzan a tu audiencia ideal y entregan resultados medibles en Facebook e Instagram.", tags: ["Facebook", "Instagram", "Analítica"] },
-    { title: "Manejo de Redes Sociales", desc: "Gestión estratégica de redes sociales que construye tu presencia de marca, engancha a tu audiencia e impulsa el crecimiento.", tags: ["Contenido", "Engagement", "Crecimiento"] },
-    { title: "Branding", desc: "Desarrollo integral de identidad de marca que posiciona tu negocio para el éxito en el panorama digital.", tags: ["Identidad", "Estrategia", "Posicionamiento"] },
-    { title: "Creación de Logos", desc: "Logos distintivos y memorables que capturan la esencia de tu marca y destacan en mercados competitivos.", tags: ["Vectorial", "Versátil", "Icónico"] },
-    { title: "Manual de Marca", desc: "Guías de marca completas que aseguran consistencia en todos tus puntos de contacto digitales y físicos.", tags: ["Lineamientos", "Tipografía", "Colores"] },
-    { title: "Desarrollo de Aplicaciones", desc: "Desarrollo de aplicaciones personalizadas para plataformas móviles y web, construidas con frameworks modernos y arquitectura escalable.", tags: ["Móvil", "Web Apps", "APIs"] },
-    { title: "Diseño UX/UI", desc: "Diseño de interfaces centrado en el usuario que crea experiencias digitales intuitivas y encantadoras.", tags: ["Investigación", "Prototipado", "Testing"] }
+    { title: "Diseño Web", desc: "Sitios rápidos y premium que convierten atención en confianza, y confianza en oportunidades reales. Cada página une posicionamiento, UX, bases SEO y conversión.", tags: ["Posicionamiento", "UX", "Velocidad"] },
+    { title: "Landing Pages", desc: "Páginas de campaña diseñadas para una acción clara. Alineamos mensaje, oferta, prueba, velocidad y analítica para que cada visita tenga un camino directo a convertir.", tags: ["Mensaje", "CRO", "Analítica"] },
+    { title: "Embudos de Venta", desc: "Recorridos automatizados que llevan al prospecto desde el primer contacto hasta una llamada agendada o compra. Conectamos lead magnets, email, retargeting y CRM.", tags: ["Leads", "Email", "CRM"] },
+    { title: "Meta Ads", desc: "Campañas para Facebook e Instagram con creatividad potente, señales de audiencia, optimización asistida por IA y pruebas constantes para invertir en compradores, no en suposiciones.", tags: ["Creatividad", "Advantage+", "ROAS"] },
+    { title: "Manejo de Redes Sociales", desc: "Sistemas de contenido que hacen tu marca visible, útil y memorable. Planificamos video corto, comunidad, captions y reportes con foco en crecimiento.", tags: ["Video corto", "Comunidad", "Reportes"] },
+    { title: "Branding", desc: "Un sistema de identidad estratégico para que tu negocio sea más fácil de reconocer, confiar y elegir. Definimos posicionamiento, voz, visuales y activos distintivos.", tags: ["Estrategia", "Voz", "Activos"] },
+    { title: "Creación de Logos", desc: "Un símbolo memorable pensado para funcionar en todo lugar: perfil, web, empaque, anuncios y app. Diseñamos primero para reconocimiento y luego refinamos cada detalle.", tags: ["Reconocimiento", "Versátil", "Sistema"] },
+    { title: "Manual de Marca", desc: "Una guía operativa para equipos, proveedores y futuras campañas. Convierte logo, colores, tipografías, tono y reglas de uso en un estándar repetible.", tags: ["Lineamientos", "Gobernanza", "Consistencia"] },
+    { title: "Desarrollo de Aplicaciones", desc: "Apps web y móviles diseñadas alrededor de flujos reales, no listas de funciones. Mapeamos journeys, interfaces escalables, APIs y productos rápidos y confiables.", tags: ["Web Apps", "APIs", "Escalable"] },
+    { title: "Diseño UX/UI", desc: "Interfaces basadas en investigación que reducen fricción y hacen simples las acciones complejas. Prototipamos, probamos y refinamos flujos para guiar cada siguiente paso.", tags: ["Investigación", "Flujos", "Prototipos"] }
   ]
 };
+
+const _capabilitiesVisualBound = new WeakSet();
+
+function initCapabilitiesVisualSwap(list) {
+  if (_capabilitiesVisualBound.has(list)) return;
+  _capabilitiesVisualBound.add(list);
+
+  list.addEventListener('click', (e) => {
+    const header = e.target.closest('.accordion-header');
+    if (!header) return;
+
+    const idx = header.dataset.serviceIndex;
+    const img = document.getElementById('cap-visual-img');
+    if (!img || !serviceImages[idx]) return;
+
+    img.style.opacity = '0';
+    img.style.transform = 'scale(0.95)';
+    setTimeout(() => {
+      img.src = serviceImages[idx];
+      img.style.opacity = '1';
+      img.style.transform = 'scale(1)';
+    }, 200);
+  });
+}
 
 /* ---- Portfolio Data ---- */
 const workData = {
@@ -137,22 +161,7 @@ function renderCapabilities() {
       </div>
     </div>`).join('');
   
-  // Update central visual on accordion change
-  list.addEventListener('click', (e) => {
-    const header = e.target.closest('.accordion-header');
-    if (!header) return;
-    const idx = header.dataset.serviceIndex;
-    const img = document.getElementById('cap-visual-img');
-    if (img && serviceImages[idx]) {
-      img.style.opacity = '0';
-      img.style.transform = 'scale(0.95)';
-      setTimeout(() => {
-        img.src = serviceImages[idx];
-        img.style.opacity = '1';
-        img.style.transform = 'scale(1)';
-      }, 200);
-    }
-  });
+  initCapabilitiesVisualSwap(list);
 
   initAccordion('#capabilities-list');
   initAnimations();
@@ -294,56 +303,103 @@ function initNewsletter() {
   });
 }
 
-/* ---- Play Showreel — Auto-sound + Toggle ---- */
-function initPlayShowreel() {
+/* ---- Play Showreel - Responsive source + click-to-sound ---- */
+function syncHeroSoundButton() {
   const btn = document.getElementById('hero-play-btn');
   const video = document.getElementById('hero-video');
   if (!btn || !video) return;
 
   const btnLabel = btn.querySelector('span');
   const btnIcon = btn.querySelector('svg');
+  const isSoundOn = !video.muted;
+  const dict = translations[currentLang] || translations.en;
 
-  function setUnmutedState() {
-    btn.classList.add('hero__play-btn--active');
-    if (btnLabel) btnLabel.textContent = currentLang === 'es' ? 'Silenciar' : 'Mute';
-    if (btnIcon) btnIcon.innerHTML = '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>';
+  btn.classList.toggle('hero__play-btn--active', isSoundOn);
+  btn.setAttribute('aria-pressed', String(isSoundOn));
+  btn.setAttribute('aria-label', isSoundOn ? dict['hero.soundMute'] : dict['hero.soundEnable']);
+
+  if (btnLabel) {
+    btnLabel.textContent = isSoundOn ? dict['hero.soundMute'] : dict['hero.soundEnable'];
   }
 
-  function setMutedState() {
-    btn.classList.remove('hero__play-btn--active');
-    if (btnLabel) btnLabel.textContent = currentLang === 'es' ? '🔇 Activar sonido' : '🔇 Enable Sound';
-    if (btnIcon) btnIcon.innerHTML = '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+  if (btnIcon) {
+    btnIcon.innerHTML = isSoundOn
+      ? '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>'
+      : '<path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/>';
+  }
+}
+
+function initPlayShowreel() {
+  const btn = document.getElementById('hero-play-btn');
+  const video = document.getElementById('hero-video');
+  if (!btn || !video) return;
+
+  const mobileQuery = window.matchMedia('(max-width: 640px)');
+  const desktopSrc = video.dataset.srcDesktop;
+  const mobileSrc = video.dataset.srcMobile;
+
+  function getExpectedSrc() {
+    return mobileQuery.matches ? mobileSrc : desktopSrc;
   }
 
-  // Attempt autoplay with sound
-  video.muted = false;
-  const playPromise = video.play();
-  if (playPromise !== undefined) {
-    playPromise.then(() => {
-      // Autoplay with sound succeeded!
-      setUnmutedState();
-    }).catch(() => {
-      // Browser blocked unmuted autoplay — fallback to muted
-      video.muted = true;
-      video.play();
-      setMutedState();
-      // Add a gentle pulse to draw attention to the sound button
-      btn.classList.add('hero__play-btn--pulse');
-    });
+  function playMuted() {
+    const playPromise = video.play();
+    if (playPromise && typeof playPromise.catch === 'function') {
+      playPromise.catch(() => {
+        video.muted = true;
+        syncHeroSoundButton();
+      });
+    }
   }
 
-  // Toggle mute/unmute on click
+  function setVideoSource() {
+    const nextSrc = getExpectedSrc();
+    if (!nextSrc || video.getAttribute('src') === nextSrc) return;
+
+    const wasPlaying = !video.paused;
+    const previousTime = Number.isFinite(video.currentTime) ? video.currentTime : 0;
+    const shouldRestoreSound = !video.muted;
+
+    const restorePlayback = () => {
+      if (previousTime > 0 && Number.isFinite(video.duration)) {
+        video.currentTime = Math.min(previousTime, Math.max(video.duration - 0.25, 0));
+      }
+
+      if (shouldRestoreSound) video.muted = false;
+      syncHeroSoundButton();
+
+      if (wasPlaying || video.autoplay) playMuted();
+    };
+
+    video.addEventListener('loadedmetadata', restorePlayback, { once: true });
+    video.muted = true;
+    video.defaultMuted = true;
+    video.setAttribute('src', nextSrc);
+    video.load();
+  }
+
+  video.defaultMuted = true;
+  video.muted = true;
+  video.playsInline = true;
+  setVideoSource();
+  syncHeroSoundButton();
+  playMuted();
+
   btn.addEventListener('click', () => {
-    btn.classList.remove('hero__play-btn--pulse');
     if (video.muted) {
       video.muted = false;
-      video.play();
-      setUnmutedState();
+      playMuted();
     } else {
       video.muted = true;
-      setMutedState();
     }
+    syncHeroSoundButton();
   });
+
+  if (typeof mobileQuery.addEventListener === 'function') {
+    mobileQuery.addEventListener('change', setVideoSource);
+  } else if (typeof mobileQuery.addListener === 'function') {
+    mobileQuery.addListener(setVideoSource);
+  }
 }
 
 /* ---- Modal System ---- */

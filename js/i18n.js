@@ -23,7 +23,7 @@ const translations = {
     // Hero
     "hero.title": "CREATIVE MK is a technology-driven digital marketing agency building modern digital systems",
     // Capabilities
-    "capabilities.intro": "We specialize in creating comprehensive digital solutions that help businesses grow, sell more and establish a powerful online presence.",
+    "capabilities.intro": "We build the digital growth stack behind modern brands: strategy, identity, high-converting experiences, paid media, automation, and product design working as one system.",
     // AI Automation
     "ai.label": "AI-Powered Solutions",
     "ai.title": "The Future of Digital is Intelligent Automation",
@@ -33,6 +33,8 @@ const translations = {
     "ai.metricTasks": "Tasks Automated",
     "ai.metricROI": "ROI Increase",
     "hero.playBtn": "Play Showreel",
+    "hero.soundEnable": "Enable sound",
+    "hero.soundMute": "Mute",
     // Work
     "work.title": "Selected Work",
     "work.viewAll": "View all work",
@@ -83,7 +85,7 @@ const translations = {
     "nav.uxui": "Diseño UX/UI",
     "nav.allServices": "Todos los servicios →",
     "hero.title": "CREATIVE MK es una agencia de marketing digital tecnológica que construye sistemas digitales modernos",
-    "capabilities.intro": "Nos especializamos en crear soluciones digitales integrales que ayudan a los negocios a crecer, vender más y establecer una presencia online poderosa.",
+    "capabilities.intro": "Construimos el sistema de crecimiento digital detrás de marcas modernas: estrategia, identidad, experiencias de conversión, pauta, automatización y producto trabajando como una sola máquina.",
     "ai.label": "Soluciones con IA",
     "ai.title": "El Futuro Digital es la Automatización Inteligente",
     "ai.text": "Integramos inteligencia artificial y automatización en cada sistema digital que construimos — desde chatbots con IA y personalización dinámica de contenido hasta embudos de marketing automatizados que funcionan 24/7.",
@@ -92,6 +94,8 @@ const translations = {
     "ai.metricTasks": "Tareas Automatizadas",
     "ai.metricROI": "Incremento de ROI",
     "hero.playBtn": "Reproducir",
+    "hero.soundEnable": "Activar sonido",
+    "hero.soundMute": "Silenciar",
     "work.title": "Proyectos Destacados",
     "work.viewAll": "Ver todos los proyectos",
     "about.title": "Transformamos negocios a través de la innovación digital",
@@ -121,10 +125,29 @@ const translations = {
   }
 };
 
-let currentLang = 'en';
+const LANG_STORAGE_KEY = 'creativeMkLang';
+
+function getStoredLanguage() {
+  try {
+    return localStorage.getItem(LANG_STORAGE_KEY) === 'es' ? 'es' : 'en';
+  } catch (error) {
+    return 'en';
+  }
+}
+
+function storeLanguage(lang) {
+  try {
+    localStorage.setItem(LANG_STORAGE_KEY, lang);
+  } catch (error) {
+    // Storage can fail in private browsing modes; language switching still works for the current page.
+  }
+}
+
+let currentLang = getStoredLanguage();
 
 function setLanguage(lang) {
   currentLang = lang;
+  storeLanguage(lang);
   const dict = translations[lang];
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.getAttribute('data-i18n');
@@ -154,10 +177,14 @@ function setLanguage(lang) {
   if (typeof renderFAQ === 'function') renderFAQ();
   // Re-animate hero title with new language text
   if (typeof animateHeroTitle === 'function') animateHeroTitle();
+  if (typeof syncHeroSoundButton === 'function') syncHeroSoundButton();
 }
 
 function initI18n() {
   document.querySelectorAll('.lang-switch__btn').forEach(btn => {
     btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
   });
+  if (currentLang !== 'en') {
+    setLanguage(currentLang);
+  }
 }

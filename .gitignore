@@ -9,7 +9,12 @@ desktop.ini
 
 # Node (if added later)
 node_modules/
-package-lock.json
+.contact-build/
+.contact-qa/
+dist/
+
+# Internal asset review output
+images/services/_stock-crop-review/
 
 # Logs
 *.log

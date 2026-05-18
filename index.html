@@ -9,7 +9,7 @@
   <meta property="og:title" content="CREATIVE MK | Digital Marketing & Design Agency">
   <meta property="og:description" content="We create modern digital systems to help businesses grow.">
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://creativemk.com">
+  <meta property="og:url" content="https://creativemk.net">
   <meta property="og:site_name" content="CREATIVE MK">
   <meta property="og:image" content="Logos/logo-dark.png">
   <!-- Twitter Cards -->
@@ -73,7 +73,7 @@
           <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
           <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Español">ES</button>
         </div>
-        <a href="#contact" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
+        <a href="contact.html" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
       </div>
       <button class="header__menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -84,7 +84,7 @@
       <a href="#capabilities" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
       <a href="#about" class="header__mobile-nav-link" data-i18n="nav.about">About</a>
       <a href="#news" class="header__mobile-nav-link" data-i18n="nav.blog">Blog</a>
-      <a href="#contact" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
+      <a href="contact.html" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
       <div class="lang-switch" style="margin-top:auto;">
         <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
         <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Español">ES</button>
@@ -104,12 +104,20 @@
         </h1>
       </div>
       <div class="hero__visual">
-        <video class="hero__video" id="hero-video" autoplay loop muted playsinline preload="auto">
-          <source src="video/creative-mk-hero-desktop-sound.mp4" type="video/mp4">
+        <video
+          class="hero__video"
+          id="hero-video"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="auto"
+          data-src-desktop="video/creative-mk-hero-desktop-sound.mp4"
+          data-src-mobile="video/creative-mk-hero-mobile-sound.mp4">
         </video>
-        <button class="hero__play-btn" id="hero-play-btn" aria-label="Play Showreel">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M8 5v14l11-7z"/></svg>
-          <span data-i18n="hero.playBtn">Play Showreel</span>
+        <button class="hero__play-btn" id="hero-play-btn" type="button" aria-label="Enable sound" aria-pressed="false">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+          <span data-i18n="hero.soundEnable">Enable sound</span>
         </button>
       </div>
     </div>
@@ -120,7 +128,7 @@
     <div class="container">
       <div class="capabilities__layout">
         <p class="capabilities__intro reveal" data-i18n="capabilities.intro">
-          We specialize in creating comprehensive digital solutions that help businesses grow, sell more and establish a powerful online presence.
+          We build the digital growth stack behind modern brands: strategy, identity, high-converting experiences, paid media, automation, and product design working as one system.
         </p>
         <div class="capabilities__visual" id="capabilities-visual">
           <img src="images/services/web-design.png" alt="Service preview" id="cap-visual-img">
@@ -140,7 +148,7 @@
           <span class="ai-automation__label" data-i18n="ai.label">AI-Powered Solutions</span>
           <h2 class="ai-automation__title" data-i18n="ai.title">The Future of Digital is Intelligent Automation</h2>
           <p class="ai-automation__text" data-i18n="ai.text">We integrate artificial intelligence and automation into every digital system we build — from AI-powered chatbots and dynamic content personalization to automated marketing funnels that work 24/7.</p>
-          <a href="#contact" class="ai-automation__cta" data-i18n="ai.cta">Explore AI Solutions →</a>
+          <a href="contact.html" class="ai-automation__cta" data-i18n="ai.cta">Explore AI Solutions →</a>
         </div>
         <div class="ai-automation__visual">
           <div class="ai-automation__metrics">
@@ -199,7 +207,7 @@
     <div class="container">
       <div class="about__bottom reveal">
         <p class="about__bottom-text" data-i18n="about.bottomText">Our team combines creativity with cutting-edge technology to deliver results that matter. From branding to full-stack development, we are your partner in digital growth.</p>
-        <a href="#contact" class="link-arrow" data-i18n="about.learnMore">Learn about CREATIVE MK</a>
+        <a href="contact.html" class="link-arrow" data-i18n="about.learnMore">Learn about CREATIVE MK</a>
       </div>
     </div>
   </section>
@@ -236,7 +244,7 @@
     <div class="container">
       <div class="footer__cta reveal">
         <p class="footer__cta-label" data-i18n="footer.ctaLabel">Start a project</p>
-        <a href="mailto:hello@creativemk.com" class="footer__cta-title" data-i18n="footer.ctaTitle">Let's Talk</a>
+        <a href="contact.html" class="footer__cta-title" data-i18n="footer.ctaTitle">Let's Talk</a>
       </div>
       <div class="footer__contact">
         <div class="footer__contact-item">
@@ -256,7 +264,7 @@
             <li><a href="#capabilities" class="footer__nav-link" data-i18n="nav.services">Services</a></li>
             <li><a href="#about" class="footer__nav-link" data-i18n="nav.about">About</a></li>
             <li><a href="#news" class="footer__nav-link" data-i18n="nav.blog">Blog</a></li>
-            <li><a href="#contact" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
+            <li><a href="contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
           </ul>
         </div>
         <div>
