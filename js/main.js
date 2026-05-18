@@ -10,10 +10,10 @@ const serviceImages = [
   'images/services/meta-ads.png',
   'images/services/social-media.png',
   'images/services/branding.png',
-  'images/services/branding.png',
-  'images/services/email-marketing.png',
+  'images/services/logo-creation-premium-preview.png',
+  'images/services/brand-manual-premium-preview.png',
   'images/services/web-design.png',
-  'images/services/landing-pages.png'
+  'images/services/ux-ui-design-premium-preview.png'
 ];
 
 const servicesData = {
