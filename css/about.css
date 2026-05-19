@@ -51,6 +51,10 @@
   animation-play-state: paused;
 }
 
+.about__carousel-track--manual {
+  animation-play-state: paused;
+}
+
 @keyframes ticker {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }

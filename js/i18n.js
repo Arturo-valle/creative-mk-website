@@ -1,55 +1,68 @@
 /* ============================================
-   i18n – Internationalization System
+   i18n - Internationalization System
    ============================================ */
 const translations = {
   en: {
-    // Nav
     "nav.work": "Work",
     "nav.services": "Services",
     "nav.about": "About",
     "nav.blog": "Blog",
     "nav.contact": "Contact",
-    "nav.webDesign": "Web Design",
+    "nav.webDesign": "Websites",
     "nav.landingPages": "Landing Pages",
-    "nav.salesFunnels": "Sales Funnels",
-    "nav.metaAds": "Meta Ads",
-    "nav.socialMedia": "Social Media",
+    "nav.salesFunnels": "Funnels",
+    "nav.metaAds": "Paid Growth",
+    "nav.socialMedia": "Content Systems",
     "nav.branding": "Branding",
     "nav.logoCreation": "Logo Creation",
     "nav.brandManual": "Brand Manual",
-    "nav.appDev": "App Development",
+    "nav.appDev": "Development",
     "nav.uxui": "UX/UI Design",
-    "nav.allServices": "All Services →",
-    // Hero
-    "hero.title": "CREATIVE MK is a technology-driven digital marketing agency building modern digital systems",
-    // Capabilities
-    "capabilities.intro": "We build the digital growth stack behind modern brands: strategy, identity, high-converting experiences, paid media, automation, and product design working as one system.",
-    // AI Automation
-    "ai.label": "AI-Powered Solutions",
-    "ai.title": "The Future of Digital is Intelligent Automation",
-    "ai.text": "We integrate artificial intelligence and automation into every digital system we build — from AI-powered chatbots and dynamic content personalization to automated marketing funnels that work 24/7.",
-    "ai.cta": "Explore AI Solutions →",
-    "ai.metricResponse": "Response Time",
-    "ai.metricTasks": "Tasks Automated",
-    "ai.metricROI": "ROI Increase",
+    "nav.allServices": "All Services ->",
+
+    "hero.eyebrow": "Brand, web, growth and AI systems",
+    "hero.title": "CREATIVE MK designs brands, sites and systems that grow",
+    "hero.lede": "Strategy, identity, conversion-focused websites, paid growth and automation shaped as one operating system.",
+    "hero.primaryCta": "Start a project",
+    "hero.secondaryCta": "See selected systems",
+    "hero.cardStrategy": "Positioning",
+    "hero.cardAutomation": "Automation",
+    "hero.signalOneLabel": "Core stack",
+    "hero.signalOneValue": "Brand + Web + Growth",
+    "hero.signalTwoLabel": "Built for",
+    "hero.signalTwoValue": "Launches, funnels and scale",
+    "hero.signalThreeLabel": "Approach",
+    "hero.signalThreeValue": "Design-led, data-aware",
     "hero.playBtn": "Play Showreel",
     "hero.soundEnable": "Enable sound",
     "hero.soundMute": "Mute",
-    // Work
-    "work.title": "Selected Work",
-    "work.viewAll": "View all work",
-    // About
+
+    "capabilities.kicker": "Capabilities",
+    "capabilities.title": "One digital operating system, built in connected layers",
+    "capabilities.intro": "We build the digital growth stack behind modern brands: strategy, identity, high-converting experiences, paid media, automation, and product design working as one system.",
+
+    "ai.label": "AI-Powered Solutions",
+    "ai.title": "The Future of Digital is Intelligent Automation",
+    "ai.text": "We integrate artificial intelligence and automation into every digital system we build - from AI-powered chatbots and dynamic content personalization to automated marketing funnels that work 24/7.",
+    "ai.cta": "Explore AI Solutions ->",
+    "ai.metricResponse": "Response Time",
+    "ai.metricTasks": "Tasks Automated",
+    "ai.metricROI": "ROI Increase",
+
+    "work.kicker": "Selected systems",
+    "work.title": "Work shaped around outcomes, not deliverables",
+    "work.viewAll": "Start your system",
+
     "about.title": "We transform businesses through digital innovation",
     "about.text": "CREATIVE MK is a technology-driven digital marketing agency specialized in creating modern digital systems to help businesses grow, sell more and position themselves online.",
     "about.viewServices": "View our services",
     "about.bottomText": "Our team combines creativity with cutting-edge technology to deliver results that matter. From branding to full-stack development, we are your partner in digital growth.",
     "about.learnMore": "Learn about CREATIVE MK",
-    // News
+
     "news.title": "Featured News",
     "news.visitBlog": "Visit blog",
-    // FAQ
     "faq.title": "Frequently Asked Questions",
-    // Footer
+
     "footer.ctaLabel": "Start a project",
     "footer.ctaTitle": "Let's Talk",
     "footer.emailLabel": "New Business",
@@ -65,7 +78,7 @@ const translations = {
     "footer.rights": "All rights reserved.",
     "footer.privacy": "Privacy Policy",
     "footer.terms": "Terms of Service",
-    "footer.subscribeSuccess": "Thanks for subscribing!",
+    "footer.subscribeSuccess": "Thanks for subscribing!"
   },
   es: {
     "nav.work": "Proyectos",
@@ -73,55 +86,77 @@ const translations = {
     "nav.about": "Nosotros",
     "nav.blog": "Blog",
     "nav.contact": "Contacto",
-    "nav.webDesign": "Diseño Web",
+    "nav.webDesign": "Sitios Web",
     "nav.landingPages": "Landing Pages",
-    "nav.salesFunnels": "Embudos de Venta",
-    "nav.metaAds": "Meta Ads",
-    "nav.socialMedia": "Redes Sociales",
+    "nav.salesFunnels": "Embudos",
+    "nav.metaAds": "Paid Growth",
+    "nav.socialMedia": "Sistemas de Contenido",
     "nav.branding": "Branding",
-    "nav.logoCreation": "Creación de Logos",
+    "nav.logoCreation": "Creacion de Logos",
     "nav.brandManual": "Manual de Marca",
-    "nav.appDev": "Desarrollo de Apps",
-    "nav.uxui": "Diseño UX/UI",
-    "nav.allServices": "Todos los servicios →",
-    "hero.title": "CREATIVE MK es una agencia de marketing digital tecnológica que construye sistemas digitales modernos",
-    "capabilities.intro": "Construimos el sistema de crecimiento digital detrás de marcas modernas: estrategia, identidad, experiencias de conversión, pauta, automatización y producto trabajando como una sola máquina.",
-    "ai.label": "Soluciones con IA",
-    "ai.title": "El Futuro Digital es la Automatización Inteligente",
-    "ai.text": "Integramos inteligencia artificial y automatización en cada sistema digital que construimos — desde chatbots con IA y personalización dinámica de contenido hasta embudos de marketing automatizados que funcionan 24/7.",
-    "ai.cta": "Explorar Soluciones IA →",
-    "ai.metricResponse": "Tiempo de Respuesta",
-    "ai.metricTasks": "Tareas Automatizadas",
-    "ai.metricROI": "Incremento de ROI",
+    "nav.appDev": "Desarrollo",
+    "nav.uxui": "Diseno UX/UI",
+    "nav.allServices": "Todos los servicios ->",
+
+    "hero.eyebrow": "Marca, web, growth y sistemas IA",
+    "hero.title": "CREATIVE MK dise\u00f1a marcas, sitios y sistemas que crecen",
+    "hero.lede": "Estrategia, identidad, sitios de conversi\u00f3n, pauta y automatizaci\u00f3n como un solo sistema operativo.",
+    "hero.primaryCta": "Iniciar proyecto",
+    "hero.secondaryCta": "Ver sistemas seleccionados",
+    "hero.cardStrategy": "Posicionamiento",
+    "hero.cardAutomation": "Automatizacion",
+    "hero.signalOneLabel": "Stack central",
+    "hero.signalOneValue": "Marca + Web + Growth",
+    "hero.signalTwoLabel": "Disenado para",
+    "hero.signalTwoValue": "Lanzamientos, embudos y escala",
+    "hero.signalThreeLabel": "Enfoque",
+    "hero.signalThreeValue": "Diseno primero, datos siempre",
     "hero.playBtn": "Reproducir",
     "hero.soundEnable": "Activar sonido",
     "hero.soundMute": "Silenciar",
-    "work.title": "Proyectos Destacados",
-    "work.viewAll": "Ver todos los proyectos",
-    "about.title": "Transformamos negocios a través de la innovación digital",
-    "about.text": "CREATIVE MK es una agencia de marketing digital tecnológica especializada en crear sistemas digitales modernos para ayudar a negocios a crecer, vender más y posicionarse en internet.",
+
+    "capabilities.kicker": "Capacidades",
+    "capabilities.title": "Un sistema operativo digital, construido por capas conectadas",
+    "capabilities.intro": "Construimos el sistema de crecimiento digital detras de marcas modernas: estrategia, identidad, experiencias de conversion, pauta, automatizacion y producto trabajando como una sola maquina.",
+
+    "ai.label": "Soluciones con IA",
+    "ai.title": "El futuro digital es la automatizacion inteligente",
+    "ai.text": "Integramos inteligencia artificial y automatizacion en cada sistema digital que construimos - desde chatbots con IA y personalizacion dinamica de contenido hasta embudos automatizados que funcionan 24/7.",
+    "ai.cta": "Explorar soluciones IA ->",
+    "ai.metricResponse": "Tiempo de Respuesta",
+    "ai.metricTasks": "Tareas Automatizadas",
+    "ai.metricROI": "Incremento de ROI",
+
+    "work.kicker": "Sistemas seleccionados",
+    "work.title": "Trabajo disenado alrededor de resultados, no entregables",
+    "work.viewAll": "Iniciar tu sistema",
+
+    "about.title": "Transformamos negocios a traves de la innovacion digital",
+    "about.text": "CREATIVE MK es una agencia de marketing digital tecnologica especializada en crear sistemas digitales modernos para ayudar a negocios a crecer, vender mas y posicionarse en internet.",
     "about.viewServices": "Ver nuestros servicios",
-    "about.bottomText": "Nuestro equipo combina creatividad con tecnología de vanguardia para entregar resultados que importan. Desde branding hasta desarrollo full-stack, somos tu aliado en el crecimiento digital.",
+    "about.bottomText": "Nuestro equipo combina creatividad con tecnologia de vanguardia para entregar resultados que importan. Desde branding hasta desarrollo full-stack, somos tu aliado en el crecimiento digital.",
     "about.learnMore": "Conoce CREATIVE MK",
+
     "news.title": "Noticias Destacadas",
     "news.visitBlog": "Visitar blog",
     "faq.title": "Preguntas Frecuentes",
+
     "footer.ctaLabel": "Iniciar un proyecto",
     "footer.ctaTitle": "Hablemos",
     "footer.emailLabel": "Nuevos Negocios",
-    "footer.phoneLabel": "Llámanos",
-    "footer.navigation": "Navegación",
+    "footer.phoneLabel": "Llamanos",
+    "footer.navigation": "Navegacion",
     "footer.services": "Servicios",
     "footer.office": "Oficina",
     "footer.address": "Agencia digital-first<br>Disponible mundialmente",
     "footer.stayUpdated": "Mantente Informado",
-    "footer.newsletterText": "Suscríbete a nuestro newsletter para las últimas novedades en marketing digital y diseño.",
+    "footer.newsletterText": "Suscribete a nuestro newsletter para las ultimas novedades en marketing digital y diseno.",
     "footer.emailPlaceholder": "Tu email",
     "footer.subscribe": "Suscribirse",
     "footer.rights": "Todos los derechos reservados.",
-    "footer.privacy": "Política de Privacidad",
-    "footer.terms": "Términos de Servicio",
-    "footer.subscribeSuccess": "¡Gracias por suscribirte!",
+    "footer.privacy": "Politica de Privacidad",
+    "footer.terms": "Terminos de Servicio",
+    "footer.subscribeSuccess": "Gracias por suscribirte!"
   }
 };
 
@@ -165,17 +200,14 @@ function setLanguage(lang) {
       btn.classList.toggle('active', btn.dataset.lang === lang);
     });
   });
-  // Reset accordion tracking before re-render
   if (typeof resetAccordion === 'function') {
     resetAccordion('#capabilities-list');
     resetAccordion('#faq-list');
   }
-  // Re-render dynamic sections
   if (typeof renderCapabilities === 'function') renderCapabilities();
   if (typeof renderWork === 'function') renderWork();
   if (typeof renderNews === 'function') renderNews();
   if (typeof renderFAQ === 'function') renderFAQ();
-  // Re-animate hero title with new language text
   if (typeof animateHeroTitle === 'function') animateHeroTitle();
   if (typeof syncHeroSoundButton === 'function') syncHeroSoundButton();
 }

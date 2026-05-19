@@ -36,6 +36,7 @@
   <link rel="stylesheet" href="css/faq.css">
   <link rel="stylesheet" href="css/footer.css">
   <link rel="stylesheet" href="css/modal.css">
+  <link rel="stylesheet" href="css/clay-refresh.css">
 </head>
 <body>
 
@@ -71,7 +72,7 @@
       <div class="header__right">
         <div class="lang-switch" id="lang-switch">
           <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
-          <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Español">ES</button>
+          <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
         </div>
         <a href="contact.html" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
       </div>
@@ -87,7 +88,7 @@
       <a href="contact.html" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
       <div class="lang-switch" style="margin-top:auto;">
         <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
-        <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Español">ES</button>
+        <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
       </div>
     </nav>
   </header>
@@ -98,27 +99,62 @@
   <!-- ========== HERO ========== -->
   <section class="hero section" id="hero">
     <div class="container hero__container">
-      <div class="hero__text">
+      <div class="hero__text reveal">
+        <span class="hero__eyebrow" data-i18n="hero.eyebrow">Brand, web, growth and AI systems</span>
         <h1 class="hero__title" id="hero-title" data-i18n="hero.title">
-          CREATIVE MK is a technology-driven digital marketing agency building modern digital systems
+          CREATIVE MK designs brands, sites and systems that grow
         </h1>
+        <p class="hero__lede" data-i18n="hero.lede">
+          Strategy, identity, conversion-focused websites, paid growth and automation shaped as one operating system.
+        </p>
+        <div class="hero__actions" aria-label="Primary actions">
+          <a href="contact.html" class="hero__cta" data-i18n="hero.primaryCta">Start a project</a>
+          <a href="#work" class="hero__link" data-i18n="hero.secondaryCta">See selected systems</a>
+        </div>
       </div>
-      <div class="hero__visual">
-        <video
-          class="hero__video"
-          id="hero-video"
-          autoplay
-          loop
-          muted
-          playsinline
-          preload="auto"
-          data-src-desktop="video/creative-mk-hero-desktop-sound.mp4"
-          data-src-mobile="video/creative-mk-hero-mobile-sound.mp4">
-        </video>
-        <button class="hero__play-btn" id="hero-play-btn" type="button" aria-label="Enable sound" aria-pressed="false">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
-          <span data-i18n="hero.soundEnable">Enable sound</span>
-        </button>
+      <div class="hero__visual reveal reveal-delay-2" aria-label="CREATIVE MK growth system preview">
+        <div class="hero__system-card hero__system-card--strategy">
+          <span data-i18n="hero.cardStrategy">Positioning</span>
+          <strong>01</strong>
+        </div>
+        <div class="hero__showreel">
+          <video
+            class="hero__video"
+            id="hero-video"
+            autoplay
+            loop
+            muted
+            playsinline
+            preload="metadata"
+            data-src-desktop="video/creative-mk-hero-desktop-sound.mp4"
+            data-src-mobile="video/creative-mk-hero-mobile-sound.mp4">
+          </video>
+          <button class="hero__play-btn" id="hero-play-btn" type="button" aria-label="Enable sound" aria-pressed="false">
+            <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+            <span data-i18n="hero.soundEnable">Enable sound</span>
+          </button>
+        </div>
+        <div class="hero__system-card hero__system-card--automation">
+          <span data-i18n="hero.cardAutomation">Automation</span>
+          <strong>24/7</strong>
+        </div>
+        <div class="hero__orbit" aria-hidden="true">
+          <span></span><span></span><span></span>
+        </div>
+      </div>
+      <div class="hero__signals reveal reveal-delay-3" aria-label="CREATIVE MK operating signals">
+        <div>
+          <span data-i18n="hero.signalOneLabel">Core stack</span>
+          <strong data-i18n="hero.signalOneValue">Brand + Web + Growth</strong>
+        </div>
+        <div>
+          <span data-i18n="hero.signalTwoLabel">Built for</span>
+          <strong data-i18n="hero.signalTwoValue">Launches, funnels and scale</strong>
+        </div>
+        <div>
+          <span data-i18n="hero.signalThreeLabel">Approach</span>
+          <strong data-i18n="hero.signalThreeValue">Design-led, data-aware</strong>
+        </div>
       </div>
     </div>
   </section>
@@ -126,6 +162,10 @@
   <!-- ========== CAPABILITIES / SERVICES ========== -->
   <section class="capabilities section" id="capabilities">
     <div class="container">
+      <div class="section-heading reveal">
+        <span class="section-kicker" data-i18n="capabilities.kicker">Capabilities</span>
+        <h2 class="section-title" data-i18n="capabilities.title">One digital operating system, built in connected layers</h2>
+      </div>
       <div class="capabilities__layout">
         <p class="capabilities__intro reveal" data-i18n="capabilities.intro">
           We build the digital growth stack behind modern brands: strategy, identity, high-converting experiences, paid media, automation, and product design working as one system.
@@ -175,8 +215,11 @@
   <section class="work section" id="work">
     <div class="container">
       <div class="work__header reveal">
-        <h2 class="work__title" data-i18n="work.title">Selected Work</h2>
-        <a href="#work" class="link-arrow" data-i18n="work.viewAll">View all work</a>
+        <div>
+          <span class="section-kicker" data-i18n="work.kicker">Selected systems</span>
+          <h2 class="work__title" data-i18n="work.title">Work shaped around outcomes, not deliverables</h2>
+        </div>
+        <a href="contact.html" class="link-arrow" data-i18n="work.viewAll">Start your system</a>
       </div>
       <div class="work__grid" id="work-grid">
         <!-- Cards generated by JS -->

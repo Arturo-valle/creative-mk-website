@@ -1,203 +1,511 @@
 /* ============================================
-   Main.js – Content Data & Initialization
+   Main.js - Content Data & Initialization
    ============================================ */
-
-/* ---- Services Data ---- */
-const serviceImages = [
-  'images/services/web-design.png',
-  'images/services/landing-pages.png',
-  'images/services/sales-funnels.png',
-  'images/services/meta-ads.png',
-  'images/services/social-media.png',
-  'images/services/branding.png',
-  'images/services/logo-creation-premium-preview.png',
-  'images/services/brand-manual-premium-preview.png',
-  'images/services/web-design.png',
-  'images/services/ux-ui-design-premium-preview.png'
-];
 
 const servicesData = {
   en: [
-    { title: "Web Design", desc: "Fast, premium websites that turn attention into trust and trust into qualified inquiries. Every page is shaped around positioning, UX, SEO foundations, and conversion.", tags: ["Positioning", "UX", "Speed"] },
-    { title: "Landing Pages", desc: "Campaign pages engineered for one decisive action. We align message, offer, proof, speed, and analytics so every visitor gets a clear path to convert.", tags: ["Message Match", "CRO", "Analytics"] },
-    { title: "Sales Funnels", desc: "Automated journeys that move prospects from first touch to booked call or purchase. We connect lead magnets, email, retargeting, and CRM logic into one measurable pipeline.", tags: ["Lead Flow", "Email", "CRM"] },
-    { title: "Meta Ads", desc: "Facebook and Instagram campaigns built on sharp creative, audience signals, AI-assisted optimization, and disciplined testing so budget moves toward buyers, not guesses.", tags: ["Creative Testing", "Advantage+", "ROAS"] },
-    { title: "Social Media Management", desc: "Content systems that make your brand visible, useful, and remembered. We plan short-form video, community touchpoints, captions, and reporting around growth.", tags: ["Short-form", "Community", "Reporting"] },
-    { title: "Branding", desc: "A strategic identity system that makes your business easier to recognize, trust, and choose. We define positioning, voice, visuals, and distinctive assets for every touchpoint.", tags: ["Strategy", "Voice", "Assets"] },
-    { title: "Logo Creation", desc: "A memorable mark built to work everywhere: profile photo, website header, packaging, ads, and app icon. We design for recognition first, then refine the details.", tags: ["Recognition", "Versatile", "Mark System"] },
-    { title: "Brand Manual", desc: "A practical brand operating guide for teams, vendors, and future campaigns. It turns your logo, colors, typography, tone, and usage rules into a repeatable standard.", tags: ["Guidelines", "Governance", "Consistency"] },
-    { title: "App Development", desc: "Web and mobile apps designed around real workflows, not feature lists. We map journeys, build scalable interfaces, integrate APIs, and ship products that feel fast and dependable.", tags: ["Web Apps", "APIs", "Scalable"] },
-    { title: "UX/UI Design", desc: "Research-led interfaces that reduce friction and make complex actions feel simple. We prototype, test, and refine flows so users know what to do next.", tags: ["Research", "Flows", "Prototypes"] }
+    {
+      title: 'Strategy & Branding',
+      lead: 'Identity system',
+      desc: 'We define positioning, visual language, voice, offer architecture, and the core narrative that makes the brand easier to trust and choose.',
+      proof: 'Best for launches, refreshes, and premium repositioning.',
+      tags: ['Positioning', 'Identity', 'Voice'],
+      media: 'images/services/branding.png'
+    },
+    {
+      title: 'Websites',
+      lead: 'Conversion site',
+      desc: 'Editorial-grade websites with fast structure, clear UX, SEO foundations, persuasive proof, and a front door built for qualified inquiries.',
+      proof: 'Best for service brands, expert firms, and local leaders scaling online.',
+      tags: ['UX', 'SEO', 'Speed'],
+      media: 'images/services/web-design.png'
+    },
+    {
+      title: 'Landing Pages & Funnels',
+      lead: 'Campaign engine',
+      desc: 'Single-purpose pages and automated journeys that connect message, offer, lead capture, email, retargeting, and CRM logic.',
+      proof: 'Best for paid traffic, launches, booking flows, and lead magnets.',
+      tags: ['CRO', 'Lead Flow', 'CRM'],
+      media: 'images/services/sales-funnels.png'
+    },
+    {
+      title: 'Paid Growth',
+      lead: 'Media system',
+      desc: 'Meta campaigns shaped around creative testing, audience signals, measurement hygiene, and AI-assisted optimization that moves budget toward buyers.',
+      proof: 'Best for brands that need disciplined acquisition, not random boosts.',
+      tags: ['Meta Ads', 'Testing', 'ROAS'],
+      media: 'images/services/meta-ads.png'
+    },
+    {
+      title: 'Content Systems',
+      lead: 'Visibility rhythm',
+      desc: 'Repeatable content operations for short-form video, social media, captions, community touchpoints, and reporting that compounds over time.',
+      proof: 'Best for brands that need consistency without losing quality.',
+      tags: ['Short-form', 'Calendar', 'Reporting'],
+      media: 'images/services/social-media.png'
+    },
+    {
+      title: 'Product UX/UI',
+      lead: 'Interface design',
+      desc: 'Research-led product flows, prototypes, dashboards, and app interfaces that reduce friction and make complex actions feel obvious.',
+      proof: 'Best for SaaS, portals, internal tools, and mobile product ideas.',
+      tags: ['Flows', 'Prototype', 'Design System'],
+      media: 'images/services/ux-ui-design-premium-preview.png'
+    },
+    {
+      title: 'Development',
+      lead: 'Build layer',
+      desc: 'Front-end, app, and integration work that turns the strategy and interface into a dependable digital product or marketing system.',
+      proof: 'Best when design, analytics, forms, APIs, and automation need to work together.',
+      tags: ['Frontend', 'APIs', 'Integrations'],
+      media: 'images/services/landing-pages.png'
+    },
+    {
+      title: 'AI Automation',
+      lead: 'Intelligent ops',
+      desc: 'Chatbots, routing, content personalization, automations, and dashboards that remove manual work from sales and marketing operations.',
+      proof: 'Best for teams that need faster response and cleaner follow-up.',
+      tags: ['Chatbots', 'Workflows', 'Dashboards'],
+      media: 'images/services/email-marketing.png'
+    }
   ],
   es: [
-    { title: "Diseño Web", desc: "Sitios rápidos y premium que convierten atención en confianza, y confianza en oportunidades reales. Cada página une posicionamiento, UX, bases SEO y conversión.", tags: ["Posicionamiento", "UX", "Velocidad"] },
-    { title: "Landing Pages", desc: "Páginas de campaña diseñadas para una acción clara. Alineamos mensaje, oferta, prueba, velocidad y analítica para que cada visita tenga un camino directo a convertir.", tags: ["Mensaje", "CRO", "Analítica"] },
-    { title: "Embudos de Venta", desc: "Recorridos automatizados que llevan al prospecto desde el primer contacto hasta una llamada agendada o compra. Conectamos lead magnets, email, retargeting y CRM.", tags: ["Leads", "Email", "CRM"] },
-    { title: "Meta Ads", desc: "Campañas para Facebook e Instagram con creatividad potente, señales de audiencia, optimización asistida por IA y pruebas constantes para invertir en compradores, no en suposiciones.", tags: ["Creatividad", "Advantage+", "ROAS"] },
-    { title: "Manejo de Redes Sociales", desc: "Sistemas de contenido que hacen tu marca visible, útil y memorable. Planificamos video corto, comunidad, captions y reportes con foco en crecimiento.", tags: ["Video corto", "Comunidad", "Reportes"] },
-    { title: "Branding", desc: "Un sistema de identidad estratégico para que tu negocio sea más fácil de reconocer, confiar y elegir. Definimos posicionamiento, voz, visuales y activos distintivos.", tags: ["Estrategia", "Voz", "Activos"] },
-    { title: "Creación de Logos", desc: "Un símbolo memorable pensado para funcionar en todo lugar: perfil, web, empaque, anuncios y app. Diseñamos primero para reconocimiento y luego refinamos cada detalle.", tags: ["Reconocimiento", "Versátil", "Sistema"] },
-    { title: "Manual de Marca", desc: "Una guía operativa para equipos, proveedores y futuras campañas. Convierte logo, colores, tipografías, tono y reglas de uso en un estándar repetible.", tags: ["Lineamientos", "Gobernanza", "Consistencia"] },
-    { title: "Desarrollo de Aplicaciones", desc: "Apps web y móviles diseñadas alrededor de flujos reales, no listas de funciones. Mapeamos journeys, interfaces escalables, APIs y productos rápidos y confiables.", tags: ["Web Apps", "APIs", "Escalable"] },
-    { title: "Diseño UX/UI", desc: "Interfaces basadas en investigación que reducen fricción y hacen simples las acciones complejas. Prototipamos, probamos y refinamos flujos para guiar cada siguiente paso.", tags: ["Investigación", "Flujos", "Prototipos"] }
+    {
+      title: 'Estrategia & Branding',
+      lead: 'Sistema de identidad',
+      desc: 'Definimos posicionamiento, lenguaje visual, voz, arquitectura de oferta y narrativa central para que la marca sea mas facil de confiar y elegir.',
+      proof: 'Ideal para lanzamientos, renovaciones y reposicionamiento premium.',
+      tags: ['Posicionamiento', 'Identidad', 'Voz'],
+      media: 'images/services/branding.png'
+    },
+    {
+      title: 'Sitios Web',
+      lead: 'Sitio de conversion',
+      desc: 'Sitios web editoriales con estructura rapida, UX clara, bases SEO, prueba persuasiva y una puerta de entrada para oportunidades calificadas.',
+      proof: 'Ideal para marcas de servicio, firmas expertas y lideres locales que escalan online.',
+      tags: ['UX', 'SEO', 'Velocidad'],
+      media: 'images/services/web-design.png'
+    },
+    {
+      title: 'Landing Pages & Embudos',
+      lead: 'Motor de campana',
+      desc: 'Paginas de accion unica y recorridos automatizados que conectan mensaje, oferta, captura, email, retargeting y CRM.',
+      proof: 'Ideal para pauta, lanzamientos, agendamientos y lead magnets.',
+      tags: ['CRO', 'Leads', 'CRM'],
+      media: 'images/services/sales-funnels.png'
+    },
+    {
+      title: 'Paid Growth',
+      lead: 'Sistema de pauta',
+      desc: 'Campanas Meta alrededor de pruebas creativas, senales de audiencia, medicion limpia y optimizacion asistida por IA.',
+      proof: 'Ideal para marcas que necesitan adquisicion disciplinada, no boosts al azar.',
+      tags: ['Meta Ads', 'Testing', 'ROAS'],
+      media: 'images/services/meta-ads.png'
+    },
+    {
+      title: 'Sistemas de Contenido',
+      lead: 'Ritmo de visibilidad',
+      desc: 'Operaciones repetibles para video corto, redes sociales, captions, comunidad y reportes que crecen con el tiempo.',
+      proof: 'Ideal para marcas que necesitan consistencia sin perder calidad.',
+      tags: ['Video corto', 'Calendario', 'Reportes'],
+      media: 'images/services/social-media.png'
+    },
+    {
+      title: 'Producto UX/UI',
+      lead: 'Diseno de interfaz',
+      desc: 'Flujos de producto, prototipos, dashboards e interfaces de app basados en investigacion para reducir friccion.',
+      proof: 'Ideal para SaaS, portales, herramientas internas e ideas mobile.',
+      tags: ['Flujos', 'Prototipo', 'Sistema UI'],
+      media: 'images/services/ux-ui-design-premium-preview.png'
+    },
+    {
+      title: 'Desarrollo',
+      lead: 'Capa de build',
+      desc: 'Frontend, apps e integraciones que convierten estrategia e interfaz en un producto digital o sistema de marketing confiable.',
+      proof: 'Ideal cuando diseno, analitica, formularios, APIs y automatizacion deben trabajar juntos.',
+      tags: ['Frontend', 'APIs', 'Integraciones'],
+      media: 'images/services/landing-pages.png'
+    },
+    {
+      title: 'Automatizacion IA',
+      lead: 'Operaciones inteligentes',
+      desc: 'Chatbots, routing, personalizacion de contenido, automatizaciones y dashboards para quitar trabajo manual de ventas y marketing.',
+      proof: 'Ideal para equipos que necesitan respuesta rapida y seguimiento limpio.',
+      tags: ['Chatbots', 'Workflows', 'Dashboards'],
+      media: 'images/services/email-marketing.png'
+    }
   ]
 };
 
-const _capabilitiesVisualBound = new WeakSet();
-
-function initCapabilitiesVisualSwap(list) {
-  if (_capabilitiesVisualBound.has(list)) return;
-  _capabilitiesVisualBound.add(list);
-
-  list.addEventListener('click', (e) => {
-    const header = e.target.closest('.accordion-header');
-    if (!header) return;
-
-    const idx = header.dataset.serviceIndex;
-    const img = document.getElementById('cap-visual-img');
-    if (!img || !serviceImages[idx]) return;
-
-    img.style.opacity = '0';
-    img.style.transform = 'scale(0.95)';
-    setTimeout(() => {
-      img.src = serviceImages[idx];
-      img.style.opacity = '1';
-      img.style.transform = 'scale(1)';
-    }, 200);
-  });
-}
-
-/* ---- Portfolio Data ---- */
 const workData = {
   en: [
-    { name: "Luminos App", desc: "Fintech mobile application", tags: ["UX/UI", "App Development"], color: "#1a1a2e", img: "images/portfolio-1.png",
-      case: { challenge: "Luminos needed a mobile banking app that could compete with established fintech players while targeting Gen Z users.", solution: "We designed a complete UX/UI system with gamified savings features, biometric security, and a distinctive dark-mode interface.", result: "4.8★ App Store rating, 150K downloads in 3 months, 62% daily active user retention." }},
-    { name: "Verde Organic", desc: "E-commerce brand & web design", tags: ["Web Design", "Branding"], color: "#2d5016", img: "images/portfolio-2.png",
-      case: { challenge: "An organic food brand needed to transition from farmers' markets to a full e-commerce presence.", solution: "We built a complete brand identity with earth-tone palette, custom typography, and a Shopify-based store with subscription features.", result: "285% increase in online revenue, 12K monthly subscribers within 6 months." }},
-    { name: "NovaTech Solutions", desc: "Corporate website redesign", tags: ["Web Design", "Landing Pages"], color: "#0f3460", img: "images/portfolio-3.png",
-      case: { challenge: "NovaTech's enterprise software site had a 78% bounce rate and wasn't generating qualified leads.", solution: "Complete redesign focused on clear value propositions, interactive product demos, and an optimized lead capture funnel.", result: "Bounce rate reduced to 34%, lead generation increased by 420%, average session duration up 3.2x." }},
-    { name: "Bloom Wellness", desc: "Full digital marketing campaign", tags: ["Meta Ads", "Sales Funnels"], color: "#6b2d5b", img: "images/portfolio-4.png",
-      case: { challenge: "A wellness brand needed to scale from local to national reach with a limited marketing budget.", solution: "We created a multi-channel funnel strategy combining Meta Ads, email automation, and retargeting with dynamic creative optimization.", result: "ROAS of 6.8x, 3,200 new customers in 90 days, cost per acquisition reduced by 58%." }},
-    { name: "Atlas Ventures", desc: "Brand identity & guidelines", tags: ["Branding", "Logo Creation"], color: "#1b1b2f", img: "images/portfolio-5.png",
-      case: { challenge: "A venture capital firm needed a brand refresh to attract Series A startups and institutional investors.", solution: "We developed a premium brand system with custom logo, typography hierarchy, pitch deck templates, and comprehensive brand guidelines.", result: "Brand recognition increased 340%, 28 new startup partnerships in Q1, investor presentation close rate up 45%." }},
-    { name: "CrystalClear SaaS", desc: "Product design & development", tags: ["UX/UI", "App Development"], color: "#0a3d62", img: "images/portfolio-6.png",
-      case: { challenge: "A B2B analytics platform needed a complete product redesign to reduce churn and improve onboarding.", solution: "We redesigned the entire product with an intuitive dashboard system, guided onboarding flow, and real-time collaboration features.", result: "Churn reduced from 12% to 4.2%, onboarding completion rate increased to 89%, NPS score improved from 32 to 71." }}
+    {
+      name: 'Growth Stack Blueprint',
+      category: 'Growth',
+      desc: 'A connected funnel system for turning paid attention into qualified conversations.',
+      tags: ['Funnels', 'Meta Ads', 'Automation'],
+      color: '#18212f',
+      img: 'images/portfolio-1.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Many service businesses run ads, forms, email, and follow-up as disconnected pieces. That makes attribution messy and response time slow.',
+        solution: 'We map the offer, build a conversion page, connect CRM routing, add email follow-up, and create reporting around the actions that matter.',
+        result: 'A repeatable acquisition system designed to reduce manual follow-up and make every campaign easier to measure.',
+        deliverables: ['Conversion landing page', 'Lead routing', 'Email follow-up', 'Campaign dashboard']
+      }
+    },
+    {
+      name: 'Premium Service Website',
+      category: 'Web',
+      desc: 'A polished editorial website system for trust, positioning, and booked inquiries.',
+      tags: ['Websites', 'UX', 'SEO'],
+      color: '#263c35',
+      img: 'images/portfolio-2.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Premium service brands often explain too much and prove too little, which makes visitors hesitate before taking action.',
+        solution: 'We structure the site around a sharp promise, proof blocks, service pathways, and a contact flow that feels high-touch.',
+        result: 'A digital front door designed to make expertise easier to understand and easier to buy.',
+        deliverables: ['Messaging architecture', 'Website UX', 'Service pages', 'Contact path']
+      }
+    },
+    {
+      name: 'Brand Identity System',
+      category: 'Brand',
+      desc: 'A flexible identity framework for launches, social channels, ads, and future campaigns.',
+      tags: ['Branding', 'Logo', 'Guidelines'],
+      color: '#4f342f',
+      img: 'images/portfolio-5.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'A brand can look decent in one place and still fall apart across ads, social, website, decks, and vendor handoffs.',
+        solution: 'We create a practical system: mark, palette, type, visual rules, tone, and examples for the channels the business actually uses.',
+        result: 'A brand manual that makes every touchpoint feel consistent without slowing the team down.',
+        deliverables: ['Logo direction', 'Palette', 'Typography', 'Brand manual']
+      }
+    },
+    {
+      name: 'Product UX Sprint',
+      category: 'Product',
+      desc: 'A focused interface sprint for dashboards, portals, onboarding, and app workflows.',
+      tags: ['UX/UI', 'Prototype', 'Design System'],
+      color: '#14283a',
+      img: 'images/portfolio-6.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Product ideas often grow as feature lists before the core user journey is clear.',
+        solution: 'We define priority workflows, prototype the experience, design reusable UI patterns, and identify what should be built first.',
+        result: 'A product direction that helps founders and teams build with less waste and more confidence.',
+        deliverables: ['Journey map', 'Clickable prototype', 'UI components', 'Build roadmap']
+      }
+    },
+    {
+      name: 'Content Operating Rhythm',
+      category: 'Content',
+      desc: 'A social content system for visibility, consistency, and useful reporting.',
+      tags: ['Social Media', 'Short-form', 'Reporting'],
+      color: '#604024',
+      img: 'images/portfolio-4.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Teams post inconsistently because ideas, approvals, formats, and reporting live in different places.',
+        solution: 'We define pillars, reusable formats, posting cadence, creative briefs, and reporting views so content becomes operational.',
+        result: 'A content rhythm built for steady visibility instead of last-minute posting.',
+        deliverables: ['Content pillars', 'Short-form briefs', 'Posting cadence', 'Monthly report']
+      }
+    },
+    {
+      name: 'AI Response Layer',
+      category: 'AI',
+      desc: 'An intelligent intake and follow-up layer for service requests and support questions.',
+      tags: ['AI Automation', 'Forms', 'Routing'],
+      color: '#20263a',
+      img: 'images/portfolio-3.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'When inquiries arrive from many channels, response quality depends too much on who is available that day.',
+        solution: 'We structure intake questions, qualify leads, route requests, draft follow-up, and surface the right next step.',
+        result: 'A faster first response and cleaner handoff from marketing to sales or operations.',
+        deliverables: ['Smart intake', 'Routing logic', 'Follow-up templates', 'Ops dashboard']
+      }
+    }
   ],
   es: [
-    { name: "Luminos App", desc: "Aplicación móvil fintech", tags: ["UX/UI", "Desarrollo de Apps"], color: "#1a1a2e", img: "images/portfolio-1.png",
-      case: { challenge: "Luminos necesitaba una app bancaria móvil que compitiera con players fintech establecidos, enfocada en usuarios Gen Z.", solution: "Diseñamos un sistema UX/UI completo con ahorro gamificado, seguridad biométrica y una interfaz distintiva en modo oscuro.", result: "4.8★ en App Store, 150K descargas en 3 meses, 62% de retención de usuarios activos diarios." }},
-    { name: "Verde Organic", desc: "E-commerce: marca y diseño web", tags: ["Diseño Web", "Branding"], color: "#2d5016", img: "images/portfolio-2.png",
-      case: { challenge: "Una marca de alimentos orgánicos necesitaba transicionar de mercados locales a e-commerce completo.", solution: "Construimos una identidad de marca completa con paleta terrosa, tipografía custom y tienda Shopify con suscripciones.", result: "285% de incremento en ingresos online, 12K suscriptores mensuales en 6 meses." }},
-    { name: "NovaTech Solutions", desc: "Rediseño de sitio corporativo", tags: ["Diseño Web", "Landing Pages"], color: "#0f3460", img: "images/portfolio-3.png",
-      case: { challenge: "El sitio de software empresarial de NovaTech tenía 78% de tasa de rebote y no generaba leads calificados.", solution: "Rediseño completo enfocado en propuestas de valor claras, demos interactivos y embudo de captación optimizado.", result: "Tasa de rebote reducida a 34%, generación de leads aumentó 420%, duración de sesión aumentó 3.2x." }},
-    { name: "Bloom Wellness", desc: "Campaña de marketing digital integral", tags: ["Meta Ads", "Embudos de Venta"], color: "#6b2d5b", img: "images/portfolio-4.png",
-      case: { challenge: "Una marca de bienestar necesitaba escalar de alcance local a nacional con presupuesto limitado.", solution: "Creamos una estrategia multi-canal con Meta Ads, automatización de email y retargeting con optimización dinámica de creativos.", result: "ROAS de 6.8x, 3,200 nuevos clientes en 90 días, costo por adquisición reducido 58%." }},
-    { name: "Atlas Ventures", desc: "Identidad de marca y lineamientos", tags: ["Branding", "Creación de Logos"], color: "#1b1b2f", img: "images/portfolio-5.png",
-      case: { challenge: "Un fondo de capital de riesgo necesitaba renovar su marca para atraer startups Serie A e inversores institucionales.", solution: "Desarrollamos un sistema de marca premium con logo custom, jerarquía tipográfica, plantillas de pitch deck y guías de marca completas.", result: "Reconocimiento de marca incrementó 340%, 28 nuevas alianzas con startups en Q1, tasa de cierre de presentaciones aumentó 45%." }},
-    { name: "CrystalClear SaaS", desc: "Diseño de producto y desarrollo", tags: ["UX/UI", "Desarrollo de Apps"], color: "#0a3d62", img: "images/portfolio-6.png",
-      case: { challenge: "Una plataforma de analítica B2B necesitaba rediseño completo para reducir abandono y mejorar onboarding.", solution: "Rediseñamos todo el producto con sistema de dashboards intuitivo, flujo de onboarding guiado y colaboración en tiempo real.", result: "Abandono reducido de 12% a 4.2%, tasa de completación de onboarding aumentó a 89%, NPS mejoró de 32 a 71." }}
+    {
+      name: 'Blueprint de Growth Stack',
+      category: 'Growth',
+      desc: 'Un sistema de embudo conectado para convertir atencion pagada en conversaciones calificadas.',
+      tags: ['Embudos', 'Meta Ads', 'Automatizacion'],
+      color: '#18212f',
+      img: 'images/portfolio-1.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Muchos negocios de servicio tienen ads, formularios, email y seguimiento como piezas separadas. Eso ensucia la medicion y retrasa la respuesta.',
+        solution: 'Mapeamos la oferta, construimos pagina de conversion, conectamos routing CRM, agregamos email follow-up y reportes.',
+        result: 'Un sistema de adquisicion repetible disenado para reducir seguimiento manual y medir mejor cada campana.',
+        deliverables: ['Landing de conversion', 'Routing de leads', 'Email follow-up', 'Dashboard']
+      }
+    },
+    {
+      name: 'Sitio Premium de Servicio',
+      category: 'Web',
+      desc: 'Un sistema web editorial para confianza, posicionamiento y oportunidades calificadas.',
+      tags: ['Sitios Web', 'UX', 'SEO'],
+      color: '#263c35',
+      img: 'images/portfolio-2.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Las marcas premium de servicio suelen explicar demasiado y probar muy poco, lo que hace que el visitante dude.',
+        solution: 'Estructuramos el sitio alrededor de una promesa clara, bloques de prueba, rutas de servicio y contacto high-touch.',
+        result: 'Una puerta digital disenada para hacer la experiencia mas facil de entender y comprar.',
+        deliverables: ['Arquitectura de mensaje', 'UX web', 'Paginas de servicio', 'Ruta de contacto']
+      }
+    },
+    {
+      name: 'Sistema de Identidad',
+      category: 'Brand',
+      desc: 'Un marco de identidad flexible para lanzamientos, redes, anuncios y futuras campanas.',
+      tags: ['Branding', 'Logo', 'Lineamientos'],
+      color: '#4f342f',
+      img: 'images/portfolio-5.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Una marca puede verse bien en un lugar y romperse en ads, redes, sitio web, decks y proveedores.',
+        solution: 'Creamos un sistema practico: marca, paleta, tipografia, reglas visuales, tono y ejemplos para canales reales.',
+        result: 'Un manual de marca que ayuda a que cada punto de contacto sea consistente sin frenar al equipo.',
+        deliverables: ['Direccion de logo', 'Paleta', 'Tipografia', 'Manual de marca']
+      }
+    },
+    {
+      name: 'Sprint de Producto UX',
+      category: 'Product',
+      desc: 'Un sprint de interfaz para dashboards, portales, onboarding y flujos de app.',
+      tags: ['UX/UI', 'Prototipo', 'Sistema UI'],
+      color: '#14283a',
+      img: 'images/portfolio-6.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Las ideas de producto suelen crecer como listas de funciones antes de aclarar el viaje principal del usuario.',
+        solution: 'Definimos flujos prioritarios, prototipamos, disenamos patrones reutilizables e identificamos que construir primero.',
+        result: 'Una direccion de producto que ayuda a construir con menos desperdicio y mas confianza.',
+        deliverables: ['Mapa de journey', 'Prototipo clickable', 'Componentes UI', 'Roadmap']
+      }
+    },
+    {
+      name: 'Ritmo Operativo de Contenido',
+      category: 'Content',
+      desc: 'Un sistema de contenido social para visibilidad, consistencia y reportes utiles.',
+      tags: ['Redes', 'Video corto', 'Reportes'],
+      color: '#604024',
+      img: 'images/portfolio-4.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Los equipos publican de forma irregular porque ideas, aprobaciones, formatos y reportes viven en lugares distintos.',
+        solution: 'Definimos pilares, formatos reutilizables, cadencia, briefs creativos y vistas de reporte.',
+        result: 'Un ritmo de contenido construido para visibilidad constante, no publicaciones de ultimo minuto.',
+        deliverables: ['Pilares de contenido', 'Briefs short-form', 'Cadencia', 'Reporte mensual']
+      }
+    },
+    {
+      name: 'Capa de Respuesta IA',
+      category: 'AI',
+      desc: 'Una capa inteligente de intake y seguimiento para solicitudes de servicio y soporte.',
+      tags: ['IA', 'Formularios', 'Routing'],
+      color: '#20263a',
+      img: 'images/portfolio-3.png',
+      outcome: 'Showcase',
+      isRealClient: false,
+      case: {
+        challenge: 'Cuando las consultas llegan por muchos canales, la calidad de respuesta depende demasiado de quien este disponible.',
+        solution: 'Estructuramos intake, calificamos leads, ruteamos solicitudes, redactamos follow-up y mostramos el siguiente paso.',
+        result: 'Primera respuesta mas rapida y handoff mas limpio entre marketing, ventas y operaciones.',
+        deliverables: ['Intake inteligente', 'Logica de routing', 'Templates follow-up', 'Dashboard ops']
+      }
+    }
   ]
 };
 
-/* ---- News Data ---- */
 const newsImages = ['images/news/news-1.png', 'images/news/news-2.png', 'images/news/news-3.png'];
 
 const newsData = {
   en: [
-    { category: "AI", title: "How AI is Revolutionizing Digital Marketing Strategies", date: "May 2026", read: "5 min read",
-      content: "Artificial intelligence is no longer a futuristic concept — it's the backbone of modern digital marketing. From predictive customer segmentation to automated content generation, AI tools are enabling agencies to deliver hyper-personalized experiences at scale.\n\nAt CREATIVE MK, we've integrated AI-powered chatbots that handle 85% of initial customer inquiries, reducing response times from hours to seconds. Our dynamic content personalization engine analyzes user behavior in real-time, adjusting messaging, imagery, and CTAs to match individual preferences.\n\nThe most impactful applications we've seen include:\n• Predictive lead scoring that identifies high-value prospects before they engage\n• Automated A/B testing that optimizes campaigns 24/7 without human intervention\n• Natural language processing for sentiment analysis across social channels\n\nThe key insight? AI doesn't replace creativity — it amplifies it. By automating data analysis and routine optimization, creative teams can focus on what they do best: crafting compelling narratives that resonate with audiences." },
-    { category: "Design", title: "Modern Branding Trends That Define Premium Identities", date: "Apr 2026", read: "4 min read",
-      content: "In 2026, premium branding has shifted decisively toward minimalist sophistication. The brands that stand out aren't the loudest — they're the most intentional.\n\nKey trends defining premium identities this year:\n\n1. Typography-First Design: Leading brands are using custom typefaces as their primary brand asset, reducing reliance on logos and icons.\n\n2. Muted, Earthy Palettes: Neon and bright gradients are giving way to warm neutrals, deep charcoals, and organic earth tones.\n\n3. Editorial Whitespace: Premium brands embrace generous whitespace, allowing each element to breathe and command attention.\n\n4. Hyper-Realistic Photography: Stock photos are out. Brands investing in custom, editorial-quality photography see 3x higher engagement.\n\n5. Micro-Interactions: Subtle hover effects, smooth transitions, and purposeful animations create a sense of craftsmanship.\n\nAt CREATIVE MK, we apply these principles across every project, ensuring our clients' brands feel current, premium, and memorable." },
-    { category: "Technology", title: "Web Design Trends Shaping the Digital Landscape in 2026", date: "Mar 2026", read: "6 min read",
-      content: "The web design landscape in 2026 is defined by the convergence of aesthetics, performance, and intelligence.\n\nTop trends we're implementing:\n\n• Scroll-Driven Animations: CSS scroll-timeline is now widely supported, enabling cinematic storytelling without JavaScript overhead.\n\n• Variable Fonts: Single font files that adapt weight, width, and optical size dynamically, improving both performance and typographic control.\n\n• Dark Mode by Default: With 78% of users preferring dark interfaces, dark-mode-first design has become the standard.\n\n• AI-Powered Personalization: Websites that adapt layout, content, and navigation based on user behavior see 45% higher conversion rates.\n\n• Core Web Vitals Obsession: Google's ranking factors have made performance optimization inseparable from design decisions. Every visual choice must justify its loading cost.\n\n• 3D and WebGL Integration: Subtle 3D elements add depth and premium feel without sacrificing performance.\n\nThe most successful websites in 2026 don't just look beautiful — they're intelligent systems that learn and adapt to each visitor." }
+    {
+      category: 'AI',
+      title: 'How AI is reshaping service-business growth systems',
+      date: 'May 2026',
+      read: '5 min read',
+      content: 'AI is most useful when it is connected to a real workflow. For service businesses, that means faster qualification, cleaner handoff, better follow-up, and more useful reporting.\n\nThe highest-leverage use cases are lead intake, response routing, content personalization, support triage, and campaign reporting.\n\nThe creative work still matters. AI simply removes the drag around repetitive operational tasks so the brand can respond with more speed and consistency.'
+    },
+    {
+      category: 'Design',
+      title: 'What makes a premium service website feel trustworthy',
+      date: 'Apr 2026',
+      read: '4 min read',
+      content: 'Premium websites do not win by adding more decoration. They win by creating clarity: a strong promise, proof, pacing, fast loading, and a contact path that respects the buyer.\n\nThe best service sites feel editorial and operational at the same time. They are beautiful, but every section has a job.\n\nThat is the standard we use when designing websites, landing pages, and brand systems for growth-focused businesses.'
+    },
+    {
+      category: 'Growth',
+      title: 'Why funnels fail when the brand system is weak',
+      date: 'Mar 2026',
+      read: '6 min read',
+      content: 'A funnel cannot fix a weak promise. Paid media, landing pages, and automation work best when the audience immediately understands who the brand helps, what changes, and why it should be trusted.\n\nThe real growth stack connects positioning, creative, landing experience, follow-up, and measurement.\n\nWhen those pieces are designed together, campaigns become easier to test and easier to improve.'
+    }
   ],
   es: [
-    { category: "IA", title: "Cómo la IA Está Revolucionando las Estrategias de Marketing Digital", date: "Mayo 2026", read: "5 min lectura",
-      content: "La inteligencia artificial ya no es un concepto futurista — es la columna vertebral del marketing digital moderno. Desde la segmentación predictiva de clientes hasta la generación automatizada de contenido, las herramientas de IA permiten a las agencias ofrecer experiencias hiperpersonalizadas a escala.\n\nEn CREATIVE MK, hemos integrado chatbots con IA que manejan el 85% de las consultas iniciales de clientes, reduciendo tiempos de respuesta de horas a segundos. Nuestro motor de personalización dinámica de contenido analiza el comportamiento del usuario en tiempo real, ajustando mensajes, imágenes y CTAs según preferencias individuales.\n\nLas aplicaciones más impactantes que hemos visto incluyen:\n• Puntuación predictiva de leads que identifica prospectos de alto valor antes de que interactúen\n• Testing A/B automatizado que optimiza campañas 24/7 sin intervención humana\n• Procesamiento de lenguaje natural para análisis de sentimiento en canales sociales\n\nLa clave: la IA no reemplaza la creatividad — la amplifica." },
-    { category: "Diseño", title: "Tendencias de Branding Moderno que Definen Identidades Premium", date: "Abr 2026", read: "4 min lectura",
-      content: "En 2026, el branding premium se ha movido decisivamente hacia la sofisticación minimalista. Las marcas que destacan no son las más ruidosas — son las más intencionales.\n\nTendencias clave que definen identidades premium este año:\n\n1. Diseño Typography-First: Las marcas líderes usan tipografías custom como su activo principal de marca.\n\n2. Paletas Terrosas y Suaves: Los neones y gradientes brillantes dan paso a neutrales cálidos, carbones profundos y tonos orgánicos.\n\n3. Whitespace Editorial: Las marcas premium abrazan el espacio generoso, permitiendo que cada elemento respire y comande atención.\n\n4. Fotografía Hiperrealista: Las fotos de stock están fuera. Las marcas que invierten en fotografía editorial custom ven 3x más engagement.\n\n5. Micro-Interacciones: Efectos hover sutiles, transiciones suaves y animaciones con propósito crean sensación de artesanía.\n\nEn CREATIVE MK, aplicamos estos principios en cada proyecto." },
-    { category: "Tecnología", title: "Tendencias de Diseño Web que Moldean el Panorama Digital en 2026", date: "Mar 2026", read: "6 min lectura",
-      content: "El panorama del diseño web en 2026 se define por la convergencia de estética, rendimiento e inteligencia.\n\nTendencias principales que estamos implementando:\n\n• Animaciones por Scroll: CSS scroll-timeline ahora tiene soporte amplio, permitiendo narrativa cinematográfica sin sobrecarga de JavaScript.\n\n• Fuentes Variables: Archivos de fuente únicos que adaptan peso, ancho y tamaño óptico dinámicamente.\n\n• Dark Mode por Defecto: Con 78% de usuarios prefiriendo interfaces oscuras, el diseño dark-mode-first se ha convertido en estándar.\n\n• Personalización con IA: Sitios web que adaptan layout, contenido y navegación basados en comportamiento del usuario ven 45% más conversión.\n\n• Obsesión por Core Web Vitals: Los factores de ranking de Google han hecho que la optimización de rendimiento sea inseparable de las decisiones de diseño.\n\n• Integración 3D y WebGL: Elementos 3D sutiles añaden profundidad y sensación premium sin sacrificar rendimiento.\n\nLos sitios web más exitosos en 2026 no solo se ven hermosos — son sistemas inteligentes que aprenden y se adaptan a cada visitante." }
+    {
+      category: 'IA',
+      title: 'Como la IA esta cambiando los sistemas de crecimiento',
+      date: 'Mayo 2026',
+      read: '5 min lectura',
+      content: 'La IA funciona mejor cuando esta conectada a un flujo real. Para negocios de servicio, eso significa mejor calificacion, handoff mas limpio, follow-up mas rapido y reportes mas utiles.\n\nLos casos de mayor impacto son intake de leads, routing de respuesta, personalizacion de contenido, soporte y reportes de campana.\n\nLa creatividad sigue importando. La IA simplemente quita friccion operativa repetitiva.'
+    },
+    {
+      category: 'Diseno',
+      title: 'Que hace que un sitio premium genere confianza',
+      date: 'Abr 2026',
+      read: '4 min lectura',
+      content: 'Los sitios premium no ganan por agregar mas decoracion. Ganan por crear claridad: promesa fuerte, prueba, ritmo, carga rapida y una ruta de contacto respetuosa.\n\nLos mejores sitios de servicio se sienten editoriales y operativos al mismo tiempo. Son bellos, pero cada seccion tiene un trabajo.\n\nEse es el estandar que usamos al disenar sitios, landing pages y sistemas de marca.'
+    },
+    {
+      category: 'Growth',
+      title: 'Por que los embudos fallan cuando la marca es debil',
+      date: 'Mar 2026',
+      read: '6 min lectura',
+      content: 'Un embudo no puede reparar una promesa debil. La pauta, las landing pages y la automatizacion funcionan mejor cuando la audiencia entiende rapido a quien ayuda la marca, que cambia y por que confiar.\n\nEl growth stack real conecta posicionamiento, creatividad, experiencia de landing, follow-up y medicion.\n\nCuando esas piezas se disenan juntas, las campanas son mas faciles de probar y mejorar.'
+    }
   ]
 };
 
-/* ---- FAQ Data ---- */
 const faqData = {
   en: [
-    { q: "What services does CREATIVE MK offer?", a: "We offer a full range of digital services including Web Design, Landing Pages, Sales Funnels, Meta Ads, Social Media Management, Branding, Logo Creation, Brand Manuals, App Development, and UX/UI Design." },
-    { q: "How long does a typical project take?", a: "Project timelines vary by scope. A landing page typically takes 1-2 weeks, a full website 4-8 weeks, and comprehensive branding projects 3-6 weeks. We'll provide a detailed timeline during our initial consultation." },
-    { q: "Do you work with international clients?", a: "Absolutely. We are a digital-first agency with clients worldwide. Our team is bilingual (English/Spanish) and experienced in working across different time zones and cultures." },
-    { q: "How do you integrate AI automation?", a: "We embed AI tools into every system we build — from intelligent chatbots and automated email sequences to dynamic content personalization and predictive analytics dashboards that work 24/7." },
-    { q: "Can you help with an existing brand refresh?", a: "Yes. Many of our clients come to us for brand refreshes. We can update your visual identity, create new brand guidelines, redesign your website, and align all touchpoints with your evolved brand vision." }
+    { q: 'What services does CREATIVE MK offer?', a: 'We build connected digital systems across branding, websites, landing pages, funnels, paid growth, content systems, product UX/UI, development, and AI automation.' },
+    { q: 'Can you redesign an existing website or brand?', a: 'Yes. We can audit the current experience, preserve what works, rebuild weak sections, and turn the brand into a clearer system across web, ads, content, and sales touchpoints.' },
+    { q: 'Do you work with international clients?', a: 'Yes. CREATIVE MK is digital-first, bilingual, and built to collaborate across markets and time zones.' },
+    { q: 'How do you integrate AI automation?', a: 'We connect AI to practical workflows: lead intake, routing, first-response support, content personalization, reporting, and follow-up sequences.' },
+    { q: 'How long does a typical project take?', a: 'A focused landing page can take 1-2 weeks, a full website 4-8 weeks, and deeper brand or product systems 4-10 weeks depending on scope.' }
   ],
   es: [
-    { q: "¿Qué servicios ofrece CREATIVE MK?", a: "Ofrecemos una gama completa de servicios digitales incluyendo Diseño Web, Landing Pages, Embudos de Venta, Meta Ads, Manejo de Redes Sociales, Branding, Creación de Logos, Manuales de Marca, Desarrollo de Aplicaciones y Diseño UX/UI." },
-    { q: "¿Cuánto tiempo toma un proyecto típico?", a: "Los tiempos varían según el alcance. Una landing page toma típicamente 1-2 semanas, un sitio web completo 4-8 semanas, y proyectos integrales de branding 3-6 semanas. Proporcionamos un cronograma detallado en la consulta inicial." },
-    { q: "¿Trabajan con clientes internacionales?", a: "Por supuesto. Somos una agencia digital-first con clientes en todo el mundo. Nuestro equipo es bilingüe (inglés/español) y tiene experiencia trabajando en diferentes zonas horarias y culturas." },
-    { q: "¿Cómo integran la automatización con IA?", a: "Integramos herramientas de IA en cada sistema que construimos — desde chatbots inteligentes y secuencias de email automatizadas hasta personalización dinámica de contenido y dashboards de analítica predictiva que funcionan 24/7." },
-    { q: "¿Pueden ayudar con un rediseño de marca existente?", a: "Sí. Muchos clientes nos buscan para refrescar su marca. Podemos actualizar tu identidad visual, crear nuevos lineamientos de marca, rediseñar tu sitio web y alinear todos los puntos de contacto con tu visión de marca evolucionada." }
+    { q: 'Que servicios ofrece CREATIVE MK?', a: 'Construimos sistemas digitales conectados: branding, sitios web, landing pages, embudos, paid growth, contenido, UX/UI, desarrollo y automatizacion IA.' },
+    { q: 'Pueden redisenar un sitio o marca existente?', a: 'Si. Podemos auditar la experiencia actual, conservar lo que funciona, reconstruir secciones debiles y convertir la marca en un sistema mas claro.' },
+    { q: 'Trabajan con clientes internacionales?', a: 'Si. CREATIVE MK es digital-first, bilingue y esta preparado para colaborar entre mercados y zonas horarias.' },
+    { q: 'Como integran automatizacion con IA?', a: 'Conectamos IA a flujos practicos: intake de leads, routing, primera respuesta, personalizacion de contenido, reportes y secuencias de follow-up.' },
+    { q: 'Cuanto tiempo toma un proyecto?', a: 'Una landing enfocada puede tomar 1-2 semanas, un sitio completo 4-8 semanas y sistemas de marca o producto 4-10 semanas segun alcance.' }
   ]
 };
 
-/* ---- Render Functions ---- */
+const _capabilitiesVisualBound = new WeakSet();
+let lastFocusedElement = null;
 
 function renderCapabilities() {
   const list = document.getElementById('capabilities-list');
+  const img = document.getElementById('cap-visual-img');
   if (!list) return;
   const data = servicesData[currentLang];
+  if (img && data[0]) img.src = data[0].media;
   list.innerHTML = data.map((s, i) => `
     <div class="accordion-item reveal${i === 0 ? ' active' : ''}">
       <button class="accordion-header" aria-expanded="${i === 0 ? 'true' : 'false'}" aria-controls="cap-content-${i}" data-service-index="${i}">
-        <span class="accordion-title">${s.title}</span>
+        <span>
+          <span class="accordion-kicker">${s.lead}</span>
+          <span class="accordion-title">${s.title}</span>
+        </span>
         <span class="accordion-icon"></span>
       </button>
       <div class="accordion-content" id="cap-content-${i}" role="region" style="${i === 0 ? 'max-height:500px' : ''}">
         <div class="accordion-content__inner">
           <div>
             <p class="accordion-text">${s.desc}</p>
+            <p class="accordion-proof">${s.proof}</p>
             <div class="accordion-tags">${s.tags.map(t => `<span class="accordion-tag">${t}</span>`).join('')}</div>
           </div>
         </div>
       </div>
     </div>`).join('');
-  
-  initCapabilitiesVisualSwap(list);
 
+  initCapabilitiesVisualSwap(list);
   initAccordion('#capabilities-list');
   initAnimations();
+}
+
+function initCapabilitiesVisualSwap(list) {
+  if (_capabilitiesVisualBound.has(list)) return;
+  _capabilitiesVisualBound.add(list);
+  list.addEventListener('click', (e) => {
+    const header = e.target.closest('.accordion-header');
+    if (!header) return;
+    const idx = Number(header.dataset.serviceIndex);
+    const service = servicesData[currentLang][idx];
+    const img = document.getElementById('cap-visual-img');
+    if (!img || !service) return;
+    img.style.opacity = '0';
+    img.style.transform = 'scale(0.96)';
+    window.setTimeout(() => {
+      img.src = service.media;
+      img.alt = `${service.title} preview`;
+      img.style.opacity = '1';
+      img.style.transform = 'scale(1)';
+    }, 160);
+  });
 }
 
 function renderWork() {
   const grid = document.getElementById('work-grid');
   if (!grid) return;
   const data = workData[currentLang];
-  const viewText = currentLang === 'es' ? 'Ver proyecto' : 'View case study';
+  const allLabel = currentLang === 'es' ? 'Todos' : 'All';
+  const viewText = currentLang === 'es' ? 'Ver sistema' : 'View system';
+  const categories = [allLabel, ...new Set(data.map(item => item.category))];
   grid.innerHTML = `
-    <div class="work__row work__row--two">
-      ${data.slice(0, 2).map((p, i) => workCard(p, viewText, i)).join('')}
+    <div class="work__filters" aria-label="${currentLang === 'es' ? 'Filtrar proyectos' : 'Filter work'}">
+      ${categories.map((category, i) => `<button class="work__filter${i === 0 ? ' active' : ''}" type="button" data-filter="${category}">${category}</button>`).join('')}
     </div>
-    <div class="work__row work__row--two-reverse">
-      ${data.slice(2, 4).map((p, i) => workCard(p, viewText, i + 2)).join('')}
-    </div>
-    <div class="work__row work__row--two">
-      ${data.slice(4, 6).map((p, i) => workCard(p, viewText, i + 4)).join('')}
+    <div class="work__cards">
+      ${data.map((p, i) => workCard(p, viewText, i)).join('')}
     </div>`;
 
-  // Attach click events to work cards
   grid.querySelectorAll('.work__card').forEach(card => {
-    card.addEventListener('click', () => {
-      const idx = parseInt(card.dataset.workIndex);
+    const open = () => {
+      const idx = Number(card.dataset.workIndex);
       const project = workData[currentLang][idx];
       if (project && project.case) openCaseModal(project);
+    };
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open();
+      }
     });
-    card.style.cursor = 'pointer';
+  });
+
+  grid.querySelectorAll('.work__filter').forEach(button => {
+    button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      grid.querySelectorAll('.work__filter').forEach(item => item.classList.toggle('active', item === button));
+      grid.querySelectorAll('.work__card').forEach(card => {
+        const match = filter === allLabel || card.dataset.category === filter;
+        card.hidden = !match;
+      });
+    });
   });
 }
 
 function workCard(p, viewText, idx) {
-  return `<div class="work__card reveal" data-work-index="${idx}">
+  return `<article class="work__card reveal" data-work-index="${idx}" data-category="${p.category}" role="button" tabindex="0" aria-label="${viewText}: ${p.name}">
     <div class="work__card-media" style="background:${p.color}">
       <img src="${p.img}" alt="${p.name}" loading="lazy">
+      <span class="work__card-meta">${p.isRealClient ? 'Client work' : p.outcome}</span>
       <div class="work__card-overlay">
         <h3 class="work__card-name">${p.name}</h3>
         <p class="work__card-desc">${p.desc}</p>
@@ -206,10 +514,13 @@ function workCard(p, viewText, idx) {
       <span class="work__card-cta">${viewText}</span>
     </div>
     <div class="work__card-info">
-      <h3 class="work__card-info-name">${p.name}</h3>
-      <p class="work__card-info-desc">${p.desc}</p>
+      <div>
+        <h3 class="work__card-info-name">${p.name}</h3>
+        <p class="work__card-info-desc">${p.desc}</p>
+      </div>
+      <span class="work__card-outcome">${p.category}</span>
     </div>
-  </div>`;
+  </article>`;
 }
 
 function renderNews() {
@@ -217,7 +528,7 @@ function renderNews() {
   if (!grid) return;
   const data = newsData[currentLang];
   grid.innerHTML = data.map((n, i) => `
-    <div class="news__card reveal" data-news-index="${i}" style="cursor:pointer">
+    <article class="news__card reveal" data-news-index="${i}" role="button" tabindex="0" aria-label="${n.title}">
       <div class="news__card-image">
         <img src="${newsImages[i]}" alt="${n.title}" loading="lazy">
       </div>
@@ -230,14 +541,20 @@ function renderNews() {
           <span>${n.read}</span>
         </div>
       </div>
-    </div>`).join('');
+    </article>`).join('');
 
-  // Attach click events to news cards
   grid.querySelectorAll('.news__card').forEach(card => {
-    card.addEventListener('click', () => {
-      const idx = parseInt(card.dataset.newsIndex);
+    const open = () => {
+      const idx = Number(card.dataset.newsIndex);
       const article = newsData[currentLang][idx];
       if (article && article.content) openNewsModal(article, newsImages[idx]);
+    };
+    card.addEventListener('click', open);
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        open();
+      }
     });
   });
 }
@@ -262,7 +579,6 @@ function renderFAQ() {
   initAnimations();
 }
 
-/* ---- Carousel with Team Photos ---- */
 function renderCarousel() {
   const track = document.getElementById('carousel-track');
   if (!track) return;
@@ -271,24 +587,21 @@ function renderCarousel() {
     'images/team/team-4.png', 'images/team/team-5.png', 'images/team/team-6.png'
   ];
   const items = imgs.map(src => `<div class="about__carousel-item"><img src="${src}" alt="CREATIVE MK team" loading="lazy"></div>`).join('');
-  track.innerHTML = items + items; // Duplicate for infinite loop
+  track.innerHTML = items + items;
 
-  // Navigation buttons
   const prevBtn = document.getElementById('carousel-prev');
   const nextBtn = document.getElementById('carousel-next');
-  if (prevBtn && nextBtn) {
-    const scrollAmount = 400;
-    const carousel = track.parentElement;
-    prevBtn.addEventListener('click', () => {
-      carousel.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-    });
-    nextBtn.addEventListener('click', () => {
-      carousel.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    });
+  const carousel = track.parentElement;
+  const move = (amount) => {
+    track.classList.add('about__carousel-track--manual');
+    carousel.scrollBy({ left: amount, behavior: 'smooth' });
+  };
+  if (prevBtn && nextBtn && carousel) {
+    prevBtn.addEventListener('click', () => move(-400));
+    nextBtn.addEventListener('click', () => move(400));
   }
 }
 
-/* ---- Newsletter Handler ---- */
 function initNewsletter() {
   const form = document.getElementById('newsletter-form');
   const success = document.getElementById('newsletter-success');
@@ -303,7 +616,6 @@ function initNewsletter() {
   });
 }
 
-/* ---- Play Showreel - Responsive source + click-to-sound ---- */
 function syncHeroSoundButton() {
   const btn = document.getElementById('hero-play-btn');
   const video = document.getElementById('hero-video');
@@ -318,10 +630,7 @@ function syncHeroSoundButton() {
   btn.setAttribute('aria-pressed', String(isSoundOn));
   btn.setAttribute('aria-label', isSoundOn ? dict['hero.soundMute'] : dict['hero.soundEnable']);
 
-  if (btnLabel) {
-    btnLabel.textContent = isSoundOn ? dict['hero.soundMute'] : dict['hero.soundEnable'];
-  }
-
+  if (btnLabel) btnLabel.textContent = isSoundOn ? dict['hero.soundMute'] : dict['hero.soundEnable'];
   if (btnIcon) {
     btnIcon.innerHTML = isSoundOn
       ? '<path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/>'
@@ -355,23 +664,19 @@ function initPlayShowreel() {
   function setVideoSource() {
     const nextSrc = getExpectedSrc();
     if (!nextSrc || video.getAttribute('src') === nextSrc) return;
-
     const wasPlaying = !video.paused;
     const previousTime = Number.isFinite(video.currentTime) ? video.currentTime : 0;
     const shouldRestoreSound = !video.muted;
 
-    const restorePlayback = () => {
+    video.addEventListener('loadedmetadata', () => {
       if (previousTime > 0 && Number.isFinite(video.duration)) {
         video.currentTime = Math.min(previousTime, Math.max(video.duration - 0.25, 0));
       }
-
-      if (shouldRestoreSound) video.muted = false;
+      video.muted = !shouldRestoreSound;
       syncHeroSoundButton();
-
       if (wasPlaying || video.autoplay) playMuted();
-    };
+    }, { once: true });
 
-    video.addEventListener('loadedmetadata', restorePlayback, { once: true });
     video.muted = true;
     video.defaultMuted = true;
     video.setAttribute('src', nextSrc);
@@ -386,12 +691,8 @@ function initPlayShowreel() {
   playMuted();
 
   btn.addEventListener('click', () => {
-    if (video.muted) {
-      video.muted = false;
-      playMuted();
-    } else {
-      video.muted = true;
-    }
+    video.muted = !video.muted;
+    if (!video.muted) playMuted();
     syncHeroSoundButton();
   });
 
@@ -402,16 +703,18 @@ function initPlayShowreel() {
   }
 }
 
-/* ---- Modal System ---- */
 function createModal() {
   if (document.getElementById('detail-modal')) return;
   const modal = document.createElement('div');
   modal.id = 'detail-modal';
   modal.className = 'detail-modal';
+  modal.setAttribute('role', 'dialog');
+  modal.setAttribute('aria-modal', 'true');
+  modal.setAttribute('aria-hidden', 'true');
   modal.innerHTML = `
     <div class="detail-modal__backdrop"></div>
-    <div class="detail-modal__container">
-      <button class="detail-modal__close" aria-label="Close">&times;</button>
+    <div class="detail-modal__container" role="document">
+      <button class="detail-modal__close" type="button" aria-label="Close">&times;</button>
       <div class="detail-modal__content"></div>
     </div>`;
   document.body.appendChild(modal);
@@ -420,22 +723,41 @@ function createModal() {
 function openModal(html) {
   const modal = document.getElementById('detail-modal');
   if (!modal) return;
+  lastFocusedElement = document.activeElement;
   modal.querySelector('.detail-modal__content').innerHTML = html;
+  const heading = modal.querySelector('.modal-case__title, .modal-news__title');
+  if (heading) {
+    heading.id = 'detail-modal-title';
+    modal.setAttribute('aria-labelledby', heading.id);
+  }
   modal.classList.add('active');
+  modal.setAttribute('aria-hidden', 'false');
   document.body.style.overflow = 'hidden';
+  const closeButton = modal.querySelector('.detail-modal__close');
+  if (closeButton) {
+    window.setTimeout(() => closeButton.focus(), 0);
+    window.setTimeout(() => {
+      if (!modal.contains(document.activeElement)) closeButton.focus();
+    }, 120);
+  }
 }
 
 function closeModal() {
   const modal = document.getElementById('detail-modal');
   if (!modal) return;
   modal.classList.remove('active');
+  modal.setAttribute('aria-hidden', 'true');
+  modal.removeAttribute('aria-labelledby');
   document.body.style.overflow = '';
+  if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
+    lastFocusedElement.focus();
+  }
 }
 
 function openCaseModal(project) {
   const labels = currentLang === 'es'
-    ? { challenge: 'El Desafío', solution: 'Nuestra Solución', result: 'Resultados', caseStudy: 'Caso de Estudio' }
-    : { challenge: 'The Challenge', solution: 'Our Solution', result: 'Results', caseStudy: 'Case Study' };
+    ? { challenge: 'El desafio', solution: 'Nuestra solucion', result: 'Resultado esperado', caseStudy: project.isRealClient ? 'Caso de estudio' : 'Showcase de capacidad', deliverables: 'Entregables' }
+    : { challenge: 'The challenge', solution: 'Our approach', result: 'Expected outcome', caseStudy: project.isRealClient ? 'Case study' : 'Capability showcase', deliverables: 'Deliverables' };
 
   const html = `
     <div class="modal-case">
@@ -455,6 +777,10 @@ function openCaseModal(project) {
           <h3>${labels.solution}</h3>
           <p>${project.case.solution}</p>
         </div>
+        <div class="modal-case__section">
+          <h3>${labels.deliverables}</h3>
+          <div class="modal-case__tags">${project.case.deliverables.map(t => `<span class="modal-case__tag">${t}</span>`).join('')}</div>
+        </div>
         <div class="modal-case__section modal-case__section--result">
           <h3>${labels.result}</h3>
           <p>${project.case.result}</p>
@@ -465,14 +791,8 @@ function openCaseModal(project) {
 }
 
 function openNewsModal(article, imgSrc) {
-  const backLabel = currentLang === 'es' ? '← Volver a noticias' : '← Back to news';
-  const paragraphs = article.content.split('\n\n').map(p => {
-    if (p.startsWith('•') || p.startsWith('1.') || p.startsWith('2.') || p.startsWith('3.') || p.startsWith('4.') || p.startsWith('5.')) {
-      return `<p class="modal-news__list">${p.replace(/\n/g, '<br>')}</p>`;
-    }
-    return `<p>${p}</p>`;
-  }).join('');
-
+  const backLabel = currentLang === 'es' ? 'Volver a noticias' : 'Back to news';
+  const paragraphs = article.content.split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
   const html = `
     <div class="modal-news">
       <div class="modal-news__hero">
@@ -487,7 +807,7 @@ function openNewsModal(article, imgSrc) {
         </div>
         <h2 class="modal-news__title">${article.title}</h2>
         <div class="modal-news__content">${paragraphs}</div>
-        <button class="modal-news__back" onclick="closeModal()">${backLabel}</button>
+        <button class="modal-news__back" type="button">${backLabel}</button>
       </div>
     </div>`;
   openModal(html);
@@ -496,7 +816,7 @@ function openNewsModal(article, imgSrc) {
 function initModal() {
   createModal();
   document.addEventListener('click', (e) => {
-    if (e.target.closest('.detail-modal__close') || e.target.closest('.detail-modal__backdrop')) {
+    if (e.target.closest('.detail-modal__close') || e.target.closest('.detail-modal__backdrop') || e.target.closest('.modal-news__back')) {
       closeModal();
     }
   });
@@ -505,7 +825,6 @@ function initModal() {
   });
 }
 
-/* ---- Init ---- */
 document.addEventListener('DOMContentLoaded', () => {
   initI18n();
   initHeader();
@@ -520,4 +839,3 @@ document.addEventListener('DOMContentLoaded', () => {
   initModal();
   initAnimations();
 });
-
