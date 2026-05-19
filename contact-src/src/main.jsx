@@ -18,7 +18,7 @@ const copy = {
     heroTitle: "Let's Talk",
     heroText: "Tell us where your brand is going. We'll map the right digital system: website, funnel, paid media, automation, product, or a full growth stack.",
     clientLabel: 'Become a client',
-    directEmail: 'hello@creativemk.com',
+    directEmail: 'hey@creativemk.net',
     directPhone: '+1 (234) 567-890',
     responseTime: 'Response window',
     responseValue: 'Within 1 business day',
@@ -80,7 +80,7 @@ const copy = {
     heroTitle: 'Hablemos',
     heroText: 'Cuéntanos hacia dónde va tu marca. Vamos a mapear el sistema digital correcto: sitio web, embudo, pauta, automatización, producto o un stack completo de crecimiento.',
     clientLabel: 'Conviértete en cliente',
-    directEmail: 'hello@creativemk.com',
+    directEmail: 'hey@creativemk.net',
     directPhone: '+1 (234) 567-890',
     responseTime: 'Tiempo de respuesta',
     responseValue: 'Dentro de 1 día hábil',
@@ -471,7 +471,7 @@ function Footer({ t }) {
         <span>{t.footerText}</span>
       </div>
       <div className="contact-footer__links">
-        <a href="mailto:hello@creativemk.com">hello@creativemk.com</a>
+        <a href="mailto:hey@creativemk.net">hey@creativemk.net</a>
         <a href="index.html#capabilities">{t.nav.services}</a>
         <a href="index.html#work">{t.nav.work}</a>
       </div>
