@@ -375,7 +375,10 @@ button {
 .field--wide,
 .chip-field--wide,
 .live-summary,
+.agent-brief-note,
+.consent-line,
 .required-note,
+.form-notice,
 .form-alert,
 .success-state,
 .magnetic-submit {
@@ -489,8 +492,70 @@ button {
   line-height: 1.5;
 }
 
+.agent-brief-note {
+  display: grid;
+  gap: 0.25rem;
+  padding: 0.95rem 1rem;
+  border: 1px solid rgba(15, 118, 110, 0.22);
+  border-radius: 8px;
+  background: rgba(240, 253, 250, 0.92);
+  color: #134e4a;
+}
+
+.agent-brief-note strong {
+  font-size: 0.94rem;
+}
+
+.agent-brief-note span {
+  color: #3f6f69;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
 .required-note {
   margin: 0;
+}
+
+.consent-line {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.92rem 1rem;
+  border: 1px solid rgba(10, 10, 10, 0.12);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #232323;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.consent-line input {
+  width: 18px;
+  height: 18px;
+  margin-top: 0.12rem;
+  accent-color: var(--ink);
+}
+
+.consent-line span {
+  display: grid;
+  gap: 0.22rem;
+}
+
+.consent-line small {
+  color: #737373;
+  font-size: 0.78rem;
+  line-height: 1.42;
+}
+
+.form-notice {
+  margin: 0;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(15, 118, 110, 0.18);
+  border-radius: 8px;
+  background: rgba(240, 253, 250, 0.85);
+  color: #115e59;
+  font-weight: 650;
 }
 
 .form-alert {
@@ -554,6 +619,46 @@ button {
   opacity: 0.72;
 }
 
+.contact-legal {
+  width: min(100%, 1440px);
+  margin: clamp(1.5rem, 3vw, 3rem) auto 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--line);
+  background: var(--line);
+}
+
+.contact-legal article {
+  min-height: 180px;
+  padding: clamp(1.25rem, 3vw, 2rem);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.contact-legal span {
+  display: inline-flex;
+  margin-bottom: 1.3rem;
+  color: #888;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.contact-legal h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.2vw, 2rem);
+  line-height: 1.05;
+  letter-spacing: -0.035em;
+}
+
+.contact-legal p {
+  margin: 0.9rem 0 0;
+  max-width: 620px;
+  color: #5f5f5f;
+  line-height: 1.6;
+}
+
 .contact-footer {
   display: flex;
   justify-content: space-between;
@@ -594,6 +699,15 @@ button {
   position: absolute;
   left: -9999px;
   opacity: 0;
+}
+
+.turnstile-slot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
 }
 
 .sr-only {
@@ -691,6 +805,10 @@ button {
   .request-panel__top,
   .contact-footer {
     flex-direction: column;
+  }
+
+  .contact-legal {
+    grid-template-columns: 1fr;
   }
 
   .contact-form {

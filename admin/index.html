@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>CREATIVE MK Lead Intelligence</title>
+  <link rel="icon" href="../favicon.png">
+  <link rel="stylesheet" href="admin.css?v=20260610-security">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="admin-sidebar">
+      <a class="admin-brand" href="../index.html" aria-label="CREATIVE MK home">
+        <img src="../Logos/logo-dark.png" alt="CREATIVE MK">
+      </a>
+      <nav class="admin-nav" aria-label="Admin views">
+        <button class="admin-nav__item is-active" type="button" data-view="inbox">Lead Inbox</button>
+        <button class="admin-nav__item" type="button" data-view="hot">Hot Leads</button>
+        <button class="admin-nav__item" type="button" data-view="audits">Website Audits</button>
+        <button class="admin-nav__item" type="button" data-view="tasks">Follow-ups</button>
+        <button class="admin-nav__item" type="button" data-view="funnel">Funnel Metrics</button>
+      </nav>
+      <form class="admin-auth" id="auth-form">
+        <label for="admin-token">Admin token</label>
+        <input class="sr-only" name="username" type="text" autocomplete="username" value="admin" tabindex="-1" aria-hidden="true">
+        <input id="admin-token" name="token" type="password" autocomplete="current-password" placeholder="ADMIN_TOKEN">
+        <button type="submit">Connect</button>
+        <small>Stored only for this browser session.</small>
+      </form>
+      <a class="admin-export" href="/admin/api/export.csv" id="export-link">Export CSV</a>
+      <a class="admin-export" href="/admin/api/export.json" id="snapshot-link">Export Ops Snapshot</a>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div>
+          <p class="eyebrow">Cloudflare-only CRM</p>
+          <h1>Lead Intelligence</h1>
+        </div>
+        <div class="admin-header__meta">
+          <span id="auth-state">Not connected</span>
+          <button type="button" id="refresh">Refresh</button>
+          <button type="button" id="disconnect">Disconnect</button>
+        </div>
+      </header>
+
+      <section class="metric-strip" aria-label="Lead metrics">
+        <div><span>Sessions</span><strong id="metric-sessions">0</strong></div>
+        <div><span>Leads</span><strong id="metric-leads">0</strong></div>
+        <div><span>Hot</span><strong id="metric-hot">0</strong></div>
+        <div><span>Audits</span><strong id="metric-audits">0</strong></div>
+        <div><span>Follow-ups</span><strong id="metric-tasks">0</strong></div>
+        <div><span>Conversion</span><strong id="metric-conversion">0%</strong></div>
+      </section>
+
+      <section class="task-panel" aria-labelledby="tasks-title">
+        <div class="panel-top">
+          <div>
+            <h2 id="tasks-title">Follow-up Command Center</h2>
+            <p>Open tasks generated from lead capture, AI summaries and email routing.</p>
+          </div>
+          <div class="task-summary" id="task-summary">
+            <span>Open: 0</span>
+            <span>Overdue: 0</span>
+          </div>
+        </div>
+        <div class="task-list" id="task-list">
+          <p class="detail-meta">Connect with an admin token to load follow-ups.</p>
+        </div>
+      </section>
+
+      <section class="sla-panel" aria-labelledby="sla-title">
+        <div class="panel-top">
+          <div>
+            <h2 id="sla-title">Lead SLA Monitor</h2>
+            <p>At-risk leads, overdue tasks and stale opportunities calculated from Cloudflare D1.</p>
+          </div>
+        </div>
+        <div class="sla-monitor" id="sla-monitor">
+          <p class="detail-meta">Connect with an admin token to load SLA risk.</p>
+        </div>
+      </section>
+
+      <section class="deal-panel" aria-labelledby="deal-board-title">
+        <div class="panel-top">
+          <div>
+            <h2 id="deal-board-title">Deal Board</h2>
+            <p>Move captured leads through the sales pipeline without leaving Cloudflare D1.</p>
+          </div>
+        </div>
+        <div class="deal-board" id="deal-board">
+          <p class="detail-meta">Connect with an admin token to load the deal board.</p>
+        </div>
+      </section>
+
+      <section class="workbench">
+        <section class="lead-panel">
+          <div class="panel-top">
+            <div>
+              <h2 id="view-title">Lead Inbox</h2>
+              <p id="view-subtitle">Captured leads, scored by fit and urgency.</p>
+            </div>
+            <div class="filters">
+              <select id="status-filter" aria-label="Status filter">
+                <option value="">All status</option>
+                <option value="new">New</option>
+                <option value="contacted">Contacted</option>
+                <option value="qualified">Qualified</option>
+                <option value="proposal">Proposal</option>
+                <option value="won">Won</option>
+                <option value="lost">Lost</option>
+                <option value="archived">Archived</option>
+              </select>
+              <select id="service-filter" aria-label="Service filter">
+                <option value="">All services</option>
+                <option value="branding">Branding</option>
+                <option value="web-design">Websites</option>
+                <option value="ux-ui-design">Digital Product UX/UI</option>
+                <option value="landing-pages">Growth & Marketing: Offer Path</option>
+                <option value="sales-funnels">Growth & Marketing: Follow-up</option>
+                <option value="meta-ads">Growth & Marketing: Traffic</option>
+                <option value="social-media">Growth & Marketing: Content</option>
+                <option value="app-development">Development</option>
+                <option value="ai-automation">AI Automation</option>
+              </select>
+            </div>
+          </div>
+          <div class="lead-table-wrap">
+            <table class="lead-table">
+              <thead>
+                <tr>
+                  <th>Lead</th>
+                  <th>Score</th>
+                  <th>Service</th>
+                  <th>Budget</th>
+                  <th>Timeline</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                </tr>
+              </thead>
+              <tbody id="lead-rows">
+                <tr><td colspan="7">Connect with an admin token to load leads.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <aside class="detail-panel" id="detail-panel">
+          <div class="detail-empty">
+            <span>Select a lead</span>
+            <p>Briefs, audits, objections and next actions will appear here.</p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="insight-grid">
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Cloudflare Operations Center</h2>
+              <p>Readiness, risk and next activations for the free-tier lead intelligence stack.</p>
+            </div>
+          </div>
+          <div class="cloudflare-ops" id="cloudflare-ops"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Security & Abuse Center</h2>
+              <p>Route limits, Turnstile posture, admin protection and abuse signals from Cloudflare Worker/D1.</p>
+            </div>
+          </div>
+          <div class="security-center" id="security-center"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Executive Daily Digest</h2>
+              <p>Today’s commercial readout generated from Cloudflare D1 signals.</p>
+            </div>
+          </div>
+          <div class="executive-digest" id="executive-digest"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Growth Command Center</h2>
+              <p>Prioritized operating queue across leads, audits, experiments, knowledge and Cloudflare activations.</p>
+            </div>
+          </div>
+          <div class="growth-command" id="growth-command-center"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <h2>Cloudflare Stack</h2>
+          </div>
+          <div class="stack-list" id="cloudflare-stack"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <h2>Service Demand</h2>
+          </div>
+          <div class="bar-list" id="service-demand"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <h2>Funnel Events</h2>
+          </div>
+          <div class="bar-list" id="event-demand"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Cloudflare Sales Pipeline</h2>
+              <p>30-day path from anonymous sessions to contacted opportunities.</p>
+            </div>
+          </div>
+          <div class="pipeline-board" id="pipeline-board"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Revenue Signal Forecast</h2>
+              <p>Budget-weighted commercial signal calculated privately from Cloudflare D1.</p>
+            </div>
+          </div>
+          <div class="forecast-board" id="forecast-board"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Sales Playbook</h2>
+              <p>Next-touch plays, cadence and reply angles generated from Cloudflare D1 lead signals.</p>
+            </div>
+          </div>
+          <div class="sales-playbook" id="sales-playbook"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <h2>Page Funnel</h2>
+          </div>
+          <div class="page-funnel" id="page-funnel"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Conversion Experiment Lab</h2>
+              <p>Prioritized CTA, chat, audit and capture experiments from Cloudflare D1 funnel signals.</p>
+            </div>
+          </div>
+          <div class="experiment-lab" id="experiment-lab"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Website Audit Lab</h2>
+              <p>Clarity, conversion, leakage and repeated website findings from Cloudflare D1 audits.</p>
+            </div>
+          </div>
+          <div class="audit-lab" id="audit-lab"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Attribution Performance</h2>
+              <p>Sources, campaigns and referrers captured by the Cloudflare lead system.</p>
+            </div>
+          </div>
+          <div class="attribution-performance" id="attribution-performance"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <h2>Conversation Intelligence</h2>
+          </div>
+          <div class="intel-list" id="conversation-intel"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <h2>Data Retention</h2>
+          </div>
+          <div class="retention-panel" id="data-retention"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <div>
+              <h2>Maintenance Console</h2>
+              <p>Run Cloudflare cron work on demand: daily rollup plus privacy cleanup.</p>
+            </div>
+          </div>
+          <div class="maintenance-console" id="maintenance-console">
+            <p class="detail-meta">Connect with an admin token to run maintenance.</p>
+          </div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>System Health Self-Test</h2>
+              <p>Read-only checks for Worker, D1 schema, rollups, cleanup, auth, queues and pending bindings.</p>
+            </div>
+          </div>
+          <div class="system-health" id="system-health">
+            <p class="detail-meta">Connect with an admin token to run health checks.</p>
+          </div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Privacy & Data Quality Sentinel</h2>
+              <p>Aggregated D1 checks for consent proof, redaction hygiene, retention cleanup and lead profile completeness.</p>
+            </div>
+          </div>
+          <div class="privacy-quality" id="privacy-quality"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Content & Offer Lab</h2>
+              <p>Action ideas generated from D1 lead intelligence without extra AI calls.</p>
+            </div>
+          </div>
+          <div class="content-lab" id="content-offer-lab"></div>
+        </div>
+        <div class="insight-block insight-block--wide">
+          <div class="panel-top">
+            <div>
+              <h2>Knowledge Gap Radar</h2>
+              <p>Corpus, FAQ and AI Search prep gaps detected from redacted Cloudflare D1 conversation signals.</p>
+            </div>
+          </div>
+          <div class="knowledge-radar" id="knowledge-radar"></div>
+        </div>
+        <div class="insight-block">
+          <div class="panel-top">
+            <h2>Activation Checklist</h2>
+          </div>
+          <div class="check-list" id="activation-checklist"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="admin.js?v=20260610-security"></script>
+</body>
+</html>

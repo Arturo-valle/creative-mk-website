@@ -9,13 +9,15 @@ const distDir = join(root, 'dist');
 const publicEntries = [
   'index.html',
   'contact.html',
+  '_headers',
   'favicon.png',
   'css',
   'js',
   'images',
   'Logos',
   'video',
-  'contact-assets'
+  'contact-assets',
+  'admin'
 ];
 
 const forbiddenTopLevelEntries = new Set([

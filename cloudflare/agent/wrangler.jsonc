@@ -1,0 +1,145 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  "name": "creative-mk-concierge",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-06-08",
+  "compatibility_flags": ["nodejs_compat"],
+  "account_id": "2a432f7e8d56266c9dd713199ecf5b47",
+  "workers_dev": true,
+  "routes": [
+    {
+      "pattern": "creativemk.net/agents/creative-mk-concierge/*",
+      "zone_name": "creativemk.net"
+    },
+    {
+      "pattern": "www.creativemk.net/agents/creative-mk-concierge/*",
+      "zone_name": "creativemk.net"
+    },
+    {
+      "pattern": "creativemk.net/admin/api/*",
+      "zone_name": "creativemk.net"
+    },
+    {
+      "pattern": "www.creativemk.net/admin/api/*",
+      "zone_name": "creativemk.net"
+    }
+  ],
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "CreativeMkConcierge",
+        "class_name": "CreativeMkConcierge"
+      },
+      {
+        "name": "QuotaGate",
+        "class_name": "QuotaGate"
+      }
+    ]
+  },
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["CreativeMkConcierge", "QuotaGate"]
+    }
+  ],
+  "ai": {
+    "binding": "AI"
+  },
+  "d1_databases": [
+    {
+      "binding": "ANALYTICS_DB",
+      "database_name": "creative_mk_concierge_analytics",
+      "database_id": "3df6ec3e-c11f-42b5-a85c-7f362756cedb",
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Enable after the API token has Account > R2:Edit and the bucket exists.
+  // "r2_buckets": [
+  //   {
+  //     "binding": "REPORTS_BUCKET",
+  //     "bucket_name": "creative-mk-lead-artifacts"
+  //   }
+  // ],
+  "queues": {
+    "producers": [
+      {
+        "binding": "LEAD_JOBS",
+        "queue": "creative-mk-lead-jobs"
+      }
+    ],
+    "consumers": [
+      {
+        "queue": "creative-mk-lead-jobs",
+        "max_batch_size": 10,
+        "max_batch_timeout": 30,
+        "max_retries": 2
+      }
+    ]
+  },
+  // Enable after Workers Analytics Engine is enabled in the account:
+  // https://dash.cloudflare.com/2a432f7e8d56266c9dd713199ecf5b47/workers/analytics-engine
+  // "analytics_engine_datasets": [
+  //   {
+  //     "binding": "MK_METRICS",
+  //     "dataset": "creative_mk_lead_metrics"
+  //   }
+  // ],
+  "workflows": [
+    {
+      "binding": "LEAD_ENRICHMENT_WORKFLOW",
+      "name": "creative-mk-lead-enrichment",
+      "class_name": "LeadEnrichmentWorkflow"
+    },
+    {
+      "binding": "DAILY_DIGEST_WORKFLOW",
+      "name": "creative-mk-daily-digest",
+      "class_name": "DailyDigestWorkflow"
+    },
+    {
+      "binding": "AUDIT_WORKFLOW",
+      "name": "creative-mk-audit-workflow",
+      "class_name": "AuditWorkflow"
+    }
+  ],
+  "triggers": {
+    "crons": ["15 6 * * *"]
+  },
+  // Enable after creating a Rate Limiting namespace in the dashboard/API.
+  // "ratelimits": [
+  //   {
+  //     "name": "API_RATE_LIMITER",
+  //     "namespace_id": "<rate-limit-namespace-id>",
+  //     "simple": { "limit": 60, "period": 60 }
+  //   }
+  // ],
+  // Enable Browser Run only after confirming the account has the free quota available.
+  // "browser": {
+  //   "binding": "BROWSER",
+  //   "remote": true
+  // },
+  // Email Routing can call the exported email() handler after you route
+  // leads@creativemk.net to this Worker. Add EMAIL_FORWARD_TO as a secret
+  // only if you want inbound emails forwarded to a verified destination too.
+  // Enable after creating the AI Search instance with an API token that has
+  // Account > AI Search:Edit and AI Search:Run permissions.
+  // "ai_search": [
+  //   {
+  //     "binding": "SITE_SEARCH",
+  //     "instance_name": "creative-mk-site-search",
+  //     "remote": true
+  //   }
+  // ],
+  "vars": {
+    "AI_MODEL": "@cf/zai-org/glm-4.7-flash",
+    "AI_FALLBACK_MODEL": "@cf/meta/llama-3.2-1b-instruct",
+    "PUBLIC_ORIGINS": "https://creativemk.net,https://www.creativemk.net,http://localhost:5173,http://127.0.0.1:5173",
+    "CONTACT_URL": "/contact.html?from=mk-concierge",
+    "PUBLIC_TURNSTILE_SITE_KEY": "",
+    "TRUST_CF_ACCESS": "false",
+    "TURNSTILE_REQUIRED": "false"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  }
+}

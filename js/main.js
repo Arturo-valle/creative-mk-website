@@ -5,134 +5,102 @@
 const servicesData = {
   en: [
     {
-      title: 'Strategy & Branding',
-      lead: 'Identity system',
-      desc: 'We define positioning, visual language, voice, offer architecture, and the core narrative that makes the brand easier to trust and choose.',
-      proof: 'Best for launches, refreshes, and premium repositioning.',
-      tags: ['Positioning', 'Identity', 'Voice'],
+      title: 'Branding',
+      lead: 'Identity and positioning',
+      desc: 'We define the promise, voice, visual identity, offer architecture, and brand rules that help a business feel consistent across website, ads, content, sales materials, and future campaigns.',
+      proof: 'Best for new brands, premium repositioning, service businesses, and teams that need trust before scaling attention.',
+      tags: ['Strategy', 'Identity', 'Guidelines'],
       media: 'images/services/branding.png'
     },
     {
       title: 'Websites',
-      lead: 'Conversion site',
-      desc: 'Editorial-grade websites with fast structure, clear UX, SEO foundations, persuasive proof, and a front door built for qualified inquiries.',
-      proof: 'Best for service brands, expert firms, and local leaders scaling online.',
-      tags: ['UX', 'SEO', 'Speed'],
+      lead: 'Marketing site',
+      desc: 'We design and build editorial, conversion-aware websites with clear messaging, UX structure, service pathways, proof blocks, SEO foundations, and a contact flow that respects the buyer.',
+      proof: 'Best for service brands, expert firms, local leaders, and companies whose current site does not explain the offer fast enough.',
+      tags: ['UX', 'Copy', 'SEO'],
       media: 'images/services/web-design.png'
     },
     {
-      title: 'Landing Pages & Funnels',
-      lead: 'Campaign engine',
-      desc: 'Single-purpose pages and automated journeys that connect message, offer, lead capture, email, retargeting, and CRM logic.',
-      proof: 'Best for paid traffic, launches, booking flows, and lead magnets.',
-      tags: ['CRO', 'Lead Flow', 'CRM'],
-      media: 'images/services/sales-funnels.png'
-    },
-    {
-      title: 'Paid Growth',
-      lead: 'Media system',
-      desc: 'Meta campaigns shaped around creative testing, audience signals, measurement hygiene, and AI-assisted optimization that moves budget toward buyers.',
-      proof: 'Best for brands that need disciplined acquisition, not random boosts.',
-      tags: ['Meta Ads', 'Testing', 'ROAS'],
-      media: 'images/services/meta-ads.png'
-    },
-    {
-      title: 'Content Systems',
-      lead: 'Visibility rhythm',
-      desc: 'Repeatable content operations for short-form video, social media, captions, community touchpoints, and reporting that compounds over time.',
-      proof: 'Best for brands that need consistency without losing quality.',
-      tags: ['Short-form', 'Calendar', 'Reporting'],
-      media: 'images/services/social-media.png'
-    },
-    {
-      title: 'Product UX/UI',
-      lead: 'Interface design',
-      desc: 'Research-led product flows, prototypes, dashboards, and app interfaces that reduce friction and make complex actions feel obvious.',
-      proof: 'Best for SaaS, portals, internal tools, and mobile product ideas.',
+      title: 'Digital Product UX/UI',
+      lead: 'Product experience',
+      desc: 'We map product journeys, dashboards, portals, onboarding flows, and app interfaces so complex actions feel clear before a team commits to a build.',
+      proof: 'Best for SaaS ideas, internal tools, client portals, MVPs, and businesses with a workflow that needs a better interface.',
       tags: ['Flows', 'Prototype', 'Design System'],
       media: 'images/services/ux-ui-design-premium-preview.png'
     },
     {
-      title: 'Development',
-      lead: 'Build layer',
-      desc: 'Front-end, app, and integration work that turns the strategy and interface into a dependable digital product or marketing system.',
-      proof: 'Best when design, analytics, forms, APIs, and automation need to work together.',
-      tags: ['Frontend', 'APIs', 'Integrations'],
-      media: 'images/services/landing-pages.png'
+      title: 'Growth & Marketing',
+      lead: 'Campaign system',
+      desc: 'We shape landing pages, funnels, Meta campaigns, content rhythms, tracking, and follow-up paths so attention has somewhere useful to go.',
+      proof: 'Best when the offer is clear enough to test traffic, capture demand, and learn from real audience signals.',
+      tags: ['Offer', 'Traffic', 'Follow-up'],
+      media: 'images/services/sales-funnels.png'
     },
     {
       title: 'AI Automation',
-      lead: 'Intelligent ops',
-      desc: 'Chatbots, routing, content personalization, automations, and dashboards that remove manual work from sales and marketing operations.',
-      proof: 'Best for teams that need faster response and cleaner follow-up.',
-      tags: ['Chatbots', 'Workflows', 'Dashboards'],
+      lead: 'Workflow intelligence',
+      desc: 'We connect intake, service matching, first-response support, knowledge bases, dashboards, and follow-up rules so teams respond faster without losing human control.',
+      proof: 'Best for businesses with repeated questions, slow lead handoff, manual reporting, or operations that need a cleaner first layer.',
+      tags: ['Intake', 'Routing', 'Dashboards'],
       media: 'images/services/email-marketing.png'
+    },
+    {
+      title: 'Development',
+      lead: 'Reliable build',
+      desc: 'We turn approved strategy and UX into responsive pages, front-end systems, forms, analytics, integrations, and lightweight app experiences that are ready to use.',
+      proof: 'Best when the brand, website, product screen, form, CRM, and automation need to work together instead of living as separate pieces.',
+      tags: ['Frontend', 'Forms', 'Integrations'],
+      media: 'images/services/landing-pages.png'
     }
   ],
   es: [
     {
-      title: 'Estrategia & Branding',
-      lead: 'Sistema de identidad',
-      desc: 'Definimos posicionamiento, lenguaje visual, voz, arquitectura de oferta y narrativa central para que la marca sea mas facil de confiar y elegir.',
-      proof: 'Ideal para lanzamientos, renovaciones y reposicionamiento premium.',
-      tags: ['Posicionamiento', 'Identidad', 'Voz'],
+      title: 'Branding',
+      lead: 'Identidad y posicionamiento',
+      desc: 'Definimos promesa, voz, identidad visual, arquitectura de oferta y reglas de marca para que el negocio se sienta consistente en sitio web, anuncios, contenido, ventas y futuras campañas.',
+      proof: 'Ideal para marcas nuevas, reposicionamientos premium, negocios de servicio y equipos que necesitan confianza antes de escalar la atención.',
+      tags: ['Estrategia', 'Identidad', 'Guías'],
       media: 'images/services/branding.png'
     },
     {
       title: 'Sitios Web',
-      lead: 'Sitio de conversion',
-      desc: 'Sitios web editoriales con estructura rapida, UX clara, bases SEO, prueba persuasiva y una puerta de entrada para oportunidades calificadas.',
-      proof: 'Ideal para marcas de servicio, firmas expertas y lideres locales que escalan online.',
-      tags: ['UX', 'SEO', 'Velocidad'],
+      lead: 'Sitio de marketing',
+      desc: 'Diseñamos y construimos sitios editoriales orientados a conversión, con mensaje claro, estructura UX, rutas de servicio, bloques de prueba, bases SEO y un contacto respetuoso para el comprador.',
+      proof: 'Ideal para marcas de servicio, firmas expertas, líderes locales y empresas cuyo sitio actual no explica la oferta con suficiente rapidez.',
+      tags: ['UX', 'Copy', 'SEO'],
       media: 'images/services/web-design.png'
     },
     {
-      title: 'Landing Pages & Embudos',
-      lead: 'Motor de campana',
-      desc: 'Paginas de accion unica y recorridos automatizados que conectan mensaje, oferta, captura, email, retargeting y CRM.',
-      proof: 'Ideal para pauta, lanzamientos, agendamientos y lead magnets.',
-      tags: ['CRO', 'Leads', 'CRM'],
-      media: 'images/services/sales-funnels.png'
-    },
-    {
-      title: 'Paid Growth',
-      lead: 'Sistema de pauta',
-      desc: 'Campanas Meta alrededor de pruebas creativas, senales de audiencia, medicion limpia y optimizacion asistida por IA.',
-      proof: 'Ideal para marcas que necesitan adquisicion disciplinada, no boosts al azar.',
-      tags: ['Meta Ads', 'Testing', 'ROAS'],
-      media: 'images/services/meta-ads.png'
-    },
-    {
-      title: 'Sistemas de Contenido',
-      lead: 'Ritmo de visibilidad',
-      desc: 'Operaciones repetibles para video corto, redes sociales, captions, comunidad y reportes que crecen con el tiempo.',
-      proof: 'Ideal para marcas que necesitan consistencia sin perder calidad.',
-      tags: ['Video corto', 'Calendario', 'Reportes'],
-      media: 'images/services/social-media.png'
-    },
-    {
-      title: 'Producto UX/UI',
-      lead: 'Diseno de interfaz',
-      desc: 'Flujos de producto, prototipos, dashboards e interfaces de app basados en investigacion para reducir friccion.',
-      proof: 'Ideal para SaaS, portales, herramientas internas e ideas mobile.',
+      title: 'Producto Digital UX/UI',
+      lead: 'Experiencia de producto',
+      desc: 'Mapeamos journeys, dashboards, portales, onboarding e interfaces de app para que acciones complejas se entiendan antes de comprometer al equipo con el desarrollo.',
+      proof: 'Ideal para ideas SaaS, herramientas internas, portales de cliente, MVPs y negocios con procesos que necesitan una mejor interfaz.',
       tags: ['Flujos', 'Prototipo', 'Sistema UI'],
       media: 'images/services/ux-ui-design-premium-preview.png'
     },
     {
-      title: 'Desarrollo',
-      lead: 'Capa de build',
-      desc: 'Frontend, apps e integraciones que convierten estrategia e interfaz en un producto digital o sistema de marketing confiable.',
-      proof: 'Ideal cuando diseno, analitica, formularios, APIs y automatizacion deben trabajar juntos.',
-      tags: ['Frontend', 'APIs', 'Integraciones'],
-      media: 'images/services/landing-pages.png'
+      title: 'Growth & Marketing',
+      lead: 'Sistema de campaña',
+      desc: 'Damos forma a landing pages, embudos, campañas Meta, ritmos de contenido, medición y rutas de seguimiento para que la atención tenga un siguiente paso útil.',
+      proof: 'Ideal cuando la oferta ya está lo suficientemente clara para probar tráfico, capturar demanda y aprender de señales reales de audiencia.',
+      tags: ['Oferta', 'Tráfico', 'Seguimiento'],
+      media: 'images/services/sales-funnels.png'
     },
     {
-      title: 'Automatizacion IA',
-      lead: 'Operaciones inteligentes',
-      desc: 'Chatbots, routing, personalizacion de contenido, automatizaciones y dashboards para quitar trabajo manual de ventas y marketing.',
-      proof: 'Ideal para equipos que necesitan respuesta rapida y seguimiento limpio.',
-      tags: ['Chatbots', 'Workflows', 'Dashboards'],
+      title: 'Automatización IA',
+      lead: 'Inteligencia operativa',
+      desc: 'Conectamos recepción de leads, recomendación de servicios, primera respuesta, bases de conocimiento, dashboards y reglas de seguimiento para responder más rápido sin perder control humano.',
+      proof: 'Ideal para negocios con preguntas repetidas, traspaso lento de leads, reportes manuales u operaciones que necesitan una primera capa más clara.',
+      tags: ['Recepción', 'Rutas', 'Dashboards'],
       media: 'images/services/email-marketing.png'
+    },
+    {
+      title: 'Desarrollo',
+      lead: 'Construcción confiable',
+      desc: 'Convertimos estrategia y UX aprobadas en páginas responsivas, sistemas front-end, formularios, analítica, integraciones y experiencias ligeras de app listas para usar.',
+      proof: 'Ideal cuando marca, sitio, pantalla de producto, formulario, CRM y automatización deben trabajar juntos en lugar de vivir como piezas separadas.',
+      tags: ['Frontend', 'Formularios', 'Integraciones'],
+      media: 'images/services/landing-pages.png'
     }
   ]
 };
@@ -140,197 +108,197 @@ const servicesData = {
 const workData = {
   en: [
     {
-      name: 'Growth Stack Blueprint',
+      name: 'Growth System Blueprint',
       category: 'Growth',
-      desc: 'A connected funnel system for turning paid attention into qualified conversations.',
-      tags: ['Funnels', 'Meta Ads', 'Automation'],
+      desc: 'A connected campaign and follow-up system for turning paid attention into qualified conversations.',
+      tags: ['Offer', 'Traffic', 'Follow-up'],
       color: '#18212f',
       img: 'images/portfolio-1.png',
-      outcome: 'Showcase',
+      outcome: 'Capability showcase',
       isRealClient: false,
       case: {
-        challenge: 'Many service businesses run ads, forms, email, and follow-up as disconnected pieces. That makes attribution messy and response time slow.',
-        solution: 'We map the offer, build a conversion page, connect CRM routing, add email follow-up, and create reporting around the actions that matter.',
-        result: 'A repeatable acquisition system designed to reduce manual follow-up and make every campaign easier to measure.',
-        deliverables: ['Conversion landing page', 'Lead routing', 'Email follow-up', 'Campaign dashboard']
+        challenge: 'A service business can have ads, a form, a calendar, and follow-up messages without those pieces telling one clear story.',
+        solution: 'We sharpen the offer, design the landing path, define the lead capture logic, and connect the first response so the campaign has a complete next step.',
+        result: 'A practical acquisition system that is easier to launch, measure, and improve without depending on scattered manual follow-up.',
+        deliverables: ['Offer map', 'Conversion page', 'Lead capture path', 'Follow-up sequence']
       }
     },
     {
       name: 'Premium Service Website',
       category: 'Web',
-      desc: 'A polished editorial website system for trust, positioning, and booked inquiries.',
-      tags: ['Websites', 'UX', 'SEO'],
+      desc: 'A refined website structure for trust, positioning, service clarity, and qualified inquiries.',
+      tags: ['Websites', 'Messaging', 'UX'],
       color: '#263c35',
       img: 'images/portfolio-2.png',
-      outcome: 'Showcase',
+      outcome: 'Capability showcase',
       isRealClient: false,
       case: {
-        challenge: 'Premium service brands often explain too much and prove too little, which makes visitors hesitate before taking action.',
-        solution: 'We structure the site around a sharp promise, proof blocks, service pathways, and a contact flow that feels high-touch.',
-        result: 'A digital front door designed to make expertise easier to understand and easier to buy.',
-        deliverables: ['Messaging architecture', 'Website UX', 'Service pages', 'Contact path']
+        challenge: 'Premium service brands often have strong expertise but a website that explains too much, proves too little, and makes the next step feel vague.',
+        solution: 'We structure the site around a clear promise, service pathways, proof sections, concise copy, and a contact experience that feels considered.',
+        result: 'A digital front door that makes the offer easier to understand, trust, and act on.',
+        deliverables: ['Messaging architecture', 'Homepage UX', 'Service pathways', 'Contact flow']
       }
     },
     {
       name: 'Brand Identity System',
       category: 'Brand',
-      desc: 'A flexible identity framework for launches, social channels, ads, and future campaigns.',
-      tags: ['Branding', 'Logo', 'Guidelines'],
+      desc: 'A flexible identity foundation for launches, web, content, sales materials, and future campaigns.',
+      tags: ['Branding', 'Identity', 'Guidelines'],
       color: '#4f342f',
       img: 'images/portfolio-5.png',
-      outcome: 'Showcase',
+      outcome: 'Capability showcase',
       isRealClient: false,
       case: {
-        challenge: 'A brand can look decent in one place and still fall apart across ads, social, website, decks, and vendor handoffs.',
-        solution: 'We create a practical system: mark, palette, type, visual rules, tone, and examples for the channels the business actually uses.',
-        result: 'A brand manual that makes every touchpoint feel consistent without slowing the team down.',
-        deliverables: ['Logo direction', 'Palette', 'Typography', 'Brand manual']
+        challenge: 'A brand can look acceptable in one place and still feel inconsistent across ads, social posts, proposals, decks, and vendor handoffs.',
+        solution: 'We create a practical system: positioning, logo direction, palette, typography, tone, usage rules, and examples for the channels the business actually uses.',
+        result: 'A brand foundation that helps every touchpoint feel intentional without slowing the team down.',
+        deliverables: ['Positioning notes', 'Logo direction', 'Visual system', 'Brand guide']
       }
     },
     {
       name: 'Product UX Sprint',
       category: 'Product',
-      desc: 'A focused interface sprint for dashboards, portals, onboarding, and app workflows.',
+      desc: 'A focused UX/UI sprint for dashboards, portals, onboarding, MVPs, and app workflows.',
       tags: ['UX/UI', 'Prototype', 'Design System'],
       color: '#14283a',
       img: 'images/portfolio-6.png',
-      outcome: 'Showcase',
+      outcome: 'Capability showcase',
       isRealClient: false,
       case: {
-        challenge: 'Product ideas often grow as feature lists before the core user journey is clear.',
-        solution: 'We define priority workflows, prototype the experience, design reusable UI patterns, and identify what should be built first.',
-        result: 'A product direction that helps founders and teams build with less waste and more confidence.',
-        deliverables: ['Journey map', 'Clickable prototype', 'UI components', 'Build roadmap']
+        challenge: 'Product ideas often become feature lists before the primary user journey, value moment, and build sequence are clear.',
+        solution: 'We define the priority workflows, prototype the experience, design reusable UI patterns, and identify the smallest useful version to build first.',
+        result: 'A product direction that helps founders and teams move with less waste and more confidence.',
+        deliverables: ['Journey map', 'Clickable prototype', 'UI components', 'MVP scope']
       }
     },
     {
-      name: 'Content Operating Rhythm',
+      name: 'Visibility Operating Rhythm',
       category: 'Content',
-      desc: 'A social content system for visibility, consistency, and useful reporting.',
-      tags: ['Social Media', 'Short-form', 'Reporting'],
+      desc: 'A content and campaign rhythm for visibility, consistency, authority, and useful reporting.',
+      tags: ['Content', 'Campaigns', 'Reporting'],
       color: '#604024',
       img: 'images/portfolio-4.png',
-      outcome: 'Showcase',
+      outcome: 'Capability showcase',
       isRealClient: false,
       case: {
-        challenge: 'Teams post inconsistently because ideas, approvals, formats, and reporting live in different places.',
-        solution: 'We define pillars, reusable formats, posting cadence, creative briefs, and reporting views so content becomes operational.',
-        result: 'A content rhythm built for steady visibility instead of last-minute posting.',
-        deliverables: ['Content pillars', 'Short-form briefs', 'Posting cadence', 'Monthly report']
+        challenge: 'Teams often post inconsistently because ideas, approvals, formats, offers, and reporting live in separate places.',
+        solution: 'We define content pillars, reusable formats, campaign angles, cadence, brief templates, and reporting views so visibility becomes operational.',
+        result: 'A rhythm built for steady authority and campaign support instead of last-minute posting.',
+        deliverables: ['Content pillars', 'Campaign angles', 'Posting cadence', 'Reporting view']
       }
     },
     {
-      name: 'AI Response Layer',
+      name: 'AI Intake Layer',
       category: 'AI',
-      desc: 'An intelligent intake and follow-up layer for service requests and support questions.',
-      tags: ['AI Automation', 'Forms', 'Routing'],
+      desc: 'An AI-assisted intake and handoff layer for service requests, FAQs, and first-response needs.',
+      tags: ['AI Automation', 'Intake', 'Handoff'],
       color: '#20263a',
       img: 'images/portfolio-3.png',
-      outcome: 'Showcase',
+      outcome: 'Capability showcase',
       isRealClient: false,
       case: {
-        challenge: 'When inquiries arrive from many channels, response quality depends too much on who is available that day.',
-        solution: 'We structure intake questions, qualify leads, route requests, draft follow-up, and surface the right next step.',
-        result: 'A faster first response and cleaner handoff from marketing to sales or operations.',
-        deliverables: ['Smart intake', 'Routing logic', 'Follow-up templates', 'Ops dashboard']
+        challenge: 'When inquiries arrive from many channels, response quality can depend too much on who is available that day.',
+        solution: 'We structure the intake questions, match the service path, prepare useful first-response logic, and surface what a human should review next.',
+        result: 'A faster first layer and cleaner handoff from marketing to sales or operations.',
+        deliverables: ['Smart intake', 'Service matching', 'Follow-up prompts', 'Ops dashboard']
       }
     }
   ],
   es: [
     {
-      name: 'Blueprint de Growth Stack',
+      name: 'Blueprint de Sistema de Crecimiento',
       category: 'Growth',
-      desc: 'Un sistema de embudo conectado para convertir atencion pagada en conversaciones calificadas.',
-      tags: ['Embudos', 'Meta Ads', 'Automatizacion'],
+      desc: 'Un sistema conectado de campaña y seguimiento para convertir atención pagada en conversaciones calificadas.',
+      tags: ['Oferta', 'Tráfico', 'Seguimiento'],
       color: '#18212f',
       img: 'images/portfolio-1.png',
-      outcome: 'Showcase',
+      outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
-        challenge: 'Muchos negocios de servicio tienen ads, formularios, email y seguimiento como piezas separadas. Eso ensucia la medicion y retrasa la respuesta.',
-        solution: 'Mapeamos la oferta, construimos pagina de conversion, conectamos routing CRM, agregamos email follow-up y reportes.',
-        result: 'Un sistema de adquisicion repetible disenado para reducir seguimiento manual y medir mejor cada campana.',
-        deliverables: ['Landing de conversion', 'Routing de leads', 'Email follow-up', 'Dashboard']
+        challenge: 'Un negocio de servicio puede tener anuncios, formulario, calendario y mensajes de seguimiento sin que esas piezas cuenten una historia clara.',
+        solution: 'Afinamos la oferta, diseñamos la ruta de landing, definimos la lógica de captura y conectamos la primera respuesta para que la campaña tenga un siguiente paso completo.',
+        result: 'Un sistema de adquisición práctico, más fácil de lanzar, medir y mejorar sin depender de seguimiento manual disperso.',
+        deliverables: ['Mapa de oferta', 'Página de conversión', 'Ruta de captura', 'Secuencia de seguimiento']
       }
     },
     {
       name: 'Sitio Premium de Servicio',
       category: 'Web',
-      desc: 'Un sistema web editorial para confianza, posicionamiento y oportunidades calificadas.',
-      tags: ['Sitios Web', 'UX', 'SEO'],
+      desc: 'Una estructura web refinada para confianza, posicionamiento, claridad de servicios y oportunidades calificadas.',
+      tags: ['Sitios Web', 'Mensaje', 'UX'],
       color: '#263c35',
       img: 'images/portfolio-2.png',
-      outcome: 'Showcase',
+      outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
-        challenge: 'Las marcas premium de servicio suelen explicar demasiado y probar muy poco, lo que hace que el visitante dude.',
-        solution: 'Estructuramos el sitio alrededor de una promesa clara, bloques de prueba, rutas de servicio y contacto high-touch.',
-        result: 'Una puerta digital disenada para hacer la experiencia mas facil de entender y comprar.',
-        deliverables: ['Arquitectura de mensaje', 'UX web', 'Paginas de servicio', 'Ruta de contacto']
+        challenge: 'Muchas marcas de servicio tienen experiencia real, pero un sitio que explica demasiado, prueba poco y deja ambiguo el siguiente paso.',
+        solution: 'Estructuramos el sitio alrededor de una promesa clara, rutas de servicio, bloques de prueba, copy conciso y un contacto más considerado.',
+        result: 'Una puerta digital que hace la oferta más fácil de entender, confiar y accionar.',
+        deliverables: ['Arquitectura de mensaje', 'UX de homepage', 'Rutas de servicio', 'Flujo de contacto']
       }
     },
     {
       name: 'Sistema de Identidad',
       category: 'Brand',
-      desc: 'Un marco de identidad flexible para lanzamientos, redes, anuncios y futuras campanas.',
-      tags: ['Branding', 'Logo', 'Lineamientos'],
+      desc: 'Una base flexible de identidad para lanzamientos, web, contenido, materiales comerciales y futuras campañas.',
+      tags: ['Branding', 'Identidad', 'Guías'],
       color: '#4f342f',
       img: 'images/portfolio-5.png',
-      outcome: 'Showcase',
+      outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
-        challenge: 'Una marca puede verse bien en un lugar y romperse en ads, redes, sitio web, decks y proveedores.',
-        solution: 'Creamos un sistema practico: marca, paleta, tipografia, reglas visuales, tono y ejemplos para canales reales.',
-        result: 'Un manual de marca que ayuda a que cada punto de contacto sea consistente sin frenar al equipo.',
-        deliverables: ['Direccion de logo', 'Paleta', 'Tipografia', 'Manual de marca']
+        challenge: 'Una marca puede verse aceptable en un lugar y aun así sentirse inconsistente en anuncios, redes, propuestas, decks y entregas a proveedores.',
+        solution: 'Creamos un sistema práctico: posicionamiento, dirección de logo, paleta, tipografía, tono, reglas de uso y ejemplos para canales reales.',
+        result: 'Una base de marca que ayuda a que cada punto de contacto se sienta intencional sin frenar al equipo.',
+        deliverables: ['Notas de posicionamiento', 'Dirección de logo', 'Sistema visual', 'Guía de marca']
       }
     },
     {
       name: 'Sprint de Producto UX',
       category: 'Product',
-      desc: 'Un sprint de interfaz para dashboards, portales, onboarding y flujos de app.',
+      desc: 'Un sprint UX/UI para dashboards, portales, onboarding, MVPs y flujos de app.',
       tags: ['UX/UI', 'Prototipo', 'Sistema UI'],
       color: '#14283a',
       img: 'images/portfolio-6.png',
-      outcome: 'Showcase',
+      outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
-        challenge: 'Las ideas de producto suelen crecer como listas de funciones antes de aclarar el viaje principal del usuario.',
-        solution: 'Definimos flujos prioritarios, prototipamos, disenamos patrones reutilizables e identificamos que construir primero.',
-        result: 'Una direccion de producto que ayuda a construir con menos desperdicio y mas confianza.',
-        deliverables: ['Mapa de journey', 'Prototipo clickable', 'Componentes UI', 'Roadmap']
+        challenge: 'Las ideas de producto suelen convertirse en listas de funciones antes de aclarar el recorrido principal, el momento de valor y la secuencia de construcción.',
+        solution: 'Definimos flujos prioritarios, prototipamos la experiencia, diseñamos patrones reutilizables e identificamos la versión mínima útil para construir primero.',
+        result: 'Una dirección de producto que ayuda a avanzar con menos desperdicio y más confianza.',
+        deliverables: ['Mapa de journey', 'Prototipo clickable', 'Componentes UI', 'Alcance MVP']
       }
     },
     {
-      name: 'Ritmo Operativo de Contenido',
+      name: 'Ritmo Operativo de Visibilidad',
       category: 'Content',
-      desc: 'Un sistema de contenido social para visibilidad, consistencia y reportes utiles.',
-      tags: ['Redes', 'Video corto', 'Reportes'],
+      desc: 'Un ritmo de contenido y campaña para visibilidad, consistencia, autoridad y reportes útiles.',
+      tags: ['Contenido', 'Campañas', 'Reportes'],
       color: '#604024',
       img: 'images/portfolio-4.png',
-      outcome: 'Showcase',
+      outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
-        challenge: 'Los equipos publican de forma irregular porque ideas, aprobaciones, formatos y reportes viven en lugares distintos.',
-        solution: 'Definimos pilares, formatos reutilizables, cadencia, briefs creativos y vistas de reporte.',
-        result: 'Un ritmo de contenido construido para visibilidad constante, no publicaciones de ultimo minuto.',
-        deliverables: ['Pilares de contenido', 'Briefs short-form', 'Cadencia', 'Reporte mensual']
+        challenge: 'Los equipos suelen publicar de forma irregular porque ideas, aprobaciones, formatos, ofertas y reportes viven en lugares distintos.',
+        solution: 'Definimos pilares de contenido, formatos reutilizables, ángulos de campaña, cadencia, briefs y vistas de reporte para operar la visibilidad.',
+        result: 'Un ritmo construido para autoridad constante y soporte de campañas, no publicaciones de último minuto.',
+        deliverables: ['Pilares de contenido', 'Ángulos de campaña', 'Cadencia', 'Vista de reportes']
       }
     },
     {
-      name: 'Capa de Respuesta IA',
+      name: 'Capa de Recepción IA',
       category: 'AI',
-      desc: 'Una capa inteligente de intake y seguimiento para solicitudes de servicio y soporte.',
-      tags: ['IA', 'Formularios', 'Routing'],
+      desc: 'Una capa asistida por IA para recepción de solicitudes, preguntas frecuentes y primera respuesta.',
+      tags: ['IA', 'Recepción', 'Handoff'],
       color: '#20263a',
       img: 'images/portfolio-3.png',
-      outcome: 'Showcase',
+      outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
-        challenge: 'Cuando las consultas llegan por muchos canales, la calidad de respuesta depende demasiado de quien este disponible.',
-        solution: 'Estructuramos intake, calificamos leads, ruteamos solicitudes, redactamos follow-up y mostramos el siguiente paso.',
-        result: 'Primera respuesta mas rapida y handoff mas limpio entre marketing, ventas y operaciones.',
-        deliverables: ['Intake inteligente', 'Logica de routing', 'Templates follow-up', 'Dashboard ops']
+        challenge: 'Cuando las consultas llegan por muchos canales, la calidad de respuesta puede depender demasiado de quién esté disponible ese día.',
+        solution: 'Estructuramos las preguntas de recepción, recomendamos la ruta de servicio, preparamos lógica de primera respuesta y mostramos lo que una persona debe revisar después.',
+        result: 'Una primera capa más rápida y una entrega más limpia entre marketing, ventas y operaciones.',
+        deliverables: ['Recepción inteligente', 'Recomendación de servicio', 'Prompts de seguimiento', 'Dashboard operativo']
       }
     }
   ]
@@ -341,66 +309,66 @@ const newsImages = ['images/news/news-1.png', 'images/news/news-2.png', 'images/
 const newsData = {
   en: [
     {
-      category: 'AI',
-      title: 'How AI is reshaping service-business growth systems',
+      category: 'AI Guide',
+      title: 'Where AI actually helps a service business',
       date: 'May 2026',
-      read: '5 min read',
-      content: 'AI is most useful when it is connected to a real workflow. For service businesses, that means faster qualification, cleaner handoff, better follow-up, and more useful reporting.\n\nThe highest-leverage use cases are lead intake, response routing, content personalization, support triage, and campaign reporting.\n\nThe creative work still matters. AI simply removes the drag around repetitive operational tasks so the brand can respond with more speed and consistency.'
+      read: '6 min read',
+      content: 'AI is most useful when it is attached to a specific business workflow. For service businesses, the strongest starting points are lead intake, service matching, first-response support, content routing, internal reporting, and follow-up reminders.\n\nThe mistake is treating AI as a decorative feature. A useful AI layer should know what information to ask for, what should be routed to a human, and where the next action lives.\n\nBefore adding AI, map the current delay: slow replies, repeated questions, unclear qualification, manual reporting, or inconsistent follow-up. That bottleneck should decide the first automation.'
     },
     {
-      category: 'Design',
+      category: 'Websites',
       title: 'What makes a premium service website feel trustworthy',
       date: 'Apr 2026',
-      read: '4 min read',
-      content: 'Premium websites do not win by adding more decoration. They win by creating clarity: a strong promise, proof, pacing, fast loading, and a contact path that respects the buyer.\n\nThe best service sites feel editorial and operational at the same time. They are beautiful, but every section has a job.\n\nThat is the standard we use when designing websites, landing pages, and brand systems for growth-focused businesses.'
+      read: '7 min read',
+      content: 'Premium websites do not win by adding more decoration. They win by creating clarity: a strong promise, precise service paths, proof, thoughtful pacing, fast loading, and a contact path that respects the buyer.\n\nThe best service sites feel editorial and operational at the same time. They are beautiful, but every section has a job: explain, reduce doubt, show proof, or move the visitor toward a clear next step.\n\nIf a visitor cannot understand who the brand helps, what changes, and why the team can be trusted within the first few moments, the design is carrying too much weight and the message needs sharper structure.'
     },
     {
-      category: 'Growth',
+      category: 'Brand Strategy',
       title: 'Why funnels fail when the brand system is weak',
       date: 'Mar 2026',
       read: '6 min read',
-      content: 'A funnel cannot fix a weak promise. Paid media, landing pages, and automation work best when the audience immediately understands who the brand helps, what changes, and why it should be trusted.\n\nThe real growth stack connects positioning, creative, landing experience, follow-up, and measurement.\n\nWhen those pieces are designed together, campaigns become easier to test and easier to improve.'
+      content: 'A funnel cannot fix a weak promise. Paid media, landing pages, and automation work best when the audience immediately understands who the brand helps, what changes, and why it should be trusted.\n\nA strong growth system connects positioning, creative, landing experience, follow-up, and measurement. If those parts are designed separately, the campaign becomes harder to test because each step uses a different message.\n\nBrand strategy is not just visual polish. It is the operating logic that helps every ad, page, email, and sales conversation point in the same direction.'
     }
   ],
   es: [
     {
-      category: 'IA',
-      title: 'Como la IA esta cambiando los sistemas de crecimiento',
+      category: 'Guía IA',
+      title: 'Dónde ayuda realmente la IA en un negocio de servicios',
       date: 'Mayo 2026',
-      read: '5 min lectura',
-      content: 'La IA funciona mejor cuando esta conectada a un flujo real. Para negocios de servicio, eso significa mejor calificacion, handoff mas limpio, follow-up mas rapido y reportes mas utiles.\n\nLos casos de mayor impacto son intake de leads, routing de respuesta, personalizacion de contenido, soporte y reportes de campana.\n\nLa creatividad sigue importando. La IA simplemente quita friccion operativa repetitiva.'
+      read: '6 min lectura',
+      content: 'La IA funciona mejor cuando está conectada a un flujo específico del negocio. Para negocios de servicio, los mejores puntos de inicio suelen ser recepción de leads, recomendación de servicio, primera respuesta, rutas de contenido, reportes internos y recordatorios de seguimiento.\n\nEl error es tratar la IA como decoración. Una capa útil debe saber qué información pedir, qué debe pasar a una persona y dónde vive la siguiente acción.\n\nAntes de agregar IA, conviene mapear el retraso actual: respuestas lentas, preguntas repetidas, calificación poco clara, reportes manuales o seguimiento inconsistente. Ese cuello de botella debe decidir la primera automatización.'
     },
     {
-      category: 'Diseno',
-      title: 'Que hace que un sitio premium genere confianza',
+      category: 'Sitios Web',
+      title: 'Qué hace que un sitio premium genere confianza',
       date: 'Abr 2026',
-      read: '4 min lectura',
-      content: 'Los sitios premium no ganan por agregar mas decoracion. Ganan por crear claridad: promesa fuerte, prueba, ritmo, carga rapida y una ruta de contacto respetuosa.\n\nLos mejores sitios de servicio se sienten editoriales y operativos al mismo tiempo. Son bellos, pero cada seccion tiene un trabajo.\n\nEse es el estandar que usamos al disenar sitios, landing pages y sistemas de marca.'
+      read: '7 min lectura',
+      content: 'Los sitios premium no ganan por agregar más decoración. Ganan por crear claridad: una promesa fuerte, rutas precisas de servicio, prueba, ritmo, carga rápida y un contacto que respeta al comprador.\n\nLos mejores sitios de servicio se sienten editoriales y operativos al mismo tiempo. Son bellos, pero cada sección tiene una función: explicar, reducir dudas, mostrar prueba o mover al visitante hacia un siguiente paso claro.\n\nSi una persona no entiende a quién ayuda la marca, qué cambia y por qué confiar durante los primeros momentos, el diseño está cargando demasiado peso y el mensaje necesita mejor estructura.'
     },
     {
-      category: 'Growth',
-      title: 'Por que los embudos fallan cuando la marca es debil',
+      category: 'Estrategia de marca',
+      title: 'Por qué los embudos fallan cuando la marca es débil',
       date: 'Mar 2026',
       read: '6 min lectura',
-      content: 'Un embudo no puede reparar una promesa debil. La pauta, las landing pages y la automatizacion funcionan mejor cuando la audiencia entiende rapido a quien ayuda la marca, que cambia y por que confiar.\n\nEl growth stack real conecta posicionamiento, creatividad, experiencia de landing, follow-up y medicion.\n\nCuando esas piezas se disenan juntas, las campanas son mas faciles de probar y mejorar.'
+      content: 'Un embudo no puede reparar una promesa débil. La pauta, las landing pages y la automatización funcionan mejor cuando la audiencia entiende rápido a quién ayuda la marca, qué cambia y por qué confiar.\n\nUn sistema de crecimiento fuerte conecta posicionamiento, creatividad, experiencia de landing, seguimiento y medición. Si esas partes se diseñan por separado, la campaña se vuelve más difícil de probar porque cada paso usa un mensaje distinto.\n\nLa estrategia de marca no es solo acabado visual. Es la lógica operativa que ayuda a que cada anuncio, página, correo y conversación comercial apunte en la misma dirección.'
     }
   ]
 };
 
 const faqData = {
   en: [
-    { q: 'What services does CREATIVE MK offer?', a: 'We build connected digital systems across branding, websites, landing pages, funnels, paid growth, content systems, product UX/UI, development, and AI automation.' },
-    { q: 'Can you redesign an existing website or brand?', a: 'Yes. We can audit the current experience, preserve what works, rebuild weak sections, and turn the brand into a clearer system across web, ads, content, and sales touchpoints.' },
-    { q: 'Do you work with international clients?', a: 'Yes. CREATIVE MK is digital-first, bilingual, and built to collaborate across markets and time zones.' },
-    { q: 'How do you integrate AI automation?', a: 'We connect AI to practical workflows: lead intake, routing, first-response support, content personalization, reporting, and follow-up sequences.' },
-    { q: 'How long does a typical project take?', a: 'A focused landing page can take 1-2 weeks, a full website 4-8 weeks, and deeper brand or product systems 4-10 weeks depending on scope.' }
+    { q: 'What services does CREATIVE MK offer?', a: 'We work across branding, websites, digital product UX/UI, growth and marketing systems, development, and practical AI automation. The goal is to connect the pieces that shape how a business is understood, trusted, and contacted.' },
+    { q: 'Are the projects shown real client case studies?', a: 'The current work section is presented as capability showcases unless a project is explicitly labeled as client work. That keeps the site honest while still showing the type of systems CREATIVE MK can design and build.' },
+    { q: 'Can you redesign an existing website or brand?', a: 'Yes. We can audit the current experience, preserve what is working, rebuild weak sections, and turn the brand, site, and follow-up path into a clearer system.' },
+    { q: 'How do you approach AI automation?', a: 'We begin with a workflow, not a tool. Useful starting points include lead intake, service matching, first response, knowledge bases, dashboards, and follow-up prompts with a clear human handoff.' },
+    { q: 'How long does a typical project take?', a: 'A focused landing page or audit can take 1-2 weeks, a full website often takes 4-8 weeks, and deeper brand, product, or automation systems usually take 4-10 weeks depending on scope.' }
   ],
   es: [
-    { q: 'Que servicios ofrece CREATIVE MK?', a: 'Construimos sistemas digitales conectados: branding, sitios web, landing pages, embudos, paid growth, contenido, UX/UI, desarrollo y automatizacion IA.' },
-    { q: 'Pueden redisenar un sitio o marca existente?', a: 'Si. Podemos auditar la experiencia actual, conservar lo que funciona, reconstruir secciones debiles y convertir la marca en un sistema mas claro.' },
-    { q: 'Trabajan con clientes internacionales?', a: 'Si. CREATIVE MK es digital-first, bilingue y esta preparado para colaborar entre mercados y zonas horarias.' },
-    { q: 'Como integran automatizacion con IA?', a: 'Conectamos IA a flujos practicos: intake de leads, routing, primera respuesta, personalizacion de contenido, reportes y secuencias de follow-up.' },
-    { q: 'Cuanto tiempo toma un proyecto?', a: 'Una landing enfocada puede tomar 1-2 semanas, un sitio completo 4-8 semanas y sistemas de marca o producto 4-10 semanas segun alcance.' }
+    { q: '¿Qué servicios ofrece CREATIVE MK?', a: 'Trabajamos branding, sitios web, producto digital UX/UI, sistemas de growth y marketing, desarrollo y automatización práctica con IA. El objetivo es conectar las piezas que hacen que un negocio se entienda, genere confianza y reciba mejores contactos.' },
+    { q: '¿Los proyectos mostrados son casos reales de clientes?', a: 'La sección de trabajo actual se presenta como showcases de capacidad, a menos que un proyecto esté marcado explícitamente como trabajo de cliente. Así el sitio se mantiene honesto y aun así muestra el tipo de sistemas que CREATIVE MK puede diseñar y construir.' },
+    { q: '¿Pueden rediseñar un sitio o marca existente?', a: 'Sí. Podemos auditar la experiencia actual, conservar lo que funciona, reconstruir secciones débiles y convertir marca, sitio y seguimiento en un sistema más claro.' },
+    { q: '¿Cómo integran automatización con IA?', a: 'Empezamos con un flujo, no con una herramienta. Los mejores puntos de inicio suelen ser recepción de leads, recomendación de servicio, primera respuesta, bases de conocimiento, dashboards y prompts de seguimiento con entrega clara a una persona.' },
+    { q: '¿Cuánto tiempo toma un proyecto?', a: 'Una landing o auditoría enfocada puede tomar 1-2 semanas, un sitio completo suele tomar 4-8 semanas y sistemas más profundos de marca, producto o automatización pueden tomar 4-10 semanas según el alcance.' }
   ]
 };
 
