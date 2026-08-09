@@ -2,6 +2,32 @@
    Global Styles & Utilities
    ============================================ */
 
+/* ---- Typeface ----
+   Inter, self-hosted. It has to be the VARIABLE font, not static instances:
+   the stylesheets ask for font-weight 720, 760, 780, 820, 840, 850 and 860 in
+   nine places, and static cuts would round every one of them to the nearest
+   hundred and change the typography.
+
+   One file, latin subset (U+0000-00FF covers every accented character Spanish
+   needs), 47 KB, whole 100-900 weight axis.
+
+   No metric-adjusted fallback face. That technique needs its family appended to
+   --font-primary, which this change is not allowed to touch, and a single
+   size-adjust cannot be right everywhere: measured against Inter it is 106.61%
+   for Segoe UI but 112.24% for Helvetica Neue. The file is preloaded from the
+   same origin, so the swap window is short, and index.html measures CLS 0.0001
+   either way. */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/inter-latin-variable.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
 /* ---- Container ---- */
 .container {
   width: 100%;
