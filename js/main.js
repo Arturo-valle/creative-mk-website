@@ -612,6 +612,7 @@ function initPlayShowreel() {
   if (!btn || !video) return;
 
   const mobileQuery = window.matchMedia('(max-width: 640px)');
+  const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
   const desktopSrc = video.dataset.srcDesktop;
   const mobileSrc = video.dataset.srcMobile;
 
@@ -629,7 +630,14 @@ function initPlayShowreel() {
     }
   }
 
-  function setVideoSource() {
+  // The markup ships without a `src` so nothing downloads before this runs and
+  // the browser picks exactly one file per breakpoint. Under reduced motion we
+  // never fetch on our own: `force` is the user asking for it via the button,
+  // and an existing `src` means they already opted in and only the breakpoint
+  // changed.
+  function setVideoSource({ force = false } = {}) {
+    if (motionQuery.matches && !force && !video.getAttribute('src')) return;
+
     const nextSrc = getExpectedSrc();
     if (!nextSrc || video.getAttribute('src') === nextSrc) return;
     const wasPlaying = !video.paused;
@@ -656,18 +664,22 @@ function initPlayShowreel() {
   video.playsInline = true;
   setVideoSource();
   syncHeroSoundButton();
-  playMuted();
+  if (!motionQuery.matches) playMuted();
 
   btn.addEventListener('click', () => {
+    // Unmute first: setVideoSource reads the current muted state to decide what
+    // to restore once metadata lands.
     video.muted = !video.muted;
-    if (!video.muted) playMuted();
+    if (!video.getAttribute('src')) setVideoSource({ force: true });
+    else if (!video.muted) playMuted();
     syncHeroSoundButton();
   });
 
+  const onBreakpointChange = () => setVideoSource();
   if (typeof mobileQuery.addEventListener === 'function') {
-    mobileQuery.addEventListener('change', setVideoSource);
+    mobileQuery.addEventListener('change', onBreakpointChange);
   } else if (typeof mobileQuery.addListener === 'function') {
-    mobileQuery.addListener(setVideoSource);
+    mobileQuery.addListener(onBreakpointChange);
   }
 }
 
