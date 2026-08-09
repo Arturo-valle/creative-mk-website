@@ -112,18 +112,33 @@ export function initHero3D(canvas) {
     camera.updateProjectionMatrix();
   }
 
-  let running = true;
+  /* The loop runs only while the hero is worth drawing: the tab is in front and
+     the hero is still on screen. Once the visitor scrolls into the rest of the
+     page there is nothing to see, and the frames are pure cost. */
+  let tabVisible = document.visibilityState === 'visible';
+  let heroOnScreen = true;
+  let running = false;
+
+  function sync() {
+    const shouldRun = tabVisible && heroOnScreen;
+    if (shouldRun === running) return;
+    running = shouldRun;
+    renderer.setAnimationLoop(running ? frame : null);
+  }
+
   function onVisibility() {
-    // No point burning a GPU on a tab nobody is looking at.
-    if (document.visibilityState === 'visible') {
-      if (!running) {
-        running = true;
-        renderer.setAnimationLoop(frame);
-      }
-    } else if (running) {
-      running = false;
-      renderer.setAnimationLoop(null);
-    }
+    tabVisible = document.visibilityState === 'visible';
+    sync();
+  }
+
+  const host = canvas.closest('#hero') || canvas.parentElement;
+  let heroObserver = null;
+  if (host && typeof IntersectionObserver === 'function') {
+    heroObserver = new IntersectionObserver((entries) => {
+      heroOnScreen = entries.some((entry) => entry.isIntersecting);
+      sync();
+    }, { threshold: 0 });
+    heroObserver.observe(host);
   }
 
   function frame(now) {
@@ -138,6 +153,7 @@ export function initHero3D(canvas) {
 
   function dispose() {
     renderer.setAnimationLoop(null);
+    if (heroObserver) heroObserver.disconnect();
     window.removeEventListener('resize', resize);
     window.removeEventListener('pointermove', onPointerMove);
     document.removeEventListener('visibilitychange', onVisibility);
@@ -153,7 +169,7 @@ export function initHero3D(canvas) {
   window.addEventListener('pagehide', dispose, { once: true });
 
   resize();
-  renderer.setAnimationLoop(frame);
+  sync();
 
   return dispose;
 }

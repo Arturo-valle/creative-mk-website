@@ -869,6 +869,43 @@ function initModal() {
  * The path is absolute on purpose: main.js is a classic script, so a relative
  * specifier would resolve against the document URL, not this file.
  */
+/**
+ * WebGL2 that is actually worth using.
+ *
+ * A context alone is not enough: Chrome hands back a working WebGL2 context
+ * backed by SwiftShader when GPU acceleration is unavailable or blocklisted,
+ * and rasterising this scene on the CPU costs seconds of main-thread time.
+ * CI measured 22s of blocking time on index.html against 98ms on the contact
+ * page in the same run, which is exactly that path.
+ *
+ * WEBGL_debug_renderer_info is unavailable in some privacy configurations. When
+ * we cannot tell, we assume hardware: the visitor with a real GPU is the common
+ * case, and a false negative would cost every one of them the background.
+ */
+function hasAcceleratedWebgl2() {
+  let gl = null;
+  try {
+    gl = document.createElement('canvas').getContext('webgl2');
+  } catch (error) {
+    return false;
+  }
+  if (!gl) return false;
+
+  try {
+    const info = gl.getExtension('WEBGL_debug_renderer_info');
+    if (!info) return true;
+    const renderer = String(gl.getParameter(info.UNMASKED_RENDERER_WEBGL) || '');
+    return !/swiftshader|llvmpipe|softpipe|software|basic render|microsoft basic/i.test(renderer);
+  } catch (error) {
+    return true;
+  } finally {
+    // Free the probe context instead of leaving it to the GC; browsers cap how
+    // many live WebGL contexts a page may hold.
+    const lose = gl.getExtension('WEBGL_lose_context');
+    if (lose) lose.loseContext();
+  }
+}
+
 function initHeroBackground() {
   const canvas = document.getElementById('hero-canvas');
   if (!canvas) return;
@@ -876,13 +913,7 @@ function initHeroBackground() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (!window.matchMedia('(min-width: 768px)').matches) return;
 
-  let supportsWebgl2 = false;
-  try {
-    supportsWebgl2 = Boolean(document.createElement('canvas').getContext('webgl2'));
-  } catch (error) {
-    supportsWebgl2 = false;
-  }
-  if (!supportsWebgl2) return;
+  if (!hasAcceleratedWebgl2()) return;
 
   const start = () => {
     import('/js/hero-3d.js')
