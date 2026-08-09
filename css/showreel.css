@@ -1,0 +1,44 @@
+/* ============================================
+   Showreel — standalone section
+   The video used to be the full-bleed background of #hero, which put several
+   megabytes on the critical path of the first screen. It now lives here and
+   loads only once this section scrolls into view (see initPlayShowreel in
+   js/main.js).
+   ============================================ */
+
+.showreel {
+  background: var(--color-black);
+}
+
+.showreel__frame {
+  position: relative;          /* .hero__play-btn positions against this */
+  width: 100%;
+  overflow: hidden;
+  border-radius: var(--radius-xl);
+  background: var(--color-gray-900);
+  aspect-ratio: 16 / 9;        /* reserved before the video loads, so no CLS */
+}
+
+/* The video keeps its .hero__video class so the existing object-fit and colour
+   grading carry over unchanged; only the box that holds it is new. */
+.showreel__frame .hero__video {
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 0;
+  aspect-ratio: auto;
+  object-fit: cover;
+}
+
+@media (max-width: 1024px) {
+  .showreel__frame {
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (max-width: 640px) {
+  .showreel__frame {
+    aspect-ratio: 4 / 5;       /* matches the crop the mobile file is cut for */
+    border-radius: var(--radius-md);
+  }
+}

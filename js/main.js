@@ -662,9 +662,27 @@ function initPlayShowreel() {
   video.defaultMuted = true;
   video.muted = true;
   video.playsInline = true;
-  setVideoSource();
   syncHeroSoundButton();
-  if (!motionQuery.matches) playMuted();
+
+  // The showreel sits below the fold, so nothing is fetched until it is on
+  // screen. That keeps several megabytes of video off the critical path of the
+  // first screen. setVideoSource() still refuses to fetch under reduced motion.
+  function activate() {
+    setVideoSource();
+    if (!motionQuery.matches) playMuted();
+  }
+
+  const section = document.getElementById('showreel');
+  if (section && typeof IntersectionObserver === 'function') {
+    new IntersectionObserver((entries) => {
+      for (const entry of entries) {
+        if (entry.isIntersecting) activate();
+        else if (!video.paused) video.pause();
+      }
+    }, { threshold: 0.01 }).observe(section);
+  } else {
+    activate();
+  }
 
   btn.addEventListener('click', () => {
     // Unmute first: setVideoSource reads the current muted state to decide what

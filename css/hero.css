@@ -40,14 +40,6 @@
 }
 
 /* ---- Video Block — Full-Width Panoramic ---- */
-.hero__visual {
-  position: relative;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .hero__video {
   width: 100%;
   max-width: none;

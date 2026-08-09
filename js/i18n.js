@@ -38,6 +38,8 @@ const translations = {
     "hero.soundEnable": "Enable sound",
     "hero.soundMute": "Mute",
 
+    "showreel.title": "CREATIVE MK showreel",
+
     "proof.kicker": "Studio model",
     "proof.title": "A senior, focused partner for the digital touchpoints that shape trust.",
     "proof.text": "Inspired by the discipline of top digital studios, our work connects strategy, design, content, technology, and automation without pretending every business needs the same package.",
@@ -140,6 +142,8 @@ const translations = {
     "hero.playBtn": "Reproducir",
     "hero.soundEnable": "Activar sonido",
     "hero.soundMute": "Silenciar",
+
+    "showreel.title": "Showreel de CREATIVE MK",
 
     "proof.kicker": "Modelo de estudio",
     "proof.title": "Un aliado senior y enfocado para los puntos digitales que construyen confianza.",
