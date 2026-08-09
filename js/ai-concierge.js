@@ -339,7 +339,30 @@
     return data;
   }
 
+  // Telemetry lands in the production database, so only production may write to
+  // it. `endpoint()` falls back to the production Worker on any other hostname,
+  // which means local sessions, deploy previews, forks and CI would otherwise
+  // dilute real lead data. Setting CREATIVE_MK_AGENT_BASE is an explicit opt-in
+  // and keeps reporting on, so a staging Worker can still be pointed at.
+  function telemetryAllowed() {
+    if (window.CREATIVE_MK_AGENT_BASE) return true;
+    return /(^|\.)creativemk\.net$/i.test(window.location.hostname);
+  }
+
+  let suppressionLogged = false;
+
   function logEvent(eventType, metadata) {
+    if (!telemetryAllowed()) {
+      if (!suppressionLogged) {
+        suppressionLogged = true;
+        console.debug(
+          '[concierge] telemetry suppressed on %s; set window.CREATIVE_MK_AGENT_BASE to report anyway',
+          window.location.hostname
+        );
+      }
+      return;
+    }
+
     fetch(endpoint('events'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
