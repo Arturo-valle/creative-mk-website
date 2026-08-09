@@ -485,6 +485,11 @@ function renderWork() {
  * artwork actually uses transparency). The AVIF and WebP candidates are derived
  * from it; the pipeline emits 480 and 960 for every source, because none of the
  * source art is wider than 1024px.
+ *
+ * width/height are declared so the browser reserves the box before the image
+ * decodes. Every source in this project is 1024x1024, so the ratio is 1:1 for
+ * all of them. CSS still controls the rendered size; these only supply the
+ * intrinsic aspect ratio, which is what stops the layout shifting.
  */
 function pictureMarkup(fallback, alt, sizes, { lazy = true } = {}) {
   const base = fallback.replace(/\.(jpg|png)$/i, '');
@@ -493,7 +498,7 @@ function pictureMarkup(fallback, alt, sizes, { lazy = true } = {}) {
   return `<picture>
       <source type="image/avif" srcset="${srcset('avif')}" sizes="${sizes}">
       <source type="image/webp" srcset="${srcset('webp')}" sizes="${sizes}">
-      <img src="${fallback}" alt="${alt}"${loading} decoding="async">
+      <img src="${fallback}" alt="${alt}"${loading} decoding="async" width="960" height="960">
     </picture>`;
 }
 
