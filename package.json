@@ -7,7 +7,10 @@
     "build": "npm run build:contact && node scripts/build-pages.mjs",
     "dev:contact": "vite --host 127.0.0.1",
     "build:contact": "vite build && node scripts/copy-contact-build.mjs",
-    "preview:contact": "vite preview --host 127.0.0.1"
+    "preview:contact": "vite preview --host 127.0.0.1",
+    "typecheck": "wrangler types cloudflare/agent/worker-configuration.d.ts --config cloudflare/agent/wrangler.jsonc && tsc -p cloudflare/agent/tsconfig.json",
+    "check:site": "node scripts/check-site.mjs",
+    "verify": "npm run build && npm run typecheck && npm run check:site"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
