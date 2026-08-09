@@ -39,6 +39,21 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ---- Ambient WebGL background ---- */
+/* Sits behind .hero__container, which already carries z-index: 2. The element
+   is in the markup at all widths; js/main.js only mounts a scene into it when
+   the capability gates pass, so on the fallback path it stays an empty, inert,
+   invisible layer over the hero's own #0a0a0a background. */
+.hero__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
+
 /* ---- Video Block — Full-Width Panoramic ---- */
 .hero__video {
   width: 100%;
