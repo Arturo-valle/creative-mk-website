@@ -10,7 +10,7 @@ const servicesData = {
       desc: 'We define the promise, voice, visual identity, offer architecture, and brand rules that help a business feel consistent across website, ads, content, sales materials, and future campaigns.',
       proof: 'Best for new brands, premium repositioning, service businesses, and teams that need trust before scaling attention.',
       tags: ['Strategy', 'Identity', 'Guidelines'],
-      media: 'images/services/branding.png'
+      media: 'images/services/branding.jpg'
     },
     {
       title: 'Websites',
@@ -18,7 +18,7 @@ const servicesData = {
       desc: 'We design and build editorial, conversion-aware websites with clear messaging, UX structure, service pathways, proof blocks, SEO foundations, and a contact flow that respects the buyer.',
       proof: 'Best for service brands, expert firms, local leaders, and companies whose current site does not explain the offer fast enough.',
       tags: ['UX', 'Copy', 'SEO'],
-      media: 'images/services/web-design.png'
+      media: 'images/services/web-design.jpg'
     },
     {
       title: 'Digital Product UX/UI',
@@ -26,7 +26,7 @@ const servicesData = {
       desc: 'We map product journeys, dashboards, portals, onboarding flows, and app interfaces so complex actions feel clear before a team commits to a build.',
       proof: 'Best for SaaS ideas, internal tools, client portals, MVPs, and businesses with a workflow that needs a better interface.',
       tags: ['Flows', 'Prototype', 'Design System'],
-      media: 'images/services/ux-ui-design-premium-preview.png'
+      media: 'images/services/ux-ui-design-premium-preview.jpg'
     },
     {
       title: 'Growth & Marketing',
@@ -34,7 +34,7 @@ const servicesData = {
       desc: 'We shape landing pages, funnels, Meta campaigns, content rhythms, tracking, and follow-up paths so attention has somewhere useful to go.',
       proof: 'Best when the offer is clear enough to test traffic, capture demand, and learn from real audience signals.',
       tags: ['Offer', 'Traffic', 'Follow-up'],
-      media: 'images/services/sales-funnels.png'
+      media: 'images/services/sales-funnels.jpg'
     },
     {
       title: 'AI Automation',
@@ -42,7 +42,7 @@ const servicesData = {
       desc: 'We connect intake, service matching, first-response support, knowledge bases, dashboards, and follow-up rules so teams respond faster without losing human control.',
       proof: 'Best for businesses with repeated questions, slow lead handoff, manual reporting, or operations that need a cleaner first layer.',
       tags: ['Intake', 'Routing', 'Dashboards'],
-      media: 'images/services/email-marketing.png'
+      media: 'images/services/email-marketing.jpg'
     },
     {
       title: 'Development',
@@ -50,7 +50,7 @@ const servicesData = {
       desc: 'We turn approved strategy and UX into responsive pages, front-end systems, forms, analytics, integrations, and lightweight app experiences that are ready to use.',
       proof: 'Best when the brand, website, product screen, form, CRM, and automation need to work together instead of living as separate pieces.',
       tags: ['Frontend', 'Forms', 'Integrations'],
-      media: 'images/services/landing-pages.png'
+      media: 'images/services/landing-pages.jpg'
     }
   ],
   es: [
@@ -60,7 +60,7 @@ const servicesData = {
       desc: 'Definimos promesa, voz, identidad visual, arquitectura de oferta y reglas de marca para que el negocio se sienta consistente en sitio web, anuncios, contenido, ventas y futuras campañas.',
       proof: 'Ideal para marcas nuevas, reposicionamientos premium, negocios de servicio y equipos que necesitan confianza antes de escalar la atención.',
       tags: ['Estrategia', 'Identidad', 'Guías'],
-      media: 'images/services/branding.png'
+      media: 'images/services/branding.jpg'
     },
     {
       title: 'Sitios Web',
@@ -68,7 +68,7 @@ const servicesData = {
       desc: 'Diseñamos y construimos sitios editoriales orientados a conversión, con mensaje claro, estructura UX, rutas de servicio, bloques de prueba, bases SEO y un contacto respetuoso para el comprador.',
       proof: 'Ideal para marcas de servicio, firmas expertas, líderes locales y empresas cuyo sitio actual no explica la oferta con suficiente rapidez.',
       tags: ['UX', 'Copy', 'SEO'],
-      media: 'images/services/web-design.png'
+      media: 'images/services/web-design.jpg'
     },
     {
       title: 'Producto Digital UX/UI',
@@ -76,7 +76,7 @@ const servicesData = {
       desc: 'Mapeamos journeys, dashboards, portales, onboarding e interfaces de app para que acciones complejas se entiendan antes de comprometer al equipo con el desarrollo.',
       proof: 'Ideal para ideas SaaS, herramientas internas, portales de cliente, MVPs y negocios con procesos que necesitan una mejor interfaz.',
       tags: ['Flujos', 'Prototipo', 'Sistema UI'],
-      media: 'images/services/ux-ui-design-premium-preview.png'
+      media: 'images/services/ux-ui-design-premium-preview.jpg'
     },
     {
       title: 'Growth & Marketing',
@@ -84,7 +84,7 @@ const servicesData = {
       desc: 'Damos forma a landing pages, embudos, campañas Meta, ritmos de contenido, medición y rutas de seguimiento para que la atención tenga un siguiente paso útil.',
       proof: 'Ideal cuando la oferta ya está lo suficientemente clara para probar tráfico, capturar demanda y aprender de señales reales de audiencia.',
       tags: ['Oferta', 'Tráfico', 'Seguimiento'],
-      media: 'images/services/sales-funnels.png'
+      media: 'images/services/sales-funnels.jpg'
     },
     {
       title: 'Automatización IA',
@@ -92,7 +92,7 @@ const servicesData = {
       desc: 'Conectamos recepción de leads, recomendación de servicios, primera respuesta, bases de conocimiento, dashboards y reglas de seguimiento para responder más rápido sin perder control humano.',
       proof: 'Ideal para negocios con preguntas repetidas, traspaso lento de leads, reportes manuales u operaciones que necesitan una primera capa más clara.',
       tags: ['Recepción', 'Rutas', 'Dashboards'],
-      media: 'images/services/email-marketing.png'
+      media: 'images/services/email-marketing.jpg'
     },
     {
       title: 'Desarrollo',
@@ -100,7 +100,7 @@ const servicesData = {
       desc: 'Convertimos estrategia y UX aprobadas en páginas responsivas, sistemas front-end, formularios, analítica, integraciones y experiencias ligeras de app listas para usar.',
       proof: 'Ideal cuando marca, sitio, pantalla de producto, formulario, CRM y automatización deben trabajar juntos en lugar de vivir como piezas separadas.',
       tags: ['Frontend', 'Formularios', 'Integraciones'],
-      media: 'images/services/landing-pages.png'
+      media: 'images/services/landing-pages.jpg'
     }
   ]
 };
@@ -113,7 +113,7 @@ const workData = {
       desc: 'A connected campaign and follow-up system for turning paid attention into qualified conversations.',
       tags: ['Offer', 'Traffic', 'Follow-up'],
       color: '#18212f',
-      img: 'images/portfolio-1.png',
+      img: 'images/portfolio-1.jpg',
       outcome: 'Capability showcase',
       isRealClient: false,
       case: {
@@ -129,7 +129,7 @@ const workData = {
       desc: 'A refined website structure for trust, positioning, service clarity, and qualified inquiries.',
       tags: ['Websites', 'Messaging', 'UX'],
       color: '#263c35',
-      img: 'images/portfolio-2.png',
+      img: 'images/portfolio-2.jpg',
       outcome: 'Capability showcase',
       isRealClient: false,
       case: {
@@ -145,7 +145,7 @@ const workData = {
       desc: 'A flexible identity foundation for launches, web, content, sales materials, and future campaigns.',
       tags: ['Branding', 'Identity', 'Guidelines'],
       color: '#4f342f',
-      img: 'images/portfolio-5.png',
+      img: 'images/portfolio-5.jpg',
       outcome: 'Capability showcase',
       isRealClient: false,
       case: {
@@ -161,7 +161,7 @@ const workData = {
       desc: 'A focused UX/UI sprint for dashboards, portals, onboarding, MVPs, and app workflows.',
       tags: ['UX/UI', 'Prototype', 'Design System'],
       color: '#14283a',
-      img: 'images/portfolio-6.png',
+      img: 'images/portfolio-6.jpg',
       outcome: 'Capability showcase',
       isRealClient: false,
       case: {
@@ -177,7 +177,7 @@ const workData = {
       desc: 'A content and campaign rhythm for visibility, consistency, authority, and useful reporting.',
       tags: ['Content', 'Campaigns', 'Reporting'],
       color: '#604024',
-      img: 'images/portfolio-4.png',
+      img: 'images/portfolio-4.jpg',
       outcome: 'Capability showcase',
       isRealClient: false,
       case: {
@@ -193,7 +193,7 @@ const workData = {
       desc: 'An AI-assisted intake and handoff layer for service requests, FAQs, and first-response needs.',
       tags: ['AI Automation', 'Intake', 'Handoff'],
       color: '#20263a',
-      img: 'images/portfolio-3.png',
+      img: 'images/portfolio-3.jpg',
       outcome: 'Capability showcase',
       isRealClient: false,
       case: {
@@ -211,7 +211,7 @@ const workData = {
       desc: 'Un sistema conectado de campaña y seguimiento para convertir atención pagada en conversaciones calificadas.',
       tags: ['Oferta', 'Tráfico', 'Seguimiento'],
       color: '#18212f',
-      img: 'images/portfolio-1.png',
+      img: 'images/portfolio-1.jpg',
       outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
@@ -227,7 +227,7 @@ const workData = {
       desc: 'Una estructura web refinada para confianza, posicionamiento, claridad de servicios y oportunidades calificadas.',
       tags: ['Sitios Web', 'Mensaje', 'UX'],
       color: '#263c35',
-      img: 'images/portfolio-2.png',
+      img: 'images/portfolio-2.jpg',
       outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
@@ -243,7 +243,7 @@ const workData = {
       desc: 'Una base flexible de identidad para lanzamientos, web, contenido, materiales comerciales y futuras campañas.',
       tags: ['Branding', 'Identidad', 'Guías'],
       color: '#4f342f',
-      img: 'images/portfolio-5.png',
+      img: 'images/portfolio-5.jpg',
       outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
@@ -259,7 +259,7 @@ const workData = {
       desc: 'Un sprint UX/UI para dashboards, portales, onboarding, MVPs y flujos de app.',
       tags: ['UX/UI', 'Prototipo', 'Sistema UI'],
       color: '#14283a',
-      img: 'images/portfolio-6.png',
+      img: 'images/portfolio-6.jpg',
       outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
@@ -275,7 +275,7 @@ const workData = {
       desc: 'Un ritmo de contenido y campaña para visibilidad, consistencia, autoridad y reportes útiles.',
       tags: ['Contenido', 'Campañas', 'Reportes'],
       color: '#604024',
-      img: 'images/portfolio-4.png',
+      img: 'images/portfolio-4.jpg',
       outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
@@ -291,7 +291,7 @@ const workData = {
       desc: 'Una capa asistida por IA para recepción de solicitudes, preguntas frecuentes y primera respuesta.',
       tags: ['IA', 'Recepción', 'Handoff'],
       color: '#20263a',
-      img: 'images/portfolio-3.png',
+      img: 'images/portfolio-3.jpg',
       outcome: 'Showcase de capacidad',
       isRealClient: false,
       case: {
@@ -304,7 +304,7 @@ const workData = {
   ]
 };
 
-const newsImages = ['images/news/news-1.png', 'images/news/news-2.png', 'images/news/news-3.png'];
+const newsImages = ['images/news/news-1.jpg', 'images/news/news-2.jpg', 'images/news/news-3.jpg'];
 
 const newsData = {
   en: [
@@ -419,6 +419,13 @@ function initCapabilitiesVisualSwap(list) {
     img.style.opacity = '0';
     img.style.transform = 'scale(0.96)';
     window.setTimeout(() => {
+      // The <img> alone is not enough: whichever <source> the browser picked
+      // wins over src, so the AVIF and WebP candidates have to move too.
+      const base = service.media.replace(/\.(jpg|png)$/i, '');
+      const avif = document.getElementById('cap-visual-avif');
+      const webp = document.getElementById('cap-visual-webp');
+      if (avif) avif.srcset = `${base}-480.avif 480w, ${base}-960.avif 960w`;
+      if (webp) webp.srcset = `${base}-480.webp 480w, ${base}-960.webp 960w`;
       img.src = service.media;
       img.alt = `${service.title} preview`;
       img.style.opacity = '1';
@@ -469,10 +476,36 @@ function renderWork() {
   });
 }
 
+/**
+ * Build a <picture> for one of the derivatives produced by
+ * scripts/convert-images.mjs.
+ *
+ * `fallback` is the path stored in the content data and is also the <img> src,
+ * so it carries the right extension for that asset (.jpg, or .png where the
+ * artwork actually uses transparency). The AVIF and WebP candidates are derived
+ * from it; the pipeline emits 480 and 960 for every source, because none of the
+ * source art is wider than 1024px.
+ *
+ * width/height are declared so the browser reserves the box before the image
+ * decodes. Every source in this project is 1024x1024, so the ratio is 1:1 for
+ * all of them. CSS still controls the rendered size; these only supply the
+ * intrinsic aspect ratio, which is what stops the layout shifting.
+ */
+function pictureMarkup(fallback, alt, sizes, { lazy = true } = {}) {
+  const base = fallback.replace(/\.(jpg|png)$/i, '');
+  const srcset = (ext) => `${base}-480.${ext} 480w, ${base}-960.${ext} 960w`;
+  const loading = lazy ? ' loading="lazy"' : '';
+  return `<picture>
+      <source type="image/avif" srcset="${srcset('avif')}" sizes="${sizes}">
+      <source type="image/webp" srcset="${srcset('webp')}" sizes="${sizes}">
+      <img src="${fallback}" alt="${alt}"${loading} decoding="async" width="960" height="960">
+    </picture>`;
+}
+
 function workCard(p, viewText, idx) {
   return `<article class="work__card reveal" data-work-index="${idx}" data-category="${p.category}" role="button" tabindex="0" aria-label="${viewText}: ${p.name}">
     <div class="work__card-media" style="background:${p.color}">
-      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      ${pictureMarkup(p.img, p.name, '(max-width: 768px) 100vw, 33vw')}
       <span class="work__card-meta">${p.isRealClient ? 'Client work' : p.outcome}</span>
       <div class="work__card-overlay">
         <h3 class="work__card-name">${p.name}</h3>
@@ -498,7 +531,7 @@ function renderNews() {
   grid.innerHTML = data.map((n, i) => `
     <article class="news__card reveal" data-news-index="${i}" role="button" tabindex="0" aria-label="${n.title}">
       <div class="news__card-image">
-        <img src="${newsImages[i]}" alt="${n.title}" loading="lazy">
+        ${pictureMarkup(newsImages[i], n.title, '(max-width: 768px) 100vw, 33vw')}
       </div>
       <div class="news__card-body">
         <span class="news__card-category">${n.category}</span>
@@ -551,10 +584,10 @@ function renderCarousel() {
   const track = document.getElementById('carousel-track');
   if (!track) return;
   const imgs = [
-    'images/team/team-1.png', 'images/team/team-2.png', 'images/team/team-3.png',
-    'images/team/team-4.png', 'images/team/team-5.png', 'images/team/team-6.png'
+    'images/team/team-1.jpg', 'images/team/team-2.jpg', 'images/team/team-3.jpg',
+    'images/team/team-4.jpg', 'images/team/team-5.jpg', 'images/team/team-6.jpg'
   ];
-  const items = imgs.map(src => `<div class="about__carousel-item"><img src="${src}" alt="CREATIVE MK team" loading="lazy"></div>`).join('');
+  const items = imgs.map(src => `<div class="about__carousel-item">${pictureMarkup(src, 'CREATIVE MK team', '(max-width: 768px) 60vw, 280px')}</div>`).join('');
   track.innerHTML = items + items;
 
   const prevBtn = document.getElementById('carousel-prev');
@@ -760,7 +793,7 @@ function openCaseModal(project) {
   const html = `
     <div class="modal-case">
       <div class="modal-case__hero" style="background:${project.color}">
-        <img src="${project.img}" alt="${project.name}">
+        ${pictureMarkup(project.img, project.name, '(max-width: 900px) 100vw, 860px', { lazy: false })}
       </div>
       <div class="modal-case__body">
         <span class="modal-case__label">${labels.caseStudy}</span>
@@ -794,7 +827,7 @@ function openNewsModal(article, imgSrc) {
   const html = `
     <div class="modal-news">
       <div class="modal-news__hero">
-        <img src="${imgSrc}" alt="${article.title}">
+        ${pictureMarkup(imgSrc, article.title, '(max-width: 900px) 100vw, 860px', { lazy: false })}
       </div>
       <div class="modal-news__body">
         <div class="modal-news__meta">
