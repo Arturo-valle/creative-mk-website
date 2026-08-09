@@ -2467,7 +2467,7 @@ async function enforceRouteLimit(request: Request, env: Env): Promise<Response |
 
   try {
     const gate = await getAgentByName<Env, QuotaGate>(
-      env.QuotaGate as DurableObjectNamespace<QuotaGate>,
+      env.QuotaGate as unknown as DurableObjectNamespace<QuotaGate>,
       "global"
     );
     const outcome = await gate.consumeRoute(key, rule.limit, rule.periodSeconds);
@@ -2710,7 +2710,7 @@ async function maybeEnhanceWithBrowserRun(
 
   try {
     const gate = await getAgentByName<Env, QuotaGate>(
-      env.QuotaGate as DurableObjectNamespace<QuotaGate>,
+      env.QuotaGate as unknown as DurableObjectNamespace<QuotaGate>,
       "global"
     );
     const browserQuota = await gate.consumeBrowserRun(LIMITS.browserAuditsPerDay);
@@ -3153,7 +3153,7 @@ export class CreativeMkConcierge extends Agent<Env, ConciergeState> {
   private async consumeAi(): Promise<{ allowed: boolean; remaining: number }> {
     try {
       const gate = await getAgentByName<Env, QuotaGate>(
-        this.env.QuotaGate as DurableObjectNamespace<QuotaGate>,
+        this.env.QuotaGate as unknown as DurableObjectNamespace<QuotaGate>,
         "global"
       );
       return await gate.consumeAi(LIMITS.dailyAiCalls);
@@ -4280,12 +4280,13 @@ function buildKnowledgeGapRadar(input: {
     .sort((a, b) => b.activeDemand - a.activeDemand || a.docs - b.docs)
     .slice(0, 8);
 
-  const actions = gaps.slice(0, 4).map((gap) => ({
-    priority: gap.priority,
-    title: `Create ${gap.recommendedDoc}`,
-    detail: gap.action,
-    sourceSignal: `${gap.signalCount} signal${gap.signalCount === 1 ? "" : "s"} / ${gap.coverageScore}% corpus coverage`
-  }));
+  const actions: Array<{ priority: "high" | "medium" | "low"; title: string; detail: string; sourceSignal: string }> =
+    gaps.slice(0, 4).map((gap) => ({
+      priority: gap.priority,
+      title: `Create ${gap.recommendedDoc}`,
+      detail: gap.action,
+      sourceSignal: `${gap.signalCount} signal${gap.signalCount === 1 ? "" : "s"} / ${gap.coverageScore}% corpus coverage`
+    }));
   if (!actions.length) {
     actions.push({
       priority: "low",
