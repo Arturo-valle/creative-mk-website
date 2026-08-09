@@ -823,9 +823,55 @@ function initModal() {
   });
 }
 
+/**
+ * Ambient WebGL background for the hero.
+ *
+ * Everything expensive lives in js/hero-3d.js and is reached through a dynamic
+ * import, so none of it is in the initial payload. The import is only issued
+ * for visitors who can benefit: no reduced-motion preference, WebGL2 available,
+ * and a viewport wide enough that the surface is not competing with the copy.
+ * When any gate fails the hero keeps its flat background and nothing is
+ * fetched at all.
+ *
+ * The path is absolute on purpose: main.js is a classic script, so a relative
+ * specifier would resolve against the document URL, not this file.
+ */
+function initHeroBackground() {
+  const canvas = document.getElementById('hero-canvas');
+  if (!canvas) return;
+
+  if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!window.matchMedia('(min-width: 768px)').matches) return;
+
+  let supportsWebgl2 = false;
+  try {
+    supportsWebgl2 = Boolean(document.createElement('canvas').getContext('webgl2'));
+  } catch (error) {
+    supportsWebgl2 = false;
+  }
+  if (!supportsWebgl2) return;
+
+  const start = () => {
+    import('/js/hero-3d.js')
+      .then((module) => module.initHero3D(canvas))
+      .catch(() => {
+        // A failed background must never break the page; the hero simply stays flat.
+        canvas.remove();
+      });
+  };
+
+  // Defer past first paint so the chunk never competes with the initial render.
+  if (typeof window.requestIdleCallback === 'function') {
+    window.requestIdleCallback(start, { timeout: 2000 });
+  } else {
+    setTimeout(start, 200);
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
   initI18n();
   initHeader();
+  initHeroBackground();
   animateHeroTitle();
   renderCapabilities();
   renderWork();
