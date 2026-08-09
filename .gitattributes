@@ -1,0 +1,3 @@
+# Vendored bundles must keep their exact bytes so the hashes in
+# js/vendor/README.md stay verifiable on every platform.
+js/vendor/*.js -text
