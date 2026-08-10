@@ -217,20 +217,29 @@ let lastFocusedElement = null;
 
 function renderCapabilities() {
   const list = document.getElementById('capabilities-list');
-  const img = document.getElementById('cap-visual-img');
   if (!list) return;
   const data = servicesData[currentLang];
-  if (img && data[0]) img.src = data[0].media;
+  /* Layer-aware initial write: after swaps the visible <picture> may be either
+     layer, and a language switch resets the accordion to row 0 — the image
+     and the wipe state have to follow. */
+  const visual = document.getElementById('capabilities-visual');
+  if (visual && data[0]) {
+    const layers = visual.querySelectorAll('.cap-layer');
+    const front = layers[Number(visual.dataset.front || 0)] || layers[0];
+    if (front) setCapLayerSources(front, data[0], data[0].title);
+    visual.dataset.current = '0';
+  }
   list.innerHTML = data.map((s, i) => `
     <div class="accordion-item reveal${i === 0 ? ' active' : ''}">
       <button class="accordion-header" aria-expanded="${i === 0 ? 'true' : 'false'}" aria-controls="cap-content-${i}" data-service-index="${i}">
+        <span class="accordion-index" aria-hidden="true">0${i + 1}</span>
         <span>
           <span class="accordion-kicker">${s.lead}</span>
           <span class="accordion-title">${s.title}</span>
         </span>
         <span class="accordion-icon"></span>
       </button>
-      <div class="accordion-content" id="cap-content-${i}" role="region" style="${i === 0 ? 'max-height:500px' : ''}">
+      <div class="accordion-content" id="cap-content-${i}" role="region">
         <div class="accordion-content__inner">
           <div>
             <p class="accordion-text">${s.desc}</p>
@@ -246,31 +255,102 @@ function renderCapabilities() {
   initAnimations();
 }
 
+/**
+ * Directional wipe between service images (immersive-plan §6).
+ *
+ * Two stacked <picture> layers inside #capabilities-visual. Selecting a row
+ * below the current one wipes the incoming image in from the bottom; a row
+ * above wipes from the top — the visual travels the way the index does. The
+ * incoming image is written to the hidden layer, decoded (capped at 300ms so
+ * a slow network degrades to an instant swap, never a blank wipe), then
+ * clip-path reveals it and the layers trade roles.
+ *
+ * On hover-capable devices the target image is preloaded on pointerenter —
+ * fetching on explicit intent, at most one image per hover.
+ *
+ * Without GSAP the wipe falls back to writing the visible layer directly:
+ * exactly the old behaviour, minus the crossfade.
+ */
+function setCapLayerSources(layer, service, title) {
+  const base = service.media.replace(/\.(jpg|png)$/i, '');
+  const avif = layer.querySelector('source[type="image/avif"]');
+  const webp = layer.querySelector('source[type="image/webp"]');
+  const img = layer.querySelector('img');
+  if (avif) avif.srcset = `${base}-480.avif 480w, ${base}-960.avif 960w`;
+  if (webp) webp.srcset = `${base}-480.webp 480w, ${base}-960.webp 960w`;
+  img.src = service.media;
+  img.alt = `${title} preview`;
+  return img;
+}
+
 function initCapabilitiesVisualSwap(list) {
   if (_capabilitiesVisualBound.has(list)) return;
   _capabilitiesVisualBound.add(list);
-  list.addEventListener('click', (e) => {
+
+  const visual = document.getElementById('capabilities-visual');
+  const layers = visual ? visual.querySelectorAll('.cap-layer') : [];
+  /* State lives on the DOM, not in this closure: renderCapabilities re-runs on
+     every EN/ES swap and needs to reset it (see its layer-aware write). */
+  const getFront = () => Number(visual.dataset.front || 0);
+  const getCurrent = () => Number(visual.dataset.current || 0);
+  let animating = false;
+
+  const decodeCapped = (img) =>
+    Promise.race([
+      img.decode ? img.decode().catch(() => {}) : Promise.resolve(),
+      new Promise((resolve) => setTimeout(resolve, 300))
+    ]);
+
+  // Preload on intent, hover devices only.
+  if (window.matchMedia('(hover: hover)').matches) {
+    list.addEventListener('pointerenter', (e) => {
+      const header = e.target.closest && e.target.closest('.accordion-header');
+      if (!header) return;
+      const service = servicesData[currentLang][Number(header.dataset.serviceIndex)];
+      if (!service) return;
+      const probe = new Image();
+      probe.src = service.media;
+    }, true);
+  }
+
+  list.addEventListener('click', async (e) => {
     const header = e.target.closest('.accordion-header');
     if (!header) return;
     const idx = Number(header.dataset.serviceIndex);
     const service = servicesData[currentLang][idx];
-    const img = document.getElementById('cap-visual-img');
-    if (!img || !service) return;
-    img.style.opacity = '0';
-    img.style.transform = 'scale(0.96)';
-    window.setTimeout(() => {
-      // The <img> alone is not enough: whichever <source> the browser picked
-      // wins over src, so the AVIF and WebP candidates have to move too.
-      const base = service.media.replace(/\.(jpg|png)$/i, '');
-      const avif = document.getElementById('cap-visual-avif');
-      const webp = document.getElementById('cap-visual-webp');
-      if (avif) avif.srcset = `${base}-480.avif 480w, ${base}-960.avif 960w`;
-      if (webp) webp.srcset = `${base}-480.webp 480w, ${base}-960.webp 960w`;
-      img.src = service.media;
-      img.alt = `${service.title} preview`;
-      img.style.opacity = '1';
-      img.style.transform = 'scale(1)';
-    }, 160);
+    if (!service || layers.length < 2 || idx === getCurrent()) return;
+
+    const front = layers[getFront()];
+    const back = layers[1 - getFront()];
+    const fromBelow = idx > getCurrent();
+    visual.dataset.current = String(idx);
+
+    if (typeof gsap === 'undefined' ||
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      setCapLayerSources(front, service, service.title);
+      return;
+    }
+    if (animating) gsap.killTweensOf(back);
+    animating = true;
+
+    const img = setCapLayerSources(back, service, service.title);
+    await decodeCapped(img);
+
+    back.style.zIndex = 2;
+    front.style.zIndex = 1;
+    gsap.fromTo(back,
+      { clipPath: fromBelow ? 'inset(100% 0 0 0)' : 'inset(0 0 100% 0)' },
+      {
+        clipPath: 'inset(0% 0 0% 0)',
+        duration: 0.6,
+        ease: 'power3.inOut',
+        onComplete: () => {
+          visual.dataset.front = String(1 - getFront());
+          animating = false;
+        }
+      });
+    gsap.fromTo(back.querySelector('img'),
+      { scale: 1.06 }, { scale: 1, duration: 0.7, ease: 'power2.out' });
   });
 }
 

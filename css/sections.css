@@ -556,13 +556,44 @@ body.menu-open .header__menu-toggle span {
   background: var(--color-black);
 }
 
+/* The meta rail: authorship above the frame instead of chrome on it. */
+.showreel__rail {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: var(--space-4);
+}
+
+.showreel__title {
+  margin: 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.showreel__timecode {
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.06em;
+}
+
+/* Full-bleed in layout; the inset lives in clip-path so expanding it costs no
+   reflow and hijacks no scroll. Without JS the reel simply plays full-bleed. */
+.showreel__stage {
+  width: 100%;
+}
+
 .showreel__frame {
   position: relative;          /* .hero__play-btn positions against this */
   width: 100%;
   overflow: hidden;
-  border-radius: var(--radius-xl);
   background: var(--color-gray-900);
   aspect-ratio: 16 / 9;        /* reserved before the video loads, so no CLS */
+  clip-path: inset(0 var(--reel-inset, 0px) round var(--reel-radius, 0px));
+  cursor: pointer;             /* the whole frame toggles sound */
 }
 
 /* The video keeps its .hero__video class so the existing object-fit and colour
@@ -576,16 +607,9 @@ body.menu-open .header__menu-toggle span {
   object-fit: cover;
 }
 
-@media (max-width: 1024px) {
-  .showreel__frame {
-    border-radius: var(--radius-lg);
-  }
-}
-
 @media (max-width: 640px) {
   .showreel__frame {
     aspect-ratio: 4 / 5;       /* matches the crop the mobile file is cut for */
-    border-radius: var(--radius-md);
   }
 }
 
@@ -712,14 +736,23 @@ body.menu-open .header__menu-toggle span {
   opacity: 0;
 }
 
-/* Content */
+/* Content. Height is intrinsic — the 0fr/1fr grid transition replaces the old
+   max-height animation, so a Spanish paragraph 20% longer than its English
+   sibling can never be clipped and no script ever measures scrollHeight.
+   Shared by capabilities and FAQ: one accordion mechanism for the page. */
 .accordion-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--duration-normal) var(--ease-out);
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.55s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.accordion-item.active .accordion-content {
+  grid-template-rows: 1fr;
 }
 
 .accordion-content__inner {
+  overflow: hidden;
+  min-height: 0;
   padding-bottom: var(--space-6);
   display: grid;
   grid-template-columns: 1fr;

@@ -23,6 +23,68 @@ function initDaylight() {
 
   initProcessLine();
   initAiTrace();
+  initShowreelScrub();
+}
+
+/* ---- §5: the reel earns the width ---- */
+
+function initShowreelScrub() {
+  var frame = document.querySelector('.showreel__frame');
+  var rail = document.querySelector('.showreel__rail');
+  var video = document.getElementById('hero-video');
+  var timecode = document.getElementById('showreel-timecode');
+  var btn = document.getElementById('hero-play-btn');
+  if (!frame || !rail) return;
+
+  /* The frame starts clipped to the rail's CONTENT width — the reel opens
+     exactly as wide as the copy above it, then earns the full bleed. The
+     container's clientWidth includes its own padding, so subtract it.
+     Function-based: invalidateOnRefresh re-measures on resize and language
+     swaps. */
+  var startInset = function () {
+    var cs = getComputedStyle(rail);
+    var content = rail.clientWidth
+      - parseFloat(cs.paddingLeft || 0)
+      - parseFloat(cs.paddingRight || 0);
+    return Math.max((frame.clientWidth - content) / 2, 0) + 'px';
+  };
+
+  gsap.fromTo(frame,
+    { '--reel-inset': startInset, '--reel-radius': '28px' },
+    {
+      '--reel-inset': '0px',
+      '--reel-radius': '0px',
+      ease: 'none',
+      immediateRender: true,
+      scrollTrigger: {
+        trigger: '#showreel',
+        start: 'top 80%',
+        end: 'top 15%',
+        scrub: 0.6,
+        invalidateOnRefresh: true
+      }
+    });
+
+  /* Honest data as decoration: the actual playback clock, ~4Hz. */
+  if (video && timecode) {
+    var fmt = function (s) {
+      if (!isFinite(s)) return '0:00';
+      var m = Math.floor(s / 60);
+      var sec = Math.floor(s % 60);
+      return m + ':' + (sec < 10 ? '0' : '') + sec;
+    };
+    video.addEventListener('timeupdate', function () {
+      timecode.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
+    });
+  }
+
+  /* The whole frame toggles sound; the button keeps doing the real work. */
+  if (btn) {
+    frame.addEventListener('click', function (event) {
+      if (event.target.closest('#hero-play-btn')) return;
+      btn.click();
+    });
+  }
 }
 
 /* ---- §7: the line draws the work ---- */

@@ -411,3 +411,67 @@ html.js-stage .ai-automation {
 .js-daylight .ai-trace__label.is-pending {
   color: rgba(255, 255, 255, 0.35);
 }
+
+/* ============================================
+   Capabilities, machined (immersive-plan §6).
+
+   The two-layer visual for the directional wipe, and the index column that
+   turns the accordion from a stack of rows into a table of contents.
+   ============================================ */
+
+/* The rounded card moves from the <img> to this stack, which is also the
+   positioning context for the hidden layer — so the wipe always aligns to
+   the visible image, never to the sticky wrapper around it. */
+.cap-stack {
+  position: relative;
+  width: 100%;
+  max-width: 460px;
+  border-radius: 28px;
+  overflow: hidden;
+  box-shadow: 0 30px 70px rgba(10, 10, 10, 0.12);
+}
+
+.cap-layer {
+  display: block;
+}
+
+.cap-layer + .cap-layer {
+  position: absolute;
+  inset: 0;
+}
+
+.cap-layer img {
+  width: 100%;
+  height: auto;
+  display: block;
+  max-width: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.cap-layer + .cap-layer img {
+  height: 100%;
+  object-fit: cover;
+}
+
+/* The index column: tabular, quiet, machined. Scoped to the capabilities
+   list — FAQ shares the accordion mechanism but not the index. */
+#capabilities-list .accordion-header {
+  display: grid;
+  grid-template-columns: 2.6em 1fr auto;
+  align-items: center;
+  text-align: left;
+}
+
+.accordion-index {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-400);
+  letter-spacing: 0.04em;
+  transition: color 0.25s var(--ease-out);
+}
+
+.accordion-item.active .accordion-index {
+  color: #7A5C12;
+}

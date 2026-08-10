@@ -23,20 +23,18 @@ function initAccordion(containerSelector) {
 
     const isActive = item.classList.contains('active');
 
-    // Close all
+    // Height is intrinsic now (grid 0fr/1fr in css/sections.css): the class
+    // is the whole state machine, and nothing measures scrollHeight — which
+    // is what used to clip the longer Spanish copy.
     container.querySelectorAll('.accordion-item').forEach(i => {
       i.classList.remove('active');
       const h = i.querySelector('.accordion-header');
       if (h) h.setAttribute('aria-expanded', 'false');
-      const panel = i.querySelector('.accordion-content');
-      if (panel) panel.style.maxHeight = null;
     });
 
-    // Open clicked if not already open
     if (!isActive) {
       item.classList.add('active');
       header.setAttribute('aria-expanded', 'true');
-      content.style.maxHeight = content.scrollHeight + 'px';
     }
   };
 
