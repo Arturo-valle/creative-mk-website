@@ -22,6 +22,7 @@ cloudflare/agent/worker-configuration.d.ts
 
 # Wrangler local state
 cloudflare/agent/.wrangler/
+.wrangler/
 
 # Per-machine Claude Code permissions
 .claude/settings.local.json

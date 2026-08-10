@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CREATIVE MK | Branding, UX/UI, Websites & AI Growth Systems</title>
-  <meta name="description" content="CREATIVE MK is a bilingual digital studio creating brand identities, UX/UI, websites, growth systems, development, and practical AI automation for modern businesses.">
+  <meta name="description" content="CREATIVE MK is a bilingual digital studio creating brand identities, UX/UI, websites, growth systems, and practical AI automation for modern businesses.">
   <!-- Open Graph -->
   <meta property="og:title" content="CREATIVE MK | Branding, UX/UI, Websites & AI Growth Systems">
   <meta property="og:description" content="Brand, UX/UI, websites, growth systems, development, and practical AI automation for modern businesses.">
@@ -19,6 +19,49 @@
   <meta name="twitter:image" content="https://creativemk.net/Logos/logo-dark.png">
   <!-- Canonical -->
   <link rel="canonical" href="https://creativemk.net/">
+  <!-- Structured data. Only claims the site can back up: no address, no phone,
+       no ratings, no founding date. Search engines penalise markup that asserts
+       more than the page shows. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "ProfessionalService",
+        "@id": "https://creativemk.net/#studio",
+        "name": "CREATIVE MK",
+        "url": "https://creativemk.net/",
+        "logo": "https://creativemk.net/Logos/logo-dark.png",
+        "image": "https://creativemk.net/Logos/logo-dark.png",
+        "email": "hey@creativemk.net",
+        "description": "Bilingual digital studio shaping brand identity, UX/UI, websites, growth systems, development, and practical AI automation into one coherent presence.",
+        "areaServed": "Worldwide",
+        "availableLanguage": ["en", "es"],
+        "knowsLanguage": ["en", "es"],
+        "hasOfferCatalog": {
+          "@type": "OfferCatalog",
+          "name": "Capabilities",
+          "itemListElement": [
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Branding" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Websites" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital Product UX/UI" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Growth & Marketing" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Development" } },
+            { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Automation" } }
+          ]
+        }
+      },
+      {
+        "@type": "WebSite",
+        "@id": "https://creativemk.net/#website",
+        "url": "https://creativemk.net/",
+        "name": "CREATIVE MK",
+        "publisher": { "@id": "https://creativemk.net/#studio" },
+        "inLanguage": ["en", "es"]
+      }
+    ]
+  }
+  </script>
   <!-- Favicon -->
   <link rel="icon" type="image/png" href="favicon.png">
   <link rel="apple-touch-icon" href="favicon.png">

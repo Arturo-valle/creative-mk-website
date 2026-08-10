@@ -330,12 +330,128 @@ async function checkAssets() {
   }
 }
 
+/* ---------- 5. performance budget ---------- */
+
+/**
+ * The budget the homepage is designed against.
+ *
+ * These are uncompressed bytes on disk, not transfer size. They are deliberately
+ * measured that way: it is the only number this script can know without a
+ * network, and the ratio to the compressed size is stable enough that a
+ * regression here is a regression there.
+ *
+ * The ceilings sit above today's numbers on purpose. They are not a target to
+ * grow into — they are the point at which a change stops being free and has to
+ * be argued for.
+ */
+const BUDGET = {
+  // index.html + render-blocking CSS + classic scripts + preloaded fonts.
+  // Everything a first-time visitor pays for before the page is usable.
+  criticalPathWarn: 300 * 1024,
+  criticalPathError: 400 * 1024,
+  videoWarn: 6 * 1024 * 1024,
+  videoError: 10 * 1024 * 1024,
+  distWarn: 25 * 1024 * 1024
+};
+
+/**
+ * Libraries heavy enough that loading them eagerly is a measurable regression,
+ * not a style preference. three.js reaches the homepage only through the
+ * dynamic import in js/main.js, behind a reduced-motion / viewport / hardware
+ * gate. CI once measured 22s of blocking time when this scene rasterised on
+ * SwiftShader; a plain <script src> would put that back for everyone.
+ */
+const LAZY_ONLY = [/three(\.|\/)/i, /hero-3d\.js/i];
+
+async function checkBudget() {
+  const check = 'budget';
+  const sizeOf = async (file) => (existsSync(file) ? (await stat(file)).size : 0);
+  const kb = (bytes) => `${(bytes / 1024).toFixed(0)} KB`;
+
+  /* ---- critical path on the homepage ---- */
+  const indexPath = join(distDir, 'index.html');
+  if (existsSync(indexPath)) {
+    const html = stripHtmlComments(await readFile(indexPath, 'utf8'));
+    const refs = new Set();
+    const collect = (regex) => {
+      for (const match of html.matchAll(regex)) refs.add(match[1]);
+    };
+    collect(/<link[^>]*\srel\s*=\s*"stylesheet"[^>]*\shref\s*=\s*"([^"]+)"/gi);
+    collect(/<link[^>]*\srel\s*=\s*"preload"[^>]*\shref\s*=\s*"([^"]+)"/gi);
+    // Only classic scripts block; type="module" and defer/async do not.
+    for (const tag of html.matchAll(/<script\b[^>]*\ssrc\s*=\s*"([^"]+)"[^>]*>/gi)) {
+      if (/\s(?:defer|async)\b/i.test(tag[0])) continue;
+      if (/\stype\s*=\s*"module"/i.test(tag[0])) continue;
+      refs.add(tag[1]);
+    }
+
+    let total = await sizeOf(indexPath);
+    for (const ref of refs) {
+      if (/^(https?:)?\/\//.test(ref)) continue; // third-party, not ours to weigh
+      total += await sizeOf(join(distDir, ref.replace(/^\//, '').split('?')[0]));
+    }
+
+    const detail = `index.html critical path is ${kb(total)}`;
+    if (total > BUDGET.criticalPathError) {
+      error(check, `${detail}, over the ${kb(BUDGET.criticalPathError)} ceiling`);
+    } else if (total > BUDGET.criticalPathWarn) {
+      warn(check, `${detail}, over the ${kb(BUDGET.criticalPathWarn)} budget`);
+    }
+  }
+
+  /* ---- heavy libraries must stay behind a dynamic import ---- */
+  for (const file of htmlFiles) {
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+    for (const tag of html.matchAll(/<script\b[^>]*\ssrc\s*=\s*"([^"]+)"[^>]*>/gi)) {
+      const pattern = LAZY_ONLY.find((candidate) => candidate.test(tag[1]));
+      if (pattern) {
+        error(
+          check,
+          `${rel(file)} loads "${tag[1]}" with a <script> tag; it must stay behind the gated dynamic import in js/main.js`
+        );
+      }
+    }
+  }
+
+  /* ---- the global reduced-motion kill switch ---- */
+  let hasReducedMotion = false;
+  for (const file of cssFiles) {
+    const css = await readFile(file, 'utf8');
+    if (/@media[^{]*prefers-reduced-motion\s*:\s*reduce/i.test(css)) hasReducedMotion = true;
+  }
+  if (cssFiles.length && !hasReducedMotion) {
+    error(check, 'no @media (prefers-reduced-motion: reduce) block ships; every animation becomes unskippable');
+  }
+
+  /* ---- media ceilings ---- */
+  for (const file of allFiles) {
+    if (!/\.(mp4|webm|mov)$/i.test(file)) continue;
+    const size = await stat(file);
+    const mb = (size.size / 1024 / 1024).toFixed(2);
+    if (size.size > BUDGET.videoError) {
+      error(check, `${rel(file)} is ${mb} MB, over the ${BUDGET.videoError / 1024 / 1024} MB ceiling`);
+    } else if (size.size > BUDGET.videoWarn) {
+      warn(check, `${rel(file)} is ${mb} MB, over the ${BUDGET.videoWarn / 1024 / 1024} MB budget`);
+    }
+  }
+
+  let distTotal = 0;
+  for (const file of allFiles) distTotal += (await stat(file)).size;
+  if (distTotal > BUDGET.distWarn) {
+    warn(
+      check,
+      `dist/ is ${(distTotal / 1024 / 1024).toFixed(1)} MB, over the ${BUDGET.distWarn / 1024 / 1024} MB budget`
+    );
+  }
+}
+
 /* ---------- report ---------- */
 
 await checkI18n();
 await checkReferences();
 await checkSeo();
 await checkAssets();
+await checkBudget();
 
 const group = (items) => {
   const byCheck = new Map();
