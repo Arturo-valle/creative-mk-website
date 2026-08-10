@@ -475,3 +475,116 @@ html.js-stage .ai-automation {
 .accordion-item.active .accordion-index {
   color: #7A5C12;
 }
+
+/* ============================================
+   The dark close (immersive-plan §11).
+
+   News, FAQ and footer become one continuous closing act on a single navy —
+   the mismatched #11151f / #17233f pair dies here — and the footer deepens
+   to the page's opening black at the bottom bar, so the site closes the way
+   it opened. Gold lives on dark, where it has its strongest legal contrast.
+   ============================================ */
+
+:root {
+  --color-dark-panel: #17233f;
+}
+
+.news {
+  background: var(--color-dark-panel);
+}
+
+.faq {
+  background: var(--color-dark-panel);
+}
+
+.footer {
+  background: linear-gradient(180deg, var(--color-dark-panel) 0%, #0a0a0a 100%);
+  color: rgba(255, 255, 255, 0.82);
+}
+
+.footer__cta-label {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.footer__contact-label,
+.footer__column-title,
+.footer__office-city {
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.footer__contact-value,
+.footer__office-address {
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.footer__nav-link,
+.footer__social-link,
+.footer__legal-link {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.footer__nav-link:hover,
+.footer__social-link:hover,
+.footer__legal-link:hover {
+  color: var(--color-primary);
+}
+
+.footer__newsletter-text,
+.footer__copyright {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+.footer__newsletter-input {
+  background: rgba(255, 255, 255, 0.07);
+  border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
+}
+
+.footer__newsletter-input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.footer__newsletter-btn {
+  background: var(--color-primary);
+  color: #0a0a0a;
+}
+
+.footer__newsletter-btn:hover {
+  background: var(--color-primary-light);
+}
+
+.footer__bottom {
+  border-top: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+/* ---- The finale: the CTA fills with gold over its other-language ghost ---- */
+
+.footer__cta-stack {
+  position: relative;
+  display: block;
+  width: max-content;
+  max-width: 100%;
+}
+
+.footer__cta-title--ghost {
+  position: absolute;
+  top: 0;
+  left: 0;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(232, 200, 64, 0.4);
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+}
+
+.footer__cta-title--fill {
+  position: relative;
+  color: var(--color-primary);
+  /* Default is fully filled: no-JS and reduced-motion get the finished
+     composition. js/daylight.js drives --cta-clip 100% -> 0% on scroll. */
+  clip-path: inset(-0.2em calc(var(--cta-clip, 0%)) -0.2em 0);
+}
+
+.footer__cta-title--fill:hover {
+  color: var(--color-primary-light);
+}

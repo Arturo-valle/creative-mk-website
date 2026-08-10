@@ -286,6 +286,13 @@ function setLanguage(lang) {
     const key = el.getAttribute('data-i18n-placeholder');
     if (dict[key]) el.placeholder = dict[key];
   });
+  /* Elements that deliberately show the OTHER language — the footer finale's
+     ghost layer. Swapping languages swaps the pair, never duplicates it. */
+  const alt = translations[lang === 'en' ? 'es' : 'en'];
+  document.querySelectorAll('[data-i18n-alt]').forEach(el => {
+    const key = el.getAttribute('data-i18n-alt');
+    if (alt[key]) el.innerHTML = alt[key];
+  });
   document.documentElement.lang = lang;
   document.querySelectorAll('.lang-switch').forEach(sw => {
     sw.querySelectorAll('.lang-switch__btn').forEach(btn => {

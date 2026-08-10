@@ -24,6 +24,42 @@ function initDaylight() {
   initProcessLine();
   initAiTrace();
   initShowreelScrub();
+  initFooterFinale();
+}
+
+/* ---- §11: the finale — Hablemos fills over its other-language ghost ---- */
+
+function initFooterFinale() {
+  var fill = document.querySelector('.footer__cta-title--fill');
+  var stack = document.querySelector('.footer__cta-stack');
+  if (!fill || !stack) return;
+
+  gsap.fromTo(fill,
+    { '--cta-clip': '100%' },
+    {
+      '--cta-clip': '0%',
+      ease: 'none',
+      immediateRender: true,
+      scrollTrigger: {
+        trigger: '.footer__cta',
+        start: 'top 85%',
+        end: 'top 35%',
+        scrub: 0.6
+      }
+    });
+
+  /* Magnetic micro-physics on fine pointers only: the word leans toward the
+     hand, ±10px, springs back on leave. */
+  if (window.matchMedia('(pointer: fine)').matches) {
+    var qx = gsap.quickTo(stack, 'x', { duration: 0.4, ease: 'power3' });
+    var qy = gsap.quickTo(stack, 'y', { duration: 0.4, ease: 'power3' });
+    stack.addEventListener('pointermove', function (e) {
+      var r = stack.getBoundingClientRect();
+      qx(gsap.utils.clamp(-10, 10, (e.clientX - (r.left + r.width / 2)) / r.width * 24));
+      qy(gsap.utils.clamp(-10, 10, (e.clientY - (r.top + r.height / 2)) / r.height * 24));
+    });
+    stack.addEventListener('pointerleave', function () { qx(0); qy(0); });
+  }
 }
 
 /* ---- §5: the reel earns the width ---- */

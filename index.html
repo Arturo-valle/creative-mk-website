@@ -458,9 +458,17 @@
   <!-- ========== FOOTER ========== -->
   <footer class="footer" id="contact">
     <div class="container">
+      <!-- The finale (immersive-plan §11): the CTA fills with gold as you
+           scroll toward it, over a ghost of the SAME phrase in the OTHER
+           language — the one brand fact no competitor shares, used as the
+           design device. i18n.js keeps the pair inverted on every swap via
+           data-i18n-alt. Without JS the gold layer simply shows filled. -->
       <div class="footer__cta reveal">
         <p class="footer__cta-label" data-i18n="footer.ctaLabel">Start a project</p>
-        <a href="contact.html" class="footer__cta-title" data-i18n="footer.ctaTitle">Let's Talk</a>
+        <div class="footer__cta-stack">
+          <span class="footer__cta-title footer__cta-title--ghost" aria-hidden="true" data-i18n-alt="footer.ctaTitle">Hablemos</span>
+          <a href="contact.html" class="footer__cta-title footer__cta-title--fill" data-i18n="footer.ctaTitle">Let's Talk</a>
+        </div>
       </div>
       <div class="footer__contact">
         <div class="footer__contact-item">
