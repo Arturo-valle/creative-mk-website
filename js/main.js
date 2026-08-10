@@ -105,204 +105,44 @@ const servicesData = {
   ]
 };
 
+/**
+ * Real client work. Nothing else.
+ *
+ * This held six fabricated entries — every one carrying `isRealClient: false`
+ * and rendering with the label "Capability showcase". They were removed on
+ * 2026-08-10: an award jury reads that label the same way a buyer does, and a
+ * studio portfolio with no client in it is the one thing no amount of craft
+ * around it can compensate for. See docs/direction.md §6.
+ *
+ * The shape below is what renderWork() and openCaseModal() consume, and it is
+ * unchanged, so a real project drops straight in:
+ *
+ *   {
+ *     name: 'Client name',
+ *     category: 'Web',            // also the filter label
+ *     desc: 'One line, what it is.',
+ *     tags: ['Brand', 'Web'],
+ *     color: '#191712',           // card field behind the image
+ *     img: 'images/work/slug.jpg',// -480/-960 .avif/.webp beside it
+ *     outcome: 'The number',      // shown on the card when isRealClient
+ *     isRealClient: true,
+ *     case: { challenge, solution, result, deliverables: [] }
+ *   }
+ *
+ * Both language arrays must stay the same length: renderWork() indexes into
+ * workData[currentLang] by position when a card is opened.
+ */
 const workData = {
-  en: [
-    {
-      name: 'Growth System Blueprint',
-      category: 'Growth',
-      desc: 'A connected campaign and follow-up system for turning paid attention into qualified conversations.',
-      tags: ['Offer', 'Traffic', 'Follow-up'],
-      color: '#18212f',
-      img: 'images/portfolio-1.jpg',
-      outcome: 'Capability showcase',
-      isRealClient: false,
-      case: {
-        challenge: 'A service business can have ads, a form, a calendar, and follow-up messages without those pieces telling one clear story.',
-        solution: 'We sharpen the offer, design the landing path, define the lead capture logic, and connect the first response so the campaign has a complete next step.',
-        result: 'A practical acquisition system that is easier to launch, measure, and improve without depending on scattered manual follow-up.',
-        deliverables: ['Offer map', 'Conversion page', 'Lead capture path', 'Follow-up sequence']
-      }
-    },
-    {
-      name: 'Premium Service Website',
-      category: 'Web',
-      desc: 'A refined website structure for trust, positioning, service clarity, and qualified inquiries.',
-      tags: ['Websites', 'Messaging', 'UX'],
-      color: '#263c35',
-      img: 'images/portfolio-2.jpg',
-      outcome: 'Capability showcase',
-      isRealClient: false,
-      case: {
-        challenge: 'Premium service brands often have strong expertise but a website that explains too much, proves too little, and makes the next step feel vague.',
-        solution: 'We structure the site around a clear promise, service pathways, proof sections, concise copy, and a contact experience that feels considered.',
-        result: 'A digital front door that makes the offer easier to understand, trust, and act on.',
-        deliverables: ['Messaging architecture', 'Homepage UX', 'Service pathways', 'Contact flow']
-      }
-    },
-    {
-      name: 'Brand Identity System',
-      category: 'Brand',
-      desc: 'A flexible identity foundation for launches, web, content, sales materials, and future campaigns.',
-      tags: ['Branding', 'Identity', 'Guidelines'],
-      color: '#4f342f',
-      img: 'images/portfolio-5.jpg',
-      outcome: 'Capability showcase',
-      isRealClient: false,
-      case: {
-        challenge: 'A brand can look acceptable in one place and still feel inconsistent across ads, social posts, proposals, decks, and vendor handoffs.',
-        solution: 'We create a practical system: positioning, logo direction, palette, typography, tone, usage rules, and examples for the channels the business actually uses.',
-        result: 'A brand foundation that helps every touchpoint feel intentional without slowing the team down.',
-        deliverables: ['Positioning notes', 'Logo direction', 'Visual system', 'Brand guide']
-      }
-    },
-    {
-      name: 'Product UX Sprint',
-      category: 'Product',
-      desc: 'A focused UX/UI sprint for dashboards, portals, onboarding, MVPs, and app workflows.',
-      tags: ['UX/UI', 'Prototype', 'Design System'],
-      color: '#14283a',
-      img: 'images/portfolio-6.jpg',
-      outcome: 'Capability showcase',
-      isRealClient: false,
-      case: {
-        challenge: 'Product ideas often become feature lists before the primary user journey, value moment, and build sequence are clear.',
-        solution: 'We define the priority workflows, prototype the experience, design reusable UI patterns, and identify the smallest useful version to build first.',
-        result: 'A product direction that helps founders and teams move with less waste and more confidence.',
-        deliverables: ['Journey map', 'Clickable prototype', 'UI components', 'MVP scope']
-      }
-    },
-    {
-      name: 'Visibility Operating Rhythm',
-      category: 'Content',
-      desc: 'A content and campaign rhythm for visibility, consistency, authority, and useful reporting.',
-      tags: ['Content', 'Campaigns', 'Reporting'],
-      color: '#604024',
-      img: 'images/portfolio-4.jpg',
-      outcome: 'Capability showcase',
-      isRealClient: false,
-      case: {
-        challenge: 'Teams often post inconsistently because ideas, approvals, formats, offers, and reporting live in separate places.',
-        solution: 'We define content pillars, reusable formats, campaign angles, cadence, brief templates, and reporting views so visibility becomes operational.',
-        result: 'A rhythm built for steady authority and campaign support instead of last-minute posting.',
-        deliverables: ['Content pillars', 'Campaign angles', 'Posting cadence', 'Reporting view']
-      }
-    },
-    {
-      name: 'AI Intake Layer',
-      category: 'AI',
-      desc: 'An AI-assisted intake and handoff layer for service requests, FAQs, and first-response needs.',
-      tags: ['AI Automation', 'Intake', 'Handoff'],
-      color: '#20263a',
-      img: 'images/portfolio-3.jpg',
-      outcome: 'Capability showcase',
-      isRealClient: false,
-      case: {
-        challenge: 'When inquiries arrive from many channels, response quality can depend too much on who is available that day.',
-        solution: 'We structure the intake questions, match the service path, prepare useful first-response logic, and surface what a human should review next.',
-        result: 'A faster first layer and cleaner handoff from marketing to sales or operations.',
-        deliverables: ['Smart intake', 'Service matching', 'Follow-up prompts', 'Ops dashboard']
-      }
-    }
-  ],
-  es: [
-    {
-      name: 'Blueprint de Sistema de Crecimiento',
-      category: 'Growth',
-      desc: 'Un sistema conectado de campaña y seguimiento para convertir atención pagada en conversaciones calificadas.',
-      tags: ['Oferta', 'Tráfico', 'Seguimiento'],
-      color: '#18212f',
-      img: 'images/portfolio-1.jpg',
-      outcome: 'Showcase de capacidad',
-      isRealClient: false,
-      case: {
-        challenge: 'Un negocio de servicio puede tener anuncios, formulario, calendario y mensajes de seguimiento sin que esas piezas cuenten una historia clara.',
-        solution: 'Afinamos la oferta, diseñamos la ruta de landing, definimos la lógica de captura y conectamos la primera respuesta para que la campaña tenga un siguiente paso completo.',
-        result: 'Un sistema de adquisición práctico, más fácil de lanzar, medir y mejorar sin depender de seguimiento manual disperso.',
-        deliverables: ['Mapa de oferta', 'Página de conversión', 'Ruta de captura', 'Secuencia de seguimiento']
-      }
-    },
-    {
-      name: 'Sitio Premium de Servicio',
-      category: 'Web',
-      desc: 'Una estructura web refinada para confianza, posicionamiento, claridad de servicios y oportunidades calificadas.',
-      tags: ['Sitios Web', 'Mensaje', 'UX'],
-      color: '#263c35',
-      img: 'images/portfolio-2.jpg',
-      outcome: 'Showcase de capacidad',
-      isRealClient: false,
-      case: {
-        challenge: 'Muchas marcas de servicio tienen experiencia real, pero un sitio que explica demasiado, prueba poco y deja ambiguo el siguiente paso.',
-        solution: 'Estructuramos el sitio alrededor de una promesa clara, rutas de servicio, bloques de prueba, copy conciso y un contacto más considerado.',
-        result: 'Una puerta digital que hace la oferta más fácil de entender, confiar y accionar.',
-        deliverables: ['Arquitectura de mensaje', 'UX de homepage', 'Rutas de servicio', 'Flujo de contacto']
-      }
-    },
-    {
-      name: 'Sistema de Identidad',
-      category: 'Brand',
-      desc: 'Una base flexible de identidad para lanzamientos, web, contenido, materiales comerciales y futuras campañas.',
-      tags: ['Branding', 'Identidad', 'Guías'],
-      color: '#4f342f',
-      img: 'images/portfolio-5.jpg',
-      outcome: 'Showcase de capacidad',
-      isRealClient: false,
-      case: {
-        challenge: 'Una marca puede verse aceptable en un lugar y aun así sentirse inconsistente en anuncios, redes, propuestas, decks y entregas a proveedores.',
-        solution: 'Creamos un sistema práctico: posicionamiento, dirección de logo, paleta, tipografía, tono, reglas de uso y ejemplos para canales reales.',
-        result: 'Una base de marca que ayuda a que cada punto de contacto se sienta intencional sin frenar al equipo.',
-        deliverables: ['Notas de posicionamiento', 'Dirección de logo', 'Sistema visual', 'Guía de marca']
-      }
-    },
-    {
-      name: 'Sprint de Producto UX',
-      category: 'Product',
-      desc: 'Un sprint UX/UI para dashboards, portales, onboarding, MVPs y flujos de app.',
-      tags: ['UX/UI', 'Prototipo', 'Sistema UI'],
-      color: '#14283a',
-      img: 'images/portfolio-6.jpg',
-      outcome: 'Showcase de capacidad',
-      isRealClient: false,
-      case: {
-        challenge: 'Las ideas de producto suelen convertirse en listas de funciones antes de aclarar el recorrido principal, el momento de valor y la secuencia de construcción.',
-        solution: 'Definimos flujos prioritarios, prototipamos la experiencia, diseñamos patrones reutilizables e identificamos la versión mínima útil para construir primero.',
-        result: 'Una dirección de producto que ayuda a avanzar con menos desperdicio y más confianza.',
-        deliverables: ['Mapa de journey', 'Prototipo clickable', 'Componentes UI', 'Alcance MVP']
-      }
-    },
-    {
-      name: 'Ritmo Operativo de Visibilidad',
-      category: 'Content',
-      desc: 'Un ritmo de contenido y campaña para visibilidad, consistencia, autoridad y reportes útiles.',
-      tags: ['Contenido', 'Campañas', 'Reportes'],
-      color: '#604024',
-      img: 'images/portfolio-4.jpg',
-      outcome: 'Showcase de capacidad',
-      isRealClient: false,
-      case: {
-        challenge: 'Los equipos suelen publicar de forma irregular porque ideas, aprobaciones, formatos, ofertas y reportes viven en lugares distintos.',
-        solution: 'Definimos pilares de contenido, formatos reutilizables, ángulos de campaña, cadencia, briefs y vistas de reporte para operar la visibilidad.',
-        result: 'Un ritmo construido para autoridad constante y soporte de campañas, no publicaciones de último minuto.',
-        deliverables: ['Pilares de contenido', 'Ángulos de campaña', 'Cadencia', 'Vista de reportes']
-      }
-    },
-    {
-      name: 'Capa de Recepción IA',
-      category: 'AI',
-      desc: 'Una capa asistida por IA para recepción de solicitudes, preguntas frecuentes y primera respuesta.',
-      tags: ['IA', 'Recepción', 'Handoff'],
-      color: '#20263a',
-      img: 'images/portfolio-3.jpg',
-      outcome: 'Showcase de capacidad',
-      isRealClient: false,
-      case: {
-        challenge: 'Cuando las consultas llegan por muchos canales, la calidad de respuesta puede depender demasiado de quién esté disponible ese día.',
-        solution: 'Estructuramos las preguntas de recepción, recomendamos la ruta de servicio, preparamos lógica de primera respuesta y mostramos lo que una persona debe revisar después.',
-        result: 'Una primera capa más rápida y una entrega más limpia entre marketing, ventas y operaciones.',
-        deliverables: ['Recepción inteligente', 'Recomendación de servicio', 'Prompts de seguimiento', 'Dashboard operativo']
-      }
-    }
-  ]
+  en: [],
+  es: []
 };
+
+/**
+ * Signed work that cannot be published yet. Only the count, because that is the
+ * only part that is honest to state without the client's name on it. When one
+ * of them clears, it moves into workData and this drops by one.
+ */
+const workPendingCount = 2;
 
 const newsImages = ['images/news/news-1.jpg', 'images/news/news-2.jpg', 'images/news/news-3.jpg'];
 
@@ -358,14 +198,14 @@ const newsData = {
 const faqData = {
   en: [
     { q: 'What services does CREATIVE MK offer?', a: 'We work across branding, websites, digital product UX/UI, growth and marketing systems, development, and practical AI automation. The goal is to connect the pieces that shape how a business is understood, trusted, and contacted.' },
-    { q: 'Are the projects shown real client case studies?', a: 'The current work section is presented as capability showcases unless a project is explicitly labeled as client work. That keeps the site honest while still showing the type of systems CREATIVE MK can design and build.' },
+    { q: 'Are the projects shown real client case studies?', a: 'Yes — that is the only thing the work section accepts. Two signed projects are waiting on their client to approve a name and a figure, and until then they are counted but not shown. Nothing invented stands in for them.' },
     { q: 'Can you redesign an existing website or brand?', a: 'Yes. We can audit the current experience, preserve what is working, rebuild weak sections, and turn the brand, site, and follow-up path into a clearer system.' },
     { q: 'How do you approach AI automation?', a: 'We begin with a workflow, not a tool. Useful starting points include lead intake, service matching, first response, knowledge bases, dashboards, and follow-up prompts with a clear human handoff.' },
     { q: 'How long does a typical project take?', a: 'A focused landing page or audit can take 1-2 weeks, a full website often takes 4-8 weeks, and deeper brand, product, or automation systems usually take 4-10 weeks depending on scope.' }
   ],
   es: [
     { q: '¿Qué servicios ofrece CREATIVE MK?', a: 'Trabajamos branding, sitios web, producto digital UX/UI, sistemas de growth y marketing, desarrollo y automatización práctica con IA. El objetivo es conectar las piezas que hacen que un negocio se entienda, genere confianza y reciba mejores contactos.' },
-    { q: '¿Los proyectos mostrados son casos reales de clientes?', a: 'La sección de trabajo actual se presenta como showcases de capacidad, a menos que un proyecto esté marcado explícitamente como trabajo de cliente. Así el sitio se mantiene honesto y aun así muestra el tipo de sistemas que CREATIVE MK puede diseñar y construir.' },
+    { q: '¿Los proyectos mostrados son casos reales de clientes?', a: 'Sí, es lo único que admite la sección de trabajo. Hay dos proyectos firmados esperando a que el cliente apruebe nombre y cifra; hasta entonces se cuentan pero no se enseñan. No hay nada inventado ocupando su lugar.' },
     { q: '¿Pueden rediseñar un sitio o marca existente?', a: 'Sí. Podemos auditar la experiencia actual, conservar lo que funciona, reconstruir secciones débiles y convertir marca, sitio y seguimiento en un sistema más claro.' },
     { q: '¿Cómo integran automatización con IA?', a: 'Empezamos con un flujo, no con una herramienta. Los mejores puntos de inicio suelen ser recepción de leads, recomendación de servicio, primera respuesta, bases de conocimiento, dashboards y prompts de seguimiento con entrega clara a una persona.' },
     { q: '¿Cuánto tiempo toma un proyecto?', a: 'Una landing o auditoría enfocada puede tomar 1-2 semanas, un sitio completo suele tomar 4-8 semanas y sistemas más profundos de marca, producto o automatización pueden tomar 4-10 semanas según el alcance.' }
@@ -434,6 +274,43 @@ function initCapabilitiesVisualSwap(list) {
   });
 }
 
+/**
+ * The ledger of what the studio cannot yet prove.
+ *
+ * This is deliberately not a placeholder. A portfolio section with two projects
+ * in it looks thin; a portfolio section with two projects and an explicit
+ * account of what is missing reads as a studio with a rule. It shrinks on its
+ * own as workData fills up — the published figure is derived, never typed — so
+ * it never needs removing.
+ */
+function workLedger() {
+  /* js/i18n.js declares `translations` and `currentLang` at the top level of a
+     classic script and loads before this file, so both are in scope. Generated
+     markup cannot use data-i18n here: setLanguage() runs before renderWork() on
+     first paint, so the attributes would never be filled. */
+  const t = (key) => (translations[currentLang] || {})[key] || '';
+  const rows = [
+    [t('work.ledgerPublished'), String(workData[currentLang].length), ''],
+    [t('work.ledgerPending'), String(workPendingCount), t('work.ledgerPendingNote')],
+    [t('work.ledgerAwards'), '0', t('work.ledgerAwardsNote')],
+    [t('work.ledgerTeam'), '1', t('work.ledgerTeamValue')]
+  ];
+  return `
+    <section class="work__ledger reveal" aria-labelledby="work-ledger-title">
+      <h3 class="work__ledger-title" id="work-ledger-title">${t('work.ledgerTitle')}</h3>
+      <p class="work__ledger-lead">${t('work.ledgerLead')}</p>
+      <dl class="work__ledger-list">
+        ${rows.map(([label, value, note]) => `
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label">${label}</dt>
+            <dd class="work__ledger-value">${value}</dd>
+            ${note ? `<dd class="work__ledger-note">${note}</dd>` : ''}
+          </div>`).join('')}
+      </dl>
+      <p class="work__ledger-close">${t('work.ledgerClose')}</p>
+    </section>`;
+}
+
 function renderWork() {
   const grid = document.getElementById('work-grid');
   if (!grid) return;
@@ -441,13 +318,20 @@ function renderWork() {
   const allLabel = currentLang === 'es' ? 'Todos' : 'All';
   const viewText = currentLang === 'es' ? 'Ver sistema' : 'View system';
   const categories = [allLabel, ...new Set(data.map(item => item.category))];
-  grid.innerHTML = `
+
+  /* Filters need something to filter. With two cases they are furniture, and
+     with none they are a row of buttons over an empty box. */
+  const filters = categories.length > 2 ? `
     <div class="work__filters" aria-label="${currentLang === 'es' ? 'Filtrar proyectos' : 'Filter work'}">
       ${categories.map((category, i) => `<button class="work__filter${i === 0 ? ' active' : ''}" type="button" data-filter="${category}">${category}</button>`).join('')}
-    </div>
+    </div>` : '';
+
+  const cards = data.length ? `
     <div class="work__cards">
       ${data.map((p, i) => workCard(p, viewText, i)).join('')}
-    </div>`;
+    </div>` : '';
+
+  grid.innerHTML = filters + cards + workLedger();
 
   grid.querySelectorAll('.work__card').forEach(card => {
     const open = () => {
@@ -474,6 +358,15 @@ function renderWork() {
       });
     });
   });
+
+  /* Everything this function writes starts hidden behind `.js-reveal`, so it
+     has to be handed to the observer. It happened to work before only because
+     setLanguage() calls renderFAQ() after renderWork() and renderFAQ() ends
+     with this call — reorder those two and the whole section would go invisible
+     on the first EN/ES switch. Claiming it here removes that coupling; the call
+     is idempotent, since there is one observer and it only picks up elements
+     that are not revealed yet. */
+  initAnimations();
 }
 
 /**

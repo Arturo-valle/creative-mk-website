@@ -806,6 +806,85 @@ body.menu-open .header__menu-toggle span {
   gap: var(--space-6);
 }
 
+/* ---- The ledger: what the studio cannot prove yet ----
+   Set as an account, not as a card. No fill, no shadow, no radius — the only
+   structure is a rule per row and tabular figures, so the numbers line up and
+   the section reads as a statement someone signed rather than as decoration.
+   It uses tokens only, so the paper repaint (docs/direction.md 5.3) will carry
+   it without edits. */
+.work__ledger {
+  margin-top: var(--space-12);
+  padding-top: var(--space-8);
+  border-top: 1px solid currentColor;
+  max-width: var(--container-narrow);
+}
+
+.work__ledger-title {
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+  margin-bottom: var(--space-3);
+}
+
+.work__ledger-lead {
+  max-width: 46ch;
+  opacity: 0.72;
+  margin-bottom: var(--space-8);
+}
+
+.work__ledger-list {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+}
+
+.work__ledger-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  column-gap: var(--space-6);
+  padding-block: var(--space-4);
+  border-bottom: 1px solid currentColor;
+}
+
+.work__ledger-label {
+  font-size: var(--text-sm);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+  opacity: 0.62;
+}
+
+.work__ledger-value {
+  margin: 0;
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-medium);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  justify-self: end;
+}
+
+/* The note belongs to the row above it, so it spans both columns and sits
+   under the label rather than beside the figure. */
+.work__ledger-note {
+  grid-column: 1 / -1;
+  margin: var(--space-2) 0 0;
+  font-size: var(--text-sm);
+  opacity: 0.62;
+  max-width: 52ch;
+}
+
+.work__ledger-close {
+  margin-top: var(--space-8);
+  font-size: var(--text-lg);
+  max-width: 46ch;
+}
+
+@media (max-width: 640px) {
+  .work__ledger-value {
+    font-size: var(--text-2xl);
+  }
+}
+
 .work__row {
   display: grid;
   gap: var(--space-6);

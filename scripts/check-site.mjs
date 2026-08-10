@@ -199,6 +199,9 @@ async function checkReferences() {
   for (const file of cssFiles) {
     const css = stripCssComments(await readFile(file, 'utf8'));
     for (const match of css.matchAll(/url\(\s*['"]?([^'")]+)['"]?\s*\)/g)) {
+      // Fragment refs (url(#f) / url(%23f)) target SVG filters, not files, and
+      // a url() inside an inline data: URI is content, not a reference.
+      if (/^(data:|#|%23)/.test(match[1])) continue;
       const target = resolveLocal(match[1], file);
       if (target && !existsSync(target)) {
         error(check, `${rel(file)} references url("${match[1]}") which does not exist in dist/`);

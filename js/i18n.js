@@ -75,9 +75,19 @@ const translations = {
     "ai.metricTasks": "Cleaner handoff",
     "ai.metricROI": "Measurable iteration",
 
-    "work.kicker": "Capability showcases",
-    "work.title": "Examples of the systems we can shape around your business.",
-    "work.viewAll": "Brief your first system",
+    "work.kicker": "Selected work",
+    "work.title": "Client work, with a name and a number. Nothing else goes here.",
+    "work.viewAll": "Start a project",
+    "work.ledgerTitle": "What we can't prove yet",
+    "work.ledgerLead": "Most studio sites leave this part out. The rest of this page asks you to trust figures, so you should also know which figures we don't have.",
+    "work.ledgerPublished": "Published client projects",
+    "work.ledgerPending": "Signed, not yet publishable",
+    "work.ledgerPendingNote": "They go up with the client's name and an agreed number, or they don't go up.",
+    "work.ledgerAwards": "Awards",
+    "work.ledgerAwardsNote": "None. This is the first year we're entering.",
+    "work.ledgerTeam": "Team",
+    "work.ledgerTeamValue": "One, plus specialists per project",
+    "work.ledgerClose": "Work appears here when the client signs off on the number, not before.",
 
     "about.title": "A compact digital studio with strategy, design and build in one conversation.",
     "about.text": "CREATIVE MK helps businesses turn scattered digital needs into a coherent system: brand, website, product experience, content, paid growth, automation, and measurement.",
@@ -180,9 +190,19 @@ const translations = {
     "ai.metricTasks": "Entrega más limpia",
     "ai.metricROI": "Iteración medible",
 
-    "work.kicker": "Showcases de capacidad",
-    "work.title": "Ejemplos de los sistemas que podemos diseñar alrededor de tu negocio.",
-    "work.viewAll": "Enviar tu primer brief",
+    "work.kicker": "Trabajo seleccionado",
+    "work.title": "Trabajo de cliente, con nombre y con cifra. Aquí no entra nada más.",
+    "work.viewAll": "Empezar un proyecto",
+    "work.ledgerTitle": "Lo que todavía no podemos demostrar",
+    "work.ledgerLead": "Casi ningún sitio de estudio pone esta parte. El resto de esta página te pide que te fíes de unas cifras, así que también deberías saber cuáles no tenemos.",
+    "work.ledgerPublished": "Proyectos de cliente publicados",
+    "work.ledgerPending": "Firmados, todavía no publicables",
+    "work.ledgerPendingNote": "Se publican con el nombre del cliente y una cifra acordada, o no se publican.",
+    "work.ledgerAwards": "Premios",
+    "work.ledgerAwardsNote": "Ninguno. Este es el primer año que nos presentamos.",
+    "work.ledgerTeam": "Equipo",
+    "work.ledgerTeamValue": "Una persona, más especialistas por proyecto",
+    "work.ledgerClose": "El trabajo aparece aquí cuando el cliente firma la cifra, no antes.",
 
     "about.title": "Un estudio digital compacto con estrategia, diseño y construcción en una sola conversación.",
     "about.text": "CREATIVE MK ayuda a convertir necesidades digitales dispersas en un sistema coherente: marca, sitio web, experiencia de producto, contenido, pauta, automatización y medición.",
@@ -264,6 +284,10 @@ function setLanguage(lang) {
   if (typeof renderFAQ === 'function') renderFAQ();
   if (typeof animateHeroTitle === 'function') animateHeroTitle();
   if (typeof syncHeroSoundButton === 'function') syncHeroSoundButton();
+  /* Spanish runs ~20% longer than English, so every swap can change layout
+     height. Anything that measured the page (ScrollTrigger, drawn SVGs)
+     listens for this one event and re-measures. */
+  document.dispatchEvent(new CustomEvent('mk:i18n', { detail: { lang } }));
 }
 
 function initI18n() {

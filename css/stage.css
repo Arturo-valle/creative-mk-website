@@ -1,0 +1,79 @@
+/* ============================================
+   The stage — one canvas behind the whole page.
+
+   Phase 1 of docs/immersive-plan.md §0: replace the section-by-section
+   background lottery with a fixed two-plane stage. Act I (ink) runs from the
+   hero through the showreel; one scrubbed crossfade in js/stage.js brings the
+   paper up as the showreel exits, and the lights never go back down. The dark
+   close (Act III) arrives with the news/FAQ/footer redesign, not before —
+   those sections keep their own solid backgrounds until they are restyled to
+   live on it.
+
+   Everything here is inert until js/stage.js adds `js-stage` to <html>, and it
+   only does that when motion is allowed, GSAP is present, and this stylesheet
+   actually loaded (it checks the stage is position:fixed — a stale cached CSS
+   file must not strip the sections' own backgrounds). No-JS and
+   reduced-motion visitors keep today's solid sections.
+
+   --color-paper is the current work-section warm tone on purpose. The closed
+   set in css/variables.css defines the future --paper ground, but its own
+   contract says the repaint is atomic: until every section's furniture moves
+   to those tokens at once, the stage matches the furniture that exists. When
+   the repaint lands, this token collapses into --paper and this comment goes.
+   ============================================ */
+
+:root {
+  --color-paper: #f7f5f0;
+}
+
+.page-stage {
+  display: none;
+}
+
+.js-stage .page-stage {
+  display: block;
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.page-stage__paper,
+.page-stage__ink {
+  position: absolute;
+  inset: 0;
+}
+
+.page-stage__paper {
+  background: var(--color-paper);
+}
+
+.page-stage__ink {
+  background: var(--color-black);
+}
+
+/* The one sanctioned grain placement: a static feTurbulence tile on the fixed
+   stage, never on a scrolling container. Barely-there by design — it reads as
+   paper tooth, not as an effect. */
+.page-stage::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='128' height='128'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='128' height='128' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+}
+
+/* Act I and Act II sections hand their backgrounds to the stage. The dark act
+   (hero, showreel) sits on the ink plane; everything after the crossfade sits
+   on paper. News, FAQ, footer and the concierge card keep their own paint
+   until the dark close is designed. */
+html.js-stage .hero,
+html.js-stage .showreel,
+html.js-stage .proof,
+html.js-stage .capabilities,
+html.js-stage .process,
+html.js-stage .work,
+html.js-stage .about,
+html.js-stage .ai-automation {
+  background: transparent;
+}

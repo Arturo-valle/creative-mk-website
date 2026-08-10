@@ -1,7 +1,92 @@
 /* ============================================
-   CREATIVE MK - Design System Variables
-   Inspired by Clay.global aesthetic
+   CREATIVE MK — Design System Variables
    ============================================ */
+
+/* ---------------------------------------------------------------------------
+   THE CLOSED SET — paper ground, machined furniture.
+   Decided 2026-08-10, see docs/direction.md §5.3.
+
+   This block is the single source of truth from here on. The legacy block
+   below it is what the site still renders against; the repaint that swaps one
+   for the other is a single atomic pass, because there are 57 unique hex values
+   in css/ and only 18 of them live here. Half a repaint reads worse than either
+   ground, so nothing is rewired until all of it moves at once.
+
+   Every ratio below was computed, not estimated. The two that decide the rules:
+   raw gold on paper is 1.36:1, which is why it can never be text or a focus
+   ring on the light ground; and the same hue aged to #7A5C12 is 5.15:1, which
+   is why it can.
+   --------------------------------------------------------------------------- */
+
+:root {
+  /* ---- Ground: paper ---- */
+  --paper:            #EDE9E1;  /* the page. Warm cotton, not white.          */
+  --paper-raised:     #F4F1EB;  /* fields and cards sitting on the page       */
+  --paper-sunk:       #E3DED4;  /* wells, tracks, the inside of a press       */
+
+  /* ---- Ink on paper ---- */
+  --ink:              #14120E;  /* body and headings   15.45:1  AAA           */
+  --ink-muted:        #4E4840;  /* secondary text       7.46:1  AAA           */
+  --ink-faint:        #6E675B;  /* labels, captions     4.62:1  AA            */
+                                /* --ink-faint is AA, not AAA: it is for      */
+                                /* labels and metadata, never for body copy.  */
+
+  /* ---- Rules ---- */
+  --rule:             #CFC7B8;  /* hairlines. Decorative: 1.39:1, never text  */
+  --rule-strong:      #8A8275;  /* control borders       3.14:1  WCAG 1.4.11  */
+
+  /* ---- Plate: the inverted field the case studies sit on ---- */
+  --plate:            #191712;
+  --plate-raised:     #232019;
+  --plate-ink:        #EDE9E1;  /* on plate            14.79:1  AAA           */
+  --plate-muted:      #B6AD9C;  /* on plate             8.06:1  AAA           */
+  --plate-rule:       #3A342A;
+  --plate-rule-strong:#6B6355;  /* on plate             3.02:1  WCAG 1.4.11   */
+
+  /* ---- Brand ----
+     The gold stops being an interface colour. No buttons, no underlines, no
+     borders, no icons. It is the specular in the relief, and it is the focus
+     ring — but only on the plate, where it measures 10.89:1. On paper the ring
+     has to be --gold-aged, because raw gold there is 1.36:1 and would fail the
+     one accessibility criterion this direction is built to win. */
+  --gold:             #E8C840;  /* on plate            10.89:1  AAA           */
+  --gold-aged:        #7A5C12;  /* on paper             5.15:1  AA            */
+
+  /* ---- State: one red, one use ---- */
+  --alert:            #A3341F;  /* on paper             5.65:1  AA            */
+
+  /* ---- Motion: two curves, and nothing else ----
+     Entering is slow and deliberate, leaving is short and dry — the ratio is
+     3.15:1. The scale is deliberately shorter than the 1600ms the reference
+     studios use: this direction is about parts seating against a shoulder, and
+     a part that takes a second and a half to land reads as a feather, not a
+     fit. Nothing overshoots. A piece that bounces is a piece that was made
+     wrong, so the site never bounces. */
+  --ease-seat:        cubic-bezier(0.19, 0.86, 0.15, 1);
+  --ease-release:     cubic-bezier(0.76, 0, 0.90, 0.28);
+  --dur-seat:         820ms;
+  --dur-release:      260ms;
+
+  /* ---- Type roles ----
+     Fit (David Jonathan Ross, Mini licence, 50 USD) for display. It is not
+     chosen for looks: its width axis is the mechanism that makes the Spanish
+     and English headline end on the same right edge, which is the thesis
+     demonstrated in three seconds. Lowercase and small caps were added to the
+     family in 2024, so it sets sentences, not only capitals.
+
+     Its axis range is NOT published, so no code may assume one — the fitter
+     probes for the usable bounds and then binary-searches rendered width. Two
+     earlier drafts assumed 82–108 and 100–800; both were invented.
+
+     Licence ceiling to watch: 15,000 monthly unique web visitors. Winning is
+     the event that breaks it. */
+  --font-display:     'Fit', 'Inter', system-ui, sans-serif;
+  --font-text:        'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ---------------------------------------------------------------------------
+   LEGACY — what the site still renders against. Removed in the repaint pass.
+   --------------------------------------------------------------------------- */
 
 :root {
   /* ---- Brand Colors ---- */

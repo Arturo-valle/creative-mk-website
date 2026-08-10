@@ -9,11 +9,11 @@
       "url": "http://127.0.0.1:5173"
     },
     {
-      "name": "creativemk-dist",
+      "name": "creativemk-dist-b",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--port", "8788", "--compatibility-date=2026-06-08"],
-      "port": 8788,
-      "url": "http://localhost:8788"
+      "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--port", "8789", "--compatibility-date=2026-06-08"],
+      "port": 8789,
+      "url": "http://localhost:8789"
     }
   ]
 }

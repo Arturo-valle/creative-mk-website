@@ -239,23 +239,40 @@ table {
   background-color: var(--border-color);
 }
 
-/* ---- Scroll Reveal Animations ---- */
-.reveal {
+/* ---- Scroll Reveal Animations ----
+   The hidden state is scoped to `.js-reveal` on <html>, which only the reveal
+   bootstrap in index.html adds. Nothing here hides content on its own, so a
+   blocked script, a load error or a client without IntersectionObserver leaves
+   a readable page instead of a header above four empty sections.
+
+   Same contract and same class name as css/lp.css, which already works this
+   way. The state class differs (`revealed` here, `is-in` there) because
+   js/animations.js and js/main.js both write this one. */
+.js-reveal .reveal {
   opacity: 0;
   transform: translateY(30px);
   transition: opacity var(--duration-slower) var(--ease-out),
               transform var(--duration-slower) var(--ease-out);
 }
 
-.reveal.revealed {
+.js-reveal .reveal.revealed {
   opacity: 1;
   transform: translateY(0);
 }
 
-.reveal-delay-1 { transition-delay: 100ms; }
-.reveal-delay-2 { transition-delay: 200ms; }
-.reveal-delay-3 { transition-delay: 300ms; }
-.reveal-delay-4 { transition-delay: 400ms; }
+.js-reveal .reveal-delay-1 { transition-delay: 100ms; }
+.js-reveal .reveal-delay-2 { transition-delay: 200ms; }
+.js-reveal .reveal-delay-3 { transition-delay: 300ms; }
+.js-reveal .reveal-delay-4 { transition-delay: 400ms; }
+
+/* Belt and braces: the bootstrap already refuses to add the class under
+   reduced motion, but if it ever gets there anyway the content stays put. */
+@media (prefers-reduced-motion: reduce) {
+  .js-reveal .reveal {
+    opacity: 1;
+    transform: none;
+  }
+}
 
 /* ---- Visually Hidden (Accessibility) ---- */
 .sr-only {

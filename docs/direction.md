@@ -227,8 +227,14 @@ global kill switch lives in `css/base.css` and is now enforced (§5.2).
 
 Ceilings sit above today's numbers on purpose. They are not targets to grow into
 — they are the point where a change stops being free and has to be argued for.
-Adding GSAP moves the critical path to roughly 320 KB, which trips the warning.
-That is intended: it should be a visible decision, not a silent one.
+
+GSAP + ScrollTrigger landed (2026-08-10) as **deferred** classic scripts, so
+they never block render and the check — which counts only render-blocking
+bytes — correctly leaves them out of the critical-path sum. This supersedes the
+earlier note that adding GSAP would trip the 300 KB warning: the ~115 KB is
+still paid in bandwidth, but not in time-to-first-paint. Everything that uses
+GSAP runs at `DOMContentLoaded`, which deferred scripts are guaranteed to
+precede, so the ordering is safe by construction.
 
 All four guards were verified by deliberately breaking the build and confirming
 each one fires.
