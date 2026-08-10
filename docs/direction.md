@@ -8,55 +8,59 @@ change contradicts something here, change this file in the same commit.
 
 ---
 
-## 1. Where the site actually deploys — UNRESOLVED
+## 1. How the site deploys
 
-This is the reason three months of work sat unpublished, and it is still not
-answered. Read this section before trying to publish anything.
+Settled 2026-08-09, after a wrong guess and a push that proved it wrong.
 
-**What is established:**
+**Host: Cloudflare Pages, project `creative-mk-website`, in the account
+`2a432f7e8d56266c9dd713199ecf5b47` (arturo.ordonezv@gmail.com).** It serves both
+`creative-mk-website.pages.dev` and the apex `creativemk.net`.
 
-- `main` was fast-forwarded onto `next` and pushed on 2026-08-09.
-  `origin/main` is at `d2304a2`.
-- **That push did not deploy anything.** The live site was unchanged twenty
-  minutes later, still serving the 2026-06-11 build (16 stylesheets, Google
-  Fonts, no WebGL hero). **There is no Git-connected auto-deploy on `main`.**
-- The origin honours `_headers`: the CSP served live matches the `_headers`
-  restored in `fb6110e` as part of the June 11 production build. That narrows
-  the host to one that supports `_headers` — Netlify or Cloudflare Pages — and
-  rules nothing else in.
-- `creativemk.net` sits behind Cloudflare's proxy (`Server: cloudflare`), but
-  that only describes DNS, not where the files are served from.
+**It is a direct-upload project. It is not connected to GitHub.** The project
+reports `production_branch: main`, which is misleading — with no Git source that
+field does nothing. Pushing to `main` publishes nothing at all.
 
-**What could not be established from here:**
+This is the whole explanation for the unshipped work: the previous deployment
+was a manual upload dated **2026-06-11**, and every commit after it was
+invisible to the public until someone uploaded again.
 
-- No Pages project serving `creativemk.net` appears in the account the local
-  `wrangler` token can read (`6b110c77…`). But `cloudflare/agent/wrangler.jsonc`
-  declares a **different** account (`2a432f7e…`), and the token cannot enumerate
-  it. So the Pages hypothesis is neither confirmed nor excluded.
-- `netlify.toml` is tracked at the repo root with `publish = "dist"` and
-  `command = "npm run build"`. It may be the live path, or a leftover from
-  before a migration. Unknown.
+**To publish:**
 
-**An earlier version of this document asserted "Cloudflare Pages, building from
-`main`". That was an inference from the `_headers` match, and `_headers` is
-shared syntax between Netlify and Pages. It was not evidence. The push proved
-it wrong.**
+```bash
+npm run verify && npx wrangler pages deploy dist --project-name=creative-mk-website --branch=main
+```
 
-**Next step, and it needs a human with dashboard access:** open the Cloudflare
-and Netlify dashboards for `creativemk.net` and record here which one serves the
-apex domain, which branch or upload path it uses, and whether builds are
-automatic or manual. Until that is written down, publishing stays a manual,
-supervised act.
+`npm run verify` is not optional politeness — it is the only gate between the
+working tree and the live site, because there is no CI in front of the upload.
 
-- A local `.netlify/` directory was removed on 2026-08-09. It was gitignored CLI
-  state whose `publish` path pointed at a **different client's project**
-  (`Kevin - Sitio web 3.5 (Codex App)\dist`). Anyone running `netlify deploy`
-  from this folder would have published the wrong site. If it reappears after
-  someone runs `netlify link`, check where it points before trusting it.
+### 1.1 Purge after deploying, and never probe before
 
-**`next` was never blocked.** It builds clean and passes every site invariant. It
-had simply never been merged — and merging it, as it turns out, is not the same
-as publishing it.
+The zone's Browser Cache TTL is **14400s (4 hours)** and it overrides the
+`Cache-Control` values in `_headers`. Cloudflare also caches the SPA-style
+fallback: a request for a file that does not exist yet returns `index.html` with
+`200`, and *that* gets cached for four hours under the missing file's URL.
+
+Requesting an asset before it is deployed therefore poisons its cache entry.
+This happened on 2026-08-09 to `/css/base.css` — pre-deploy verification
+requests cached the HTML fallback, so the edge served `text/html` for a
+stylesheet after the real file was live.
+
+**Deploy first, verify second, and purge the zone cache as part of every
+release.** Zone id `9c6d17208894937c1c029efaf2e3673e`. The Workers/Pages tokens
+do not carry `Zone → Cache Purge`; use the dashboard, or a token that has it.
+
+### 1.2 Netlify is not involved
+
+`netlify.toml` is still tracked at the repo root. It is a leftover and it points
+at nothing live. A gitignored `.netlify/` directory was also removed on
+2026-08-09 — its `publish` path pointed at **a different client's project**
+(`Kevin - Sitio web 3.5 (Codex App)\dist`). Deleting the tracked `netlify.toml`
+is now safe; it is left only so the removal is a deliberate commit rather than a
+side effect of this one.
+
+**`next` was never blocked.** It built clean and passed every invariant. It had
+simply never been merged — and merging it, as it turned out, was not the same as
+publishing it.
 
 ---
 
@@ -217,11 +221,13 @@ that drives the label. Filling it in is a content job, not an engineering one.
 
 ## 7. Open questions
 
-1. **Where the site actually deploys from (§1).** Blocking. Everything else on
-   this list is cosmetic next to it.
-2. **`netlify.toml` at the repo root** — is Netlify the live host, a fallback, or
-   dead weight? Cannot be answered without §1. Left in place because deleting a
-   tracked deploy config while the deploy path is unknown is how sites go down.
+1. **Connect the Pages project to GitHub, or accept manual uploads forever.**
+   The direct-upload setup is exactly what let three months of work go
+   unpublished (§1). Connecting it to `Arturo-valle/creative-mk-website` with
+   build command `npm run build` and output `dist` would make a merge to `main`
+   mean something. Until then, releases depend on someone remembering.
+2. **Delete `netlify.toml`.** Now safe (§1.2), deliberately left for its own
+   commit.
 3. **CSP allows Google Fonts that nothing loads.** `_headers` still permits
    `fonts.googleapis.com` in `style-src` and `fonts.gstatic.com` in `font-src`.
    Inter is self-hosted now and a repo-wide search finds no remaining reference
