@@ -13,6 +13,11 @@ taste-skill's role here was vocabulary and guardrails — its dials, its
 anti-slop bans, its motion skeletons translated out of React into vanilla +
 GSAP. It is not a dependency and nothing from it gets installed.
 
+> **Status 2026-08-10:** §0–§7, §10–§12 built, verified and live. Remaining
+> items are content-gated: the work Flip plates (§8–9) wait on imagery and
+> permission for the two real cases, the about shelf (§10) on real artifacts,
+> and the newsletter form on being wired to the funnel backend or deleted.
+
 ---
 
 ## 0. The one idea everything hangs on
