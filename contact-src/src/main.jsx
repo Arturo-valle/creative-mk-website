@@ -7,6 +7,11 @@ const LANG_KEY = 'creativeMkLang';
 const SESSION_KEY = 'creativeMkConciergeSession';
 const BRIEF_KEY = 'creativeMkBrief';
 const LOGO_SRC = import.meta.env.DEV ? '/Logos/logo-dark.png' : 'Logos/logo-dark.png';
+// Intrinsic size of logo-dark.png. Both logos are sized in CSS with height:auto,
+// so without these the images occupy no height until the bitmap arrives and the
+// layout jumps when it does.
+const LOGO_W = 5000;
+const LOGO_H = 3068;
 
 const copy = {
   en: {
@@ -524,7 +529,7 @@ function App() {
       <main className="contact-main">
         <section className="contact-hero">
           <div className="contact-copy reveal-on-scroll is-visible">
-            <img className="hero-logo" src={LOGO_SRC} alt="CREATIVE MK" />
+            <img className="hero-logo" src={LOGO_SRC} width={LOGO_W} height={LOGO_H} alt="CREATIVE MK" />
             <h1>{t.heroTitle}</h1>
             <p>{t.heroText}</p>
             <div className="contact-routes" aria-label={t.clientLabel}>
@@ -660,7 +665,7 @@ function Header({ lang, setLang, t }) {
   return (
     <header className="contact-header">
       <a className="contact-header__logo" href="index.html" aria-label="CREATIVE MK Home">
-        <img src={LOGO_SRC} alt="CREATIVE MK" />
+        <img src={LOGO_SRC} width={LOGO_W} height={LOGO_H} alt="CREATIVE MK" />
       </a>
       <nav className="contact-header__nav" aria-label="Main navigation">
         <a href="index.html#work">{t.nav.work}</a>
