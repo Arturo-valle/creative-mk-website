@@ -6,6 +6,10 @@ This is the document the redesign is designed *against*. It records what was
 measured, what was decided, and what is deliberately still open. When a later
 change contradicts something here, change this file in the same commit.
 
+The component-by-component design plan that implements this direction lives in
+[immersive-plan.md](immersive-plan.md) (written 2026-08-10). This file owns the
+constraints; that one owns the design.
+
 ---
 
 ## 1. How the site deploys
@@ -112,6 +116,39 @@ the number of animated elements grows. **Fix this before adding motion, not
 after:** the reveal transition should be opt-in via a class the script *adds*
 (`js-reveal`), so the no-JS state is visible content rather than an empty page.
 
+**Done, 2026-08-10.** `css/base.css` now scopes the hidden state to
+`.js-reveal .reveal`, matching the contract `css/lp.css` already used. Three
+paths were verified in the browser against the built `dist/`, with transitions
+suppressed so the readings are resolved values and not a frame of the
+animation:
+
+| Path | Result |
+|---|---|
+| Class present, not yet revealed | 35/35 hidden — the reveal is armed |
+| Class present, `.revealed` added | opacity 1 — the state class still wins |
+| **Class absent** (JS blocked, errored, disabled) | **35/35 visible** |
+
+The class is added by an inline bootstrap at the end of `<head>` in
+`index.html`, not by `js/animations.js`. That placement is deliberate: it runs
+before the first paint, so nothing flashes in and then hides, which adding it
+from an end-of-body script would risk. The failure mode that placement
+reintroduces — bootstrap runs, `js/animations.js` then fails — is closed by a
+`load` handler that strips the class again unless `js/animations.js` set
+`document.documentElement.dataset.revealReady`. That third path was verified by
+clearing the flag and re-firing `load`: the class is removed and the page reads.
+
+Fixed in the same pass: `initAnimations()` built a fresh `IntersectionObserver`
+on every call and never disconnected the old one. It is called three times at
+boot and again on every EN/ES switch, so observers accumulated for as long as a
+visitor kept toggling languages. There is now one observer for the life of the
+page.
+
+Not verified here, and not affected by the change: that the observer actually
+fires on scroll. The preview pane does not composite — a control observer built
+from scratch on a visible element reported nothing either, and `innerHeight` was
+0 at load — so it has to be checked in a real browser. The observer options are
+byte-for-byte what they were.
+
 ### 3.3 Bilingual EN/ES with a runtime text swap
 
 `js/i18n.js` swaps `textContent` in place. `animateHeroTitle()` already
@@ -200,9 +237,14 @@ each one fires.
 
 ## 6. The thing that matters more than any of this
 
-**All six portfolio entries in `js/main.js` carry `isRealClient: false`** and
-render with the label "Capability showcase". The Work section says, in the
-site's own words, that these are examples of systems we *can* shape.
+**Resolved 2026-08-10: the six fabricated entries are gone.** What follows is
+kept because the reasoning is still the reasoning, and because the section is
+now empty until real work fills it.
+
+Until today, **all six portfolio entries in `js/main.js` carried
+`isRealClient: false`** and rendered with the label "Capability showcase". The
+Work section said, in the site's own words, that these were examples of systems
+we *can* shape.
 
 Award juries score Content alongside Design and Creativity, and prospective
 clients read that label the same way a jury does. A cinematic shell amplifies
@@ -217,7 +259,171 @@ The data structure is already there and already correct: `case.challenge`,
 `case.solution`, `case.result`, `case.deliverables`, and the `isRealClient` flag
 that drives the label. Filling it in is a content job, not an engineering one.
 
+### 6.0 What replaced them
+
+`workData` is now `{ en: [], es: [] }`, with the accepted shape documented above
+it so a real project drops straight in. `workPendingCount` holds the two signed
+projects that cannot be published yet — the count is the only part that is
+honest to state without a client's name on it.
+
+The section renders a **ledger** instead of a grid: four rows, tabular figures,
+a rule under each, no card and no fill. Published client projects **0** ·
+signed but not publishable **2** · awards **0** · team **1**. The published
+figure is derived from `workData.length`, never typed, so the ledger cannot go
+stale; it shrinks on its own as real cases arrive and never needs removing.
+
+Two decisions worth keeping:
+
+- **Filters only appear above two categories.** With two cases they are
+  furniture; with none they are a row of buttons over an empty box.
+- **The FAQ answer changed with it.** It used to explain that the work section
+  showed capability showcases. That sentence described something that no longer
+  exists, and a stale FAQ is worse than none — it now says the section accepts
+  client work only, and that two are waiting on a name and a figure.
+
+Verified in the browser against the built `dist/`: 0 cards, 0 filters, 4 ledger
+rows, correct in both languages, surviving an EN→ES→EN round trip, and neither
+"Capability showcase" nor "Showcase de capacidad" appears anywhere in the DOM.
+
+One coupling was removed at the same time. `renderWork()` writes elements that
+start hidden behind `.js-reveal` but never handed them to the observer; it only
+worked because `setLanguage()` happens to call `renderFAQ()` afterwards and
+*that* ends with `initAnimations()`. Reordering those two would have made the
+whole section invisible on the first language switch. `renderWork()` now claims
+its own elements.
+
 ---
+
+## 5.3 Ground: paper, not steel
+
+Settled 2026-08-10. The chosen direction is a graft — the thesis of one proposal
+("making the parts is cheap now, making them fit is not") carrying the WebGL
+piece of another (a dry relief, blind-embossed, revealed by raking light). Those
+two arrived with opposite grounds: machined steel on near-black, and cotton
+paper. That had to be decided before a single token could be written, because
+the palette, the piece and the fate of the navy all hang off it.
+
+**Paper wins.** Four reasons, in the order they matter:
+
+1. **The piece is an impression.** A blind emboss is a mark with no ink that
+   does not exist until light rakes across it. On a dark ground there is nothing
+   to emboss. Choosing steel would mean keeping the thesis and throwing away the
+   piece that carries it.
+2. **It differentiates where phase 2 is decided.** Every Site of the Month of
+   2026 is dark or warm-bicolour. Site of the Month is not a score threshold —
+   the eight highest-scoring sites of the month are nominated and then re-judged,
+   with validated PRO user votes weighing explicitly on the final call. A light
+   ground separates this site in the feed thumbnail, before anyone clicks.
+3. **It buys the cheapest points on the board.** Near-black on warm paper clears
+   AAA comfortably. Accessibility is the lowest sub-score of every winner
+   measured (6.6–7.8); it is the one place where two points are available without
+   spending on 3D.
+4. **It is the larger transformation for zero runtime.** §5.1 argues that layout
+   variance is free and motion is not. Ground is the same kind of axis: the site
+   is `#0a0a0a` today, so the flip reads as a redesign and costs nothing at
+   runtime, no bilingual risk, no mobile penalty.
+
+The two worlds are not actually in conflict, and the seam is worth naming: a
+machinist's inspection plate and a printer's proof are the same object — a flat
+surface where you check whether something came out right, under raking light.
+Both proposals reached raking light independently. So: **paper ground, machined
+furniture.** Rules, borders, the focus ring and the case fields are metal; the
+page they sit on is paper.
+
+**The navy dies.** `#1B2A4A` survived only as a section field, and on paper that
+field becomes the warm near-black of the plate. It was already the most generic
+value in the set — navy plus gold is the most predictable pairing there is — and
+nothing in the direction needs it. `--color-navy` and `--color-navy-light` go,
+along with `--color-text-muted`, which is derived from it.
+
+**The gold survives, demoted.** `#E8C840` stops being an interface colour: no
+buttons, no underlines, no borders, no icons. It appears as the specular in the
+relief and as the keyboard focus ring, and nowhere else. Its contrast on paper is
+1.36:1 — unusable as text, which is part of why the current page scores where it
+does — so text that needs the brand colour uses an aged cut of the same hue.
+
+Consequence for sequencing: the repaint is **one atomic pass, not a cleanup**.
+There are 52 unique hex values in `css/`, only 18 of them in `variables.css`;
+changing the tokens without also catching the 34 hardcoded values would leave
+the page half-repainted, which reads worse than either ground. It does not get
+started until the token set is final.
+
+## 5.4 Display face: Fit, and the token set it closes
+
+Settled 2026-08-10. The site has no display face — `--font-primary` and
+`--font-display` are the same string — and that single line is the largest
+share of why Design scores where it does. Two candidates were costed.
+
+**Fit**, David Jonathan Ross, Mini licence **50 USD**, 3 workstations, 15,000
+monthly unique web visitors, 10 named instances from Skyline to Ultra Extended.
+**Signifier**, Klim, roughly 180–240 USD for two cuts.
+
+Fit wins, and not on price. Its width axis *is* the mechanism that makes the
+Spanish and English headline end on the same right edge — the thesis of this
+direction demonstrated in three seconds by pressing ES. Signifier is the more
+beautiful face and does nothing for that problem. It also carries a second cost
+the research flagged: it is one of the most-used faces in awarded work, and a
+jury reads it as the safe pick in a field it already describes as
+indistinguishable.
+
+The objection raised against Fit — that it is a capitals series and a
+44-character Spanish headline in it reads as a novelty face — was checked and is
+out of date: **lowercase and small caps were added to the family in 2024**. The
+risk is mitigated anyway by keeping the extreme widths for the plate and the
+figures, and holding the prose to a short range.
+
+**Two corrections to carry into implementation.**
+
+The width axis range is **not published**. Two earlier drafts assumed `82–108`
+and `100–800`; both were invented, and the first could not have converged. Code
+must probe for the usable bounds and binary-search on *rendered width*, never on
+assumed axis numbers.
+
+The measurement must happen in the **DOM, off-screen, and be cached** — one
+resolved width per string per language, not per switch. The canvas `font`
+shorthand does not accept `font-variation-settings`, so `measureText` cannot
+instantiate an arbitrary width reliably; and re-measuring seven strings on every
+language change is reflow inside the 260 ms window where the text is out.
+
+**Before paying**, confirm ñ á é í ó ú ü ¿ ¡ in the Glyphs panel. The family
+page lists Latin Western & Eastern European but does not name Spanish
+diacritics explicitly.
+
+### 5.4.1 The finding that changed a rule
+
+Every ratio in the new token block was computed rather than estimated, and one
+of them overturned a decision made earlier in this document. §5.3 said the gold
+survives as the specular and as the focus ring. Measured:
+
+| | on paper `#EDE9E1` | on plate `#191712` |
+|---|---|---|
+| `--gold` `#E8C840` | **1.36:1** | 10.89:1 |
+| `--gold-aged` `#7A5C12` | 5.15:1 | — |
+
+WCAG 2.2 SC 1.4.11 requires 3:1 for a focus indicator. Raw gold on paper is not
+a third of that. So the rule is now **two-sided**: the focus ring is
+`--gold-aged` on paper and `--gold` on plate. Shipping the obvious version would
+have put a failing focus indicator on every interactive element of a site whose
+whole competitive argument is that its accessibility is better than the
+winners'.
+
+## 6.1 Meta Pixel removed, and the measurement gap it was hiding
+
+Deleted 2026-08-10: `js/meta-pixel.js` and its four references (`index.html`,
+`contact.html`, `contact-src/index.html`, and the copy inside the build output).
+
+It shipped with `META_PIXEL_ID = ''`, so every branch past the guard was dead —
+and it was the **first script in `<head>`, ahead of the stylesheets**, a
+render-blocking classic script whose entire runtime effect was setting two
+`data-` attributes. It was removing itself from the critical path for free.
+
+Both callers are already null-safe and were left alone: `contact-src/src/main.jsx`
+uses `window.creativeMkTrackLead?.()` and `js/lp.js` guards with `typeof`.
+
+**This does not close the measurement gap, it exposes it.** The site now has no
+analytics of any kind. Every funnel step before the concierge opens is still a
+blind spot, and that is a decision to make on purpose rather than inherit from a
+tag that never fired.
 
 ## 7. Open questions
 
