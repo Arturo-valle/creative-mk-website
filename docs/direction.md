@@ -8,24 +8,55 @@ change contradicts something here, change this file in the same commit.
 
 ---
 
-## 1. Where the site actually deploys
+## 1. Where the site actually deploys — UNRESOLVED
 
-This was ambiguous enough to be worth writing down, because it is the reason
-three months of work sat unpublished.
+This is the reason three months of work sat unpublished, and it is still not
+answered. Read this section before trying to publish anything.
 
-- **Host: Cloudflare Pages**, building from **`main`**. Confirmed two ways: the
-  CSP served by `creativemk.net` matches `_headers` in this repo byte for byte,
-  and `scripts/build-pages.mjs` writes a Pages-shaped `dist/`.
-- `netlify.toml` at the repo root is a **leftover from before the Cloudflare
-  migration**. It is tracked but appears to drive nothing. *Open question — see
-  §7.*
+**What is established:**
+
+- `main` was fast-forwarded onto `next` and pushed on 2026-08-09.
+  `origin/main` is at `d2304a2`.
+- **That push did not deploy anything.** The live site was unchanged twenty
+  minutes later, still serving the 2026-06-11 build (16 stylesheets, Google
+  Fonts, no WebGL hero). **There is no Git-connected auto-deploy on `main`.**
+- The origin honours `_headers`: the CSP served live matches the `_headers`
+  restored in `fb6110e` as part of the June 11 production build. That narrows
+  the host to one that supports `_headers` — Netlify or Cloudflare Pages — and
+  rules nothing else in.
+- `creativemk.net` sits behind Cloudflare's proxy (`Server: cloudflare`), but
+  that only describes DNS, not where the files are served from.
+
+**What could not be established from here:**
+
+- No Pages project serving `creativemk.net` appears in the account the local
+  `wrangler` token can read (`6b110c77…`). But `cloudflare/agent/wrangler.jsonc`
+  declares a **different** account (`2a432f7e…`), and the token cannot enumerate
+  it. So the Pages hypothesis is neither confirmed nor excluded.
+- `netlify.toml` is tracked at the repo root with `publish = "dist"` and
+  `command = "npm run build"`. It may be the live path, or a leftover from
+  before a migration. Unknown.
+
+**An earlier version of this document asserted "Cloudflare Pages, building from
+`main`". That was an inference from the `_headers` match, and `_headers` is
+shared syntax between Netlify and Pages. It was not evidence. The push proved
+it wrong.**
+
+**Next step, and it needs a human with dashboard access:** open the Cloudflare
+and Netlify dashboards for `creativemk.net` and record here which one serves the
+apex domain, which branch or upload path it uses, and whether builds are
+automatic or manual. Until that is written down, publishing stays a manual,
+supervised act.
+
 - A local `.netlify/` directory was removed on 2026-08-09. It was gitignored CLI
   state whose `publish` path pointed at a **different client's project**
   (`Kevin - Sitio web 3.5 (Codex App)\dist`). Anyone running `netlify deploy`
-  from this folder would have published the wrong site.
+  from this folder would have published the wrong site. If it reappears after
+  someone runs `netlify link`, check where it points before trusting it.
 
 **`next` was never blocked.** It builds clean and passes every site invariant. It
-had simply never been merged.
+had simply never been merged — and merging it, as it turns out, is not the same
+as publishing it.
 
 ---
 
@@ -186,14 +217,21 @@ that drives the label. Filling it in is a content job, not an engineering one.
 
 ## 7. Open questions
 
-1. **`netlify.toml` at the repo root** — delete it, or is Netlify still a
-   fallback or staging host? Left in place because removing a tracked deploy
-   config on an assumption is worse than the confusion it causes.
-2. **Mobile 3D.** Currently excluded entirely (§3.1). Either it stays excluded
+1. **Where the site actually deploys from (§1).** Blocking. Everything else on
+   this list is cosmetic next to it.
+2. **`netlify.toml` at the repo root** — is Netlify the live host, a fallback, or
+   dead weight? Cannot be answered without §1. Left in place because deleting a
+   tracked deploy config while the deploy path is unknown is how sites go down.
+3. **CSP allows Google Fonts that nothing loads.** `_headers` still permits
+   `fonts.googleapis.com` in `style-src` and `fonts.gstatic.com` in `font-src`.
+   Inter is self-hosted now and a repo-wide search finds no remaining reference
+   outside the gitignored `.contact-qa/` prototype. Tightening this is safe and
+   was deliberately not bundled with the release, so a rollback stays clean.
+4. **Mobile 3D.** Currently excluded entirely (§3.1). Either it stays excluded
    and mobile gets a different treatment designed on purpose, or someone
    measures a cheaper scene on a mid-range Android. Not a decision to make from
    a desktop.
-3. **Manual cache-busting** (`?v=20260610-...`) on `ai-concierge.js` and the
+5. **Manual cache-busting** (`?v=20260610-...`) on `ai-concierge.js` and the
    admin assets. Works, but it is a symptom of unversioned assets and
    `check:site` warns about it on every run. Worth resolving before the asset
    count grows.
