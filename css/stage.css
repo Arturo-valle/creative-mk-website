@@ -588,3 +588,49 @@ html.js-stage .ai-automation {
 .footer__cta-title--fill:hover {
   color: var(--color-primary-light);
 }
+
+/* ============================================
+   Wayfinding (immersive-plan §12), and the last de-pill pass.
+   ============================================ */
+
+/* Every section kicker drops the pill chrome for the same grammar as the
+   hero eyebrow: bare uppercase with a short gold dash. One kicker language
+   across the whole page. */
+.section-kicker {
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  letter-spacing: 0.14em;
+}
+
+.section-kicker::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--color-primary);
+  margin-right: 12px;
+  vertical-align: middle;
+}
+
+/* The sliding underline: one indicator, moved by js/daylight.js to the nav
+   item whose section is on screen. Hidden until the spy has something to
+   point at, and entirely absent without JS. */
+.header__nav {
+  position: relative;
+}
+
+.header__nav-underline {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: 40px;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 1px;
+  transform-origin: left;
+  opacity: 0;
+  pointer-events: none;
+}

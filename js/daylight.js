@@ -25,6 +25,7 @@ function initDaylight() {
   initAiTrace();
   initShowreelScrub();
   initFooterFinale();
+  initWayfinding();
 }
 
 /* ---- §11: the finale — Hablemos fills over its other-language ghost ---- */
@@ -233,3 +234,100 @@ function initAiTrace() {
 }
 
 document.addEventListener('DOMContentLoaded', initDaylight);
+
+/* ---- §12: wayfinding — the underline that knows where you are ---- */
+
+function initWayfinding() {
+  var nav = document.getElementById('main-nav');
+  var underline = nav && nav.querySelector('.header__nav-underline');
+  if (!nav || !underline) return;
+
+  var targets = {
+    work: nav.querySelector('[data-nav-section="work"]'),
+    capabilities: nav.querySelector('[data-nav-section="capabilities"]'),
+    about: nav.querySelector('[data-nav-section="about"]'),
+    news: nav.querySelector('[data-nav-section="news"]')
+  };
+  /* Which nav item answers for each section. Dark act and footer point at
+     nothing: the underline bows out rather than lying. */
+  var sectionMap = {
+    capabilities: 'capabilities',
+    process: 'capabilities',
+    'ai-automation': 'capabilities',
+    work: 'work',
+    about: 'about',
+    news: 'news',
+    faq: 'news'
+  };
+
+  var current = null;
+
+  function moveTo(key) {
+    if (key === current) return;
+    current = key;
+    var link = key && targets[key];
+    if (!link) {
+      gsap.to(underline, { opacity: 0, duration: 0.25 });
+      return;
+    }
+    gsap.to(underline, {
+      x: link.offsetLeft,
+      width: link.offsetWidth,
+      opacity: 1,
+      duration: 0.45,
+      ease: 'power3.out'
+    });
+  }
+
+  /* The spy: whichever mapped section owns the middle of the viewport wins. */
+  var visible = new Map();
+  var spy = new IntersectionObserver(function (entries) {
+    entries.forEach(function (entry) {
+      visible.set(entry.target.id, entry.isIntersecting ? entry.intersectionRatio : 0);
+    });
+    var best = null, bestRatio = 0;
+    visible.forEach(function (ratio, id) {
+      if (ratio > bestRatio) { bestRatio = ratio; best = id; }
+    });
+    moveTo(best ? sectionMap[best] : null);
+  }, { rootMargin: '-35% 0px -45% 0px', threshold: [0, 0.05, 0.25, 0.5] });
+
+  Object.keys(sectionMap).forEach(function (id) {
+    var section = document.getElementById(id);
+    if (section) spy.observe(section);
+  });
+
+  /* Link widths change with the language; re-aim the underline. */
+  var reaim = function () {
+    var key = current;
+    current = null;
+    moveTo(key);
+  };
+  window.addEventListener('resize', reaim);
+  document.addEventListener('mk:i18n', function () { setTimeout(reaim, 50); });
+
+  /* Dropdown items that carry a data-cap-index open their accordion row on
+     arrival instead of just parking the viewport at the section top. */
+  document.addEventListener('click', function (event) {
+    var item = event.target.closest && event.target.closest('[data-cap-index]');
+    if (!item) return;
+    var idx = item.getAttribute('data-cap-index');
+    var header = document.querySelector(
+      '#capabilities-list .accordion-header[data-service-index="' + idx + '"]'
+    );
+    if (header && header.getAttribute('aria-expanded') !== 'true') header.click();
+  });
+
+  /* Magnetic contact button, fine pointers only. */
+  var cta = document.querySelector('.header__contact-btn');
+  if (cta && window.matchMedia('(pointer: fine)').matches) {
+    var qx = gsap.quickTo(cta, 'x', { duration: 0.35, ease: 'power3' });
+    var qy = gsap.quickTo(cta, 'y', { duration: 0.35, ease: 'power3' });
+    cta.addEventListener('pointermove', function (e) {
+      var r = cta.getBoundingClientRect();
+      qx(gsap.utils.clamp(-6, 6, (e.clientX - (r.left + r.width / 2)) / r.width * 12));
+      qy(gsap.utils.clamp(-6, 6, (e.clientY - (r.top + r.height / 2)) / r.height * 12));
+    });
+    cta.addEventListener('pointerleave', function () { qx(0); qy(0); });
+  }
+}
