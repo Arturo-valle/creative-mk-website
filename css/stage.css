@@ -77,3 +77,107 @@ html.js-stage .about,
 html.js-stage .ai-automation {
   background: transparent;
 }
+
+/* ============================================
+   The arrival (immersive-plan §3).
+
+   Start states live behind `js-arrival`, which only the pre-paint bootstrap
+   adds; js/arrival.js conducts the shot and adds `js-arrival-done` when it
+   lands. Both classes stay on <html> afterwards — the done rules are written
+   after the start rules on purpose, so at equal specificity they win, and a
+   later EN/ES re-split of the headline renders instantly instead of replaying
+   the legacy wordFadeIn.
+   ============================================ */
+
+/* The hairline the shot draws first. Always present, subtle enough to live
+   under both the transparent and the frosted header states. */
+.header__rule {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(232, 200, 64, 0.55), rgba(232, 200, 64, 0) 70%);
+  opacity: 0.5;
+  transform-origin: left;
+  pointer-events: none;
+}
+
+.js-arrival:not(.js-arrival-done) .header__rule {
+  transform: scaleX(0);
+}
+
+/* The headline resolves from 1px gold stroke — the same weight and gold as
+   the terrain's contour lines — to filled white. The timeline adds .word--in
+   per word; the transition does the resolving. */
+.js-arrival .hero__title .word {
+  animation: none;
+  opacity: 0;
+  transform: translateY(0.35em);
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(232, 200, 64, 0.9);
+  transition: opacity 0.45s var(--ease-out),
+              transform 0.45s var(--ease-out),
+              color 0.45s var(--ease-out),
+              -webkit-text-stroke-color 0.45s var(--ease-out);
+}
+
+.js-arrival .hero__title .word--in {
+  opacity: 1;
+  transform: translateY(0);
+  color: #ffffff;
+  -webkit-text-stroke-color: transparent;
+}
+
+.js-arrival:not(.js-arrival-done) .hero__eyebrow {
+  opacity: 0;
+}
+
+.js-arrival:not(.js-arrival-done) .hero__lede,
+.js-arrival:not(.js-arrival-done) .hero__actions {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* Done state: everything visible, nothing replays. */
+.js-arrival-done .hero__title .word {
+  animation: none;
+  opacity: 1;
+  transform: none;
+  color: #ffffff;
+  -webkit-text-stroke: 0 transparent;
+}
+
+.js-arrival-done .hero__lede,
+.js-arrival-done .hero__actions {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================
+   De-slop: the eyebrow stops being a pill.
+
+   The glass pill over a dark hero is the single most recognisable
+   AI-template opener. A bare uppercase kicker with a short gold dash says
+   the same thing with typography instead of chrome.
+   ============================================ */
+.hero__eyebrow {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  padding: 0;
+  color: rgba(255, 255, 255, 0.72);
+  letter-spacing: 0.14em;
+}
+
+.hero__eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 24px;
+  height: 1px;
+  background: var(--color-primary);
+  margin-right: 12px;
+  vertical-align: middle;
+}

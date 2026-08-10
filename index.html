@@ -89,8 +89,10 @@
       if (!('IntersectionObserver' in window)) return;
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       root.classList.add('js-reveal');
+      root.classList.add('js-arrival');
       window.addEventListener('load', function () {
         if (root.dataset.revealReady !== 'true') root.classList.remove('js-reveal');
+        if (root.dataset.arrivalReady !== 'true') root.classList.remove('js-arrival');
       });
     })();
   </script>
@@ -144,6 +146,7 @@
         <span></span><span></span><span></span>
       </button>
     </div>
+    <div class="header__rule" aria-hidden="true"></div>
     <nav class="header__mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
       <a href="#work" class="header__mobile-nav-link" data-i18n="nav.work">Work</a>
       <a href="#capabilities" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
@@ -497,6 +500,7 @@
   <script src="js/vendor/gsap.min.js" defer></script>
   <script src="js/vendor/ScrollTrigger.min.js" defer></script>
   <script src="js/stage.js" defer></script>
+  <script src="js/arrival.js" defer></script>
   <script src="js/i18n.js"></script>
   <script src="js/accordion.js"></script>
   <script src="js/animations.js"></script>
