@@ -234,20 +234,24 @@
         <h2 class="proof__title" data-i18n="proof.title">A senior, focused partner for the digital touchpoints that shape trust.</h2>
         <p class="proof__text" data-i18n="proof.text">Inspired by the discipline of top digital studios, our work connects strategy, design, content, technology, and automation without pretending every business needs the same package.</p>
       </div>
+      <!-- The first ledger (immersive-plan §4). Labels translate; the figure
+           lives outside data-i18n so no dictionary swap can ever rewrite it.
+           The "2" is the same number js/main.js publishes in the work ledger —
+           the two sections corroborate each other, so change both or neither. -->
       <div class="proof__grid reveal reveal-delay-1" aria-label="CREATIVE MK trust signals">
-        <article class="proof__item">
+        <article class="proof__item" style="--i:0">
           <span data-i18n="proof.itemOneLabel">Core disciplines</span>
           <strong data-i18n="proof.itemOneValue">Brand + UX + Web + AI</strong>
         </article>
-        <article class="proof__item">
-          <span data-i18n="proof.itemTwoLabel">Best fit</span>
-          <strong data-i18n="proof.itemTwoValue">Service brands, founders, and growing teams</strong>
+        <article class="proof__item" style="--i:1">
+          <span data-i18n="proof.itemTwoLabel">Languages</span>
+          <strong data-i18n="proof.itemTwoValue">EN + ES, one team</strong>
         </article>
-        <article class="proof__item">
-          <span data-i18n="proof.itemThreeLabel">Working style</span>
-          <strong data-i18n="proof.itemThreeValue">Bilingual, digital-first, strategy-led</strong>
+        <article class="proof__item" style="--i:2">
+          <span data-i18n="proof.itemThreeLabel">Engagements underway</span>
+          <strong><a href="#work" class="proof__count"><span class="proof__digit">2</span></a></strong>
         </article>
-        <article class="proof__item">
+        <article class="proof__item" style="--i:3">
           <span data-i18n="proof.itemFourLabel">Output</span>
           <strong data-i18n="proof.itemFourValue">Launch-ready systems, not loose assets</strong>
         </article>
@@ -287,26 +291,34 @@
         <span class="section-kicker" data-i18n="process.kicker">Process</span>
         <h2 class="section-title" data-i18n="process.title">From unclear brief to launchable system.</h2>
       </div>
-      <div class="process__grid reveal reveal-delay-1">
+      <!-- The line that draws the method (immersive-plan §7). js/daylight.js
+           lays one SVG over the grid — a navy trail with a gold tip, scrubbed
+           by scroll — and re-measures it on resize and on every EN/ES swap.
+           Without JS the steps keep their border-top and solid numbers. -->
+      <div class="process__grid reveal reveal-delay-1" id="process-grid">
         <article class="process__step">
           <span>01</span>
           <h3 data-i18n="process.stepOneTitle">Diagnose</h3>
           <p data-i18n="process.stepOneText">We clarify the audience, offer, current bottleneck, and what the first version must prove.</p>
+          <span class="process__step-meta" data-i18n="process.stepOneMeta">Brief map · Offer · First metric</span>
         </article>
         <article class="process__step">
           <span>02</span>
           <h3 data-i18n="process.stepTwoTitle">Shape</h3>
           <p data-i18n="process.stepTwoText">We define messaging, structure, visual direction, UX flow, and the priority service path.</p>
+          <span class="process__step-meta" data-i18n="process.stepTwoMeta">Messaging · Structure · Visual direction</span>
         </article>
         <article class="process__step">
           <span>03</span>
           <h3 data-i18n="process.stepThreeTitle">Build</h3>
           <p data-i18n="process.stepThreeText">We design and develop the assets, pages, automations, or product screens needed for launch.</p>
+          <span class="process__step-meta" data-i18n="process.stepThreeMeta">Design · Build · Automations</span>
         </article>
         <article class="process__step">
           <span>04</span>
           <h3 data-i18n="process.stepFourTitle">Measure</h3>
           <p data-i18n="process.stepFourText">We connect capture, follow-up, analytics, and iteration so the system can improve after launch.</p>
+          <span class="process__step-meta" data-i18n="process.stepFourMeta">Capture · Analytics · Iteration</span>
         </article>
       </div>
     </div>
@@ -326,22 +338,28 @@
             <span class="ai-concierge-inline__text">Get a focused AI diagnostic before you brief us.</span>
           </button>
         </div>
+        <!-- The workflow trace (immersive-plan §10): a drawing of the intake
+             pipeline that actually powers the concierge, not statistic tiles.
+             Geometry is SVG; the labels are HTML with data-i18n so language
+             and geometry never touch. The spine ends at the concierge trigger
+             in the left column — the diagram's endpoint is a working demo. -->
         <div class="ai-automation__visual">
-          <div class="ai-automation__metrics">
-            <div class="ai-automation__metric">
-              <span class="ai-automation__metric-value">Map</span>
-              <span class="ai-automation__metric-label" data-i18n="ai.metricResponse">Process first</span>
-            </div>
-            <div class="ai-automation__metric">
-              <span class="ai-automation__metric-value">Route</span>
-              <span class="ai-automation__metric-label" data-i18n="ai.metricTasks">Cleaner handoff</span>
-            </div>
-            <div class="ai-automation__metric">
-              <span class="ai-automation__metric-value">Learn</span>
-              <span class="ai-automation__metric-label" data-i18n="ai.metricROI">Measurable iteration</span>
+          <div class="ai-automation__trace" id="ai-trace">
+            <svg class="ai-trace__svg" viewBox="0 0 48 220" aria-hidden="true" focusable="false">
+              <line class="ai-trace__rail" x1="24" y1="18" x2="24" y2="202"/>
+              <path class="ai-trace__path" id="ai-trace-path" d="M24 18 V202" pathLength="1"/>
+              <circle class="ai-trace__node" cx="24" cy="24" r="5"/>
+              <circle class="ai-trace__node" cx="24" cy="82" r="5"/>
+              <circle class="ai-trace__node" cx="24" cy="140" r="5"/>
+              <circle class="ai-trace__node" cx="24" cy="198" r="5"/>
+            </svg>
+            <div class="ai-trace__labels">
+              <span class="ai-trace__label" data-i18n="ai.traceIntake">Intake</span>
+              <span class="ai-trace__label" data-i18n="ai.traceMatch">Service match</span>
+              <span class="ai-trace__label" data-i18n="ai.traceResponse">First response</span>
+              <span class="ai-trace__label" data-i18n="ai.traceHandoff">Human handoff</span>
             </div>
           </div>
-          <div class="ai-automation__circuit"></div>
         </div>
       </div>
     </div>
@@ -501,6 +519,7 @@
   <script src="js/vendor/ScrollTrigger.min.js" defer></script>
   <script src="js/stage.js" defer></script>
   <script src="js/arrival.js" defer></script>
+  <script src="js/daylight.js" defer></script>
   <script src="js/i18n.js"></script>
   <script src="js/accordion.js"></script>
   <script src="js/animations.js"></script>

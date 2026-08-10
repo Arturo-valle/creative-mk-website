@@ -181,3 +181,233 @@ html.js-stage .ai-automation {
   margin-right: 12px;
   vertical-align: middle;
 }
+
+/* ============================================
+   The proof ledger (immersive-plan §4).
+
+   Hairlines draw themselves, values rise behind them, staggered per cell via
+   --i set in the markup. Everything is scoped to `.js-reveal`, the same class
+   the reveal bootstrap owns: no JS, or reduced motion, means solid borders
+   and visible values — today's static strip.
+   ============================================ */
+
+.js-reveal .proof__grid {
+  position: relative;
+  border-top-color: transparent;
+}
+
+/* The first rule: gold at its origin fading into ink — the hero's horizon
+   handed to the ledger. Draws on its own trigger, so it works whether or not
+   the terrain rewrite is on screen above it. */
+.js-reveal .proof__grid::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(232, 200, 64, 0.7), rgba(10, 10, 10, 0.15) 35%);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.js-reveal .proof__grid.revealed::before {
+  transform: scaleX(1);
+}
+
+.js-reveal .proof__item {
+  position: relative;
+  border-right-color: transparent;
+}
+
+.js-reveal .proof__item::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(10, 10, 10, 0.1);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.7s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 90ms);
+}
+
+.js-reveal .proof__grid.revealed .proof__item::after {
+  transform: scaleY(1);
+}
+
+.js-reveal .proof__item:last-child::after {
+  display: none;
+}
+
+.js-reveal .proof__item span,
+.js-reveal .proof__item strong {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 0.6s var(--ease-out), transform 0.6s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 90ms + 180ms);
+}
+
+.js-reveal .proof__grid.revealed .proof__item span,
+.js-reveal .proof__grid.revealed .proof__item strong {
+  opacity: 1;
+  transform: none;
+}
+
+/* The one real figure on the strip. Tabular so it cannot wobble, linked to
+   the work ledger it corroborates. Aged gold on hover — raw gold fails
+   contrast on paper (1.36:1); #7A5C12 is the same hue at 5.15:1. */
+.proof__count {
+  color: inherit;
+  text-decoration: none;
+}
+
+.proof__digit {
+  display: block;
+  font-size: clamp(3rem, 5vw, 4.5rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  transition: color 0.25s var(--ease-out);
+}
+
+.proof__count:hover .proof__digit,
+.proof__count:focus-visible .proof__digit {
+  color: #7A5C12;
+}
+
+/* ============================================
+   The line that draws the method (immersive-plan §7).
+
+   js/daylight.js adds `js-daylight` only when GSAP + ScrollTrigger are live
+   and motion is allowed. Under it, the per-step border hands off to one SVG
+   line laid over the grid, and the step numbers hollow to a navy outline
+   that inks solid as the line reaches them. Without it: solid borders,
+   solid numbers.
+   ============================================ */
+
+.process__grid {
+  position: relative;
+}
+
+.process__line {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 48px;
+  overflow: visible;
+  pointer-events: none;
+  display: none;
+}
+
+.js-daylight .process__line {
+  display: block;
+}
+
+.js-daylight .process__step {
+  border-top-color: transparent;
+}
+
+.process__line-trail,
+.process__line-tip {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+}
+
+.process__line-trail {
+  stroke: var(--color-navy);
+  stroke-width: 2;
+}
+
+.process__line-tip {
+  stroke: var(--color-primary);
+  stroke-width: 2;
+}
+
+.js-daylight .process__step span {
+  font-size: clamp(2.2rem, 3vw, 3rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  color: transparent;
+  -webkit-text-stroke: 1px var(--color-navy);
+  transition: color 0.35s var(--ease-out), -webkit-text-stroke-color 0.35s var(--ease-out);
+}
+
+.js-daylight .process__step.is-passed span {
+  color: var(--color-navy);
+  -webkit-text-stroke-color: transparent;
+}
+
+.process__step-meta {
+  display: block;
+  margin-top: var(--space-4);
+  color: var(--color-gray-500);
+  font-size: 11px;
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ============================================
+   The workflow trace (immersive-plan §10).
+
+   Defaults below are the FINISHED drawing — path drawn, nodes full, labels
+   active — so no-JS and reduced-motion visitors see the complete diagram.
+   js/daylight.js hides the parts and redraws them once on entry.
+   ============================================ */
+
+.ai-automation__trace {
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  align-items: stretch;
+  min-height: 220px;
+}
+
+.ai-trace__svg {
+  width: 48px;
+  height: 220px;
+  overflow: visible;
+}
+
+.ai-trace__rail {
+  stroke: rgba(42, 61, 102, 0.25);
+  stroke-width: 1;
+}
+
+.ai-trace__path {
+  stroke: var(--color-primary);
+  stroke-width: 1.5;
+  fill: none;
+}
+
+.ai-trace__node {
+  fill: var(--color-primary);
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.ai-trace__labels {
+  display: grid;
+  grid-template-rows: repeat(4, 1fr);
+  align-items: center;
+}
+
+.ai-trace__label {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  transition: color 0.3s var(--ease-out), transform 0.3s var(--ease-out);
+}
+
+.js-daylight .ai-trace__label.is-pending {
+  color: rgba(255, 255, 255, 0.35);
+}
