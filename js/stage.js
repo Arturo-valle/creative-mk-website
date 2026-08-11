@@ -18,9 +18,36 @@
      walk away.
    ============================================ */
 
+/* Lenis: the lerp'd, inertial scroll that every scrubbed piece on this page
+   reads through. Same wiring as the proven js/lp/main.js block — Lenis drives
+   ScrollTrigger, GSAP's ticker drives Lenis, lagSmoothing off so scrub values
+   never rubber-band. Native touch is left alone (syncTouch: false); reduced
+   motion never constructs it. The skip-nav link keeps native jump behaviour:
+   smooth-scrolling an accessibility escape hatch defeats its purpose. */
+function initLenis() {
+  if (typeof window.Lenis !== 'function') return null;
+  var lenis = new window.Lenis({ duration: 1.05, smoothWheel: true, syncTouch: false });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(function (t) { lenis.raf(t * 1000); });
+  gsap.ticker.lagSmoothing(0);
+
+  document.querySelectorAll('a[href^="#"]:not(.skip-nav)').forEach(function (a) {
+    a.addEventListener('click', function (e) {
+      var target = document.querySelector(a.getAttribute('href'));
+      if (!target) return;
+      e.preventDefault();
+      lenis.scrollTo(target, { offset: 0 });
+    });
+  });
+  return lenis;
+}
+
 function initStage() {
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
+
+  gsap.registerPlugin(ScrollTrigger);
+  initLenis();
 
   var stage = document.querySelector('.page-stage');
   var ink = document.querySelector('.page-stage__ink');
@@ -33,8 +60,6 @@ function initStage() {
     root.classList.remove('js-stage');
     return;
   }
-
-  gsap.registerPlugin(ScrollTrigger);
 
   gsap.to(ink, {
     opacity: 0,

@@ -634,3 +634,30 @@ html.js-stage .ai-automation {
   opacity: 0;
   pointer-events: none;
 }
+
+/* The timecode appears only once the video's real metadata exists — no
+   instrument on this page reads a value that is not true. */
+.showreel__timecode {
+  visibility: hidden;
+}
+
+/* The redaction bars (immersive-plan §8): ink with a gold edge, drawn in when
+   the ledger reveals. Removing one is how a case announces itself. */
+.work__redaction {
+  display: inline-block;
+  width: min(14ch, 100%);
+  height: 0.9em;
+  background: #14120E;
+  border-bottom: 2px solid var(--color-primary);
+  vertical-align: baseline;
+}
+
+.js-reveal .work__redaction {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.7s var(--ease-out) 0.25s;
+}
+
+.js-reveal .work__ledger.revealed .work__redaction {
+  transform: scaleX(1);
+}

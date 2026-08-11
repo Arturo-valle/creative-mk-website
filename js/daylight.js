@@ -102,7 +102,10 @@ function initShowreelScrub() {
       }
     });
 
-  /* Honest data as decoration: the actual playback clock, ~4Hz. */
+  /* Honest data as decoration: the actual playback clock, ~4Hz. The element
+     ships hidden (css) and only appears once real metadata exists — an
+     instrument that reads "0:00 / 0:00" forever is a lie, and reduced-motion
+     visitors whose video never loads should see no clock at all. */
   if (video && timecode) {
     var fmt = function (s) {
       if (!isFinite(s)) return '0:00';
@@ -110,6 +113,10 @@ function initShowreelScrub() {
       var sec = Math.floor(s % 60);
       return m + ':' + (sec < 10 ? '0' : '') + sec;
     };
+    video.addEventListener('loadedmetadata', function () {
+      timecode.style.visibility = 'visible';
+      timecode.textContent = fmt(0) + ' / ' + fmt(video.duration);
+    });
     video.addEventListener('timeupdate', function () {
       timecode.textContent = fmt(video.currentTime) + ' / ' + fmt(video.duration);
     });

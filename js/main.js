@@ -375,17 +375,28 @@ function workLedger() {
     [t('work.ledgerAwards'), '0', t('work.ledgerAwardsNote')],
     [t('work.ledgerTeam'), '1', t('work.ledgerTeamValue')]
   ];
+  const row = ([label, value, note]) => `
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label">${label}</dt>
+            <dd class="work__ledger-value">${value}</dd>
+            ${note ? `<dd class="work__ledger-note">${note}</dd>` : ''}
+          </div>`;
+  /* The redaction bars (immersive-plan §8): each signed-but-unnamed
+     engagement is a drawn bar, not an apology. When a case publishes, its
+     bar's removal IS the announcement. No invented industries, no invented
+     figures — the bar and the count are the only honest statements. */
+  const redacted = Array.from({ length: workPendingCount }, () => `
+          <div class="work__ledger-row work__ledger-row--redacted">
+            <dt class="work__ledger-label">${t('work.ledgerRedactedLabel')}</dt>
+            <dd class="work__ledger-value"><span class="work__redaction" aria-hidden="true"></span></dd>
+            <dd class="work__ledger-note">${t('work.ledgerRedactedNote')}</dd>
+          </div>`).join('');
   return `
     <section class="work__ledger reveal" aria-labelledby="work-ledger-title">
       <h3 class="work__ledger-title" id="work-ledger-title">${t('work.ledgerTitle')}</h3>
       <p class="work__ledger-lead">${t('work.ledgerLead')}</p>
       <dl class="work__ledger-list">
-        ${rows.map(([label, value, note]) => `
-          <div class="work__ledger-row">
-            <dt class="work__ledger-label">${label}</dt>
-            <dd class="work__ledger-value">${value}</dd>
-            ${note ? `<dd class="work__ledger-note">${note}</dd>` : ''}
-          </div>`).join('')}
+        ${row(rows[0])}${row(rows[1])}${redacted}${row(rows[2])}${row(rows[3])}
       </dl>
       <p class="work__ledger-close">${t('work.ledgerClose')}</p>
     </section>`;
@@ -553,39 +564,72 @@ function renderFAQ() {
   initAnimations();
 }
 
-function renderCarousel() {
-  const track = document.getElementById('carousel-track');
-  if (!track) return;
-  const imgs = [
-    'images/team/team-1.jpg', 'images/team/team-2.jpg', 'images/team/team-3.jpg',
-    'images/team/team-4.jpg', 'images/team/team-5.jpg', 'images/team/team-6.jpg'
-  ];
-  const items = imgs.map(src => `<div class="about__carousel-item">${pictureMarkup(src, 'CREATIVE MK team', '(max-width: 768px) 60vw, 280px')}</div>`).join('');
-  track.innerHTML = items + items;
+/* The stock "team" carousel was deleted 2026-08-10: six strangers above a
+   ledger that says "Team: 1" was the loudest honesty contradiction on the
+   page. An artifacts shelf takes this slot when real artifacts exist. */
 
-  const prevBtn = document.getElementById('carousel-prev');
-  const nextBtn = document.getElementById('carousel-next');
-  const carousel = track.parentElement;
-  const move = (amount) => {
-    track.classList.add('about__carousel-track--manual');
-    carousel.scrollBy({ left: amount, behavior: 'smooth' });
-  };
-  if (prevBtn && nextBtn && carousel) {
-    prevBtn.addEventListener('click', () => move(-400));
-    nextBtn.addEventListener('click', () => move(400));
+/**
+ * The newsletter now actually subscribes. It posts to the same Worker
+ * lead-capture endpoint the concierge and the lp form use — the funnel
+ * backend that already exists — and only claims success when the server
+ * agrees. The previous version hid the form and showed "thanks" while
+ * discarding the address, which was the most falsifiable claim on the page.
+ */
+function newsletterEndpoint() {
+  const prod = /(^|\.)creativemk\.net$/i.test(location.hostname)
+    ? location.origin
+    : 'https://creative-mk-concierge.arturo-ordonezv.workers.dev';
+  let session;
+  try {
+    session = localStorage.getItem('creativeMkSession');
+    if (!session) {
+      session = `mk-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 10)}`;
+      localStorage.setItem('creativeMkSession', session);
+    }
+  } catch (error) {
+    session = `mk-${Date.now().toString(36)}`;
   }
+  return `${prod}/agents/creative-mk-concierge/${encodeURIComponent(session)}/lead-capture`;
 }
 
 function initNewsletter() {
   const form = document.getElementById('newsletter-form');
   const success = document.getElementById('newsletter-success');
   if (!form || !success) return;
-  form.addEventListener('submit', (e) => {
+  form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const email = form.querySelector('input[type="email"]').value;
-    if (email) {
+    const input = form.querySelector('input[type="email"]');
+    const button = form.querySelector('button[type="submit"]');
+    const email = input && input.value.trim();
+    if (!email) return;
+    if (button) button.disabled = true;
+    try {
+      const res = await fetch(newsletterEndpoint(), {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          // The Worker requires a name; a newsletter has none. This labels the
+          // record for what it is instead of inventing a person.
+          name: 'Newsletter subscriber',
+          email,
+          consent: true,
+          lang: currentLang,
+          service: 'newsletter',
+          source: 'newsletter-footer',
+          page_url: location.href
+        })
+      });
+      if (!res.ok) throw new Error(String(res.status));
       form.hidden = true;
       success.hidden = false;
+    } catch (error) {
+      // Honest failure: the form stays, the button recovers, nothing pretends.
+      if (button) button.disabled = false;
+      input.setCustomValidity(currentLang === 'es'
+        ? 'No se pudo suscribir. Intenta de nuevo.'
+        : 'Could not subscribe. Please try again.');
+      input.reportValidity();
+      input.addEventListener('input', () => input.setCustomValidity(''), { once: true });
     }
   });
 }
@@ -912,7 +956,7 @@ document.addEventListener('DOMContentLoaded', () => {
   animateHeroTitle();
   renderCapabilities();
   renderWork();
-  renderCarousel();
+
   renderNews();
   renderFAQ();
   initNewsletter();
