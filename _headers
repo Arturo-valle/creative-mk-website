@@ -15,6 +15,9 @@
 /index.html
   Cache-Control: public, max-age=300
 
+/lp/*
+  Cache-Control: public, max-age=300
+
 /contact-assets/*
   Cache-Control: public, max-age=31536000, immutable
 

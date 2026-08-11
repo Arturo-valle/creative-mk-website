@@ -1,0 +1,255 @@
+/* ============================================================
+   CREATIVE MK · Landing de campaña · construida sobre
+   Lenis + GSAP + ScrollTrigger + SplitText (auto-hospedados).
+   Autocontenida: no depende del CSS del sitio.
+   ============================================================ */
+
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url('fonts/inter-latin-variable.woff2') format('woff2-variations');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: 'Inter Fallback';
+  src: local('Arial');
+  size-adjust: 107%; ascent-override: 90%; descent-override: 22.43%; line-gap-override: 0%;
+}
+
+:root {
+  --negro: #0a0a0a;
+  --azuln: #11151f;
+  --navy: #17233f;
+  --crema: #f7f5f0;
+  --off: #edeae4;
+  --oro: #E8C840;
+  --papel-linea: #cfc7b8;
+
+  --g3: rgba(255,255,255,.86);
+  --g4: rgba(255,255,255,.64);
+  --g5: rgba(255,255,255,.55);
+  --hair: rgba(255,255,255,.16);
+
+  --ease: cubic-bezier(.16,1,.3,1);
+  --pad: clamp(1.25rem, 4vw, 4rem);
+  --max: 1500px;
+  --font: 'Inter', 'Inter Fallback', -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0; background: var(--negro); color: var(--off);
+  font-family: var(--font); font-size: 1rem; line-height: 1.6;
+  font-optical-sizing: auto; -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, video { display: block; max-width: 100%; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--oro); outline-offset: 3px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+.wrap { width: 100%; max-width: var(--max); margin: 0 auto; padding-inline: var(--pad); }
+.sec { padding-block: clamp(4rem, 10vw, 9rem); position: relative; }
+.sec--papel { background: var(--crema); color: var(--negro); }
+.sec--navy { background: var(--navy); }
+
+/* rejilla asimétrica .28/.72 — firma del sistema de marca */
+.asim { display: grid; gap: 1.5rem; }
+@media (min-width: 900px) { .asim { grid-template-columns: minmax(0,.28fr) minmax(0,.72fr); gap: 3rem; align-items: start; } }
+
+/* ---------- tipografía ---------- */
+
+.kick {
+  display: inline-flex; align-items: center; min-height: 32px; padding: 0 14px;
+  border: 1px solid var(--hair); border-radius: 9999px;
+  font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: var(--oro); margin: 0;
+}
+.sec--papel .kick { border-color: rgba(10,10,10,.2); color: #4a4a4a; }
+
+h1, h2, h3 { margin: 0; }
+
+.xl {
+  font-size: clamp(3rem, 8.4vw, 8.5rem);
+  font-weight: 800; letter-spacing: -.05em; line-height: .88;
+  max-width: 12ch; color: var(--off);
+}
+.lg { font-size: clamp(2.1rem, 1.1rem + 3.8vw, 4.2rem); font-weight: 800; letter-spacing: -.042em; line-height: .95; max-width: 16ch; }
+.sec--papel .lg { color: var(--negro); }
+
+p { margin: 0; text-wrap: pretty; }
+.lede { font-size: clamp(1.1rem, 1rem + .6vw, 1.5rem); line-height: 1.38; color: var(--g3); max-width: 42ch; }
+.sec--papel .lede { color: #3a3a3a; }
+.txt { font-size: 1.05rem; line-height: 1.6; color: var(--g4); max-width: 58ch; }
+.sec--papel .txt { color: #4a4a4a; }
+.mini { font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--g5); }
+.sec--papel .mini { color: #6b6b6b; }
+.tab { font-variant-numeric: tabular-nums; }
+
+/* SplitText: cada línea se revela desde debajo de su propia máscara */
+.linea-mask { overflow: hidden; display: block; }
+
+/* ---------- botones ---------- */
+
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 58px; padding: 0 2.1rem; border: 0; border-radius: 9999px;
+  font-family: var(--font); font-size: 1rem; font-weight: 700; letter-spacing: -.01em;
+  text-decoration: none; cursor: pointer;
+  background: var(--off); color: var(--negro);
+  transition: transform 320ms var(--ease), background 320ms var(--ease);
+}
+.btn:hover { background: #fff; }
+.sec--papel .btn { background: var(--negro); color: var(--crema); }
+.sec--papel .btn:hover { background: #262626; }
+
+.acts { display: flex; flex-wrap: wrap; align-items: center; gap: 1rem 1.6rem; }
+
+/* ---------- hero ---------- */
+
+/* El póster va de fondo del propio hero, no del <video>: así hay imagen
+   desde el primer pintado y el hero nunca se queda en negro aunque el
+   vídeo tarde, falle o lo bloquee un servidor sin soporte de rangos. */
+.hero {
+  position: relative; min-height: 100svh; display: flex; align-items: center;
+  overflow: hidden; padding-block: clamp(5rem,12vw,8rem) clamp(3rem,7vw,5rem);
+  background-image: var(--poster); background-size: cover; background-position: center 45%;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0; z-index: 0;
+  background: none;
+}
+
+.hero__video {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: cover; z-index: 0;
+  opacity: 0; transition: opacity 1200ms var(--ease);
+}
+.hero__video.on { opacity: .85; }
+
+/* velo: garantiza el contraste del titular desde el primer fotograma */
+.hero__velo {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(100deg, rgba(10,10,10,.97) 0%, rgba(10,10,10,.9) 34%, rgba(10,10,10,.55) 58%, rgba(10,10,10,.1) 88%, transparent 100%),
+    linear-gradient(180deg, rgba(10,10,10,.6) 0%, transparent 26%, transparent 68%, rgba(10,10,10,.85) 100%);
+}
+.hero__in { position: relative; z-index: 2; width: 100%; }
+.hero__b { display: flex; flex-direction: column; gap: clamp(1.25rem,3vw,2rem); min-width: 0; }
+
+.marca { font-size: 1.15rem; font-weight: 800; letter-spacing: -.03em; }
+.marca i { font-style: normal; font-weight: 400; font-size: .85em; color: var(--g5); }
+
+.senales { display: flex; flex-wrap: wrap; gap: .5rem 2rem; border-top: 1px solid var(--hair); padding-top: 1.1rem; }
+
+/* ---------- trabajo: pista horizontal con pin ---------- */
+
+.pista { position: relative; }
+.pista__viewport { height: 100svh; display: flex; align-items: center; overflow: hidden; }
+.pista__carril { display: flex; gap: clamp(1.5rem,3vw,3rem); padding-inline: var(--pad); will-change: transform; }
+
+.pieza { flex: 0 0 min(78vw, 620px); display: flex; flex-direction: column; gap: 1rem; }
+.pieza__marco { border-radius: 28px; overflow: hidden; background: var(--azuln); aspect-ratio: 1.45; }
+.pieza:nth-child(even) .pieza__marco { aspect-ratio: 1.08; }
+.pieza__marco img { width: 100%; height: 100%; object-fit: cover; }
+.pieza__meta { display: flex; flex-wrap: wrap; gap: .35rem 1.2rem; align-items: baseline; }
+.pieza__cat { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: var(--oro); }
+.pieza__n { font-size: 1.15rem; font-weight: 700; letter-spacing: -.025em; }
+
+/* ---------- proceso ---------- */
+
+.pasos { display: grid; margin-top: clamp(2rem,5vw,3.5rem); }
+.paso { display: grid; grid-template-columns: 5.5rem 1fr; gap: .4rem 1.75rem; padding: 1.6rem 0; border-top: 1px solid var(--papel-linea); align-items: start; }
+@media (min-width: 800px) { .paso { grid-template-columns: 5.5rem minmax(0,15rem) minmax(0,1fr); } }
+.paso__n { font-size: .74rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #6b6b6b; padding-top: .35rem; }
+.paso__t { font-size: 1.15rem; font-weight: 700; letter-spacing: -.025em; }
+.paso__d { font-size: 1rem; line-height: 1.55; color: #4a4a4a; max-width: 50ch; }
+
+.plazos { display: grid; margin-top: 2.5rem; }
+.plazos div { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .3rem 1.5rem; padding: .9rem 0; border-top: 1px solid var(--papel-linea); font-size: 1rem; }
+.plazos b { font-weight: 700; font-variant-numeric: tabular-nums; }
+
+/* ---------- formulario ---------- */
+
+.form-grid { display: grid; gap: clamp(2rem,5vw,4rem); }
+@media (min-width: 940px) { .form-grid { grid-template-columns: minmax(0,.9fr) minmax(0,1.1fr); align-items: start; } }
+
+.campo { display: flex; flex-direction: column; gap: .35rem; padding-top: 1.2rem; border-top: 1px solid var(--papel-linea); }
+.campo label { font-size: .72rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase; color: #6b6b6b; }
+.campo input, .campo textarea {
+  font-family: var(--font); font-size: 1.1rem; color: var(--negro);
+  background: transparent; border: 0; padding: .55rem 0 .9rem; width: 100%;
+}
+.campo textarea { min-height: 6rem; resize: vertical; line-height: 1.5; font-size: 1rem; }
+.campo input:focus, .campo textarea:focus { outline: none; }
+.campo:focus-within { border-top-color: var(--negro); }
+.campo ::placeholder { color: #9a948c; }
+
+.chips { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.chip {
+  display: inline-flex; align-items: center; min-height: 46px; padding: 0 1.2rem;
+  border: 1px solid rgba(10,10,10,.18); border-radius: 9999px; background: transparent;
+  font-family: var(--font); font-size: .9rem; color: #3a3a3a; cursor: pointer;
+  transition: background 200ms var(--ease), color 200ms var(--ease), border-color 200ms var(--ease);
+}
+.chip:hover { border-color: var(--negro); }
+.chip[aria-pressed='true'] { background: var(--negro); color: var(--crema); border-color: var(--negro); }
+
+.estado { font-size: 1rem; min-height: 1.5em; margin-top: 1.2rem; }
+.estado[data-e='error'] { color: #a8261a; }
+.estado[data-e='ok'] { color: #1d6b3f; }
+
+.faq { display: grid; margin-top: 2.5rem; }
+.faq div { display: grid; gap: .2rem; padding: 1rem 0; border-top: 1px solid var(--papel-linea); }
+.faq b { font-size: 1rem; font-weight: 700; }
+.faq span { font-size: .98rem; color: #4a4a4a; }
+
+/* ---------- degradación ----------
+   Nada nace invisible: GSAP añade .anim y solo entonces se oculta.
+   Sin JS o con error de script, la página se lee entera. */
+.anim [data-rev] { opacity: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .anim [data-rev] { opacity: 1 !important; transform: none !important; }
+  .btn:hover { transform: none; }
+  .pista__viewport { height: auto; overflow: visible; }
+  .pista__carril { flex-wrap: wrap; transform: none !important; }
+  .pieza { flex: 1 1 min(100%, 420px); }
+}
+
+@media (max-width: 899px) {
+  .pista__viewport { height: auto; overflow-x: auto; scroll-snap-type: x mandatory; padding-block: 1rem; }
+  .pista__carril { transform: none !important; }
+  .pieza { flex: 0 0 82vw; scroll-snap-align: center; }
+}
+
+/* ---------- acabados de autor ---------- */
+
+::selection { background: var(--oro); color: var(--negro); }
+html { scrollbar-width: thin; scrollbar-color: rgba(232,200,64,.55) var(--negro); }
+
+body { font-feature-settings: 'calt' 1, 'liga' 1; }
+
+.fl { display: inline-block; margin-left: .45rem; transition: transform 320ms var(--ease); }
+.btn:hover .fl { transform: translateX(6px); }
+
+.firma { margin-top: 2.25rem; font-size: 1.02rem; color: #3a3a3a; }
+.firma b { color: var(--negro); }
+
+/* lienzo del reel: mismo hueco que el video, encima del poster, bajo el velo */
+.hero__gl {
+  position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;
+  opacity: 0; transition: opacity 900ms var(--ease);
+}
+.hero__gl.on { opacity: 1; }
+
+/* el ritmo uniforme entre secciones es firma de plantilla */
+#proceso { padding-block: clamp(5.5rem, 13vw, 12rem) clamp(3.25rem, 6vw, 5rem); }

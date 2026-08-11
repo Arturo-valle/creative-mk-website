@@ -9,6 +9,7 @@ const distDir = join(root, 'dist');
 const publicEntries = [
   'index.html',
   'contact.html',
+  'lp',
   '_headers',
   'favicon.png',
   'css',
