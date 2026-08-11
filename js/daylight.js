@@ -26,6 +26,8 @@ function initDaylight() {
   initShowreelScrub();
   initFooterFinale();
   initWayfinding();
+  initHeadlineReveals();
+  initLanguageScramble();
 }
 
 /* ---- §11: the finale — Hablemos fills over its other-language ghost ---- */
@@ -337,4 +339,92 @@ function initWayfinding() {
     });
     cta.addEventListener('pointerleave', function () { qx(0); qy(0); });
   }
+}
+
+/* ---- Week 2: type. Masked line reveals + the EN/ES scramble ---- */
+
+/* Section headlines rise out of line masks as they enter — the standard
+   kinetic-type register of current winners, applied only below the fold (the
+   hero has its own arrival). Splits happen after fonts are ready so line
+   breaks are measured against the real face, and re-split on every language
+   swap because Spanish breaks differently. */
+function initHeadlineReveals() {
+  if (typeof SplitText === 'undefined') return;
+  gsap.registerPlugin(SplitText);
+
+  var SELECTOR = [
+    '.proof__title', '.capabilities .section-title', '.process .section-title',
+    '.ai-automation__title', '.work__title', '.about__title',
+    '.news__title', '.faq__title'
+  ].join(', ');
+
+  var splits = [];
+
+  function teardown() {
+    splits.forEach(function (s) {
+      if (s.trigger) s.trigger.kill();
+      s.split.revert();
+    });
+    splits = [];
+  }
+
+  function build() {
+    document.querySelectorAll(SELECTOR).forEach(function (el) {
+      if (!el.textContent.trim()) return;
+      var split = SplitText.create(el, { type: 'lines', mask: 'lines' });
+      var tween = gsap.from(split.lines, {
+        yPercent: 115,
+        duration: 0.8,
+        ease: 'power3.out',
+        stagger: 0.09,
+        scrollTrigger: { trigger: el, start: 'top 82%', once: true }
+      });
+      splits.push({ split: split, trigger: tween.scrollTrigger });
+    });
+  }
+
+  var ready = (document.fonts && document.fonts.ready) || Promise.resolve();
+  Promise.race([ready, new Promise(function (r) { setTimeout(r, 400); })]).then(build);
+
+  document.addEventListener('mk:i18n', function () {
+    /* The swap rewrote the headlines' innerHTML, orphaning the old splits;
+       rebuild against the new text after the DOM settles. */
+    teardown();
+    setTimeout(build, 60);
+  });
+}
+
+/* The signature only a bilingual studio can have: switching language plays a
+   short per-word scramble on the hero headline — glyphs cycle and resolve
+   into the other language. Skipped while the arrival shot still owns the
+   hero, and never constructed under reduced motion (the caller gates). */
+function initLanguageScramble() {
+  var GLYPHS = 'abcdefghijklmnopqrstuvwxyzáéíóñ—·';
+
+  document.addEventListener('mk:i18n', function () {
+    var root = document.documentElement;
+    if (root.classList.contains('js-arrival') && !root.classList.contains('js-arrival-done')) return;
+    var words = document.querySelectorAll('#hero-title .word');
+    if (!words.length) return;
+
+    words.forEach(function (word, i) {
+      var target = word.textContent;
+      var state = { p: 0 };
+      gsap.to(state, {
+        p: 1,
+        duration: 0.5,
+        delay: i * 0.05,
+        ease: 'power2.in',
+        onUpdate: function () {
+          var settled = Math.floor(target.length * state.p);
+          var out = target.slice(0, settled);
+          for (var c = settled; c < target.length; c++) {
+            out += GLYPHS[(Math.random() * GLYPHS.length) | 0];
+          }
+          word.textContent = out;
+        },
+        onComplete: function () { word.textContent = target; }
+      });
+    });
+  });
 }

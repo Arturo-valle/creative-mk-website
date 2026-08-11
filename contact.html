@@ -19,6 +19,19 @@
     <meta name="twitter:title" content="Contact CREATIVE MK | Start a Project" />
     <meta name="twitter:description" content="Start a project with CREATIVE MK through a guided service request." />
     <meta name="twitter:image" content="https://creativemk.net/Logos/logo-dark.png" />
+    <!-- Same cross-document View Transition opt-in the homepage carries
+         (css/stage.css): both documents must declare it for the crossfade to
+         run. Firefox ignores it; reduced motion disables it. -->
+    <style>
+      @view-transition { navigation: auto; }
+      ::view-transition-old(root) { animation-duration: 0.22s; }
+      ::view-transition-new(root) { animation-duration: 0.28s; }
+      @media (prefers-reduced-motion: reduce) {
+        ::view-transition-group(*),
+        ::view-transition-old(*),
+        ::view-transition-new(*) { animation: none !important; }
+      }
+    </style>
     <script type="application/ld+json">
       {
         "@context": "https://schema.org",

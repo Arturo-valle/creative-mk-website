@@ -661,3 +661,33 @@ html.js-stage .ai-automation {
 .js-reveal .work__ledger.revealed .work__redaction {
   transform: scaleX(1);
 }
+
+/* ============================================
+   Tissue between pages (audit gap 7): cross-document View Transitions.
+
+   Pure CSS progressive enhancement — Chrome/Edge 126+ and Safari 18.2+ get a
+   soft crossfade instead of a cold cut when navigating to contact and back;
+   Firefox falls back to instant navigation. Works across the vanilla/React
+   boundary because no shared runtime is involved: both documents just opt in.
+   The contact page carries the same block inline (contact-src/index.html).
+   ============================================ */
+
+@view-transition {
+  navigation: auto;
+}
+
+::view-transition-old(root) {
+  animation-duration: 0.22s;
+}
+
+::view-transition-new(root) {
+  animation-duration: 0.28s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
