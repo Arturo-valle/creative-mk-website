@@ -100,10 +100,14 @@
 <body>
 
   <!-- The stage: two fixed planes behind the whole page (css/stage.css,
-       js/stage.js). Inert without the js-stage class. -->
+       js/stage.js), and on capable hardware the persistent terrain canvas on
+       top of them (js/terrain.js, reached through the gate in js/main.js).
+       When the canvas runs it paints the whole color story itself; when it
+       cannot, the planes underneath are the same story without the field. -->
   <div class="page-stage" aria-hidden="true">
     <div class="page-stage__paper"></div>
     <div class="page-stage__ink"></div>
+    <canvas class="page-stage__canvas" id="page-canvas"></canvas>
   </div>
 
   <!-- Skip Navigation (Accessibility) -->
@@ -169,8 +173,9 @@
   <main id="main-content">
 
   <!-- ========== HERO ========== -->
+  <!-- The hero's private canvas is gone: the terrain lives on the page-wide
+       canvas now (js/terrain.js) and persists through all three acts. -->
   <section class="hero section" id="hero">
-    <canvas class="hero__canvas" id="hero-canvas" aria-hidden="true" tabindex="-1"></canvas>
     <div class="container hero__container">
       <!-- No .reveal above the fold: the hero must never wait for an observer.
            Its choreography arrives with the phase-2 arrival timeline. -->

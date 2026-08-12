@@ -924,7 +924,13 @@ function hasAcceleratedWebgl2() {
 }
 
 function initHeroBackground() {
-  const canvas = document.getElementById('hero-canvas');
+  /* The persistent field (js/terrain.js): one fixed canvas inside the stage,
+     painting the whole three-act color story with the contour terrain in it.
+     Same gates as its hero-only predecessor — reduced motion, ≥768px,
+     hardware WebGL2 — and it engages only when the stage did, because it
+     replaces the stage's planes visually and something must be behind the
+     transparent sections if it fails. */
+  const canvas = document.getElementById('page-canvas');
   if (!canvas) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -933,10 +939,11 @@ function initHeroBackground() {
   if (!hasAcceleratedWebgl2()) return;
 
   const start = () => {
-    import('/js/hero-3d.js')
-      .then((module) => module.initHero3D(canvas))
+    if (!document.documentElement.classList.contains('js-stage')) return;
+    import('/js/terrain.js')
+      .then((module) => module.initTerrain(canvas))
       .catch(() => {
-        // A failed background must never break the page; the hero simply stays flat.
+        // A failed field must never break the page; the stage planes remain.
         canvas.remove();
       });
   };

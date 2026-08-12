@@ -691,3 +691,13 @@ html.js-stage .ai-automation {
     animation: none !important;
   }
 }
+
+/* The persistent terrain canvas: painted on top of the planes when the GPU
+   gate passes; the planes remain the fallback underneath it. */
+.page-stage__canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
