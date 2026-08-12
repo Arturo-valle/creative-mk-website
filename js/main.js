@@ -934,13 +934,16 @@ function initHeroBackground() {
   if (!canvas) return;
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  if (!window.matchMedia('(min-width: 768px)').matches) return;
 
-  if (!hasAcceleratedWebgl2()) return;
+  /* The tier is designed, not subtracted (audit gap 4): capable desktops get
+     the WebGL field; phones and software renderers get the same signature
+     drawn as 2D polylines by terrain-lite. Only reduced motion gets stillness,
+     and that on purpose. */
+  const useLite = !window.matchMedia('(min-width: 768px)').matches || !hasAcceleratedWebgl2();
 
   const start = () => {
     if (!document.documentElement.classList.contains('js-stage')) return;
-    import('/js/terrain.js')
+    import(useLite ? '/js/terrain-lite.js' : '/js/terrain.js')
       .then((module) => module.initTerrain(canvas))
       .catch(() => {
         // A failed field must never break the page; the stage planes remain.
