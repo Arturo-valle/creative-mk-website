@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Lab | CREATIVE MK</title>
+  <meta name="description" content="Self-initiated work at CREATIVE MK: the intake agent running this site and the WebGL terrain behind its hero, built in public.">
+  <link rel="canonical" href="https://creativemk.net/lab/">
+  <meta property="og:title" content="The Lab | CREATIVE MK">
+  <meta property="og:description" content="Self-initiated work, built in public: the intake agent and the Signal Terrain.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://creativemk.net/lab/">
+  <meta property="og:site_name" content="CREATIVE MK">
+  <meta property="og:image" content="https://creativemk.net/Logos/logo-dark.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Lab | CREATIVE MK">
+  <meta name="twitter:description" content="Self-initiated work, built in public: the intake agent and the Signal Terrain.">
+  <meta name="twitter:image" content="https://creativemk.net/Logos/logo-dark.png">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "url": "https://creativemk.net/lab/",
+    "name": "The Lab — CREATIVE MK",
+    "inLanguage": ["en", "es"],
+    "about": { "@id": "https://creativemk.net/#studio" }
+  }
+  </script>
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="preload" href="/css/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/sections.css">
+  <link rel="stylesheet" href="/css/clay-refresh.css">
+  <link rel="stylesheet" href="/css/stage.css">
+  <link rel="stylesheet" href="/css/subpage.css">
+</head>
+<body class="subpage">
+
+  <header class="header scrolled subpage__header">
+    <div class="header__inner">
+      <a href="/" class="header__logo" aria-label="CREATIVE MK Home">
+        <span class="header__logo-mark">CREATIVE<span class="header__logo-mk">mk</span></span>
+      </a>
+      <div class="header__right">
+        <div class="lang-switch">
+          <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
+          <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
+        </div>
+        <a href="/contact.html" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
+      </div>
+    </div>
+    <div class="header__rule" aria-hidden="true"></div>
+  </header>
+
+  <main class="subpage__main">
+    <div class="container">
+
+      <span class="section-kicker" data-i18n="labPage.kicker">The lab</span>
+      <h1 class="subpage__title" data-i18n="labPage.title">What the studio builds for itself, in public.</h1>
+      <p class="subpage__lede" data-i18n="labPage.lede">Client work carries names and numbers. Lab work carries neither — it is the studio using its own tools on itself, and everything here runs live on this site.</p>
+
+      <section class="labpage__pieces" aria-label="Lab pieces">
+        <article class="labpage__piece">
+          <span class="workpage__slot-index" aria-hidden="true">L1</span>
+          <h2 class="workpage__slot-title" data-i18n="labPage.pieceOneTitle">MK Growth Concierge</h2>
+          <p class="workpage__slot-note" data-i18n="labPage.pieceOneText">An intake agent on Cloudflare Workers and Durable Objects: it receives a brief, matches it to a service, drafts the first response and hands off to a person. The diagram on the homepage is its real pipeline, and the form on the contact page feeds it.</p>
+          <a class="link-arrow" href="/#ai-automation" data-i18n="labPage.pieceOneCta">See it run</a>
+        </article>
+        <article class="labpage__piece">
+          <span class="workpage__slot-index" aria-hidden="true">L2</span>
+          <h2 class="workpage__slot-title" data-i18n="labPage.pieceTwoTitle">Signal Terrain</h2>
+          <p class="workpage__slot-note" data-i18n="labPage.pieceTwoText">The WebGL scene behind the homepage hero: a contour map drawn in the brand's gold and navy that swells on arrival, rises toward the cursor, and flattens back to a horizon as you scroll. Written as one shader, loaded only where a GPU can carry it.</p>
+          <a class="link-arrow" href="/#hero" data-i18n="labPage.pieceTwoCta">Watch the terrain</a>
+        </article>
+        <article class="labpage__piece labpage__piece--next">
+          <span class="workpage__slot-index" aria-hidden="true">L3</span>
+          <h2 class="workpage__slot-title" data-i18n="labPage.pieceThreeTitle">Next: an authored WebGL piece</h2>
+          <p class="workpage__slot-note" data-i18n="labPage.pieceThreeText">In progress for autumn 2026. It lands here first.</p>
+        </article>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="subpage__footer">
+    <div class="container subpage__footer-inner">
+      <a href="/" data-i18n="subpage.home">Home</a>
+      <a href="/work/" data-i18n="subpage.work">Work</a>
+      <a href="/contact.html" data-i18n="nav.contact">Contact</a>
+      <a href="/privacy/" data-i18n="footer.privacy">Privacy Notice</a>
+      <a href="/terms/" data-i18n="footer.terms">Service Terms</a>
+    </div>
+  </footer>
+
+  <script src="/js/i18n.js"></script>
+  <script>document.addEventListener('DOMContentLoaded', initI18n);</script>
+</body>
+</html>

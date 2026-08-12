@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 | CREATIVE MK</title>
+  <meta name="description" content="This route does not exist. The rest of CREATIVE MK does.">
+  <meta name="robots" content="noindex">
+  <link rel="canonical" href="https://creativemk.net/404.html">
+  <meta property="og:title" content="404 | CREATIVE MK">
+  <meta property="og:description" content="This route does not exist.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://creativemk.net/404.html">
+  <meta property="og:image" content="https://creativemk.net/Logos/logo-dark.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="404 | CREATIVE MK">
+  <meta name="twitter:description" content="This route does not exist.">
+  <meta name="twitter:image" content="https://creativemk.net/Logos/logo-dark.png">
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <style>
+    /* Self-contained on purpose: the 404 must render even if every other
+       stylesheet is the thing that broke. Dark act, contour motif, done. */
+    body {
+      min-height: 100svh;
+      display: grid;
+      place-items: center;
+      background: #0a0a0a;
+      color: #ffffff;
+      text-align: center;
+      padding: 2rem;
+    }
+    .nf__code {
+      margin: 0;
+      font-size: clamp(5rem, 18vw, 12rem);
+      font-weight: 800;
+      line-height: 1;
+      letter-spacing: -0.04em;
+      color: transparent;
+      -webkit-text-stroke: 1.5px rgba(232, 200, 64, 0.85);
+    }
+    .nf__contour {
+      display: block;
+      width: min(420px, 80vw);
+      margin: 1.5rem auto 0;
+    }
+    .nf__text {
+      margin: 1.5rem 0 0;
+      color: rgba(255, 255, 255, 0.75);
+      font-size: 1.05rem;
+      line-height: 1.6;
+    }
+    .nf__home {
+      display: inline-block;
+      margin-top: 2rem;
+      color: #E8C840;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(232, 200, 64, 0.45);
+      padding-bottom: 2px;
+    }
+    .nf__home:hover { border-bottom-color: #E8C840; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1 class="nf__code">404</h1>
+    <svg class="nf__contour" viewBox="0 0 420 60" aria-hidden="true" fill="none">
+      <path d="M0 44 C60 44 80 18 130 18 S200 52 250 52 320 12 360 12 410 40 420 40" stroke="#2A3D66" stroke-width="1.5"/>
+      <path d="M0 52 C70 52 95 30 140 30 S210 58 260 58 330 24 368 24 412 48 420 48" stroke="rgba(232,200,64,0.7)" stroke-width="1.5"/>
+    </svg>
+    <p class="nf__text">
+      This route does not exist. The terrain continues elsewhere.<br>
+      <span lang="es">Esta ruta no existe. El terreno continúa en otra parte.</span>
+    </p>
+    <a class="nf__home" href="/">creativemk.net</a>
+  </main>
+</body>
+</html>

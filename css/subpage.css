@@ -1,0 +1,191 @@
+/* ============================================
+   Subpage chrome — /work/, /lab/, /privacy/, /terms/.
+
+   The interior pages live on the paper tone with the frosted header state
+   forced on (they have no dark hero to be transparent over). Same kicker
+   grammar, same type scale, no stage, no GSAP: these pages are documents and
+   load like documents.
+   ============================================ */
+
+.subpage {
+  background: var(--color-paper, #f7f5f0);
+  color: var(--color-black);
+}
+
+.subpage__header {
+  position: sticky;
+  top: 0;
+}
+
+.subpage__main {
+  padding: calc(var(--header-height) + clamp(3rem, 8vw, 6rem)) 0 clamp(4rem, 10vw, 8rem);
+}
+
+.subpage__title {
+  margin: var(--space-5) 0 0;
+  max-width: 18ch;
+  font-size: clamp(2.6rem, 5.5vw, 5rem);
+  font-weight: 800;
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+}
+
+.subpage__lede {
+  margin: var(--space-8) 0 0;
+  max-width: 58ch;
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+  line-height: 1.6;
+  color: var(--color-gray-700);
+}
+
+.subpage__footnote {
+  margin: clamp(3rem, 6vw, 5rem) 0 0;
+  max-width: 52ch;
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+}
+
+/* ---- The slots: engagements and lab pieces as ruled entries ---- */
+
+.workpage__slots,
+.labpage__pieces {
+  margin-top: clamp(3rem, 7vw, 6rem);
+  border-top: 1px solid rgba(10, 10, 10, 0.15);
+}
+
+.workpage__slot,
+.labpage__piece {
+  position: relative;
+  padding: clamp(1.75rem, 4vw, 3rem) 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.12);
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  grid-template-rows: auto;
+  gap: var(--space-2) var(--space-6);
+  align-items: baseline;
+}
+
+.workpage__slot-index {
+  grid-row: 1 / span 3;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-400);
+  letter-spacing: 0.04em;
+}
+
+.workpage__slot-title {
+  margin: 0;
+  grid-column: 2;
+  font-size: clamp(1.4rem, 2.4vw, 2rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.workpage__slot-bar {
+  grid-column: 2;
+  order: -1;
+}
+
+.workpage__slot-note {
+  margin: 0;
+  grid-column: 2;
+  max-width: 62ch;
+  color: var(--color-gray-600);
+  line-height: 1.55;
+}
+
+.workpage__slot .link-arrow,
+.labpage__piece .link-arrow {
+  grid-column: 2;
+  width: max-content;
+}
+
+.labpage__piece--next .workpage__slot-title {
+  color: var(--color-gray-500);
+}
+
+/* On these static pages the redaction bar needs no reveal choreography —
+   it is simply drawn. */
+.subpage .work__redaction {
+  transform: none;
+  width: min(18ch, 100%);
+}
+
+/* ---- Legal pages: two languages, one document ---- */
+
+.subpage__legal {
+  max-width: 68ch;
+}
+
+.subpage__legal h2 {
+  margin: clamp(2.5rem, 5vw, 4rem) 0 0;
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.subpage__legal h3 {
+  margin: var(--space-8) 0 0;
+  font-size: var(--text-lg);
+}
+
+.subpage__legal p,
+.subpage__legal li {
+  margin: var(--space-4) 0 0;
+  color: var(--color-gray-700);
+  line-height: 1.65;
+}
+
+.subpage__legal ul {
+  margin: var(--space-4) 0 0;
+  padding-left: 1.2em;
+}
+
+.subpage__updated {
+  display: block;
+  margin-top: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+}
+
+/* ---- Compact footer ---- */
+
+.subpage__footer {
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+  padding: var(--space-8) 0;
+}
+
+.subpage__footer-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+}
+
+.subpage__footer a {
+  color: var(--color-gray-600);
+  text-decoration: none;
+  font-size: var(--text-sm);
+}
+
+.subpage__footer a:hover {
+  color: var(--color-black);
+}
+
+@media (max-width: 640px) {
+  .workpage__slot,
+  .labpage__piece {
+    grid-template-columns: 1fr;
+  }
+
+  .workpage__slot-index {
+    grid-row: auto;
+  }
+
+  .workpage__slot-title,
+  .workpage__slot-bar,
+  .workpage__slot-note,
+  .workpage__slot .link-arrow,
+  .labpage__piece .link-arrow {
+    grid-column: 1;
+  }
+}

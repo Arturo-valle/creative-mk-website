@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /lp/
+
+Sitemap: https://creativemk.net/sitemap.xml
