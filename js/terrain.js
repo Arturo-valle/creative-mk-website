@@ -32,7 +32,13 @@ import { Color } from '/js/vendor/ogl/math/Color.js';
 
 const ARRIVAL_MS = 1200;
 
-const VERTEX = /* glsl */ `
+/* Two dialects of the same shader. WebGL2 requires ESSL 3.00 to use fwidth
+   (the derivatives extension exists only in WebGL1 — in a WebGL2 context an
+   ESSL 1.00 shader has neither the extension nor the builtin, which is how
+   the first version of this file shipped dark on every real desktop). The
+   bodies are identical; only the dialect scaffolding differs. */
+
+const VERTEX_100 = /* glsl */ `
   attribute vec2 uv;
   attribute vec2 position;
   varying vec2 vUv;
@@ -42,13 +48,17 @@ const VERTEX = /* glsl */ `
   }
 `;
 
-const FRAGMENT = /* glsl */ `
-#ifdef GL_OES_standard_derivatives
-#extension GL_OES_standard_derivatives : enable
-#endif
-  precision highp float;
+const VERTEX_300 = /* glsl */ `#version 300 es
+  in vec2 uv;
+  in vec2 position;
+  out vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = vec4(position, 0.0, 1.0);
+  }
+`;
 
-  varying vec2 vUv;
+const FRAGMENT_BODY = /* glsl */ `
   uniform vec2 uRes;
   uniform float uTime;
   uniform float uArrival;    // 0..1, the opening swell
@@ -119,9 +129,23 @@ const FRAGMENT = /* glsl */ `
     vec3 bg = mix(mix(uInk, uPaper, day), uPanel, close);
 
     float alpha = line * presence * (0.35 + m * 0.65);
-    gl_FragColor = vec4(mix(bg, lineColor, alpha), 1.0);
+    FRAG_OUT = vec4(mix(bg, lineColor, alpha), 1.0);
   }
 `;
+
+/* #version must be the first characters of the source — no leading newline. */
+const FRAGMENT_300 = `#version 300 es
+  precision highp float;
+  in vec2 vUv;
+  out vec4 fragColor;
+  #define FRAG_OUT fragColor
+` + FRAGMENT_BODY;
+
+const FRAGMENT_100 = `#extension GL_OES_standard_derivatives : enable
+  precision highp float;
+  varying vec2 vUv;
+  #define FRAG_OUT gl_FragColor
+` + FRAGMENT_BODY;
 
 function cssColor(name, fallback) {
   const value = getComputedStyle(document.documentElement).getPropertyValue(name).trim();
@@ -139,18 +163,18 @@ export function initTerrain(canvas) {
   const gl = renderer.gl;
 
   /* The gate in js/main.js proved WebGL2 exists, but OGL still falls back to
-     WebGL1 if the second context is refused. fwidth is core in WebGL2 and an
-     extension in WebGL1 — enable it there, and if it is genuinely absent,
-     throw: main.js's catch removes the canvas and the stage planes carry the
-     color story without the field. */
+     WebGL1 if the second context is refused. There, fwidth needs the
+     derivatives extension enabled from JS as well as declared in the shader;
+     if it is genuinely absent, throw — main.js's catch removes the canvas
+     and the stage planes carry the color story without the field. */
   if (!renderer.isWebgl2 && !gl.getExtension('OES_standard_derivatives')) {
     throw new Error('no derivatives support');
   }
 
   const geometry = new Triangle(gl);
   const program = new Program(gl, {
-    vertex: VERTEX,
-    fragment: FRAGMENT,
+    vertex: renderer.isWebgl2 ? VERTEX_300 : VERTEX_100,
+    fragment: renderer.isWebgl2 ? FRAGMENT_300 : FRAGMENT_100,
     uniforms: {
       uRes: { value: new Vec2(1, 1) },
       uTime: { value: 0 },
