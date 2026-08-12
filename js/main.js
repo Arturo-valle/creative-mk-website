@@ -943,7 +943,7 @@ function initHeroBackground() {
 
   const start = () => {
     if (!document.documentElement.classList.contains('js-stage')) return;
-    import(useLite ? '/js/terrain-lite.js' : '/js/terrain.js')
+    import(useLite ? '/js/terrain-lite.js?v=20260810b' : '/js/terrain.js?v=20260810b')
       .then((module) => module.initTerrain(canvas))
       .catch(() => {
         // A failed field must never break the page; the stage planes remain.
