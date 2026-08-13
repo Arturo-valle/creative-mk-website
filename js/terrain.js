@@ -107,17 +107,19 @@ const FRAGMENT_BODY = /* glsl */ `
     /* Contour density and presence per act: dense and confident at night,
        a whisper on paper, gathering again for the close. */
     float bands = mix(mix(5.0, 3.0, day), 6.0, close);
-    float presence = mix(mix(0.55, 0.10, day), 0.45, close);
+    float presence = mix(mix(0.85, 0.16, day), 0.70, close);
 
     float bh = h * bands;
     float w = max(fwidth(bh), 1e-4);
     float dist = abs(fract(bh - 0.5) - 0.5) / w;
     float line = clamp(1.0 - dist, 0.0, 1.0);
 
-    /* Keep the hero copy legible: in the night act only, lines fade in the
-       upper-left quadrant where the headline lives. */
+    /* Keep the hero copy legible: in the night act only, lines soften behind
+       the headline. The mask used to remove 85% across a band wide enough to
+       swallow most of a desktop hero, which read as an empty page rather than
+       as restraint; it now takes 55% and releases sooner. */
     float copyMask = 1.0 - (1.0 - day) * (1.0 - close)
-      * smoothstep(0.9, 0.35, p.x / aspect) * smoothstep(0.55, 0.15, 1.0 - vUv.y) * 0.85;
+      * smoothstep(0.62, 0.20, p.x / aspect) * smoothstep(0.55, 0.15, 1.0 - vUv.y) * 0.55;
     line *= copyMask;
 
     // Height picks the ink of the line: navy troughs, gold crests.
@@ -129,7 +131,7 @@ const FRAGMENT_BODY = /* glsl */ `
     // The stage lives inside the shader: ink → paper → panel navy.
     vec3 bg = mix(mix(uInk, uPaper, day), uPanel, close);
 
-    float alpha = line * presence * (0.35 + m * 0.65);
+    float alpha = line * presence * (0.45 + m * 0.55);
     FRAG_OUT = vec4(mix(bg, lineColor, alpha), 1.0);
   }
 `;

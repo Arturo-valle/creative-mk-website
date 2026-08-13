@@ -16,7 +16,7 @@
 
 const ARRIVAL_MS = 1200;
 const FRAME_MS = 33;           // ~30fps: legible motion, cool phone
-const LINES = 22;
+const LINES = 26;
 
 function cssColor(name, fallback) {
   const v = getComputedStyle(document.documentElement).getPropertyValue(name).trim() || fallback;
@@ -95,8 +95,8 @@ export function initTerrain(canvas) {
     const close = smoothstep(act2End - 0.04, act2End + 0.04, scroll);
 
     const bg = mix(mix(ink, paper, day), panel, close);
-    const amp = (1 - day) * 26 + day * (1 - close) * 8 + close * 20;
-    const presence = (1 - day) * 0.5 + day * (1 - close) * 0.12 + close * 0.4;
+    const amp = (1 - day) * 30 + day * (1 - close) * 9 + close * 24;
+    const presence = (1 - day) * 0.8 + day * (1 - close) * 0.18 + close * 0.65;
 
     ctx.fillStyle = rgb(bg, 1);
     ctx.fillRect(0, 0, w, h);
