@@ -2160,3 +2160,45 @@ body.menu-open .header__menu-toggle span {
     font-size: 1.35rem;
   }
 }
+
+/* The homepage insight cards: links to the note pages, rendered at build time
+   from the same data the pages use. They replaced a modal that carried an
+   older draft of each article. */
+.newscard {
+  display: block;
+  padding: var(--space-8) 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.14);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.3s var(--ease-out);
+}
+
+.newscard:hover { border-top-color: var(--color-primary); }
+
+.newscard__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.newscard__title {
+  display: block;
+  margin-top: var(--space-4);
+  max-width: 22ch;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: #ffffff;
+  transition: color 0.25s var(--ease-out);
+}
+
+.newscard:hover .newscard__title { color: var(--color-primary); }
+
+/* The accordion row title is a link now — it must not inherit button styling. */
+a.accordion-title { color: inherit; text-decoration: none; }
+a.accordion-title:hover { color: #7A5C12; }

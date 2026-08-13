@@ -13,6 +13,11 @@
 const raw = [
   {
     slug: 'ai-for-service-businesses',
+    iso: '2026-05-12',
+    metaDesc: {
+      en: 'Most service businesses do not need a custom model. They need the first five minutes after a lead arrives to stop being manual.',
+      es: 'La mayoria de negocios de servicios no necesita un modelo propio. Necesita que los primeros cinco minutos tras un lead dejen de ser manuales.'
+    },
     en: {
       category: 'AI',
       title: 'Where AI actually helps a service business',
@@ -28,6 +33,11 @@ const raw = [
   },
   {
     slug: 'premium-website-trust',
+    iso: '2026-04-08',
+    metaDesc: {
+      en: 'Premium sites do not win by adding decoration. They win by creating clarity: a strong promise, precise service paths, proof and rhythm.',
+      es: 'Los sitios premium no ganan agregando decoracion. Ganan creando claridad: promesa fuerte, rutas precisas de servicio, prueba y ritmo.'
+    },
     en: {
       category: 'Web',
       title: 'What makes a premium service website feel trustworthy',
@@ -43,6 +53,11 @@ const raw = [
   },
   {
     slug: 'funnels-and-brand-systems',
+    iso: '2026-03-17',
+    metaDesc: {
+      en: 'A funnel cannot repair a weak promise. Paid traffic and automation work better when the audience understands the offer fast.',
+      es: 'Un embudo no puede reparar una promesa debil. La pauta y la automatizacion funcionan mejor cuando la audiencia entiende rapido la oferta.'
+    },
     en: {
       category: 'Growth',
       title: 'Why funnels fail when the brand system is weak',

@@ -1,27 +1,45 @@
 {#- The one <head> for every hand-authored page. Front matter supplies title,
-    description, canonical (path only) and optional jsonld; everything else —
-    the stylesheet cascade, the font preload, the reveal bootstrap — is shared
-    so it can never drift between pages again. Eight hand-copied variants
-    collapse here. -#}
+    description, canonical (path only) and either `schema` (an object, the
+    preferred form) or `jsonld` (a pre-rendered string, legacy). Everything
+    else — the stylesheet cascade, the font preload, the reveal bootstrap — is
+    shared so it can never drift between pages again.
+
+    Values are escaped exactly once, through the `attr` filter, because
+    Nunjucks' autoescaping would otherwise run a second pass over an already
+    escaped entity and ship &amp;amp; in a title. -#}
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{{ title }}</title>
-  <meta name="description" content="{{ description }}">
-  <meta property="og:title" content="{{ ogTitle or title }}">
-  <meta property="og:description" content="{{ ogDescription or description }}">
+  <title>{{ title | attr | safe }}</title>
+  <meta name="description" content="{{ description | attr | safe }}">
+  <meta property="og:title" content="{{ (ogTitle or title) | attr | safe }}">
+  <meta property="og:description" content="{{ (ogDescription or description) | attr | safe }}">
   <meta property="og:type" content="website">
   <meta property="og:url" content="{{ site.origin }}{{ canonical }}">
   <meta property="og:site_name" content="CREATIVE MK">
   <meta property="og:image" content="{{ site.origin }}{{ ogImage or site.defaultOgImage }}">
+  <meta property="og:image:alt" content="CREATIVE MK">
+  <meta property="og:locale" content="{{ 'es_ES' if lang == 'es' else 'en_US' }}">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="{{ ogTitle or title }}">
-  <meta name="twitter:description" content="{{ ogDescription or description }}">
+  <meta name="twitter:title" content="{{ (ogTitle or title) | attr | safe }}">
+  <meta name="twitter:description" content="{{ (ogDescription or description) | attr | safe }}">
   <meta name="twitter:image" content="{{ site.origin }}{{ ogImage or site.defaultOgImage }}">
   <link rel="canonical" href="{{ site.origin }}{{ canonical }}">
+{%- if hreflang %}
+{%- for alt in hreflang %}
+  <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.origin }}{{ alt.href }}">
+{%- endfor %}
+{%- endif %}
 {%- if robots %}
   <meta name="robots" content="{{ robots }}">
 {%- endif %}
-{%- if jsonld %}
+{#- Preferred: a `schema` object serialised by the jsonld filter, always
+    wrapped in a @graph that carries the studio stub, so the {"@id": …#studio}
+    references every page makes actually resolve inside its own document. -#}
+{%- if pageSchema %}
+  <script type="application/ld+json">
+{{ { "@context": "https://schema.org", "@graph": [(schema.studioFull if page.url == "/" else schema.studio), pageSchema] } | jsonld | safe }}
+  </script>
+{%- elif jsonld %}
   <script type="application/ld+json">
 {{ jsonld | safe }}
   </script>

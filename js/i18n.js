@@ -415,7 +415,6 @@ function setLanguage(lang) {
   }
   if (typeof renderCapabilities === 'function') renderCapabilities();
   if (typeof renderWork === 'function') renderWork();
-  if (typeof renderNews === 'function') renderNews();
   if (typeof renderFAQ === 'function') renderFAQ();
   if (typeof animateHeroTitle === 'function') animateHeroTitle();
   if (typeof syncHeroSoundButton === 'function') syncHeroSoundButton();

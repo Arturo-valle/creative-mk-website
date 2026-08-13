@@ -5,22 +5,19 @@ title: "The Studio | CREATIVE MK"
 description: "CREATIVE MK is Arturo Valle plus specialists, working bilingually across brand, web, product, growth and AI automation. The ledger, in public."
 ogDescription: "Arturo Valle plus specialists. The ledger, in public."
 canonical: "/studio/"
-jsonld: |
-  {
-    "@context": "https://schema.org",
-    "@type": "AboutPage",
-    "url": "https://creativemk.net/studio/",
-    "name": "The Studio — CREATIVE MK",
-    "inLanguage": ["en", "es"],
-    "mainEntity": {
-      "@type": "Person",
-      "name": "Arturo Valle",
-      "jobTitle": "Founder",
-      "worksFor": { "@id": "https://creativemk.net/#studio" },
-      "email": "hey@creativemk.net",
-      "knowsLanguage": ["en", "es"]
-    }
-  }
+pageSchema:
+  "@type": "AboutPage"
+  url: "https://creativemk.net/studio/"
+  name: "The Studio — CREATIVE MK"
+  inLanguage: "en"
+  mainEntity:
+    "@type": "Person"
+    name: "Arturo Valle"
+    jobTitle: "Founder"
+    email: "hey@creativemk.net"
+    knowsLanguage: ["en", "es"]
+    worksFor:
+      "@id": "https://creativemk.net/#studio"
 ---
     <div class="container">
 

@@ -7,22 +7,21 @@ permalink: "/services/{{ service.slug }}/"
 layout: "layout.njk"
 subpage: true
 eleventyComputed:
-  title: "{{ service.en.title }} | CREATIVE MK"
+  title: "{{ service.en.title | safe }} | CREATIVE MK"
   description: "{{ service.en.desc | truncate(155) }}"
-  ogDescription: "{{ service.en.lead }} — {{ service.en.title }} at CREATIVE MK."
+  ogDescription: "{{ service.en.lead | safe }} — {{ service.en.title | safe }} at CREATIVE MK."
   canonical: "/services/{{ service.slug }}/"
-  jsonld: |
-    {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "{{ service.en.title }}",
-      "url": "https://creativemk.net/services/{{ service.slug }}/",
-      "serviceType": "{{ service.en.lead }}",
-      "description": "{{ service.en.desc }}",
-      "provider": { "@id": "https://creativemk.net/#studio" },
-      "areaServed": "Worldwide",
-      "availableLanguage": ["en", "es"]
-    }
+  pageSchema:
+    "@type": "Service"
+    "@id": "https://creativemk.net/services/{{ service.slug }}/#service"
+    name: "{{ service.en.title | safe }}"
+    url: "https://creativemk.net/services/{{ service.slug }}/"
+    serviceType: "{{ service.en.lead | safe }}"
+    description: "{{ service.en.desc | safe }}"
+    provider:
+      "@id": "https://creativemk.net/#studio"
+    areaServed: "Worldwide"
+    availableLanguage: ["en", "es"]
 ---
     <div class="container">
       <nav class="crumbs" aria-label="Breadcrumb">

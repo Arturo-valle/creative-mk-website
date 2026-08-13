@@ -464,6 +464,87 @@ async function checkBudget() {
   }
 }
 
+
+/* ---------- 6. structured data and metadata integrity ----------
+   Every defect below shipped at least once during the August rebuild and was
+   caught by an audit rather than by this gate. Each is now an ERROR. */
+
+async function checkStructuredData() {
+  const check = 'schema';
+  const seenTitles = new Map();
+  const seenDescriptions = new Map();
+
+  for (const file of htmlFiles) {
+    const name = rel(file);
+    const raw = await readFile(file, 'utf8');
+    const html = stripHtmlComments(raw);
+
+    /* Double-escaped entities. "Growth & Marketing" became &amp;amp; in every
+       title and social tag on one page because two escaping passes ran. */
+    const metaRegions = [
+      ...[...html.matchAll(/<title>([\s\S]*?)<\/title>/gi)].map((m) => m[1]),
+      ...[...html.matchAll(/<meta[^>]*\scontent\s*=\s*"([^"]*)"/gi)].map((m) => m[1])
+    ];
+    for (const region of metaRegions) {
+      const doubled = region.match(/&amp;(amp|lt|gt|quot|#\d+);/i);
+      if (doubled) {
+        error(check, `${name} contains a double-escaped entity (&amp;${doubled[1]};) in its metadata`);
+        break;
+      }
+    }
+
+    if (CLIENT_RENDERED.has(name)) continue;
+
+    /* Titles and descriptions must be unique: two pages sharing either are
+       competing for the same query. */
+    const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim();
+    if (title) {
+      if (seenTitles.has(title)) {
+        error(check, `${name} and ${seenTitles.get(title)} share the title "${title.slice(0, 50)}"`);
+      } else seenTitles.set(title, name);
+    }
+    const description = metaContent(html, 'name', 'description');
+    if (description) {
+      if (seenDescriptions.has(description)) {
+        error(check, `${name} and ${seenDescriptions.get(description)} share a meta description`);
+      } else seenDescriptions.set(description, name);
+    }
+
+    /* Every JSON-LD block must parse, and every @id it references must be
+       declared in the same document — a cross-document @id is a dangling
+       pointer no consumer can follow. */
+    for (const block of html.matchAll(/<script[^>]*application\/ld\+json[^>]*>([\s\S]*?)<\/script>/gi)) {
+      let parsed;
+      try {
+        parsed = JSON.parse(block[1]);
+      } catch (cause) {
+        error(check, `${name} has JSON-LD that does not parse: ${cause.message}`);
+        continue;
+      }
+      const declared = new Set();
+      const referenced = [];
+      const walk = (node, isRef) => {
+        if (Array.isArray(node)) return node.forEach((n) => walk(n, isRef));
+        if (!node || typeof node !== 'object') return;
+        const keys = Object.keys(node);
+        if (node['@id']) {
+          if (keys.length === 1) referenced.push(node['@id']);
+          else declared.add(node['@id']);
+        }
+        for (const [key, value] of Object.entries(node)) {
+          if (key !== '@id') walk(value, isRef);
+        }
+      };
+      walk(parsed['@graph'] ?? parsed, false);
+      for (const id of referenced) {
+        if (!declared.has(id)) {
+          error(check, `${name} references @id "${id}" that no node in the same document declares`);
+        }
+      }
+    }
+  }
+}
+
 /* ---------- report ---------- */
 
 await checkI18n();
@@ -471,6 +552,7 @@ await checkReferences();
 await checkSeo();
 await checkAssets();
 await checkBudget();
+await checkStructuredData();
 
 const group = (items) => {
   const byCheck = new Map();

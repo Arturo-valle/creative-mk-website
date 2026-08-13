@@ -5,14 +5,20 @@ motion: false
 title: "Privacy Notice | CREATIVE MK"
 description: "What CREATIVE MK collects, why, and where it lives. Contact form data, newsletter emails, and nothing sold to anyone."
 canonical: "/privacy/"
-jsonld: |
-  {
-      "@context": "https://schema.org",
-      "@type": "WebPage",
-      "url": "https://creativemk.net/privacy/",
-      "name": "Privacy Notice — CREATIVE MK",
-      "inLanguage": ["en", "es"]
-    }
+pageSchema:
+  "@type": "WebPage"
+  url: "https://creativemk.net/privacy/"
+  name: "Privacy Notice — CREATIVE MK"
+  inLanguage: "en"
+  publisher:
+    "@id": "https://creativemk.net/#studio"
+hreflang:
+  - lang: "en"
+    href: "/privacy/"
+  - lang: "es"
+    href: "/privacidad/"
+  - lang: "x-default"
+    href: "/privacy/"
 ---
 
     <div class="container subpage__legal">

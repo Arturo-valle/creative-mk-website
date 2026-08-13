@@ -3,26 +3,27 @@ pagination:
   data: notes
   size: 1
   alias: note
-permalink: "/insights/{{ note.slug }}/"
+permalink: "/insights/{{ note.slug | safe }}/"
 layout: "layout.njk"
 subpage: true
 eleventyComputed:
-  title: "{{ note.en.title }} | CREATIVE MK"
-  description: "{{ note.en.content | truncate(155) }}"
-  ogDescription: "{{ note.en.title }} — a short note from CREATIVE MK."
-  canonical: "/insights/{{ note.slug }}/"
-  jsonld: |
-    {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": "{{ note.en.title }}",
-      "url": "https://creativemk.net/insights/{{ note.slug }}/",
-      "datePublished": "{{ note.en.date }}",
-      "wordCount": {{ note.words }},
-      "inLanguage": "en",
-      "author": { "@type": "Person", "name": "Arturo Valle" },
-      "publisher": { "@id": "https://creativemk.net/#studio" }
-    }
+  title: "{{ note.en.title | safe }} | CREATIVE MK"
+  description: "{{ note.metaDesc.en | safe }}"
+  ogDescription: "{{ note.en.title | safe }} — a short note from CREATIVE MK."
+  canonical: "/insights/{{ note.slug | safe }}/"
+  pageSchema:
+    "@type": "Article"
+    headline: "{{ note.en.title | safe }}"
+    url: "https://creativemk.net/insights/{{ note.slug | safe }}/"
+    datePublished: "{{ note.iso | safe }}"
+    dateModified: "{{ note.iso | safe }}"
+    wordCount: "{{ note.words | safe }}"
+    inLanguage: "en"
+    author:
+      "@type": "Person"
+      name: "Arturo Valle"
+    publisher:
+      "@id": "https://creativemk.net/#studio"
 ---
     <div class="container">
       <article class="note">

@@ -788,5 +788,12 @@ html.js-stage .ai-automation {
 /* The current page states itself without JavaScript — the animated underline
    is the homepage scroll-spy and cannot speak for a subpage. */
 .header__nav-link[aria-current="page"] {
+  color: #7A5C12;
+  font-weight: var(--weight-semibold);
+}
+
+/* On the dark hero the frosted header has not engaged, so the brand gold is
+   both legal and correct there. */
+.header:not(.scrolled) .header__nav-link[aria-current="page"] {
   color: var(--color-primary);
 }

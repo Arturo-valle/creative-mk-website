@@ -2,6 +2,11 @@
    Main.js - Content Data & Initialization
    ============================================ */
 
+/* The accordion rows link to the pages generated from src/_data/services.js.
+   Order is the contract: this array is indexed by position, exactly as the
+   accordion is. */
+const SERVICE_SLUGS = ['branding', 'websites', 'product-ux-ui', 'growth', 'ai-automation', 'development'];
+
 const servicesData = {
   en: [
     {
@@ -146,54 +151,6 @@ const workPendingCount = 2;
 
 const newsImages = ['images/news/news-1.jpg', 'images/news/news-2.jpg', 'images/news/news-3.jpg'];
 
-const newsData = {
-  en: [
-    {
-      category: 'AI Guide',
-      title: 'Where AI actually helps a service business',
-      date: 'May 2026',
-      read: '6 min read',
-      content: 'AI is most useful when it is attached to a specific business workflow. For service businesses, the strongest starting points are lead intake, service matching, first-response support, content routing, internal reporting, and follow-up reminders.\n\nThe mistake is treating AI as a decorative feature. A useful AI layer should know what information to ask for, what should be routed to a human, and where the next action lives.\n\nBefore adding AI, map the current delay: slow replies, repeated questions, unclear qualification, manual reporting, or inconsistent follow-up. That bottleneck should decide the first automation.'
-    },
-    {
-      category: 'Websites',
-      title: 'What makes a premium service website feel trustworthy',
-      date: 'Apr 2026',
-      read: '7 min read',
-      content: 'Premium websites do not win by adding more decoration. They win by creating clarity: a strong promise, precise service paths, proof, thoughtful pacing, fast loading, and a contact path that respects the buyer.\n\nThe best service sites feel editorial and operational at the same time. They are beautiful, but every section has a job: explain, reduce doubt, show proof, or move the visitor toward a clear next step.\n\nIf a visitor cannot understand who the brand helps, what changes, and why the team can be trusted within the first few moments, the design is carrying too much weight and the message needs sharper structure.'
-    },
-    {
-      category: 'Brand Strategy',
-      title: 'Why funnels fail when the brand system is weak',
-      date: 'Mar 2026',
-      read: '6 min read',
-      content: 'A funnel cannot fix a weak promise. Paid media, landing pages, and automation work best when the audience immediately understands who the brand helps, what changes, and why it should be trusted.\n\nA strong growth system connects positioning, creative, landing experience, follow-up, and measurement. If those parts are designed separately, the campaign becomes harder to test because each step uses a different message.\n\nBrand strategy is not just visual polish. It is the operating logic that helps every ad, page, email, and sales conversation point in the same direction.'
-    }
-  ],
-  es: [
-    {
-      category: 'Guía IA',
-      title: 'Dónde ayuda realmente la IA en un negocio de servicios',
-      date: 'Mayo 2026',
-      read: '6 min lectura',
-      content: 'La IA funciona mejor cuando está conectada a un flujo específico del negocio. Para negocios de servicio, los mejores puntos de inicio suelen ser recepción de leads, recomendación de servicio, primera respuesta, rutas de contenido, reportes internos y recordatorios de seguimiento.\n\nEl error es tratar la IA como decoración. Una capa útil debe saber qué información pedir, qué debe pasar a una persona y dónde vive la siguiente acción.\n\nAntes de agregar IA, conviene mapear el retraso actual: respuestas lentas, preguntas repetidas, calificación poco clara, reportes manuales o seguimiento inconsistente. Ese cuello de botella debe decidir la primera automatización.'
-    },
-    {
-      category: 'Sitios Web',
-      title: 'Qué hace que un sitio premium genere confianza',
-      date: 'Abr 2026',
-      read: '7 min lectura',
-      content: 'Los sitios premium no ganan por agregar más decoración. Ganan por crear claridad: una promesa fuerte, rutas precisas de servicio, prueba, ritmo, carga rápida y un contacto que respeta al comprador.\n\nLos mejores sitios de servicio se sienten editoriales y operativos al mismo tiempo. Son bellos, pero cada sección tiene una función: explicar, reducir dudas, mostrar prueba o mover al visitante hacia un siguiente paso claro.\n\nSi una persona no entiende a quién ayuda la marca, qué cambia y por qué confiar durante los primeros momentos, el diseño está cargando demasiado peso y el mensaje necesita mejor estructura.'
-    },
-    {
-      category: 'Estrategia de marca',
-      title: 'Por qué los embudos fallan cuando la marca es débil',
-      date: 'Mar 2026',
-      read: '6 min lectura',
-      content: 'Un embudo no puede reparar una promesa débil. La pauta, las landing pages y la automatización funcionan mejor cuando la audiencia entiende rápido a quién ayuda la marca, qué cambia y por qué confiar.\n\nUn sistema de crecimiento fuerte conecta posicionamiento, creatividad, experiencia de landing, seguimiento y medición. Si esas partes se diseñan por separado, la campaña se vuelve más difícil de probar porque cada paso usa un mensaje distinto.\n\nLa estrategia de marca no es solo acabado visual. Es la lógica operativa que ayuda a que cada anuncio, página, correo y conversación comercial apunte en la misma dirección.'
-    }
-  ]
-};
 
 const faqData = {
   en: [
@@ -235,7 +192,7 @@ function renderCapabilities() {
         <span class="accordion-index" aria-hidden="true">0${i + 1}</span>
         <span>
           <span class="accordion-kicker">${s.lead}</span>
-          <span class="accordion-title">${s.title}</span>
+          <a class="accordion-title" href="/services/${SERVICE_SLUGS[i]}/">${s.title}</a>
         </span>
         <span class="accordion-icon"></span>
       </button>
@@ -508,41 +465,6 @@ function workCard(p, viewText, idx) {
   </article>`;
 }
 
-function renderNews() {
-  const grid = document.getElementById('news-grid');
-  if (!grid) return;
-  const data = newsData[currentLang];
-  grid.innerHTML = data.map((n, i) => `
-    <article class="news__card reveal" data-news-index="${i}" role="button" tabindex="0" aria-label="${n.title}">
-      <div class="news__card-image">
-        ${pictureMarkup(newsImages[i], n.title, '(max-width: 768px) 100vw, 33vw')}
-      </div>
-      <div class="news__card-body">
-        <span class="news__card-category">${n.category}</span>
-        <h3 class="news__card-title">${n.title}</h3>
-        <div class="news__card-meta">
-          <span>${n.date}</span>
-          <span class="news__card-meta-dot"></span>
-          <span>${n.read}</span>
-        </div>
-      </div>
-    </article>`).join('');
-
-  grid.querySelectorAll('.news__card').forEach(card => {
-    const open = () => {
-      const idx = Number(card.dataset.newsIndex);
-      const article = newsData[currentLang][idx];
-      if (article && article.content) openNewsModal(article, newsImages[idx]);
-    };
-    card.addEventListener('click', open);
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        open();
-      }
-    });
-  });
-}
 
 function renderFAQ() {
   const list = document.getElementById('faq-list');
@@ -838,28 +760,6 @@ function openCaseModal(project) {
   openModal(html);
 }
 
-function openNewsModal(article, imgSrc) {
-  const backLabel = currentLang === 'es' ? 'Volver a noticias' : 'Back to news';
-  const paragraphs = article.content.split('\n\n').map(p => `<p>${p.replace(/\n/g, '<br>')}</p>`).join('');
-  const html = `
-    <div class="modal-news">
-      <div class="modal-news__hero">
-        ${pictureMarkup(imgSrc, article.title, '(max-width: 900px) 100vw, 860px', { lazy: false })}
-      </div>
-      <div class="modal-news__body">
-        <div class="modal-news__meta">
-          <span class="modal-news__category">${article.category}</span>
-          <span>${article.date}</span>
-          <span class="news__card-meta-dot"></span>
-          <span>${article.read}</span>
-        </div>
-        <h2 class="modal-news__title">${article.title}</h2>
-        <div class="modal-news__content">${paragraphs}</div>
-        <button class="modal-news__back" type="button">${backLabel}</button>
-      </div>
-    </div>`;
-  openModal(html);
-}
 
 function initModal() {
   createModal();
@@ -966,8 +866,6 @@ document.addEventListener('DOMContentLoaded', () => {
   animateHeroTitle();
   renderCapabilities();
   renderWork();
-
-  renderNews();
   renderFAQ();
   initNewsletter();
   initPlayShowreel();

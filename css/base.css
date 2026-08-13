@@ -331,3 +331,13 @@ a:focus-visible {
   font-weight: var(--weight-medium);
   padding: var(--space-3) 0;
 }
+
+/* The focus ring, by ground.
+   Raw #E8C840 is 1.51:1 on the paper tone — invisible exactly when a keyboard
+   visitor needs it most. The aged cut of the same hue is 5.15:1 and is already
+   a brand token, so the ring stays gold without lying about contrast. */
+.subpage :focus-visible,
+.subpage__main :focus-visible {
+  outline: 2px solid #7A5C12;
+  outline-offset: 3px;
+}

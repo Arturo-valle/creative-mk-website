@@ -4,15 +4,13 @@ subpage: true
 title: "Selected Work | CREATIVE MK"
 description: "The CREATIVE MK work ledger: client engagements published with a name and a number, or not published at all."
 canonical: "/work/"
-jsonld: |
-  {
-      "@context": "https://schema.org",
-      "@type": "CollectionPage",
-      "url": "https://creativemk.net/work/",
-      "name": "Selected Work — CREATIVE MK",
-      "inLanguage": ["en", "es"],
-      "about": { "@id": "https://creativemk.net/#studio" }
-    }
+pageSchema:
+  "@type": "CollectionPage"
+  url: "https://creativemk.net/work/"
+  name: "Selected Work — CREATIVE MK"
+  inLanguage: "en"
+  about:
+    "@id": "https://creativemk.net/#studio"
 ---
 
     <div class="container">

@@ -280,7 +280,9 @@ const serviceIndexes = {
   'landing-pages': 1,
   'ux-ui-design': 2,
   'digital-product': 2,
+  'product-ux-ui': 2,
   'sales-funnels': 3,
+  growth: 3,
   'meta-ads': 3,
   'social-media': 3,
   'app-development': 4,
@@ -385,6 +387,21 @@ function App() {
     document.documentElement.lang = lang;
     setStoredLang(lang);
   }, [lang]);
+
+  /* The six service pages link here as /contact.html?service=<slug>. That
+     handoff used to be decorative — nothing read the parameter — so a visitor
+     who clicked "Start a project" from /services/growth/ arrived at an empty
+     form and had to re-state what they had just chosen. */
+  useEffect(() => {
+    if (briefAppliedRef.current) return;
+    const fromUrl = new URLSearchParams(window.location.search).get('service');
+    if (fromUrl && serviceIndexes[fromUrl] !== undefined) {
+      setForm((current) => ({
+        ...current,
+        service: current.service || byIndex(t.serviceOptions, serviceIndexes, fromUrl)
+      }));
+    }
+  }, [t]);
 
   useEffect(() => {
     if (briefAppliedRef.current) return;
@@ -668,10 +685,10 @@ function Header({ lang, setLang, t }) {
         <img src={LOGO_SRC} width={LOGO_W} height={LOGO_H} alt="CREATIVE MK" />
       </a>
       <nav className="contact-header__nav" aria-label="Main navigation">
-        <a href="index.html#work">{t.nav.work}</a>
-        <a href="index.html#capabilities">{t.nav.services}</a>
-        <a href="index.html#about">{t.nav.about}</a>
-        <a href="index.html#news">{t.nav.blog}</a>
+        <a href="/work/">{t.nav.work}</a>
+        <a href="/services/">{t.nav.services}</a>
+        <a href="/studio/">{t.nav.about}</a>
+        <a href="/insights/">{t.nav.blog}</a>
       </nav>
       <div className="contact-header__actions">
         <div className="contact-lang" aria-label="Language switcher">
@@ -792,10 +809,10 @@ function Footer({ t }) {
       </div>
       <div className="contact-footer__links">
         <a href="mailto:hey@creativemk.net">hey@creativemk.net</a>
-        <a href="index.html#capabilities">{t.nav.services}</a>
-        <a href="index.html#work">{t.nav.work}</a>
-        <a href="#privacy">{t.privacyTitle}</a>
-        <a href="#terms">{t.termsTitle}</a>
+        <a href="/services/">{t.nav.services}</a>
+        <a href="/work/">{t.nav.work}</a>
+        <a href="/privacy/">{t.privacyTitle}</a>
+        <a href="/terms/">{t.termsTitle}</a>
       </div>
     </footer>
   );
