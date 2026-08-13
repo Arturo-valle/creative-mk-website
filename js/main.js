@@ -155,7 +155,7 @@ const newsImages = ['images/news/news-1.jpg', 'images/news/news-2.jpg', 'images/
 const faqData = {
   en: [
     { q: 'What services does CREATIVE MK offer?', a: 'We work across branding, websites, digital product UX/UI, growth and marketing systems, development, and practical AI automation. The goal is to connect the pieces that shape how a business is understood, trusted, and contacted.' },
-    { q: 'Are the projects shown real client case studies?', a: 'Client work is only published with a name and an agreed figure, and two engagements are signed but not yet publishable. The two cases open today are the studio's own, labelled as self-initiated. Two signed projects are waiting on their client to approve a name and a figure, and until then they are counted but not shown. Nothing invented stands in for them.' },
+    { q: 'Are the projects shown real client case studies?', a: "Client work is only published with a name and an agreed figure, and two engagements are signed but not yet publishable. The two cases open today are the studio's own, labelled as self-initiated. Two signed projects are waiting on their client to approve a name and a figure, and until then they are counted but not shown. Nothing invented stands in for them." },
     { q: 'Can you redesign an existing website or brand?', a: 'Yes. We can audit the current experience, preserve what is working, rebuild weak sections, and turn the brand, site, and follow-up path into a clearer system.' },
     { q: 'How do you approach AI automation?', a: 'We begin with a workflow, not a tool. Useful starting points include lead intake, service matching, first response, knowledge bases, dashboards, and follow-up prompts with a clear human handoff.' },
     { q: 'How long does a typical project take?', a: 'A focused landing page or audit can take 1-2 weeks, a full website often takes 4-8 weeks, and deeper brand, product, or automation systems usually take 4-10 weeks depending on scope.' }
@@ -645,6 +645,16 @@ function initPlayShowreel() {
   }
 
   const section = document.getElementById('showreel');
+
+  /* A tab that was hidden while the visitor scrolled past the reel gets no
+     IntersectionObserver callbacks, so it could come back to a black frame
+     that never recovers. On becoming visible, check the geometry directly. */
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'visible' || !section) return;
+    const rect = section.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) activate();
+  });
+
   if (section && typeof IntersectionObserver === 'function') {
     new IntersectionObserver((entries) => {
       for (const entry of entries) {

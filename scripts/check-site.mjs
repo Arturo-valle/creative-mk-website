@@ -562,6 +562,48 @@ async function checkStructuredData() {
   }
 }
 
+
+/* ---------- 7. every shipped script must parse ---------- */
+
+async function checkScriptsParse() {
+  const check = 'syntax';
+  const { Script } = await import('node:vm');
+  for (const file of allFiles) {
+    if (!file.endsWith('.js')) continue;
+    const name = rel(file);
+    // Vendored bundles are third-party and already minified; module syntax
+    // needs a different parser than the classic-script one used here.
+    if (name.includes('/vendor/') || name.includes('contact-assets/')) continue;
+    const source = await readFile(file, 'utf8');
+    /* Module scripts cannot be compiled as classic scripts. Strip the import
+       and export lines and compile what is left — which is where a stray
+       quote or bracket lives anyway. NL keeps a real newline out of this
+       file's own source. */
+    const NL = String.fromCharCode(10);
+    const isImport = (line) => /^[ \t]*import[ {*'"]/.test(line);
+    const sourceLines = source.split(NL);
+    const isModule = sourceLines.some(
+      (line) => isImport(line) || /^[ \t]*export[ {]/.test(line)
+    );
+    /* Drop import statements outright, but only unwrap the export keyword —
+       deleting a whole "export function foo() {" line would orphan its body
+       and report a brace error instead of the real one. */
+    const body = isModule
+      ? sourceLines
+          .filter((line) => !isImport(line))
+          .map((line) =>
+            line.replace(/^([ \t]*)export default /, '$1').replace(/^([ \t]*)export /, '$1')
+          )
+          .join(NL)
+      : source;
+    try {
+      new Script(isModule ? '(async () => {' + NL + body + NL + '})' : body);
+    } catch (cause) {
+      error(check, `${name} does not parse: ${cause.message}`);
+    }
+  }
+}
+
 /* ---------- report ---------- */
 
 await checkI18n();
@@ -570,6 +612,7 @@ await checkSeo();
 await checkAssets();
 await checkBudget();
 await checkStructuredData();
+await checkScriptsParse();
 
 const group = (items) => {
   const byCheck = new Map();

@@ -23,8 +23,19 @@ function initArrival() {
   if (!root.classList.contains('js-arrival')) return;
 
   var title = document.getElementById('hero-title');
-  var words = title ? title.querySelectorAll('.word') : [];
-  if (typeof gsap === 'undefined' || !words.length) {
+  if (!title || typeof gsap === 'undefined') {
+    root.classList.remove('js-arrival');
+    return;
+  }
+
+  /* Split the headline ourselves if nothing has yet. animateHeroTitle() in
+     js/animations.js does the same work and is idempotent, so whichever runs
+     first wins and the other finds the job done. */
+  if (!title.querySelector('.word') && typeof animateHeroTitle === 'function') {
+    animateHeroTitle();
+  }
+  var words = title.querySelectorAll('.word');
+  if (!words.length) {
     root.classList.remove('js-arrival');
     return;
   }
