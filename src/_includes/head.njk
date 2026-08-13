@@ -1,0 +1,63 @@
+{#- The one <head> for every hand-authored page. Front matter supplies title,
+    description, canonical (path only) and optional jsonld; everything else —
+    the stylesheet cascade, the font preload, the reveal bootstrap — is shared
+    so it can never drift between pages again. Eight hand-copied variants
+    collapse here. -#}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ title }}</title>
+  <meta name="description" content="{{ description }}">
+  <meta property="og:title" content="{{ ogTitle or title }}">
+  <meta property="og:description" content="{{ ogDescription or description }}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="{{ site.origin }}{{ canonical }}">
+  <meta property="og:site_name" content="CREATIVE MK">
+  <meta property="og:image" content="{{ site.origin }}{{ ogImage or site.defaultOgImage }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="{{ ogTitle or title }}">
+  <meta name="twitter:description" content="{{ ogDescription or description }}">
+  <meta name="twitter:image" content="{{ site.origin }}{{ ogImage or site.defaultOgImage }}">
+  <link rel="canonical" href="{{ site.origin }}{{ canonical }}">
+{%- if robots %}
+  <meta name="robots" content="{{ robots }}">
+{%- endif %}
+{%- if jsonld %}
+  <script type="application/ld+json">
+{{ jsonld | safe }}
+  </script>
+{%- endif %}
+  <link rel="icon" type="image/png" href="/favicon.png">
+  <link rel="apple-touch-icon" href="/favicon.png">
+  <link rel="preload" href="/css/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin>
+  {#- Order is the cascade. clay-refresh overrides the section files, stage
+      overrides the section backgrounds clay-refresh set; the concierge comes
+      last. Do not reorder. -#}
+  <link rel="stylesheet" href="/css/variables.css">
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/sections.css">
+  <link rel="stylesheet" href="/css/clay-refresh.css">
+  <link rel="stylesheet" href="/css/stage.css">
+{%- if subpage %}
+  <link rel="stylesheet" href="/css/subpage.css">
+{%- endif %}
+  <link rel="stylesheet" href="/css/ai-concierge.css">
+{#- Reveal bootstrap. `.js-reveal` is the only thing that hides the `.reveal`
+    blocks; css/base.css never hides them on its own. Adding it here — after the
+    stylesheets, so they are discovered first, and still before the first paint
+    — means nothing flashes in and then vanishes. Removing it again on `load`
+    when js/animations.js has not claimed it means a blocked or broken script
+    leaves a readable page. Keep it inline: an external file could be the thing
+    that fails. -#}
+  <script>
+    (function () {
+      var root = document.documentElement;
+      if (!('IntersectionObserver' in window)) return;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      root.classList.add('js-reveal');
+      root.classList.add('js-arrival');
+      window.addEventListener('load', function () {
+        if (root.dataset.revealReady !== 'true') root.classList.remove('js-reveal');
+        if (root.dataset.arrivalReady !== 'true') root.classList.remove('js-arrival');
+      });
+    })();
+  </script>

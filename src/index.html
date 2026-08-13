@@ -1,0 +1,321 @@
+---
+layout: "layout.njk"
+title: "CREATIVE MK | Branding, UX/UI, Websites & AI Growth Systems"
+description: "CREATIVE MK is a bilingual digital studio creating brand identities, UX/UI, websites, growth systems, and practical AI automation for modern businesses."
+ogDescription: "Brand, UX/UI, websites, growth systems, development, and practical AI automation for modern businesses."
+canonical: "/"
+jsonld: |
+  {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://creativemk.net/#studio",
+          "name": "CREATIVE MK",
+          "url": "https://creativemk.net/",
+          "logo": "https://creativemk.net/Logos/logo-dark.png",
+          "image": "https://creativemk.net/Logos/logo-dark.png",
+          "email": "hey@creativemk.net",
+          "description": "Bilingual digital studio shaping brand identity, UX/UI, websites, growth systems, development, and practical AI automation into one coherent presence.",
+          "areaServed": "Worldwide",
+          "availableLanguage": ["en", "es"],
+          "knowsLanguage": ["en", "es"],
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Capabilities",
+            "itemListElement": [
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Branding" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Websites" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Digital Product UX/UI" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Growth & Marketing" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "Development" } },
+              { "@type": "Offer", "itemOffered": { "@type": "Service", "name": "AI Automation" } }
+            ]
+          }
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://creativemk.net/#website",
+          "url": "https://creativemk.net/",
+          "name": "CREATIVE MK",
+          "publisher": { "@id": "https://creativemk.net/#studio" },
+          "inLanguage": ["en", "es"]
+        }
+      ]
+    }
+---
+
+
+  <!-- ========== HERO ========== -->
+  <!-- The hero's private canvas is gone: the terrain lives on the page-wide
+       canvas now (js/terrain.js) and persists through all three acts. -->
+  <section class="hero section" id="hero">
+    <div class="container hero__container">
+      <!-- No .reveal above the fold: the hero must never wait for an observer.
+           Its choreography arrives with the phase-2 arrival timeline. -->
+      <div class="hero__text">
+        <span class="hero__eyebrow" data-i18n="hero.eyebrow">Branding, UX/UI, websites, growth and AI</span>
+        <h1 class="hero__title" id="hero-title" data-i18n="hero.title">
+          Digital experiences for brands ready to grow with clarity
+        </h1>
+        <p class="hero__lede" data-i18n="hero.lede">
+          CREATIVE MK is a bilingual digital studio shaping brand identity, UX/UI, websites, growth systems, development, and practical AI automation into one coherent presence.
+        </p>
+        <div class="hero__actions" aria-label="Primary actions">
+          <a href="contact.html" class="hero__cta" data-i18n="hero.primaryCta">Start a project</a>
+          <a href="#capabilities" class="hero__link" data-i18n="hero.secondaryCta">Explore services</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SHOWREEL ==========
+       The frame is full-bleed in layout; js/daylight.js insets it with
+       clip-path to the rail's width and one scrub expands it to the edges as
+       it enters — clip, not layout, so no pinning and no scroll hijack
+       (immersive-plan §5). The rail above gives the reel authorship: the
+       title made visible, and a real timecode written from timeupdate. -->
+  <section class="showreel section" id="showreel">
+    <div class="container showreel__rail">
+      <h2 class="showreel__title" data-i18n="showreel.title">CREATIVE MK showreel</h2>
+      <span class="showreel__timecode" id="showreel-timecode" aria-hidden="true">0:00 / 0:00</span>
+    </div>
+    <div class="showreel__stage">
+      <div class="showreel__frame">
+        <video
+          class="hero__video"
+          id="hero-video"
+          autoplay
+          loop
+          muted
+          playsinline
+          preload="none"
+          data-src-desktop="video/creative-mk-hero-desktop-sound.mp4"
+          data-src-mobile="video/creative-mk-hero-mobile-sound.mp4">
+        </video>
+        <button class="hero__play-btn" id="hero-play-btn" type="button" aria-label="Enable sound" aria-pressed="false">
+          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z"/></svg>
+          <span data-i18n="hero.soundEnable">Enable sound</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROOF / POSITIONING ==========
+       Sits below the showreel so the hero and the reel form one contiguous
+       dark act; this strip is where the lights have come up (immersive-plan
+       §0). It opens the daylight act as the first ruled ledger. -->
+  <section class="proof section" id="proof">
+    <div class="container">
+      <div class="proof__intro reveal">
+        <span class="section-kicker" data-i18n="proof.kicker">Studio model</span>
+        <h2 class="proof__title" data-i18n="proof.title">A senior, focused partner for the digital touchpoints that shape trust.</h2>
+        <p class="proof__text" data-i18n="proof.text">Inspired by the discipline of top digital studios, our work connects strategy, design, content, technology, and automation without pretending every business needs the same package.</p>
+      </div>
+      <!-- The first ledger (immersive-plan §4). Labels translate; the figure
+           lives outside data-i18n so no dictionary swap can ever rewrite it.
+           The "2" is the same number js/main.js publishes in the work ledger —
+           the two sections corroborate each other, so change both or neither. -->
+      <div class="proof__grid reveal reveal-delay-1" aria-label="CREATIVE MK trust signals">
+        <article class="proof__item" style="--i:0">
+          <span data-i18n="proof.itemOneLabel">Core disciplines</span>
+          <strong data-i18n="proof.itemOneValue">Brand + UX + Web + AI</strong>
+        </article>
+        <article class="proof__item" style="--i:1">
+          <span data-i18n="proof.itemTwoLabel">Languages</span>
+          <strong data-i18n="proof.itemTwoValue">EN + ES, one team</strong>
+        </article>
+        <article class="proof__item" style="--i:2">
+          <span data-i18n="proof.itemThreeLabel">Engagements underway</span>
+          <strong><a href="#work" class="proof__count"><span class="proof__digit">2</span></a></strong>
+        </article>
+        <article class="proof__item" style="--i:3">
+          <span data-i18n="proof.itemFourLabel">Output</span>
+          <strong data-i18n="proof.itemFourValue">Launch-ready systems, not loose assets</strong>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CAPABILITIES / SERVICES ========== -->
+  <section class="capabilities section" id="capabilities">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="section-kicker" data-i18n="capabilities.kicker">Capabilities</span>
+        <h2 class="section-title" data-i18n="capabilities.title">Services shaped as a connected brand and growth system</h2>
+      </div>
+      <div class="capabilities__layout">
+        <p class="capabilities__intro reveal" data-i18n="capabilities.intro">
+          We organize the essentials like a premium digital studio: clear identity, refined digital experience, conversion paths, reliable build, and practical automation that helps the business respond faster.
+        </p>
+        <!-- Two stacked layers so the image swap can wipe directionally
+             (immersive-plan §6): the hidden layer receives the incoming
+             sources, decodes, and clip-path reveals it from the direction of
+             travel. Layer roles are tracked in data-front / data-current. -->
+        <div class="capabilities__visual" id="capabilities-visual" data-front="0" data-current="0">
+          <div class="cap-stack">
+            <picture class="cap-layer">
+              <source type="image/avif" sizes="(max-width: 1024px) 100vw, 45vw" srcset="images/services/web-design-480.avif 480w, images/services/web-design-960.avif 960w">
+              <source type="image/webp" sizes="(max-width: 1024px) 100vw, 45vw" srcset="images/services/web-design-480.webp 480w, images/services/web-design-960.webp 960w">
+              <img src="images/services/web-design.jpg" alt="Service preview" loading="lazy" decoding="async" width="960" height="960">
+            </picture>
+            <picture class="cap-layer" aria-hidden="true">
+              <source type="image/avif" sizes="(max-width: 1024px) 100vw, 45vw" srcset="">
+              <source type="image/webp" sizes="(max-width: 1024px) 100vw, 45vw" srcset="">
+              <img src="images/services/web-design.jpg" alt="" loading="lazy" decoding="async" width="960" height="960">
+            </picture>
+          </div>
+        </div>
+        <div class="capabilities__list" id="capabilities-list" role="region" aria-label="Services">
+          <!-- Items generated by JS -->
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROCESS ========== -->
+  <section class="process section" id="process">
+    <div class="container">
+      <div class="section-heading reveal">
+        <span class="section-kicker" data-i18n="process.kicker">Process</span>
+        <h2 class="section-title" data-i18n="process.title">From unclear brief to launchable system.</h2>
+      </div>
+      <!-- The line that draws the method (immersive-plan §7). js/daylight.js
+           lays one SVG over the grid — a navy trail with a gold tip, scrubbed
+           by scroll — and re-measures it on resize and on every EN/ES swap.
+           Without JS the steps keep their border-top and solid numbers. -->
+      <div class="process__grid reveal reveal-delay-1" id="process-grid">
+        <article class="process__step">
+          <span>01</span>
+          <h3 data-i18n="process.stepOneTitle">Diagnose</h3>
+          <p data-i18n="process.stepOneText">We clarify the audience, offer, current bottleneck, and what the first version must prove.</p>
+          <span class="process__step-meta" data-i18n="process.stepOneMeta">Brief map · Offer · First metric</span>
+        </article>
+        <article class="process__step">
+          <span>02</span>
+          <h3 data-i18n="process.stepTwoTitle">Shape</h3>
+          <p data-i18n="process.stepTwoText">We define messaging, structure, visual direction, UX flow, and the priority service path.</p>
+          <span class="process__step-meta" data-i18n="process.stepTwoMeta">Messaging · Structure · Visual direction</span>
+        </article>
+        <article class="process__step">
+          <span>03</span>
+          <h3 data-i18n="process.stepThreeTitle">Build</h3>
+          <p data-i18n="process.stepThreeText">We design and develop the assets, pages, automations, or product screens needed for launch.</p>
+          <span class="process__step-meta" data-i18n="process.stepThreeMeta">Design · Build · Automations</span>
+        </article>
+        <article class="process__step">
+          <span>04</span>
+          <h3 data-i18n="process.stepFourTitle">Measure</h3>
+          <p data-i18n="process.stepFourText">We connect capture, follow-up, analytics, and iteration so the system can improve after launch.</p>
+          <span class="process__step-meta" data-i18n="process.stepFourMeta">Capture · Analytics · Iteration</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== AI AUTOMATION ========== -->
+  <section class="ai-automation section" id="ai-automation">
+    <div class="container">
+      <div class="ai-automation__card reveal">
+        <div class="ai-automation__content">
+          <span class="ai-automation__label" data-i18n="ai.label">AI Automation</span>
+          <h2 class="ai-automation__title" data-i18n="ai.title">AI belongs inside a useful workflow, not beside it.</h2>
+          <p class="ai-automation__text" data-i18n="ai.text">We use AI where it can reduce friction: lead intake, service matching, first response, content routing, internal dashboards, and follow-up. The goal is practical speed with clear human handoff.</p>
+          <a href="contact.html" class="ai-automation__cta" data-i18n="ai.cta">Map an AI workflow</a>
+          <button class="ai-concierge-inline" type="button" data-mk-concierge-trigger data-mode="diagnostic">
+            <span class="ai-concierge-inline__eyebrow">MK Growth Concierge</span>
+            <span class="ai-concierge-inline__text">Get a focused AI diagnostic before you brief us.</span>
+          </button>
+        </div>
+        <!-- The workflow trace (immersive-plan §10): a drawing of the intake
+             pipeline that actually powers the concierge, not statistic tiles.
+             Geometry is SVG; the labels are HTML with data-i18n so language
+             and geometry never touch. The spine ends at the concierge trigger
+             in the left column — the diagram's endpoint is a working demo. -->
+        <div class="ai-automation__visual">
+          <div class="ai-automation__trace" id="ai-trace">
+            <svg class="ai-trace__svg" viewBox="0 0 48 220" aria-hidden="true" focusable="false">
+              <line class="ai-trace__rail" x1="24" y1="18" x2="24" y2="202"/>
+              <path class="ai-trace__path" id="ai-trace-path" d="M24 18 V202" pathLength="1"/>
+              <circle class="ai-trace__node" cx="24" cy="24" r="5"/>
+              <circle class="ai-trace__node" cx="24" cy="82" r="5"/>
+              <circle class="ai-trace__node" cx="24" cy="140" r="5"/>
+              <circle class="ai-trace__node" cx="24" cy="198" r="5"/>
+            </svg>
+            <div class="ai-trace__labels">
+              <span class="ai-trace__label" data-i18n="ai.traceIntake">Intake</span>
+              <span class="ai-trace__label" data-i18n="ai.traceMatch">Service match</span>
+              <span class="ai-trace__label" data-i18n="ai.traceResponse">First response</span>
+              <span class="ai-trace__label" data-i18n="ai.traceHandoff">Human handoff</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== WORK / PORTFOLIO ========== -->
+  <section class="work section" id="work">
+    <div class="container">
+      <div class="work__header reveal">
+        <div>
+          <span class="section-kicker" data-i18n="work.kicker">Selected work</span>
+          <h2 class="work__title" data-i18n="work.title">Client work, with a name and a number. Nothing else goes here.</h2>
+        </div>
+        <a href="contact.html" class="link-arrow" data-i18n="work.viewAll">Start a project</a>
+      </div>
+      <div class="work__grid" id="work-grid">
+        <!-- Cards generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="about section" id="about">
+    <div class="container">
+      <div class="about__content reveal">
+        <h2 class="about__title" data-i18n="about.title">A compact digital studio with strategy, design and build in one conversation.</h2>
+        <div>
+          <p class="about__text" data-i18n="about.text">CREATIVE MK helps businesses turn scattered digital needs into a coherent system: brand, website, product experience, content, paid growth, automation, and measurement.</p>
+          <a href="#capabilities" class="link-arrow" data-i18n="about.viewServices">View our services</a>
+        </div>
+      </div>
+    </div>
+    <!-- The stock "team" carousel is gone: six strangers' photos two sections
+         above a ledger that says "Team: 1" was the page's loudest honesty
+         contradiction. The section returns as an artifacts shelf when real
+         artifacts exist (immersive-plan §9). -->
+    <div class="container">
+      <div class="about__bottom reveal">
+        <p class="about__bottom-text" data-i18n="about.bottomText">The work is intentionally focused: understand the business, sharpen the message, design the experience, build what is needed, and connect the follow-up path so every touchpoint has a job.</p>
+        <a href="contact.html" class="link-arrow" data-i18n="about.learnMore">Talk to CREATIVE MK</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FEATURED NEWS ========== -->
+  <section class="news section" id="news">
+    <div class="container">
+      <div class="news__header reveal">
+        <h2 class="news__title" data-i18n="news.title">Insights</h2>
+        <a href="contact.html" class="link-arrow text-white" data-i18n="news.visitBlog">Ask for guidance</a>
+      </div>
+      <div class="news__grid" id="news-grid">
+        <!-- News cards generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FAQ ========== -->
+  <section class="faq section" id="faq">
+    <div class="container">
+      <div class="faq__header reveal">
+        <h2 class="faq__title" data-i18n="faq.title">Frequently Asked Questions</h2>
+      </div>
+      <div class="faq__list" id="faq-list" role="region" aria-label="FAQ">
+        <!-- FAQ items generated by JS -->
+      </div>
+    </div>
+  </section>
+
+  

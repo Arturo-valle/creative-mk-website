@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="{{ lang or 'en' }}">
+<head>
+{% include "head.njk" %}
+</head>
+<body{% if subpage %} class="subpage"{% endif %}>
+
+  {#- The stage: two fixed planes behind the whole page (css/stage.css,
+      js/stage.js), and on capable hardware the persistent terrain canvas on
+      top of them (js/terrain.js, reached through the gate in js/main.js).
+      When the canvas runs it paints the whole color story itself; when it
+      cannot, the planes underneath are the same story without the field. -#}
+  <div class="page-stage" aria-hidden="true">
+    <div class="page-stage__paper"></div>
+    <div class="page-stage__ink"></div>
+    <canvas class="page-stage__canvas" id="page-canvas"></canvas>
+  </div>
+
+  <a href="#main-content" class="skip-nav">Skip to content</a>
+
+{% include "header.njk" %}
+
+  <main id="main-content"{% if subpage %} class="subpage__main"{% endif %}>
+{{ content | safe }}
+  </main>
+
+{% include "footer.njk" %}
+
+{% include "scripts.njk" %}
+</body>
+</html>

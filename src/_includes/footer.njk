@@ -1,0 +1,86 @@
+{#- One footer everywhere — it is the site's sitemap, and every page needs it.
+    Anchors are prefixed with {{ home }} so a subpage's "Services" link goes to
+    the homepage section instead of nowhere. -#}
+  <footer class="footer" id="contact">
+    <div class="container">
+      {#- The finale (immersive-plan §11): the CTA fills with gold as you
+          scroll toward it, over a ghost of the SAME phrase in the OTHER
+          language — the one brand fact no competitor shares, used as the
+          design device. i18n.js keeps the pair inverted on every swap via
+          data-i18n-alt. Without JS the gold layer simply shows filled. -#}
+      <div class="footer__cta reveal">
+        <p class="footer__cta-label" data-i18n="footer.ctaLabel">Start a project</p>
+        <div class="footer__cta-stack">
+          <span class="footer__cta-title footer__cta-title--ghost" aria-hidden="true" data-i18n-alt="footer.ctaTitle">Hablemos</span>
+          <a href="/contact.html" class="footer__cta-title footer__cta-title--fill" data-i18n="footer.ctaTitle">Let's Talk</a>
+        </div>
+      </div>
+      <div class="footer__contact">
+        <div class="footer__contact-item">
+          <span class="footer__contact-label" data-i18n="footer.emailLabel">New Business</span>
+          <a href="mailto:hey@creativemk.net" class="footer__contact-value">hey@creativemk.net</a>
+        </div>
+        <div class="footer__contact-item">
+          <span class="footer__contact-label" data-i18n="footer.phoneLabel">Project Path</span>
+          <a href="/contact.html" class="footer__contact-value" data-i18n="footer.projectPath">Send a brief</a>
+        </div>
+      </div>
+      <div class="footer__main">
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.navigation">Navigation</h4>
+          <ul class="footer__nav-list">
+            <li><a href="/work/" class="footer__nav-link" data-i18n="nav.work">Work</a></li>
+            <li><a href="/lab/" class="footer__nav-link" data-i18n="nav.lab">Lab</a></li>
+            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.services">Services</a></li>
+            <li><a href="{{ home }}#about" class="footer__nav-link" data-i18n="nav.about">About</a></li>
+            <li><a href="{{ home }}#news" class="footer__nav-link" data-i18n="nav.blog">Insights</a></li>
+            <li><a href="/contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.services">Services</h4>
+          <ul class="footer__nav-list">
+            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.webDesign">Websites</a></li>
+            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.uxui">UX/UI Design</a></li>
+            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.metaAds">Growth &amp; Marketing</a></li>
+            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.branding">Branding</a></li>
+            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.appDev">Development</a></li>
+            <li><a href="{{ home }}#ai-automation" class="footer__nav-link" data-i18n="nav.aiAutomation">AI Automation</a></li>
+          </ul>
+        </div>
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.office">Office</h4>
+          <div class="footer__offices">
+            <div class="footer__office">
+              <span class="footer__office-city">CREATIVE MK HQ</span>
+              <span class="footer__office-address" data-i18n="footer.address">Digital-first agency<br>Available worldwide</span>
+            </div>
+          </div>
+        </div>
+        <div>
+          <h4 class="footer__column-title" data-i18n="footer.stayUpdated">Stay Updated</h4>
+          <div class="footer__newsletter">
+            <p class="footer__newsletter-text" data-i18n="footer.newsletterText">Get occasional notes on branding, UX, websites, growth systems, and practical AI.</p>
+            <form class="footer__newsletter-form" id="newsletter-form">
+              <input type="email" class="footer__newsletter-input" placeholder="Your email" data-i18n-placeholder="footer.emailPlaceholder" required>
+              <button type="submit" class="footer__newsletter-btn" data-i18n="footer.subscribe">Subscribe</button>
+            </form>
+            <p class="footer__newsletter-success" id="newsletter-success" hidden>&#10003; <span data-i18n="footer.subscribeSuccess">Thanks for subscribing!</span></p>
+            <div class="footer__social">
+              <a href="/contact.html" class="footer__social-link" data-i18n="hero.primaryCta">Start a project</a>
+              <a href="mailto:hey@creativemk.net" class="footer__social-link">Email</a>
+              <a href="{{ home }}#capabilities" class="footer__social-link" data-i18n="nav.services">Services</a>
+              <a href="{{ home }}#news" class="footer__social-link" data-i18n="nav.blog">Insights</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <p class="footer__copyright">&copy; 2026 CREATIVE MK. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <div class="footer__legal">
+          <a href="/privacy/" class="footer__legal-link" data-i18n="footer.privacy">Privacy Notice</a>
+          <a href="/terms/" class="footer__legal-link" data-i18n="footer.terms">Service Terms</a>
+        </div>
+      </div>
+    </div>
+  </footer>

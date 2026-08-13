@@ -1,0 +1,66 @@
+{#- One header for the whole site. It used to exist in eight hand-maintained
+    variants across three technologies, which is the economic reason the site
+    stopped at six URLs: every new page meant another copy to keep in sync.
+
+    Subpages pass `subpage: true` and get the frosted state plus the same
+    navigation — before this, /work/ and /lab/ had no site nav at all, so a
+    visitor who reached them could only go home or to the contact form. -#}
+  <header class="header{% if subpage %} scrolled subpage__header{% endif %}" id="header">
+    <div class="header__inner">
+      <a href="/" class="header__logo" aria-label="CREATIVE MK Home">
+        <span class="header__logo-mark">CREATIVE<span class="header__logo-mk">mk</span></span>
+      </a>
+      {#- Wayfinding (immersive-plan §12): the underline slides to the link
+          whose section is on screen — one indicator, moved by js/daylight.js.
+          The dropdown stops being furniture: each item opens its own
+          accordion row via data-cap-index, or jumps to its real section. -#}
+      <nav class="header__nav" id="main-nav" aria-label="Main navigation">
+        <a href="/work/" class="header__nav-link" data-nav-section="work" data-i18n="nav.work">Work</a>
+        <div class="header__dropdown">
+          <button class="header__dropdown-trigger" data-nav-section="capabilities" aria-expanded="false" aria-haspopup="true">
+            <span data-i18n="nav.services">Services</span>
+            <svg class="header__dropdown-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>
+          </button>
+          <div class="header__dropdown-menu" role="menu">
+            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="0" data-i18n="nav.branding">Branding</a>
+            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="1" data-i18n="nav.webDesign">Websites</a>
+            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="2" data-i18n="nav.uxui">Digital Product UX/UI</a>
+            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="3" data-i18n="nav.metaAds">Growth &amp; Marketing</a>
+            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="5" data-i18n="nav.appDev">Development</a>
+            <a href="{{ home }}#ai-automation" class="header__dropdown-item" role="menuitem" data-i18n="nav.aiAutomation">AI Automation</a>
+            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.allServices">All Capabilities</a>
+          </div>
+        </div>
+        <a href="/lab/" class="header__nav-link" data-nav-section="lab" data-i18n="nav.lab">Lab</a>
+        <a href="{{ home }}#about" class="header__nav-link" data-nav-section="about" data-i18n="nav.about">About</a>
+        <a href="{{ home }}#news" class="header__nav-link" data-nav-section="news" data-i18n="nav.blog">Insights</a>
+        <span class="header__nav-underline" aria-hidden="true"></span>
+      </nav>
+      <div class="header__right">
+        <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="Ambient sound / Sonido ambiental">
+          <span class="sound-toggle__bar"></span><span class="sound-toggle__bar"></span><span class="sound-toggle__bar"></span>
+        </button>
+        <div class="lang-switch" id="lang-switch">
+          <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
+          <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
+        </div>
+        <a href="/contact.html" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
+      </div>
+      <button class="header__menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <div class="header__rule" aria-hidden="true"></div>
+    <nav class="header__mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
+      <a href="/work/" class="header__mobile-nav-link" data-i18n="nav.work">Work</a>
+      <a href="/lab/" class="header__mobile-nav-link" data-i18n="nav.lab">Lab</a>
+      <a href="{{ home }}#capabilities" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
+      <a href="{{ home }}#about" class="header__mobile-nav-link" data-i18n="nav.about">About</a>
+      <a href="{{ home }}#news" class="header__mobile-nav-link" data-i18n="nav.blog">Insights</a>
+      <a href="/contact.html" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
+      <div class="lang-switch" style="margin-top:auto;">
+        <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
+        <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
+      </div>
+    </nav>
+  </header>

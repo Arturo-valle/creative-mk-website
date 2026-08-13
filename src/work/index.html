@@ -1,0 +1,51 @@
+---
+layout: "layout.njk"
+subpage: true
+title: "Selected Work | CREATIVE MK"
+description: "The CREATIVE MK work ledger: client engagements published with a name and a number, or not published at all."
+canonical: "/work/"
+jsonld: |
+  {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "url": "https://creativemk.net/work/",
+      "name": "Selected Work — CREATIVE MK",
+      "inLanguage": ["en", "es"],
+      "about": { "@id": "https://creativemk.net/#studio" }
+    }
+---
+
+    <div class="container">
+
+      <span class="section-kicker" data-i18n="workPage.kicker">The ledger</span>
+      <h1 class="subpage__title" data-i18n="workPage.title">Client work, with a name and a number.</h1>
+      <p class="subpage__lede" data-i18n="workPage.lede">Every engagement on this page is published with the client's name and an agreed figure, or it is not published. That rule is why the list below is short — and why it can be trusted.</p>
+
+      <!-- The two signed engagements. Each bar becomes a full case page the
+           day its client signs off on the name — removing the bar IS the
+           announcement (immersive-plan §8). -->
+      <section class="workpage__slots" aria-label="Signed engagements">
+        <article class="workpage__slot">
+          <span class="workpage__slot-index" aria-hidden="true">01</span>
+          <span class="work__redaction workpage__slot-bar" aria-hidden="true"></span>
+          <h2 class="workpage__slot-title" data-i18n="workPage.slotLabel">Signed engagement</h2>
+          <p class="workpage__slot-note" data-i18n="workPage.slotNote">In production. Published with the client's name and an agreed number, or not at all.</p>
+        </article>
+        <article class="workpage__slot">
+          <span class="workpage__slot-index" aria-hidden="true">02</span>
+          <span class="work__redaction workpage__slot-bar" aria-hidden="true"></span>
+          <h2 class="workpage__slot-title" data-i18n="workPage.slotLabel">Signed engagement</h2>
+          <p class="workpage__slot-note" data-i18n="workPage.slotNote">In production. Published with the client's name and an agreed number, or not at all.</p>
+        </article>
+        <article class="workpage__slot workpage__slot--lab">
+          <span class="workpage__slot-index" aria-hidden="true">03</span>
+          <h2 class="workpage__slot-title" data-i18n="workPage.labTitle">Self-initiated: the lab</h2>
+          <p class="workpage__slot-note" data-i18n="workPage.labNote">What the studio builds for itself, in public: the intake agent running this site and the WebGL terrain behind its hero.</p>
+          <a class="link-arrow" href="/lab/" data-i18n="workPage.labCta">Enter the lab</a>
+        </article>
+      </section>
+
+      <p class="subpage__footnote" data-i18n="workPage.close">No borrowed logos, no "capability showcases", no stock. When a name goes up here, it is real.</p>
+
+    </div>
+  

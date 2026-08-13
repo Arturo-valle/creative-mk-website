@@ -1,0 +1,23 @@
+{#- GSAP is deferred on purpose: it must not block render, and everything that
+    uses it waits for DOMContentLoaded, which deferred scripts precede. Order
+    matters within the deferred group: core, plugins, then consumers.
+
+    The hand-written ?v= query strings are gone — the fingerprint pass in
+    scripts/fingerprint.mjs rewrites every one of these to a content-hashed
+    filename, which is a strictly better cache key and needs no human to
+    remember to bump it. -#}
+  <script src="/js/vendor/gsap.min.js" defer></script>
+  <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
+  <script src="/js/vendor/SplitText.min.js" defer></script>
+  <script src="/js/vendor/lenis.min.js" defer></script>
+  <script src="/js/stage.js" defer></script>
+  <script src="/js/arrival.js" defer></script>
+  <script src="/js/daylight.js" defer></script>
+  <script src="/js/cursor.js" defer></script>
+  <script src="/js/ambient.js" defer></script>
+  <script src="/js/i18n.js"></script>
+  <script src="/js/accordion.js"></script>
+  <script src="/js/animations.js"></script>
+  <script src="/js/header.js"></script>
+  <script src="/js/main.js"></script>
+  <script src="/js/ai-concierge.js"></script>

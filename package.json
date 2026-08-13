@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "npm run build:contact && node scripts/build-pages.mjs",
+    "build": "npm run build:contact && node scripts/copy-assets.mjs && npx @11ty/eleventy && node scripts/fingerprint.mjs",
     "dev:contact": "vite --host 127.0.0.1",
     "build:contact": "vite build && node scripts/copy-contact-build.mjs",
     "preview:contact": "vite preview --host 127.0.0.1",
@@ -27,6 +27,7 @@
     "vite": "^7.0.0"
   },
   "devDependencies": {
+    "@11ty/eleventy": "^3.1.6",
     "wrangler": "^4.97.0"
   }
 }
