@@ -22,23 +22,34 @@ pageSchema:
       <!-- The two signed engagements. Each bar becomes a full case page the
            day its client signs off on the name — removing the bar IS the
            announcement (immersive-plan §8). -->
-      <section class="workpage__slots" aria-label="Signed engagements">
+      {#- Published first: the studio's own work, which needs nobody's
+          permission. Then the two signed engagements as redaction bars — the
+          bar's removal is how a case announces itself. -#}
+      <section class="workpage__slots" aria-label="Published work">
+        {%- for case in cases %}
+        <article class="workpage__slot workpage__slot--published">
+          <span class="workpage__slot-index" aria-hidden="true">0{{ loop.index }}</span>
+          <h2 class="workpage__slot-title"><a href="/work/{{ case.slug }}/">{{ case.en.title }}</a></h2>
+          <p class="workpage__slot-note">{{ case.en.lead }} &middot; {{ case.en.client }} &middot; {{ case.year }}</p>
+          <p class="workpage__slot-figure"><strong>{{ case.en.figure }}</strong> {{ case.en.figureLabel }}</p>
+        </article>
+        {%- endfor %}
         <article class="workpage__slot">
-          <span class="workpage__slot-index" aria-hidden="true">01</span>
+          <span class="workpage__slot-index" aria-hidden="true">03</span>
           <span class="work__redaction workpage__slot-bar" aria-hidden="true"></span>
           <h2 class="workpage__slot-title" data-i18n="workPage.slotLabel">Signed engagement</h2>
           <p class="workpage__slot-note" data-i18n="workPage.slotNote">In production. Published with the client's name and an agreed number, or not at all.</p>
         </article>
         <article class="workpage__slot">
-          <span class="workpage__slot-index" aria-hidden="true">02</span>
+          <span class="workpage__slot-index" aria-hidden="true">04</span>
           <span class="work__redaction workpage__slot-bar" aria-hidden="true"></span>
           <h2 class="workpage__slot-title" data-i18n="workPage.slotLabel">Signed engagement</h2>
           <p class="workpage__slot-note" data-i18n="workPage.slotNote">In production. Published with the client's name and an agreed number, or not at all.</p>
         </article>
         <article class="workpage__slot workpage__slot--lab">
-          <span class="workpage__slot-index" aria-hidden="true">03</span>
+          <span class="workpage__slot-index" aria-hidden="true">05</span>
           <h2 class="workpage__slot-title" data-i18n="workPage.labTitle">Self-initiated: the lab</h2>
-          <p class="workpage__slot-note" data-i18n="workPage.labNote">What the studio builds for itself, in public: the intake agent running this site and the WebGL terrain behind its hero.</p>
+          <p class="workpage__slot-note" data-i18n="workPage.labNote">What the studio builds for itself, in public.</p>
           <a class="link-arrow" href="/lab/" data-i18n="workPage.labCta">Enter the lab</a>
         </article>
       </section>

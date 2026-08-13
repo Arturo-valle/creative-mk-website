@@ -10,13 +10,17 @@ eleventyExcludeFromCollections: true
     template that paginates contributes only its first output there. -#}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 {%- for item in collections.all %}
-{%- if item.url and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/404" not in item.url %}
+{%- if item.url and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/work/" not in item.url and "/404" not in item.url %}
   <url><loc>{{ site.origin }}{{ item.url }}</loc></url>
 {%- endif %}
 {%- endfor %}
+  <url><loc>{{ site.origin }}/work/</loc></url>
   <url><loc>{{ site.origin }}/services/</loc></url>
 {%- for service in services %}
   <url><loc>{{ site.origin }}/services/{{ service.slug }}/</loc></url>
+{%- endfor %}
+{%- for case in cases %}
+  <url><loc>{{ site.origin }}/work/{{ case.slug }}/</loc></url>
 {%- endfor %}
   <url><loc>{{ site.origin }}/insights/</loc></url>
 {%- for note in notes %}

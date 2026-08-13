@@ -1,0 +1,96 @@
+---
+pagination:
+  data: cases
+  size: 1
+  alias: case
+permalink: "/work/{{ case.slug }}/"
+layout: "layout.njk"
+subpage: true
+eleventyComputed:
+  title: "{{ case.en.title | safe }} | CREATIVE MK"
+  description: "{{ case.en.challenge | truncate(155) }}"
+  ogDescription: "{{ case.en.lead | safe }} — {{ case.en.client | safe }}."
+  canonical: "/work/{{ case.slug }}/"
+  pageSchema:
+    "@type": "CreativeWork"
+    "@id": "https://creativemk.net/work/{{ case.slug }}/#case"
+    name: "{{ case.en.title | safe }}"
+    url: "https://creativemk.net/work/{{ case.slug }}/"
+    abstract: "{{ case.en.challenge | truncate(200) }}"
+    inLanguage: "en"
+    dateCreated: "{{ case.year }}"
+    creator:
+      "@id": "https://creativemk.net/#studio"
+---
+    <div class="container">
+      <article class="case">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="/work/" data-i18n="work.kicker">Selected work</a>
+          <span aria-hidden="true">/</span>
+          <span aria-current="page">{{ case.en.client }}</span>
+        </nav>
+
+        <span class="section-kicker">{{ case.en.lead }}</span>
+        <h1 class="subpage__title">{{ case.en.title }}</h1>
+
+        <p class="case__figure">
+          <span class="case__figure-value">{{ case.en.figure }}</span>
+          <span class="case__figure-label">{{ case.en.figureLabel }}</span>
+        </p>
+
+        <section class="svc__block" aria-labelledby="case-challenge">
+          <h2 id="case-challenge" class="svc__block-title" data-i18n="casePage.challenge">The problem</h2>
+          <p class="case__prose">{{ case.en.challenge }}</p>
+        </section>
+
+        <section class="svc__block" aria-labelledby="case-approach">
+          <h2 id="case-approach" class="svc__block-title" data-i18n="casePage.approach">What we built</h2>
+          <p class="case__prose">{{ case.en.approach }}</p>
+        </section>
+
+        <section class="svc__block" aria-labelledby="case-result">
+          <h2 id="case-result" class="svc__block-title" data-i18n="casePage.result">Where it stands</h2>
+          <p class="case__prose">{{ case.en.result }}</p>
+        </section>
+
+        {#- Every figure below is checkable in the public repository. A case
+            that cannot be verified does not get numbers. -#}
+        <section class="svc__block" aria-labelledby="case-proof">
+          <h2 id="case-proof" class="svc__block-title" data-i18n="casePage.proof">Checkable figures</h2>
+          <dl class="case__proof">
+            {%- for item in case.en.proof %}
+            <div>
+              <dt class="case__proof-value">{{ item.value }}</dt>
+              <dd class="case__proof-label">{{ item.label }}</dd>
+            </div>
+            {%- endfor %}
+          </dl>
+        </section>
+
+        <section class="svc__block" aria-labelledby="case-deliverables">
+          <h2 id="case-deliverables" class="svc__block-title" data-i18n="casePage.deliverables">Deliverables</h2>
+          <ul class="svc__tags">
+            {%- for item in case.en.deliverables %}
+            <li>{{ item }}</li>
+            {%- endfor %}
+          </ul>
+          <p class="case__stack"><span data-i18n="casePage.stack">Stack</span>: {{ case.en.stack | join(" · ") }}</p>
+        </section>
+
+        <section class="svc__cta" aria-labelledby="case-cta">
+          <h2 id="case-cta" class="svc__cta-title" data-i18n="casePage.ctaTitle">This is the studio's own work.</h2>
+          <p class="svc__cta-text" data-i18n="casePage.ctaText">Client engagements go up with a name and an agreed figure, or they do not go up. Two are signed and in production.</p>
+          <a class="hero__cta" href="/contact.html" data-i18n="hero.primaryCta">Start a project</a>
+        </section>
+
+        <nav class="note__siblings" aria-label="More work">
+          <h2 class="svc__block-title" data-i18n="casePage.nextTitle">Next</h2>
+          <ul>
+            {%- for other in cases %}{% if other.slug != case.slug %}
+            <li><a href="/work/{{ other.slug }}/">{{ other.en.title }}</a></li>
+            {%- endif %}{% endfor %}
+            <li><a href="/work/">&larr; <span data-i18n="workPage.kicker">The ledger</span></a></li>
+          </ul>
+        </nav>
+      </article>
+    </div>
