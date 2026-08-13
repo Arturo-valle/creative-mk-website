@@ -14,7 +14,8 @@
    This supersedes js/hero-3d.js (three.js, hero-only, scrolled out at the
    top — the exact pattern the 2026 award research showed stopped winning).
    Fragment-shader contours replace vertex displacement: same signature,
-   ~12KB of OGL modules instead of ~118KB of three.js. Surgical imports on
+   25KB gzipped of OGL modules instead of 184KB of three.js (measured
+   across the full import closure, not the six files named below). Surgical imports on
    purpose — OGL's index.js re-exports 64 modules and the browser would
    fetch all of them.
 

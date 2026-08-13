@@ -495,6 +495,16 @@ async function checkStructuredData() {
 
     if (CLIENT_RENDERED.has(name)) continue;
 
+    /* A published case study claims "0 render-blocking scripts, site-wide".
+       That is only allowed to stay on the page while it is true, so the gate
+       owns it: any classic <script src> without defer/async/module fails the
+       build. The claim and the check ship together. */
+    for (const tag of html.matchAll(/<script[^>]*\ssrc\s*=\s*"[^"]+"[^>]*>/gi)) {
+      if (/\s(?:defer|async)/i.test(tag[0])) continue;
+      if (/\stype\s*=\s*"module"/i.test(tag[0])) continue;
+      error(check, `${name} has a render-blocking script: ${tag[0].slice(0, 80)}`);
+    }
+
     /* Titles and descriptions must be unique: two pages sharing either are
        competing for the same query. */
     const title = html.match(/<title>([\s\S]*?)<\/title>/i)?.[1]?.trim();
