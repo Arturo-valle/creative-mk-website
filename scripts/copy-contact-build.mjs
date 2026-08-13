@@ -32,14 +32,20 @@ if (!scriptMatch || !styleMatch) {
   throw new Error('Could not find built contact JS/CSS assets to inline.');
 }
 
-const script = (await readFile(join(buildDir, 'assets', scriptMatch[1]), 'utf8')).replace(/<\/script/gi, '<\\/script');
+/* The bundle ships as an external module, not inlined. It used to be a
+   214 KB classic <script> at the top of <body>, blocking the first paint of
+   the page every CTA on the site points at — while the identical file sat in
+   contact-assets/ referenced by nothing. A module script defers by
+   definition. */
+const scriptSrc = '/contact-assets/' + scriptMatch[1];
 const styles = await readFile(join(buildDir, 'assets', styleMatch[1]), 'utf8');
 
 html = html
   .replace(styleMatch[0], () => `<style>\n${styles}\n</style>`)
   .replace(scriptMatch[0], '')
   .replace(/(["'])\.{0,2}\/?assets\//g, '$1./contact-assets/')
-  .replace('</body>', () => `  <script>\n${script}\n</script>\n  </body>`)
+  .replace('</body>', () => `  <script type="module" src="${scriptSrc}"></script>
+  </body>`)
   .replace(/^[ \t]+$/gm, '');
 
 await writeFile(rootHtml, html, 'utf8');

@@ -14,7 +14,7 @@ const faq = {
     },
     {
       "q": "Are the projects shown real client case studies?",
-      "a": "Yes — that is the only thing the work section accepts. Two signed projects are waiting on their client to approve a name and a figure, and until then they are counted but not shown. Nothing invented stands in for them."
+      "a": "Client work is only published with a name and an agreed figure, and two engagements are signed but not yet publishable. The two cases open today are the studio's own, labelled as self-initiated. Two signed projects are waiting on their client to approve a name and a figure, and until then they are counted but not shown. Nothing invented stands in for them."
     },
     {
       "q": "Can you redesign an existing website or brand?",

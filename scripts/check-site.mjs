@@ -493,8 +493,6 @@ async function checkStructuredData() {
       }
     }
 
-    if (CLIENT_RENDERED.has(name)) continue;
-
     /* A published case study claims "0 render-blocking scripts, site-wide".
        That is only allowed to stay on the page while it is true, so the gate
        owns it: any classic <script src> without defer/async/module fails the
@@ -504,6 +502,15 @@ async function checkStructuredData() {
       if (/\stype\s*=\s*"module"/i.test(tag[0])) continue;
       error(check, `${name} has a render-blocking script: ${tag[0].slice(0, 80)}`);
     }
+    /* Inline classic scripts block as surely as external ones. The reveal
+       bootstrap is deliberately inline and tiny; anything large is a bug. */
+    for (const inline of html.matchAll(/<script(?![^>]*\ssrc)(?![^>]*type\s*=\s*"(?:module|application)[^"]*")[^>]*>([\s\S]*?)<\/script>/gi)) {
+      if (inline[1].length > 4096) {
+        error(check, `${name} has a ${(inline[1].length / 1024).toFixed(0)} KB inline render-blocking script`);
+      }
+    }
+
+    if (CLIENT_RENDERED.has(name)) continue;
 
     /* Titles and descriptions must be unique: two pages sharing either are
        competing for the same query. */

@@ -602,3 +602,9 @@
 @media (max-width: 640px) {
   .workpage__slot-figure { grid-column: 1; }
 }
+
+/* Self-initiated work says so, everywhere it appears. */
+.workpage__own {
+  color: #7A5C12;
+  font-weight: var(--weight-semibold);
+}

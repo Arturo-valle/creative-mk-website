@@ -16,8 +16,8 @@ pageSchema:
     <div class="container">
 
       <span class="section-kicker" data-i18n="workPage.kicker">The ledger</span>
-      <h1 class="subpage__title" data-i18n="workPage.title">Client work, with a name and a number.</h1>
-      <p class="subpage__lede" data-i18n="workPage.lede">Every engagement on this page is published with the client's name and an agreed figure, or it is not published. That rule is why the list below is short — and why it can be trusted.</p>
+      <h1 class="subpage__title" data-i18n="workPage.title">The ledger: what is published, and what is not yet.</h1>
+      <p class="subpage__lede" data-i18n="workPage.lede">Client work is published with the client's name and an agreed figure, or it is not published — which is why two engagements below appear as redaction bars rather than as case studies. The two that are open are the studio's own, labelled as such.</p>
 
       <!-- The two signed engagements. Each bar becomes a full case page the
            day its client signs off on the name — removing the bar IS the
@@ -30,7 +30,7 @@ pageSchema:
         <article class="workpage__slot workpage__slot--published">
           <span class="workpage__slot-index" aria-hidden="true">0{{ loop.index }}</span>
           <h2 class="workpage__slot-title"><a href="/work/{{ case.slug }}/">{{ case.en.title }}</a></h2>
-          <p class="workpage__slot-note">{{ case.en.lead }} &middot; {{ case.en.client }} &middot; {{ case.year }}</p>
+          <p class="workpage__slot-note"><span class="workpage__own" data-i18n="workPage.selfLabel">Self-initiated</span> &middot; {{ case.en.lead }} &middot; {{ case.year }}</p>
           <p class="workpage__slot-figure"><strong>{{ case.en.figure }}</strong> {{ case.en.figureLabel }}</p>
         </article>
         {%- endfor %}
@@ -54,7 +54,7 @@ pageSchema:
         </article>
       </section>
 
-      <p class="subpage__footnote" data-i18n="workPage.close">No borrowed logos, no "capability showcases", no stock. When a name goes up here, it is real.</p>
+      <p class="subpage__footnote" data-i18n="workPage.close">No borrowed logos, no "capability showcases", no stock. The self-initiated work says whose it is; the client work waits for permission.</p>
 
     </div>
   

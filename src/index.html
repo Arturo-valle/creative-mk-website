@@ -230,7 +230,7 @@ extraSchema: "faq"
       <div class="work__header reveal">
         <div>
           <span class="section-kicker" data-i18n="work.kicker">Selected work</span>
-          <h2 class="work__title" data-i18n="work.title">Client work, with a name and a number. Nothing else goes here.</h2>
+          <h2 class="work__title" data-i18n="work.title">The ledger: what is published, and what is not yet.</h2>
         </div>
         <a href="/work/" class="link-arrow" data-i18n="work.viewAll">See the ledger</a>
       </div>
@@ -242,7 +242,7 @@ extraSchema: "faq"
         <a class="workplate reveal" href="/work/{{ case.slug }}/">
           <span class="workplate__index" aria-hidden="true">0{{ loop.index }}</span>
           <span class="workplate__title">{{ case.en.title }}</span>
-          <span class="workplate__lead">{{ case.en.lead }}</span>
+          <span class="workplate__lead"><span data-i18n="workPage.selfLabel">Self-initiated</span> &middot; {{ case.en.lead }}</span>
           <span class="workplate__figure"><strong>{{ case.en.figure }}</strong> {{ case.en.figureLabel }}</span>
         </a>
         {%- endfor %}
