@@ -1,0 +1,40 @@
+---
+layout: "layout.njk"
+subpage: true
+title: "Services | CREATIVE MK"
+description: "Six services that chain into one system: branding, websites, product UX/UI, growth, AI automation and development."
+ogDescription: "Six services, one system. Branding through AI automation."
+canonical: "/services/"
+jsonld: |
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "url": "https://creativemk.net/services/",
+    "name": "Services — CREATIVE MK",
+    "inLanguage": ["en", "es"],
+    "about": { "@id": "https://creativemk.net/#studio" }
+  }
+---
+    <div class="container">
+
+      <span class="section-kicker" data-i18n="servicesPage.kicker">Services</span>
+      <h1 class="subpage__title" data-i18n="servicesPage.title">Six services that chain, not six things on a menu.</h1>
+      <p class="subpage__lede" data-i18n="servicesPage.lede">Most work here starts in one of three places — a brand that does not hold, a site that does not explain, or attention that has nowhere to go — and the rest follows in a predictable order. You can buy one. It just helps to know where it sits.</p>
+
+      <ol class="svcindex">
+        {%- for service in services %}
+        <li class="svcindex__row">
+          <span class="svcindex__num" aria-hidden="true">0{{ loop.index }}</span>
+          <div class="svcindex__body">
+            <h2 class="svcindex__title"><a href="/services/{{ service.slug }}/">{{ service.en.title }}</a></h2>
+            <p class="svcindex__lead">{{ service.en.lead }}</p>
+            <p class="svcindex__desc">{{ service.en.desc }}</p>
+          </div>
+          <a class="svcindex__go" href="/services/{{ service.slug }}/" aria-label="{{ service.en.title }}">&rarr;</a>
+        </li>
+        {%- endfor %}
+      </ol>
+
+      <p class="subpage__footnote" data-i18n="servicesPage.close">Nothing here is a package. Every engagement starts with a written proposal that names the scope, the deliverables and the price — see the <a href="/terms/">terms</a>.</p>
+
+    </div>

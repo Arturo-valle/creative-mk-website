@@ -132,20 +132,11 @@
       return;
     }
 
-    /* Revelados variados: la uniformidad del fade-up en todo es firma de
-       plantilla. Las filas del proceso entran desde su costado; el resto,
-       desde abajo. Dos vocabularios, no veinte. */
-    gsap.utils.toArray('[data-rev="2"]').forEach((el) => {
-      const esFila = el.classList.contains('paso');
-      gsap.fromTo(el,
-        esFila ? { x: -30, opacity: 0 } : { y: 26, opacity: 0 },
-        {
-          x: 0, y: 0, opacity: 1, duration: esFila ? .7 : .85, ease: 'power3.out',
-          scrollTrigger: { trigger: el, start: 'top 84%', once: true }
-        });
-    });
-
-    // Pista horizontal con pin, solo escritorio
+    /* EL PIN VA PRIMERO, y no es estilo: es el bug que mataba la mitad
+       inferior. Si los revelados se crean antes que el pin, sus starts se
+       calculan sin el espacio del pin-spacer (2100px), caen dentro del rango
+       pineado y con once:true se queman fuera de cámara. El 40% inferior de
+       la página entraba sin animación por esto. */
     const carril = $('#carril');
     const viewport = $('#pista-viewport');
     if (carril && viewport && anchoOk) {
@@ -160,15 +151,30 @@
           pin: viewport,
           scrub: 0.8,
           invalidateOnRefresh: true,
-          anticipatePin: 1
+          anticipatePin: 1,
+          refreshPriority: 1
         }
       });
     }
 
+    /* Revelados variados: la uniformidad del fade-up en todo es firma de
+       plantilla. Las filas del proceso entran desde su costado; el resto,
+       desde abajo. Dos vocabularios, no veinte. */
+    gsap.utils.toArray('[data-rev="2"]').forEach((el) => {
+      const esFila = el.classList.contains('paso');
+      gsap.fromTo(el,
+        esFila ? { x: -30, opacity: 0 } : { y: 26, opacity: 0 },
+        {
+          x: 0, y: 0, opacity: 1, duration: esFila ? .7 : .85, ease: 'power3.out',
+          scrollTrigger: { trigger: el, start: 'top 84%', once: true }
+        });
+    });
+    window.ScrollTrigger.sort();
+
     /* Tipografia cinetica: la velocidad del scroll pesa sobre la variable.
        Inter "usada", no Inter por defecto: el texto gana masa al frenar. */
     if (lenis) {
-      const cineticos = Array.from(document.querySelectorAll('#h1, .lg'));
+      const cineticos = Array.from(document.querySelectorAll('#h1, .lg, .telon__mail'));
       let wAct = 800;
       gsap.ticker.add(() => {
         const v = Math.min(2.2, Math.abs(lenis.velocity || 0));
@@ -232,9 +238,17 @@
     const d = {};
     try { d.referrer = document.referrer ? new URL(document.referrer).hostname.replace(/^www\./, '') : 'direct'; }
     catch { d.referrer = 'unknown'; }
-    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'].forEach((k) => {
+    ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term', 'fbclid'].forEach((k) => {
       const v = p.get(k); if (v) d[k] = v.slice(0, 120);
     });
+    // Cookies que Meta escribe si algun dia hay pixel; el Worker las usa
+    // para deduplicar CAPI. Leerlas en su ausencia es inocuo.
+    try {
+      const fbp = document.cookie.match(/(?:^|; )_fbp=([^;]+)/);
+      const fbc = document.cookie.match(/(?:^|; )_fbc=([^;]+)/);
+      if (fbp) d.fbp = fbp[1];
+      if (fbc) d.fbc = fbc[1];
+    } catch { /* sin cookies */ }
     return d;
   }
 
@@ -288,6 +302,10 @@
       }
     });
   }
+
+  window.creativeMkTrackLead = window.creativeMkTrackLead || function (params) {
+    try { if (typeof window.fbq === 'function') window.fbq('track', 'Lead', params); } catch { /* sin pixel */ }
+  };
 
   function iniciar() {
     iniciarFormulario();

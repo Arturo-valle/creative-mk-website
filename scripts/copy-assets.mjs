@@ -10,7 +10,6 @@ const distDir = join(root, 'dist');
 const publicEntries = [
   'contact.html',
   'robots.txt',
-  'sitemap.xml',
   'lp',
   '_headers',
   'favicon.png',

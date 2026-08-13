@@ -104,9 +104,10 @@ p { margin: 0; text-wrap: pretty; }
   font-family: var(--font); font-size: 1rem; font-weight: 700; letter-spacing: -.01em;
   text-decoration: none; cursor: pointer;
   background: var(--off); color: var(--negro);
-  transition: transform 320ms var(--ease), background 320ms var(--ease);
+  transition: background 320ms var(--ease);
 }
 .btn:hover { background: #fff; }
+.btn:active { transform: scale(.985); }
 .sec--papel .btn { background: var(--negro); color: var(--crema); }
 .sec--papel .btn:hover { background: #262626; }
 
@@ -253,3 +254,26 @@ body { font-feature-settings: 'calt' 1, 'liga' 1; }
 
 /* el ritmo uniforme entre secciones es firma de plantilla */
 #proceso { padding-block: clamp(5.5rem, 13vw, 12rem) clamp(3.25rem, 6vw, 5rem); }
+
+/* ---------- telon final: cierra el anillo negro -> crema -> negro ---------- */
+
+.telon {
+  background: var(--negro); color: var(--off);
+  padding: clamp(4rem, 10vw, 8rem) 0 clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid rgba(232,200,64,.4);
+}
+.telon__in { display: flex; flex-direction: column; gap: clamp(1.25rem, 3vw, 2rem); }
+.telon__mail {
+  font-size: clamp(2rem, 1rem + 4.6vw, 4.6rem);
+  font-weight: 800; letter-spacing: -.045em; line-height: .95;
+  color: var(--oro); text-decoration: none; align-self: start;
+}
+.telon__mail:hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.telon__firma { font-size: 1.05rem; color: var(--g3); }
+.telon__firma b { color: var(--off); }
+.telon__micro {
+  display: flex; flex-wrap: wrap; gap: .5rem 2rem;
+  border-top: 1px solid var(--hair); padding-top: 1.1rem; margin-top: 1rem;
+  font-size: .74rem; letter-spacing: .08em; text-transform: uppercase; color: var(--g5);
+}
+.telon__micro a { color: var(--g4); }

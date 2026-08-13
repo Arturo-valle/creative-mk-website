@@ -1,0 +1,76 @@
+---
+pagination:
+  data: services
+  size: 1
+  alias: service
+permalink: "/services/{{ service.slug }}/"
+layout: "layout.njk"
+subpage: true
+eleventyComputed:
+  title: "{{ service.en.title }} | CREATIVE MK"
+  description: "{{ service.en.desc | truncate(155) }}"
+  ogDescription: "{{ service.en.lead }} — {{ service.en.title }} at CREATIVE MK."
+  canonical: "/services/{{ service.slug }}/"
+  jsonld: |
+    {
+      "@context": "https://schema.org",
+      "@type": "Service",
+      "name": "{{ service.en.title }}",
+      "url": "https://creativemk.net/services/{{ service.slug }}/",
+      "serviceType": "{{ service.en.lead }}",
+      "description": "{{ service.en.desc }}",
+      "provider": { "@id": "https://creativemk.net/#studio" },
+      "areaServed": "Worldwide",
+      "availableLanguage": ["en", "es"]
+    }
+---
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="/services/" data-i18n="servicesPage.kicker">Services</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{{ service.en.title }}</span>
+      </nav>
+
+      <span class="section-kicker">{{ service.en.lead }}</span>
+      <h1 class="subpage__title">{{ service.en.title }}</h1>
+      <p class="subpage__lede">{{ service.en.desc }}</p>
+
+      <section class="svc__block" aria-labelledby="svc-fit">
+        <h2 id="svc-fit" class="svc__block-title" data-i18n="servicePage.fitTitle">Who this is for</h2>
+        <p class="svc__proof">{{ service.en.proof }}</p>
+      </section>
+
+      <section class="svc__block" aria-labelledby="svc-what">
+        <h2 id="svc-what" class="svc__block-title" data-i18n="servicePage.whatTitle">What it covers</h2>
+        <ul class="svc__tags">
+          {%- for tag in service.en.tags %}
+          <li>{{ tag }}</li>
+          {%- endfor %}
+        </ul>
+      </section>
+
+      <section class="svc__block" aria-labelledby="svc-how">
+        <h2 id="svc-how" class="svc__block-title" data-i18n="servicePage.howTitle">How the work runs</h2>
+        <ol class="svc__process">
+          <li><span>01</span><strong data-i18n="process.stepOneTitle">Diagnose</strong><span data-i18n="process.stepOneText">We clarify the audience, offer, current bottleneck, and what the first version must prove.</span></li>
+          <li><span>02</span><strong data-i18n="process.stepTwoTitle">Shape</strong><span data-i18n="process.stepTwoText">We define messaging, structure, visual direction, UX flow, and the priority service path.</span></li>
+          <li><span>03</span><strong data-i18n="process.stepThreeTitle">Build</strong><span data-i18n="process.stepThreeText">We design and develop the assets, pages, automations, or product screens needed for launch.</span></li>
+          <li><span>04</span><strong data-i18n="process.stepFourTitle">Measure</strong><span data-i18n="process.stepFourText">We connect capture, follow-up, analytics, and iteration so the system can improve after launch.</span></li>
+        </ol>
+      </section>
+
+      <section class="svc__cta" aria-labelledby="svc-cta">
+        <h2 id="svc-cta" class="svc__cta-title" data-i18n="servicePage.ctaTitle">Start with a diagnosis, not a quote.</h2>
+        <p class="svc__cta-text" data-i18n="servicePage.ctaText">Tell us the bottleneck. If this is not the right service for it, we will say so and point at the one that is.</p>
+        <a class="hero__cta" href="/contact.html?service={{ service.slug }}" data-i18n="hero.primaryCta">Start a project</a>
+      </section>
+
+      <nav class="svc__siblings" aria-label="Other services">
+        <h2 class="svc__block-title" data-i18n="servicesPage.othersTitle">The other five</h2>
+        <ul>
+          {%- for other in services %}{% if other.slug != service.slug %}
+          <li><a href="/services/{{ other.slug }}/"><span>{{ "0" + (loop.index | string) }}</span>{{ other.en.title }}</a></li>
+          {%- endif %}{% endfor %}
+        </ul>
+      </nav>
+    </div>

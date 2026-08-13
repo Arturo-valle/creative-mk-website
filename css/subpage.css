@@ -189,3 +189,326 @@
     grid-column: 1;
   }
 }
+
+/* ============================================
+   The page types the factory produces: service pages, the services index,
+   note pages, the notes index, and the studio ledger. All on the paper
+   ground, all ruled, all using the kicker grammar the rest of the site uses.
+   ============================================ */
+
+.crumbs {
+  display: flex;
+  gap: var(--space-2);
+  align-items: center;
+  margin-bottom: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+}
+
+.crumbs a { color: var(--color-gray-600); text-decoration: none; }
+.crumbs a:hover { color: var(--color-black); }
+
+/* ---- Blocks shared by service, note and studio pages ---- */
+
+.svc__block,
+.studio__block {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.svc__block-title {
+  margin: 0 0 var(--space-5);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.svc__proof,
+.studio__text {
+  margin: 0;
+  max-width: 62ch;
+  font-size: clamp(1.05rem, 1.3vw, 1.2rem);
+  line-height: 1.6;
+  color: var(--color-gray-700);
+}
+
+.svc__tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-6);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+.svc__process {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-6);
+}
+
+.svc__process li {
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: var(--space-2) var(--space-5);
+  align-items: baseline;
+}
+
+.svc__process li > span:first-child {
+  font-variant-numeric: tabular-nums;
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-400);
+}
+
+.svc__process strong { font-size: var(--text-lg); }
+.svc__process li > span:last-child {
+  grid-column: 2;
+  max-width: 58ch;
+  color: var(--color-gray-600);
+  line-height: 1.55;
+}
+
+/* ---- The CTA that closes every page type ---- */
+
+.svc__cta {
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: var(--space-10);
+  border-top: 2px solid var(--color-navy);
+}
+
+.svc__cta-title {
+  margin: 0;
+  max-width: 20ch;
+  font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.svc__cta-text {
+  margin: var(--space-5) 0 var(--space-8);
+  max-width: 52ch;
+  color: var(--color-gray-600);
+  line-height: 1.6;
+}
+
+.svc__cta .hero__cta {
+  display: inline-flex;
+  background: var(--color-black);
+  color: #ffffff;
+}
+
+/* ---- Sibling navigation: no page is a dead end ---- */
+
+.svc__siblings,
+.note__siblings {
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.svc__siblings ul,
+.note__siblings ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-4);
+}
+
+.svc__siblings a,
+.note__siblings a {
+  display: inline-flex;
+  gap: var(--space-4);
+  align-items: baseline;
+  color: var(--color-black);
+  text-decoration: none;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.svc__siblings a span {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-400);
+}
+
+.svc__siblings a:hover,
+.note__siblings a:hover { color: #7A5C12; }
+
+/* ---- The services index: a ruled table of contents ---- */
+
+.svcindex,
+.noteindex {
+  margin: clamp(3rem, 7vw, 5rem) 0 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid rgba(10, 10, 10, 0.15);
+}
+
+.svcindex__row {
+  display: grid;
+  grid-template-columns: 4rem 1fr auto;
+  gap: var(--space-6);
+  align-items: start;
+  padding: clamp(1.75rem, 4vw, 2.75rem) 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.svcindex__num {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  color: var(--color-gray-400);
+  letter-spacing: 0.04em;
+}
+
+.svcindex__title {
+  margin: 0;
+  font-size: clamp(1.5rem, 3vw, 2.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.05;
+}
+
+.svcindex__title a { color: inherit; text-decoration: none; }
+.svcindex__title a:hover { color: #7A5C12; }
+
+.svcindex__lead {
+  margin: var(--space-2) 0 0;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.svcindex__desc {
+  margin: var(--space-4) 0 0;
+  max-width: 62ch;
+  color: var(--color-gray-600);
+  line-height: 1.55;
+}
+
+.svcindex__go {
+  align-self: center;
+  font-size: 1.5rem;
+  color: var(--color-gray-400);
+  text-decoration: none;
+  transition: color 0.2s var(--ease-out), transform 0.2s var(--ease-out);
+}
+
+.svcindex__row:hover .svcindex__go {
+  color: #7A5C12;
+  transform: translateX(4px);
+}
+
+/* ---- The notes index and the note page ---- */
+
+.noteindex__row {
+  padding: clamp(1.5rem, 3.5vw, 2.25rem) 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.noteindex__meta {
+  display: flex;
+  gap: var(--space-4);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.noteindex__time { font-variant-numeric: tabular-nums; }
+
+.noteindex__title {
+  margin: var(--space-3) 0 0;
+  max-width: 24ch;
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+  letter-spacing: -0.025em;
+  line-height: 1.1;
+}
+
+.noteindex__title a { color: inherit; text-decoration: none; }
+.noteindex__title a:hover { color: #7A5C12; }
+
+.note { max-width: 68ch; }
+.note__title { max-width: 20ch; }
+
+.note__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin: var(--space-6) 0 0;
+  font-size: var(--text-sm);
+  color: var(--color-gray-500);
+}
+
+.note__body p {
+  margin: var(--space-6) 0 0;
+  font-size: clamp(1.05rem, 1.35vw, 1.2rem);
+  line-height: 1.7;
+  color: var(--color-gray-800);
+}
+
+.note__cta {
+  margin-top: clamp(2.5rem, 5vw, 4rem);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.note__cta p {
+  margin: 0 0 var(--space-4);
+  color: var(--color-gray-600);
+}
+
+/* ---- The studio ledger ---- */
+
+.studio__ledger {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: var(--space-8);
+  margin: 0;
+}
+
+.studio__ledger dt {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-gray-500);
+}
+
+.studio__ledger dd {
+  margin: var(--space-3) 0 0;
+  color: var(--color-gray-600);
+  font-size: var(--text-sm);
+  line-height: 1.5;
+}
+
+.studio__figure {
+  display: block;
+  font-size: clamp(2.5rem, 4.5vw, 3.5rem);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  color: var(--color-black);
+}
+
+@media (max-width: 640px) {
+  .svcindex__row {
+    grid-template-columns: 1fr;
+    gap: var(--space-3);
+  }
+  .svcindex__go { display: none; }
+  .svc__process li { grid-template-columns: 1fr; }
+  .svc__process li > span:last-child { grid-column: 1; }
+}

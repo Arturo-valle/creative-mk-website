@@ -1,0 +1,39 @@
+---
+layout: "layout.njk"
+subpage: true
+title: "Insights | CREATIVE MK"
+description: "Short, signed notes on branding, websites, growth systems and practical AI from a working studio."
+ogDescription: "Short, signed notes from a working studio."
+canonical: "/insights/"
+jsonld: |
+  {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    "url": "https://creativemk.net/insights/",
+    "name": "Insights — CREATIVE MK",
+    "inLanguage": ["en", "es"],
+    "publisher": { "@id": "https://creativemk.net/#studio" }
+  }
+---
+    <div class="container">
+
+      <span class="section-kicker" data-i18n="insightsPage.kicker">Insights</span>
+      <h1 class="subpage__title" data-i18n="insightsPage.title">Short notes, signed.</h1>
+      <p class="subpage__lede" data-i18n="insightsPage.lede">No content calendar, no filler. These are the arguments that come up often enough in client conversations to be worth writing down once — a minute each, and they say a minute.</p>
+
+      <ol class="noteindex">
+        {%- for note in notes %}
+        <li class="noteindex__row">
+          <div class="noteindex__meta">
+            <span class="noteindex__cat">{{ note.en.category }}</span>
+            <span class="noteindex__date">{{ note.en.date }}</span>
+            <span class="noteindex__time">{{ note.minutes }} min</span>
+          </div>
+          <h2 class="noteindex__title"><a href="/insights/{{ note.slug }}/">{{ note.en.title }}</a></h2>
+        </li>
+        {%- endfor %}
+      </ol>
+
+      <p class="subpage__footnote" data-i18n="insightsPage.close">Written by Arturo Valle, who does the work these describe.</p>
+
+    </div>

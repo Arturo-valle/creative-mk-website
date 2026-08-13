@@ -1,0 +1,26 @@
+---
+permalink: "/sitemap.xml"
+eleventyExcludeFromCollections: true
+---
+<?xml version="1.0" encoding="UTF-8"?>
+{#- Built from the route tree plus the two paginated collections, so a new
+    page cannot be forgotten — the hand-edited six-line file this replaces had
+    already fallen behind the routes that existed. Paginated outputs are
+    enumerated from their source data rather than collections.all, because a
+    template that paginates contributes only its first output there. -#}
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+{%- for item in collections.all %}
+{%- if item.url and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/404" not in item.url %}
+  <url><loc>{{ site.origin }}{{ item.url }}</loc></url>
+{%- endif %}
+{%- endfor %}
+  <url><loc>{{ site.origin }}/services/</loc></url>
+{%- for service in services %}
+  <url><loc>{{ site.origin }}/services/{{ service.slug }}/</loc></url>
+{%- endfor %}
+  <url><loc>{{ site.origin }}/insights/</loc></url>
+{%- for note in notes %}
+  <url><loc>{{ site.origin }}/insights/{{ note.slug }}/</loc></url>
+{%- endfor %}
+  <url><loc>{{ site.origin }}/contact.html</loc></url>
+</urlset>

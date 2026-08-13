@@ -17,23 +17,24 @@
       <nav class="header__nav" id="main-nav" aria-label="Main navigation">
         <a href="/work/" class="header__nav-link" data-nav-section="work"{% if page.url == "/work/" %} aria-current="page"{% endif %} data-i18n="nav.work">Work</a>
         <div class="header__dropdown">
-          <button class="header__dropdown-trigger" data-nav-section="capabilities" aria-expanded="false" aria-haspopup="true">
+          <button class="header__dropdown-trigger" data-nav-section="capabilities" aria-expanded="false" aria-controls="services-menu">
             <span data-i18n="nav.services">Services</span>
             <svg class="header__dropdown-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>
           </button>
-          <div class="header__dropdown-menu" role="menu">
-            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="0" data-i18n="nav.branding">Branding</a>
-            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="1" data-i18n="nav.webDesign">Websites</a>
-            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="2" data-i18n="nav.uxui">Digital Product UX/UI</a>
-            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="3" data-i18n="nav.metaAds">Growth &amp; Marketing</a>
-            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-cap-index="5" data-i18n="nav.appDev">Development</a>
-            <a href="{{ home }}#ai-automation" class="header__dropdown-item" role="menuitem" data-i18n="nav.aiAutomation">AI Automation</a>
-            <a href="{{ home }}#capabilities" class="header__dropdown-item" role="menuitem" data-i18n="nav.allServices">All Capabilities</a>
+          {#- Was: seven links, five of which resolved to the SAME anchor
+              (#capabilities) and merely opened an accordion row. Now each one
+              is its own page. This is the mechanism the owner named when he
+              said the site felt like a single landing page. -#}
+          <div class="header__dropdown-menu">
+            {%- for service in services %}
+            <a href="/services/{{ service.slug }}/" class="header__dropdown-item">{{ service.en.title }}</a>
+            {%- endfor %}
+            <a href="/services/" class="header__dropdown-item" data-i18n="nav.allServices">All Capabilities</a>
           </div>
         </div>
         <a href="/lab/" class="header__nav-link" data-nav-section="lab"{% if page.url == "/lab/" %} aria-current="page"{% endif %} data-i18n="nav.lab">Lab</a>
-        <a href="{{ home }}#about" class="header__nav-link" data-nav-section="about" data-i18n="nav.about">About</a>
-        <a href="{{ home }}#news" class="header__nav-link" data-nav-section="news" data-i18n="nav.blog">Insights</a>
+        <a href="/studio/" class="header__nav-link" data-nav-section="about"{% if page.url == "/studio/" %} aria-current="page"{% endif %} data-i18n="nav.about">About</a>
+        <a href="/insights/" class="header__nav-link" data-nav-section="news"{% if "/insights/" in page.url %} aria-current="page"{% endif %} data-i18n="nav.blog">Insights</a>
         <span class="header__nav-underline" aria-hidden="true"></span>
       </nav>
       <div class="header__right">
@@ -54,9 +55,9 @@
     <nav class="header__mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
       <a href="/work/" class="header__mobile-nav-link" data-i18n="nav.work">Work</a>
       <a href="/lab/" class="header__mobile-nav-link" data-i18n="nav.lab">Lab</a>
-      <a href="{{ home }}#capabilities" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
-      <a href="{{ home }}#about" class="header__mobile-nav-link" data-i18n="nav.about">About</a>
-      <a href="{{ home }}#news" class="header__mobile-nav-link" data-i18n="nav.blog">Insights</a>
+      <a href="/services/" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
+      <a href="/studio/" class="header__mobile-nav-link" data-i18n="nav.about">About</a>
+      <a href="/insights/" class="header__mobile-nav-link" data-i18n="nav.blog">Insights</a>
       <a href="/contact.html" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
       <div class="lang-switch" style="margin-top:auto;">
         <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>

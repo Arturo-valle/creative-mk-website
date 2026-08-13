@@ -31,21 +31,18 @@
           <ul class="footer__nav-list">
             <li><a href="/work/" class="footer__nav-link" data-i18n="nav.work">Work</a></li>
             <li><a href="/lab/" class="footer__nav-link" data-i18n="nav.lab">Lab</a></li>
-            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.services">Services</a></li>
-            <li><a href="{{ home }}#about" class="footer__nav-link" data-i18n="nav.about">About</a></li>
-            <li><a href="{{ home }}#news" class="footer__nav-link" data-i18n="nav.blog">Insights</a></li>
+            <li><a href="/services/" class="footer__nav-link" data-i18n="nav.services">Services</a></li>
+            <li><a href="/studio/" class="footer__nav-link" data-i18n="nav.about">About</a></li>
+            <li><a href="/insights/" class="footer__nav-link" data-i18n="nav.blog">Insights</a></li>
             <li><a href="/contact.html" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
           </ul>
         </div>
         <div>
           <h2 class="footer__column-title" data-i18n="footer.services">Services</h2>
           <ul class="footer__nav-list">
-            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.webDesign">Websites</a></li>
-            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.uxui">UX/UI Design</a></li>
-            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.metaAds">Growth &amp; Marketing</a></li>
-            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.branding">Branding</a></li>
-            <li><a href="{{ home }}#capabilities" class="footer__nav-link" data-i18n="nav.appDev">Development</a></li>
-            <li><a href="{{ home }}#ai-automation" class="footer__nav-link" data-i18n="nav.aiAutomation">AI Automation</a></li>
+            {%- for service in services %}
+            <li><a href="/services/{{ service.slug }}/" class="footer__nav-link">{{ service.en.title }}</a></li>
+            {%- endfor %}
           </ul>
         </div>
         <div>
@@ -69,8 +66,8 @@
             <div class="footer__social">
               <a href="/contact.html" class="footer__social-link" data-i18n="hero.primaryCta">Start a project</a>
               <a href="mailto:hey@creativemk.net" class="footer__social-link">Email</a>
-              <a href="{{ home }}#capabilities" class="footer__social-link" data-i18n="nav.services">Services</a>
-              <a href="{{ home }}#news" class="footer__social-link" data-i18n="nav.blog">Insights</a>
+              <a href="/services/" class="footer__social-link" data-i18n="nav.services">Services</a>
+              <a href="/insights/" class="footer__social-link" data-i18n="nav.blog">Insights</a>
             </div>
           </div>
         </div>
