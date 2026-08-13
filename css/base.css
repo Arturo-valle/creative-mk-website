@@ -311,17 +311,27 @@ body.menu-open {
   top: var(--space-4);
 }
 
-/* ---- Focus Visible (Accessibility) ---- */
+/* ---- Focus Visible (Accessibility) ----
+   Two tones, because one cannot serve both grounds this site uses: brand gold
+   measures 1.51:1 on the paper tone and the aged cut is weak on ink. The
+   outline is the dark core; the box-shadow is a light halo just outside it.
+   Whichever ground the element sits on, one of the two reads. */
 :focus-visible {
-  outline: 2px solid var(--color-primary);
+  outline: 2px solid #14120E;
   outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9);
+  border-radius: var(--radius-sm);
 }
 
-button:focus-visible,
-a:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-  border-radius: var(--radius-sm);
+/* On the dark acts the pair inverts: gold core, ink halo. */
+.hero :focus-visible,
+.showreel :focus-visible,
+.news :focus-visible,
+.faq :focus-visible,
+.footer :focus-visible,
+.header:not(.scrolled) :focus-visible {
+  outline-color: var(--color-primary);
+  box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.9);
 }
 
 /* ---- Newsletter Success ---- */
@@ -332,12 +342,3 @@ a:focus-visible {
   padding: var(--space-3) 0;
 }
 
-/* The focus ring, by ground.
-   Raw #E8C840 is 1.51:1 on the paper tone — invisible exactly when a keyboard
-   visitor needs it most. The aged cut of the same hue is 5.15:1 and is already
-   a brand token, so the ring stays gold without lying about contrast. */
-.subpage :focus-visible,
-.subpage__main :focus-visible {
-  outline: 2px solid #7A5C12;
-  outline-offset: 3px;
-}

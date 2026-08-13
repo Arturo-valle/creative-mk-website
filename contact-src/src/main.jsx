@@ -451,6 +451,20 @@ function App() {
     const htmlForm = formRef.current;
     if (!htmlForm) return;
 
+    /* Explicit first: the chip groups are custom controls, and relying on
+       the browser to enforce them has already failed once. */
+    const missing = [
+      !form.service && t.labels.service,
+      !form.budget && t.labels.budget,
+      !form.timeline && t.labels.timeline
+    ].filter(Boolean);
+    if (missing.length) {
+      setError(
+        (lang === 'es' ? 'Falta por elegir: ' : 'Still to choose: ') + missing.join(', ')
+      );
+      return;
+    }
+
     if (!htmlForm.checkValidity()) {
       htmlForm.reportValidity();
       return;
@@ -740,7 +754,19 @@ function ChipGroup({ name, label, options, value, onChange, required = false, wi
       <legend>
         {label} {required ? <span aria-hidden="true">*</span> : null}
       </legend>
-      <input className="sr-only" name={name} value={value} required={required} readOnly tabIndex="-1" />
+      {/* The mirror input carries the value into FormData. It must NOT be
+          readOnly: a readonly control is barred from constraint validation,
+          which is how three required groups silently validated while empty.
+          onChange is a no-op because the chips own the state. */}
+      <input
+        className="sr-only"
+        name={name}
+        value={value}
+        required={required}
+        tabIndex="-1"
+        aria-hidden="true"
+        onChange={() => {}}
+      />
       <div className="chip-grid">
         {options.map((option) => (
           <button
