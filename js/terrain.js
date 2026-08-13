@@ -214,10 +214,35 @@ export function initTerrain(canvas) {
     }
   }
 
+  /* Never measure the canvas itself: OGL's Renderer constructor stamps
+     style.width/height on it (300x150, its defaults) before we say anything,
+     which overrides the stylesheet's 100%. Reading that back would look like a
+     real size and the field would stay a postage stamp forever. The host
+     covers the viewport, so it is the honest second opinion for the case
+     window.innerWidth reports 0 — a page laid out but not being rendered. */
+  const host = canvas.parentElement;
+
+  function measure() {
+    const rect = host ? host.getBoundingClientRect() : null;
+    return {
+      width: window.innerWidth || (rect ? Math.round(rect.width) : 0),
+      height: window.innerHeight || (rect ? Math.round(rect.height) : 0)
+    };
+  }
+
+  /* Returns whether the drawing buffer now has a real size.
+
+     A zero must never reach setSize — it leaves a 0x0 drawing buffer that
+     nothing revives, because the visitor's window never resizes and this is
+     the only listener that could re-run. That is how the field shipped
+     invisible. Refuse it; the observer or the next frame will try again. */
   function resize() {
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    const { width, height } = measure();
+    if (!width || !height) return false;
+    renderer.setSize(width, height);
     u.uRes.value.set(gl.drawingBufferWidth, gl.drawingBufferHeight);
     measureActs();
+    return true;
   }
 
   /* ---- inputs ---- */
@@ -245,6 +270,8 @@ export function initTerrain(canvas) {
 
   function frame(now) {
     raf = requestAnimationFrame(frame);
+    // Keep trying to claim a size until layout gives us one.
+    if (!gl.drawingBufferWidth && !resize()) return;
     if (!startedAt) startedAt = now;
 
     const t = Math.min(1, (now - startedAt) / ARRIVAL_MS);
@@ -278,9 +305,15 @@ export function initTerrain(canvas) {
 
   const remeasure = () => measureActs();
 
+  /* The element knows it grew even when the window never fired an event. */
+  const observer = typeof ResizeObserver === 'function'
+    ? new ResizeObserver(() => resize())
+    : null;
+
   function dispose() {
     if (raf !== null) cancelAnimationFrame(raf);
     raf = null;
+    if (observer) observer.disconnect();
     window.removeEventListener('resize', resize);
     window.removeEventListener('pointermove', onPointerMove);
     window.removeEventListener('pointerleave', onPointerLeave);
@@ -293,6 +326,7 @@ export function initTerrain(canvas) {
     if (lose) lose.loseContext();
   }
 
+  if (observer && host) observer.observe(host);
   window.addEventListener('resize', resize);
   window.addEventListener('pointermove', onPointerMove, { passive: true });
   window.addEventListener('pointerleave', onPointerLeave, { passive: true });

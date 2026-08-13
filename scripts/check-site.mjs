@@ -179,6 +179,16 @@ function resolveLocal(url, fromFile) {
   return base;
 }
 
+/**
+ * Whether a URL is actually served, given how Pages maps requests to files:
+ * `/contact` comes from contact.html and `/work/` from work/index.html.
+ */
+function isServed(url, fromFile) {
+  const base = resolveLocal(url, fromFile);
+  if (base === null) return true;
+  return existsSync(base) || existsSync(base + '.html') || existsSync(join(base, 'index.html'));
+}
+
 async function checkReferences() {
   const check = 'references';
 
@@ -189,8 +199,7 @@ async function checkReferences() {
       ...[...html.matchAll(/\s(?:href|src)\s*=\s*'([^']*)'/g)].map((m) => m[1])
     ];
     for (const url of urls) {
-      const target = resolveLocal(url, file);
-      if (target && !existsSync(target)) {
+      if (!isServed(url, file)) {
         error(check, `${rel(file)} references "${url}" which does not exist in dist/`);
       }
     }
@@ -604,10 +613,74 @@ async function checkScriptsParse() {
   }
 }
 
+/* ---------- 8. nothing links into a redirect ---------- */
+
+/**
+ * Cloudflare Pages serves `/contact` from contact.html and `/work/` from
+ * work/index.html, and 308-redirects the `.html` forms. So a `.html` in an
+ * internal URL is never wrong-looking — it resolves, it renders, the gate used
+ * to pass — it is simply a redirect the visitor pays for. That was true of
+ * every "Start a project" button on the site at once, and of the contact
+ * page's own canonical, og:url and sitemap entry: three declarations of a
+ * URL that answers 308.
+ *
+ * The same slip silently voids `_headers` rules, which match the request path
+ * and not the filename, so a rule written for `/contact.html` governs nothing.
+ * Cheap to state, invisible without stating it.
+ */
+async function checkCanonicalUrls() {
+  const check = 'redirects';
+  const isRedirected = (url) => /\.html($|[?#])/.test(url);
+
+  for (const file of htmlFiles) {
+    const name = rel(file);
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+
+    for (const match of html.matchAll(/\s(?:href|src)\s*=\s*"([^"]+)"/g)) {
+      const url = match[1];
+      if (isExternal(url) && !url.startsWith(SITE_ORIGIN)) continue;
+      if (!isRedirected(url)) continue;
+      error(check, `${name} links to "${url}", which Pages 308s to the extensionless URL`);
+    }
+
+    for (const [label, value] of [
+      ['canonical', html.match(/<link[^>]*rel="canonical"[^>]*href="([^"]+)"/i)?.[1]],
+      ['og:url', metaContent(html, 'property', 'og:url')]
+    ]) {
+      if (value && isRedirected(value)) {
+        error(check, `${name} declares ${label}="${value}", a URL that answers 308`);
+      }
+    }
+  }
+
+  const sitemap = join(distDir, 'sitemap.xml');
+  if (existsSync(sitemap)) {
+    const xml = await readFile(sitemap, 'utf8');
+    for (const match of xml.matchAll(/<loc>([^<]+)<\/loc>/g)) {
+      if (isRedirected(match[1])) {
+        error(check, `sitemap.xml submits "${match[1]}", a URL that answers 308`);
+      }
+    }
+  }
+
+  /* _headers keys on the request path, so a rule naming a file that Pages
+     serves under a different URL is dead configuration. */
+  const headers = join(distDir, '_headers');
+  if (existsSync(headers)) {
+    const text = await readFile(headers, 'utf8');
+    for (const line of text.split(/\r?\n/)) {
+      const path = line.trim();
+      if (!path.startsWith('/') || !isRedirected(path)) continue;
+      error(check, `_headers has a rule for "${path}", a path no request ever carries`);
+    }
+  }
+}
+
 /* ---------- report ---------- */
 
 await checkI18n();
 await checkReferences();
+await checkCanonicalUrls();
 await checkSeo();
 await checkAssets();
 await checkBudget();

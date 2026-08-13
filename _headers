@@ -9,10 +9,14 @@
   X-Robots-Tag: noindex, nofollow, noarchive
   Cache-Control: no-store
 
-/contact.html
+# Keyed on the URL Pages actually serves, not on the filename. Pages strips
+# the .html extension and 308-redirects the old form, so `/contact.html` and
+# `/index.html` matched no request at all and both pages silently fell back to
+# the platform default (public, max-age=0, must-revalidate).
+/contact
   Cache-Control: no-store
 
-/index.html
+/
   Cache-Control: public, max-age=300
 
 /lp/*

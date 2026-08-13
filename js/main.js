@@ -639,21 +639,40 @@ function initPlayShowreel() {
   // The showreel sits below the fold, so nothing is fetched until it is on
   // screen. That keeps several megabytes of video off the critical path of the
   // first screen. setVideoSource() still refuses to fetch under reduced motion.
+  let activated = false;
+
   function activate() {
+    activated = true;
     setVideoSource();
     if (!motionQuery.matches) playMuted();
   }
 
   const section = document.getElementById('showreel');
 
-  /* A tab that was hidden while the visitor scrolled past the reel gets no
-     IntersectionObserver callbacks, so it could come back to a black frame
-     that never recovers. On becoming visible, check the geometry directly. */
-  document.addEventListener('visibilitychange', () => {
-    if (document.visibilityState !== 'visible' || !section) return;
+  /* The observer is the fast path, not the only path.
+     IntersectionObserver delivers nothing while the page is not being
+     rendered — a background tab, a window the compositor has parked — and
+     `visibilitychange` never fires for a document that stayed nominally
+     visible the whole time. The reel then sits at a black frame that nothing
+     revives, which is what visitors were reporting. So measure the geometry
+     ourselves too, from every signal that survives that state. */
+  function reelInView() {
+    if (!section) return false;
     const rect = section.getBoundingClientRect();
-    if (rect.top < window.innerHeight && rect.bottom > 0) activate();
+    return rect.top < window.innerHeight && rect.bottom > 0;
+  }
+
+  function maybeActivate() {
+    if (activated || !reelInView()) return;
+    activate();
+    window.removeEventListener('scroll', maybeActivate);
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState === 'visible') maybeActivate();
   });
+  window.addEventListener('scroll', maybeActivate, { passive: true });
+  requestAnimationFrame(maybeActivate);
 
   if (section && typeof IntersectionObserver === 'function') {
     new IntersectionObserver((entries) => {

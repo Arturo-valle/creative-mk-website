@@ -3142,7 +3142,7 @@ export class CreativeMkConcierge extends Agent<Env, ConciergeState> {
           maxAudits: LIMITS.maxAudits,
           maxBriefs: LIMITS.maxBriefs
         },
-        contactUrl: this.env.CONTACT_URL || "/contact.html?from=mk-concierge",
+        contactUrl: this.env.CONTACT_URL || "/contact?from=mk-concierge",
         knowledgeVersion: KNOWLEDGE_VERSION
       },
       request,
@@ -3498,7 +3498,7 @@ export class CreativeMkConcierge extends Agent<Env, ConciergeState> {
         report: briefReport,
         reportId: briefReport.reportId,
         reportUrl: briefReport.reportUrl,
-        contactUrl: this.env.CONTACT_URL || "/contact.html?from=mk-concierge"
+        contactUrl: this.env.CONTACT_URL || "/contact?from=mk-concierge"
       },
       request,
       this.env

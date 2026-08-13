@@ -66,14 +66,41 @@ export function initTerrain(canvas) {
     if (news) act2End = Math.min(Math.max((news.offsetTop - window.innerHeight * 0.6) / total, act1End + 0.05), 0.98);
   }
 
+  /* Measure the host, never the canvas: the canvas's own box follows its
+     backing store the moment anything writes width/height to it, so reading it
+     back would just echo whatever we last set. The host covers the viewport
+     and is the honest second opinion for the case window.innerWidth reports 0
+     — a page laid out but not being rendered. */
+  const host = canvas.parentElement;
+
+  function measure() {
+    const rect = host ? host.getBoundingClientRect() : null;
+    return {
+      w: window.innerWidth || (rect ? Math.round(rect.width) : 0),
+      h: window.innerHeight || (rect ? Math.round(rect.height) : 0)
+    };
+  }
+
+  /* Returns whether the canvas now has a real backing store.
+
+     A zero measurement is not a size — it is a page the browser has not laid
+     out yet (a background tab, a window the compositor has parked). Writing it
+     leaves a 0x0 canvas, and nothing revives it: the visitor's window never
+     resizes, so the one listener that could re-run this never fires. That is
+     how the field shipped invisible. Refuse the zero and let the observer or
+     the next frame try again. */
   function resize() {
+    const next = measure();
+    if (!next.w || !next.h) return false;
+    if (next.w === w && next.h === h && canvas.width) return true;
     dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-    w = window.innerWidth;
-    h = window.innerHeight;
+    w = next.w;
+    h = next.h;
     canvas.width = w * dpr;
     canvas.height = h * dpr;
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     measureActs();
+    return true;
   }
 
   let raf = null;
@@ -84,6 +111,8 @@ export function initTerrain(canvas) {
     raf = requestAnimationFrame(frame);
     if (now - lastFrame < FRAME_MS) return;
     lastFrame = now;
+    // Keep trying to claim a size until layout gives us one.
+    if (!canvas.width && !resize()) return;
     if (!startedAt) startedAt = now;
 
     const arrival = 1 - Math.pow(1 - Math.min(1, (now - startedAt) / ARRIVAL_MS), 3);
@@ -131,15 +160,22 @@ export function initTerrain(canvas) {
 
   const remeasure = () => measureActs();
 
+  /* The element knows it grew even when the window never fired an event. */
+  const observer = typeof ResizeObserver === 'function'
+    ? new ResizeObserver(() => resize())
+    : null;
+
   function dispose() {
     if (raf !== null) cancelAnimationFrame(raf);
     raf = null;
+    if (observer) observer.disconnect();
     window.removeEventListener('resize', resize);
     document.removeEventListener('visibilitychange', sync);
     document.removeEventListener('mk:i18n', remeasure);
     window.removeEventListener('pagehide', dispose);
   }
 
+  if (observer && host) observer.observe(host);
   window.addEventListener('resize', resize);
   document.addEventListener('visibilitychange', sync);
   document.addEventListener('mk:i18n', remeasure);

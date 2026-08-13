@@ -511,7 +511,7 @@
       logEvent('form-click', { source: 'brief', page: window.location.pathname });
       thinking.textContent = t().briefReady;
       window.setTimeout(() => {
-        window.location.href = data.contactUrl || 'contact.html?from=mk-concierge';
+        window.location.href = data.contactUrl || '/contact?from=mk-concierge';
       }, 360);
     } catch {
       const lang = getLang();
@@ -534,7 +534,7 @@
       logEvent('form-click', { source: 'brief-fallback', page: window.location.pathname, fallback: true });
       thinking.textContent = t().briefReady;
       window.setTimeout(() => {
-        window.location.href = 'contact.html?from=mk-concierge';
+        window.location.href = '/contact?from=mk-concierge';
       }, 360);
     } finally {
       busy = false;

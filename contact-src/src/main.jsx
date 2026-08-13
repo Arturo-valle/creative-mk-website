@@ -388,7 +388,7 @@ function App() {
     setStoredLang(lang);
   }, [lang]);
 
-  /* The six service pages link here as /contact.html?service=<slug>. That
+  /* The six service pages link here as /contact?service=<slug>. That
      handoff used to be decorative — nothing read the parameter — so a visitor
      who clicked "Start a project" from /services/growth/ arrived at an empty
      form and had to re-state what they had just chosen. */
@@ -723,7 +723,7 @@ function Header({ lang, setLang, t }) {
             ES
           </button>
         </div>
-        <a className="contact-header__cta" href="contact.html">{t.nav.contact}</a>
+        <a className="contact-header__cta" href="/contact">{t.nav.contact}</a>
       </div>
     </header>
   );
