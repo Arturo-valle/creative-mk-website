@@ -41,6 +41,13 @@
   <link rel="stylesheet" href="/css/subpage.css">
 {%- endif %}
   <link rel="stylesheet" href="/css/ai-concierge.css">
+{#- Per-page sheets, last in the cascade. /privacidad/ needs css/lp.css because
+    its body is lp-namespaced markup: without this the page renders with none
+    of its own classes defined — a live regression the Phase 0 validation
+    caught before it shipped. -#}
+{%- for sheet in extraCss %}
+  <link rel="stylesheet" href="{{ sheet }}">
+{%- endfor %}
 {#- Reveal bootstrap. `.js-reveal` is the only thing that hides the `.reveal`
     blocks; css/base.css never hides them on its own. Adding it here — after the
     stylesheets, so they are discovered first, and still before the first paint

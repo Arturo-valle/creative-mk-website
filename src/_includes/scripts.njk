@@ -1,11 +1,19 @@
-{#- GSAP is deferred on purpose: it must not block render, and everything that
-    uses it waits for DOMContentLoaded, which deferred scripts precede. Order
-    matters within the deferred group: core, plugins, then consumers.
+{#- Everything is deferred. The six consumer scripts used to be render-blocking
+    classic tags — 100 KB in the critical path of every URL for nothing, since
+    each one already waits for DOMContentLoaded, which deferred scripts are
+    guaranteed to precede. `defer` also preserves document order, so the
+    vendors still execute before their consumers.
 
-    The hand-written ?v= query strings are gone — the fingerprint pass in
-    scripts/fingerprint.mjs rewrites every one of these to a content-hashed
-    filename, which is a strictly better cache key and needs no human to
-    remember to bump it. -#}
+    The motion stack is skipped on pages that carry no motion (`motion: false`
+    in front matter — the legal pages). The head bootstrap already strips
+    .js-reveal/.js-arrival on load when nothing claims them, so those pages
+    degrade to plain readable documents by the same path a blocked script
+    would take.
+
+    The hand-written ?v= query strings are gone: scripts/fingerprint.mjs
+    rewrites every src below to a content-hashed filename, which is a strictly
+    better cache key and needs no human to remember to bump it. -#}
+{%- if motion !== false %}
   <script src="/js/vendor/gsap.min.js" defer></script>
   <script src="/js/vendor/ScrollTrigger.min.js" defer></script>
   <script src="/js/vendor/SplitText.min.js" defer></script>
@@ -15,9 +23,10 @@
   <script src="/js/daylight.js" defer></script>
   <script src="/js/cursor.js" defer></script>
   <script src="/js/ambient.js" defer></script>
-  <script src="/js/i18n.js"></script>
-  <script src="/js/accordion.js"></script>
-  <script src="/js/animations.js"></script>
-  <script src="/js/header.js"></script>
-  <script src="/js/main.js"></script>
-  <script src="/js/ai-concierge.js"></script>
+{%- endif %}
+  <script src="/js/i18n.js" defer></script>
+  <script src="/js/accordion.js" defer></script>
+  <script src="/js/animations.js" defer></script>
+  <script src="/js/header.js" defer></script>
+  <script src="/js/main.js" defer></script>
+  <script src="/js/ai-concierge.js" defer></script>

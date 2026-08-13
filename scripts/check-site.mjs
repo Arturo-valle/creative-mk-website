@@ -354,7 +354,9 @@ const BUDGET = {
   criticalPathError: 400 * 1024,
   videoWarn: 6 * 1024 * 1024,
   videoError: 10 * 1024 * 1024,
-  distWarn: 25 * 1024 * 1024
+  distWarn: 25 * 1024 * 1024,
+  // blocking + deferred per page: catches a stack landing where it is not needed
+  pageTotalWarn: 500 * 1024
 };
 
 /**
@@ -372,33 +374,47 @@ async function checkBudget() {
   const kb = (bytes) => `${(bytes / 1024).toFixed(0)} KB`;
 
   /* ---- critical path on the homepage ---- */
-  const indexPath = join(distDir, 'index.html');
-  if (existsSync(indexPath)) {
-    const html = stripHtmlComments(await readFile(indexPath, 'utf8'));
-    const refs = new Set();
-    const collect = (regex) => {
-      for (const match of html.matchAll(regex)) refs.add(match[1]);
+  /* Every page is weighed, not just the homepage. The Phase 0 validation
+     found this check structurally blind: it measured index.html alone, so a
+     migration that gave the legal pages the homepage's whole motion stack
+     passed clean. Both groups are reported — the blocking bytes that gate
+     first paint, and the deferred bytes that still cost bandwidth. */
+  for (const file of htmlFiles) {
+    const name = rel(file);
+    if (CLIENT_RENDERED.has(name)) continue;
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+    const blocking = new Set();
+    const deferred = new Set();
+    const collect = (regex, into) => {
+      for (const match of html.matchAll(regex)) into.add(match[1]);
     };
-    collect(/<link[^>]*\srel\s*=\s*"stylesheet"[^>]*\shref\s*=\s*"([^"]+)"/gi);
-    collect(/<link[^>]*\srel\s*=\s*"preload"[^>]*\shref\s*=\s*"([^"]+)"/gi);
-    // Only classic scripts block; type="module" and defer/async do not.
-    for (const tag of html.matchAll(/<script\b[^>]*\ssrc\s*=\s*"([^"]+)"[^>]*>/gi)) {
-      if (/\s(?:defer|async)\b/i.test(tag[0])) continue;
-      if (/\stype\s*=\s*"module"/i.test(tag[0])) continue;
-      refs.add(tag[1]);
+    collect(/<link[^>]*\srel\s*=\s*"stylesheet"[^>]*\shref\s*=\s*"([^"]+)"/gi, blocking);
+    collect(/<link[^>]*\srel\s*=\s*"preload"[^>]*\shref\s*=\s*"([^"]+)"/gi, blocking);
+    for (const tag of html.matchAll(/<script[^>]*\ssrc\s*=\s*"([^"]+)"[^>]*>/gi)) {
+      const isDeferred = /\s(?:defer|async)/i.test(tag[0]) || /\stype\s*=\s*"module"/i.test(tag[0]);
+      (isDeferred ? deferred : blocking).add(tag[1]);
     }
 
-    let total = await sizeOf(indexPath);
-    for (const ref of refs) {
-      if (/^(https?:)?\/\//.test(ref)) continue; // third-party, not ours to weigh
-      total += await sizeOf(join(distDir, ref.replace(/^\//, '').split('?')[0]));
-    }
+    const weigh = async (set) => {
+      let bytes = 0;
+      for (const ref of set) {
+        if (/^(https?:)?\/\//.test(ref)) continue; // third-party, not ours to weigh
+        bytes += await sizeOf(join(distDir, ref.replace(/^\//, '').split('?')[0]));
+      }
+      return bytes;
+    };
 
-    const detail = `index.html critical path is ${kb(total)}`;
-    if (total > BUDGET.criticalPathError) {
+    const blockingTotal = (await sizeOf(file)) + (await weigh(blocking));
+    const deferredTotal = await weigh(deferred);
+
+    const detail = `${name} critical path is ${kb(blockingTotal)}`;
+    if (blockingTotal > BUDGET.criticalPathError) {
       error(check, `${detail}, over the ${kb(BUDGET.criticalPathError)} ceiling`);
-    } else if (total > BUDGET.criticalPathWarn) {
+    } else if (blockingTotal > BUDGET.criticalPathWarn) {
       warn(check, `${detail}, over the ${kb(BUDGET.criticalPathWarn)} budget`);
+    }
+    if (blockingTotal + deferredTotal > BUDGET.pageTotalWarn) {
+      warn(check, `${name} ships ${kb(blockingTotal + deferredTotal)} of first-party JS and CSS`);
     }
   }
 

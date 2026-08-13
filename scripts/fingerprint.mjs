@@ -57,10 +57,40 @@ function rewriteRefs(text) {
   return out;
 }
 
+/** A name this pass has already produced. Hashing one twice is how the
+    phantom `terrain.HASH.HASH.js` files appeared, and how a second run over a
+    built dist/ used to rewrite every reference to a doubled name. */
+const isHashed = (name) => /\.[0-9a-f]{10}\.[^.]+$/.test(name);
+
+/* Refuse to run on output that has already been fingerprinted. The pass is
+   not idempotent by nature — it must only ever see a fresh copy-assets tree. */
+for (const dir of ['css', 'js']) {
+  for (const entry of await readdir(join(distDir, dir))) {
+    if (isHashed(entry)) {
+      throw new Error(
+        `dist/${dir}/${entry} is already fingerprinted — run copy-assets first; ` +
+        'this pass must never run twice over the same output.'
+      );
+    }
+  }
+}
+
+/* Directory listings are snapshotted BEFORE any hashing, so the loops below
+   iterate the originals and never discover their own output. */
+const cssEntries = await readdir(join(distDir, 'css'));
+const jsEntries = await readdir(join(distDir, 'js'));
+const vendorEntries = await readdir(join(distDir, 'js/vendor'));
+const lpJsEntries = existsSync(join(distDir, 'js/lp'))
+  ? await readdir(join(distDir, 'js/lp'))
+  : [];
+
 // Leaves first: fonts, then the lazy modules, then everything the HTML loads.
 await fingerprintFile('css/fonts/inter-latin-variable.woff2');
 await fingerprintFile('js/terrain.js');
 await fingerprintFile('js/terrain-lite.js');
+for (const js of lpJsEntries) {
+  if (js.endsWith('.js')) await fingerprintFile('js/lp/' + js, rewriteRefs);
+}
 
 /* CSS references its fonts relative to its own directory ('fonts/…'), which
    the absolute-path rewriter cannot see; swap those by basename first. */
@@ -73,13 +103,16 @@ const rewriteCss = (text) => {
   }
   return out;
 };
-for (const css of await readdir(join(distDir, 'css'))) {
+for (const css of cssEntries) {
   if (css.endsWith('.css')) await fingerprintFile('css/' + css, rewriteCss);
 }
-for (const js of await readdir(join(distDir, 'js'))) {
+for (const js of jsEntries) {
   if (js.endsWith('.js')) await fingerprintFile('js/' + js, rewriteRefs);
 }
-for (const vendor of await readdir(join(distDir, 'js/vendor'))) {
+/* The vendored ogl tree is deliberately excluded: its modules import each
+   other by relative path, and rewriting an ESM import graph is a bundler's
+   job. Only the flat UMD vendors are hashed. */
+for (const vendor of vendorEntries) {
   if (vendor.endsWith('.js')) await fingerprintFile('js/vendor/' + vendor);
 }
 
@@ -87,8 +120,10 @@ async function rewriteHtmlIn(dir) {
   for (const entry of await readdir(join(distDir, dir || '.'), { withFileTypes: true })) {
     const rel = dir ? dir + '/' + entry.name : entry.name;
     if (entry.isDirectory()) {
-      // lp/ and admin/ manage their own assets; leave their HTML alone.
-      if (['lp', 'admin', 'contact-assets'].includes(entry.name)) continue;
+      /* admin/ is served no-store and manages its own assets. lp/ is NOT
+         skipped: the paid landing page links the shared css/js, so leaving it
+         unrewritten made every ad-traffic visit depend on a cache purge. */
+      if (['admin', 'contact-assets'].includes(entry.name)) continue;
       await rewriteHtmlIn(rel);
     } else if (entry.name.endsWith('.html')) {
       const full = join(distDir, rel);

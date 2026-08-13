@@ -784,3 +784,9 @@ html.js-stage .ai-automation {
   .sound-toggle.is-on .sound-toggle__bar { animation: none; height: 10px; }
   .mk-cursor { display: none; }
 }
+
+/* The current page states itself without JavaScript — the animated underline
+   is the homepage scroll-spy and cannot speak for a subpage. */
+.header__nav-link[aria-current="page"] {
+  color: var(--color-primary);
+}

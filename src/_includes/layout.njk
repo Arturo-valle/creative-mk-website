@@ -20,7 +20,9 @@
 
 {% include "header.njk" %}
 
-  <main id="main-content"{% if subpage %} class="subpage__main"{% endif %}>
+  {#- tabindex="-1" so the skip link actually moves focus, not just the
+      viewport. mainClass lets a page keep its own wrapper classes. -#}
+  <main id="main-content" tabindex="-1"{% if mainClass %} class="{{ mainClass }}"{% elif subpage %} class="subpage__main"{% endif %}>
 {{ content | safe }}
   </main>
 
