@@ -8,6 +8,17 @@ looks like one giant landing page, the sections have no pages, it feels like
 something an 8-year-old made." The audit's finding: **he is right, and it is
 measurable.**
 
+> **Status 2026-08-10, end of session:** Phases 0-3 are built, verified and
+> live. The site went from 6 crawlable URLs to 20. The Eleventy page factory,
+> the six service pages, /studio/, /insights/, the two self-owned case
+> studies, the trailer homepage, FAQPage schema, content-hash fingerprinting
+> and a hardened invariant gate all shipped. Four rounds of specialist
+> validation ran against the work; the fact-checkers found seven false
+> published figures and one self-contradicting page, all corrected — see the
+> commit history. Still deferred and owner-gated: /es/ static mirrors,
+> analytics, the two client case pages (need names cleared), and moving the
+> contact island into the factory.
+
 ## The mechanisms of the feeling
 
 1. **29 of the primary nav+footer links are same-page anchors.** Work points
