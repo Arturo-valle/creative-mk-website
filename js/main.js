@@ -200,8 +200,8 @@ function renderCapabilities() {
         <div class="accordion-content__inner">
           <div>
             <p class="accordion-text">${s.desc}</p>
-            <p class="accordion-proof">${s.proof}</p>
             <div class="accordion-tags">${s.tags.map(t => `<span class="accordion-tag">${t}</span>`).join('')}</div>
+            <a class="accordion-more link-arrow" href="/services/${SERVICE_SLUGS[i]}/">${currentLang === 'es' ? 'Ver el servicio' : 'See the service'}</a>
           </div>
         </div>
       </div>

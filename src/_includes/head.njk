@@ -37,7 +37,10 @@
     references every page makes actually resolve inside its own document. -#}
 {%- if pageSchema %}
   <script type="application/ld+json">
-{{ { "@context": "https://schema.org", "@graph": [(schema.studioFull if page.url == "/" else schema.studio), pageSchema] } | jsonld | safe }}
+{%- set faqNode = { "@type": "FAQPage", "@id": site.origin + "/#faq", "mainEntity": faqEntities } -%}
+{%- set graph = [(schema.studioFull if page.url == "/" else schema.studio), pageSchema] -%}
+{%- if extraSchema == "faq" %}{% set graph = graph | concat([faqNode]) %}{% endif -%}
+{{ { "@context": "https://schema.org", "@graph": graph } | jsonld | safe }}
   </script>
 {%- elif jsonld %}
   <script type="application/ld+json">

@@ -33,6 +33,10 @@ export default function (eleventyConfig) {
   /* Titles and descriptions are plain text in front matter; the head partial
      needs them escaped exactly once. Nunjucks' default autoescape would run a
      second pass over an already-escaped entity. */
+  /* Nunjucks' `+` concatenates arrays as strings; the JSON-LD graph needs a
+     real array merge. */
+  eleventyConfig.addFilter('concat', (a, b) => [...(a || []), ...(b || [])]);
+
   eleventyConfig.addFilter('attr', (value) =>
     String(value ?? '')
       .replace(/&/g, '&amp;')
