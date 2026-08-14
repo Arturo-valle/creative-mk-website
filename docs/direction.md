@@ -264,10 +264,20 @@ Two enforcement mechanisms ride with the amendment:
   degradation ends in stillness, not slideshow.
 - **A per-frame budget for the field's program stack: ≤6ms at DPR 1.5 on the
   dev machine,** measured before each merge that touches the shader, the
-  number recorded here the way the 22s SwiftShader figure was. Today's
-  baseline (2026-08-13, single-pass contour shader): ~1.2ms at DPR 1.5,
-  1440p, RTX-class hardware — headroom is real but finite; the raymarched
-  Act II (immersive plan's successor) spends most of it.
+  number recorded here the way the 22s SwiftShader figure was.
+
+  Measured 2026-08-13 at 1920×1200 (DPR 1.5 over 1280×800), 60 draws per
+  reading, `readPixels` as the sync point: **night act 0.73 ms/frame,
+  daylight act with the emboss 0.31 ms/frame.** The daylight act is
+  *cheaper* than the night act — the emboss costs four extra `wave()` taps
+  and a normalize, while the contour path it replaces runs `fwidth` and a
+  `fract` band it now barely uses. So Act II was bought at negative cost,
+  and the 6 ms budget is ~8% spent. The raymarched version the research
+  proposed (32–48 sphere-tracing steps) was not built: a forward-difference
+  gradient over the height field the site already has produces the same
+  raking-light relief for a fraction of the fill rate, and it keeps Act I
+  and Act II literally the same surface under different light rather than
+  two unrelated scenes.
 
 Decisions recorded with the amendment, so a later taste pass reads them as
 chosen rather than accidental: the persistent canvas stays (per-section

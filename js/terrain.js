@@ -72,6 +72,7 @@ const FRAGMENT_BODY = /* glsl */ `
   uniform float uClose;      // page shares one implementation (see actWeights)
   uniform vec2 uPointer;     // pointer in uv space (aspect-corrected)
   uniform float uPointerStrength;
+  uniform float uLightAz;    // raking-light azimuth, driven by scroll
   uniform sampler2D tFlow;   // gesture memory: where the pointer has been
   uniform vec3 uInk;
   uniform vec3 uPaper;
@@ -85,6 +86,32 @@ const FRAGMENT_BODY = /* glsl */ `
     return sin(p.x * 3.1 + t * 0.55) * 0.90
          + sin(p.y * 4.2 - t * 0.40) * 0.70
          + sin((p.x + p.y) * 2.1 + t * 0.28) * 1.25;
+  }
+
+  /* ---- Act II: the blind emboss (direction.md §5.3) ----
+
+     The direction settled on paper over steel for one reason: a blind emboss
+     is a mark with no ink that does not exist until light rakes across it.
+     This is that thesis executed rather than described. The daylight act
+     stops being "the contours, but faint" and becomes a relief in the paper
+     whose only illumination is a low sun the visitor moves by scrolling.
+
+     Cheap on purpose: no sphere tracing, no 40-step march. The height field
+     is the same wave() the contours use, so the two acts are literally the
+     same surface seen under different light, and the normal comes from four
+     taps of it — a forward-difference gradient, not a tetrahedron SDF
+     estimate. That keeps Act II inside the same frame budget as Act I
+     (direction.md §5.1.1) while the light does the work. */
+  vec3 embossNormal(vec2 q, float t, float amp) {
+    float e = 0.0035;
+    /* The 1/(2e) is not optional. Without it the differences are ~0.02 and
+       the normal collapses to (0,0,1) — a perfectly flat sheet that no
+       light angle can model, which is exactly how the first version of this
+       function rendered: paper, evenly lit, no relief at any azimuth. */
+    float inv = 1.0 / (2.0 * e);
+    float hx = (wave(q + vec2(e, 0.0), t) - wave(q - vec2(e, 0.0), t)) * inv;
+    float hy = (wave(q + vec2(0.0, e), t) - wave(q - vec2(0.0, e), t)) * inv;
+    return normalize(vec3(-hx * amp, -hy * amp, 1.0));
   }
 
   void main() {
@@ -120,9 +147,11 @@ const FRAGMENT_BODY = /* glsl */ `
     float close = uClose;
 
     /* Contour density and presence per act: dense and confident at night,
-       a whisper on paper, gathering again for the close. */
+       a whisper on paper, gathering again for the close. Act II keeps only a
+       trace of line now — the relief below carries the daylight instead of
+       a fainter version of the night's drawing. */
     float bands = mix(mix(5.0, 3.0, day), 6.0, close);
-    float presence = mix(mix(0.85, 0.16, day), 0.70, close);
+    float presence = mix(mix(0.85, 0.06, day), 0.70, close);
 
     float bh = h * bands;
     float w = max(fwidth(bh), 1e-4);
@@ -145,6 +174,36 @@ const FRAGMENT_BODY = /* glsl */ `
 
     // The stage lives inside the shader: ink → paper → panel navy.
     vec3 bg = mix(mix(uInk, uPaper, day), uPanel, close);
+
+    /* ---- the emboss, lit ----
+       Only the daylight act pays for this: dayOnly is zero at both ends of
+       the page, and the compiler cannot skip the work but the mix can, so
+       the relief is invisible in Act I and Act III rather than fighting the
+       contours there.
+
+       uLightAz is the visitor's scroll expressed as an angle, so the sun
+       travels across the plate as the page moves. Nothing here is animated
+       on its own clock: stop scrolling and the light stops, which is what a
+       raking light on a real proof does when you stop turning the sheet. */
+    float dayOnly = day * (1.0 - close);
+    vec3 n = embossNormal(q, t, 0.16 * uArrival);
+    /* z low on purpose: a raking light is a light that has almost lain
+       down. Lift it and the relief flattens into a bevel. */
+    vec3 lightDir = normalize(vec3(cos(uLightAz), sin(uLightAz), 0.30));
+
+    // Lambert for the body of the relief, a tight specular for the crest
+    // the light catches — the gold appears only where the sheet turns into
+    // the sun, never as an interface colour (direction.md §5.3).
+    float lambert = max(dot(n, lightDir), 0.0);
+    vec3 viewDir = vec3(0.0, 0.0, 1.0);
+    float spec = pow(max(dot(reflect(-lightDir, n), viewDir), 0.0), 12.0);
+
+    /* Paper does not take light evenly; the shadow side goes slightly warm
+       rather than grey, which is the difference between an emboss and a
+       bevel filter. */
+    vec3 shade = uPaper * (0.90 + lambert * 0.17);
+    shade = mix(shade, uGold, spec * 0.22);
+    bg = mix(bg, shade, dayOnly);
 
     float alpha = line * presence * (0.45 + m * 0.55);
     FRAG_OUT = vec4(mix(bg, lineColor, alpha), 1.0);
@@ -250,6 +309,7 @@ export function initTerrain(canvas) {
       uClose: { value: 0 },
       uPointer: { value: new Vec2(-10, -10) },
       uPointerStrength: { value: 0 },
+      uLightAz: { value: 0 },
       tFlow: flowmap ? flowmap.uniform : { value: new Texture(gl) },
       uInk: { value: cssColor('--color-black', '#0a0a0a') },
       uPaper: { value: cssColor('--color-paper', '#f7f5f0') },
@@ -461,6 +521,15 @@ export function initTerrain(canvas) {
     u.uVel.value = velocity;
 
     u.uTime.value = now / 1000;
+
+    /* The raking light is the scroll. Across the daylight act the sun swings
+       through about 150° — from low on one side to low on the other — so the
+       relief that was invisible at the top of the act is fully modelled in
+       the middle and reversed by its end. Offset by a quarter turn so the
+       act never opens with the light dead-on, which is the one angle at
+       which an emboss disappears. */
+    u.uLightAz.value = 0.8 + u.uScroll.value * 2.6;
+
     u.uPointer.value.lerp(pointerTarget, 0.06);
     u.uPointerStrength.value += (strengthTarget - u.uPointerStrength.value) * 0.05;
 
