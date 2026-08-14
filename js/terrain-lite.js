@@ -45,9 +45,35 @@ function wave(x, y, t) {
        + Math.sin((x + y) * 2.1 + t * 0.28) * 1.25;
 }
 
+/* The same handoff the WebGL tier uses (js/terrain.js): a phone that walks
+   from one page to the next should see the surface continue, not restart.
+   Written on pagehide, read on init, five-minute TTL. */
+const HANDOFF_KEY = 'mk:field';
+
+function readHandoff() {
+  try {
+    const raw = sessionStorage.getItem(HANDOFF_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw);
+    if (!state || typeof state.drift !== 'number' || typeof state.at !== 'number') return null;
+    return Date.now() - state.at > 300000 ? null : state;
+  } catch (error) {
+    return null;
+  }
+}
+
 export function initTerrain(canvas) {
   const ctx = canvas.getContext('2d');
   if (!ctx) throw new Error('no 2d context');
+
+  const restored = readHandoff();
+  const carriedDrift = restored ? restored.drift : 0;
+
+  /* Pages without the homepage's landmarks are daylight rooms, exactly as
+     in the WebGL tier — one implementation of the three acts, two
+     renderers. */
+  const hasReel = !!document.getElementById('showreel');
+  const hasNews = !!document.getElementById('news');
 
   const ink = cssColor('--color-black', '#0a0a0a');
   const paper = cssColor('--color-paper', '#f7f5f0');
@@ -120,17 +146,51 @@ export function initTerrain(canvas) {
     const total = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
     const scroll = Math.min((window.scrollY || 0) / total, 1);
 
-    const day = smoothstep(act1End - 0.04, act1End + 0.04, scroll);
-    const close = smoothstep(act2End - 0.04, act2End + 0.04, scroll);
+    const day = hasReel ? smoothstep(act1End - 0.04, act1End + 0.04, scroll) : 1;
+    const close = hasNews ? smoothstep(act2End - 0.04, act2End + 0.04, scroll) : 0;
 
     const bg = mix(mix(ink, paper, day), panel, close);
     const amp = (1 - day) * 30 + day * (1 - close) * 9 + close * 24;
-    const presence = (1 - day) * 0.8 + day * (1 - close) * 0.18 + close * 0.65;
+    const presence = (1 - day) * 0.8 + day * (1 - close) * 0.06 + close * 0.65;
 
     ctx.fillStyle = rgb(bg, 1);
     ctx.fillRect(0, 0, w, h);
 
-    const drift = scroll * 2.6;
+    const drift = carriedDrift + scroll * 2.6;
+
+    /* ---- the emboss, on a phone ----
+       The daylight act carries the same blind emboss the WebGL tier does
+       (js/terrain.js, direction.md §5.3), drawn the only way a 2D canvas
+       can afford: bands of the height field shaded by the slope facing the
+       light, with the light's azimuth driven by scroll exactly as in the
+       shader. It is coarser than the fragment version and it is the same
+       idea — the mobile tier is designed, not subtracted (audit gap 4). */
+    const dayOnly = day * (1 - close);
+    if (dayOnly > 0.02) {
+      const az = 0.8 + scroll * 2.6;
+      const lx = Math.cos(az);
+      const ly = Math.sin(az);
+      const rows = 34;
+      const cols = Math.max(10, Math.round(w / 34));
+      const cellW = w / cols;
+      const cellH = h / rows;
+      const e = 0.02;
+      for (let r = 0; r < rows; r++) {
+        const fy = (r + 0.5) * cellH / h + drift;
+        for (let c = 0; c < cols; c++) {
+          const fx = (c + 0.5) * cellW / h;
+          // Forward differences of the same wave: the slope facing the sun.
+          const hx = (wave(fx + e, fy, t) - wave(fx - e, fy, t)) / (2 * e);
+          const hy = (wave(fx, fy + e, t) - wave(fx, fy - e, t)) / (2 * e);
+          const lambert = (-hx * lx - hy * ly) * 0.06 + 0.5;
+          const shade = Math.min(Math.max(lambert, 0), 1);
+          // ±5% around the paper tone: an emboss is a whisper or it is a bevel.
+          const lit = mix(bg, shade > 0.5 ? [255, 255, 255] : [0, 0, 0], Math.abs(shade - 0.5) * 0.22);
+          ctx.fillStyle = rgb(lit, dayOnly * arrival);
+          ctx.fillRect(c * cellW, r * cellH, cellW + 1, cellH + 1);
+        }
+      }
+    }
     const step = Math.max(12, w / 48);
 
     for (let i = 0; i < LINES; i++) {
@@ -166,6 +226,13 @@ export function initTerrain(canvas) {
     : null;
 
   function dispose() {
+    try {
+      const total = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+      sessionStorage.setItem(HANDOFF_KEY, JSON.stringify({
+        drift: carriedDrift + Math.min((window.scrollY || 0) / total, 1) * 2.6,
+        at: Date.now()
+      }));
+    } catch (error) { /* private mode: the next page opens on the arrival */ }
     if (raf !== null) cancelAnimationFrame(raf);
     raf = null;
     if (observer) observer.disconnect();

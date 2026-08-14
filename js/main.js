@@ -316,8 +316,40 @@ function initPlayShowreel() {
   const desktopSrc = video.dataset.srcDesktop;
   const mobileSrc = video.dataset.srcMobile;
 
+  /* AV1 saves 35% on this reel (5.4 MB → 3.6 MB desktop, 4.2 → 2.9 mobile),
+     which matters most on the mobile networks this studio's market actually
+     uses. But AV1 without a hardware decoder is a CPU heater, and a 20-second
+     looping autoplay is the worst possible thing to decode in software — the
+     same class of mistake as the 22-second SwiftShader incident
+     (direction.md §3.1). So the format is chosen the way the WebGL tier is
+     chosen: by asking whether the machine can actually afford it.
+     MediaCapabilities answers `powerEfficient` only for hardware paths;
+     anything else keeps the H.264 file. Both are muxed the same, so the
+     decision changes only which URL is fetched. */
+  let av1Src = null;
+
+  function pickAv1() {
+    if (!video.dataset.av1Desktop || typeof navigator.mediaCapabilities === 'undefined') return;
+    navigator.mediaCapabilities.decodingInfo({
+      type: 'file',
+      video: {
+        contentType: 'video/mp4; codecs="av01.0.05M.08"',
+        width: 1920, height: 1080, bitrate: 1400000, framerate: 30
+      }
+    }).then((info) => {
+      if (info && info.supported && info.smooth && info.powerEfficient) {
+        av1Src = { desktop: video.dataset.av1Desktop, mobile: video.dataset.av1Mobile };
+        // Only swap before the first fetch; mid-playback re-fetching a
+        // 3.5 MB file to save bytes already spent is a net loss.
+        if (!video.getAttribute('src')) setVideoSource();
+      }
+    }).catch(() => { /* keep H.264 */ });
+  }
+
   function getExpectedSrc() {
-    return mobileQuery.matches ? mobileSrc : desktopSrc;
+    const wantsMobile = mobileQuery.matches;
+    if (av1Src) return wantsMobile ? av1Src.mobile : av1Src.desktop;
+    return wantsMobile ? mobileSrc : desktopSrc;
   }
 
   function playMuted() {
@@ -363,6 +395,12 @@ function initPlayShowreel() {
   video.muted = true;
   video.playsInline = true;
   syncHeroSoundButton();
+
+  /* Ask about AV1 now, while the reel is still below the fold and nothing
+     has been fetched: the answer arrives long before activate() runs, so
+     the cheaper file is the one that gets requested. If the probe is slow
+     or the codec is unsupported the H.264 path is already in place. */
+  pickAv1();
 
   // The showreel sits below the fold, so nothing is fetched until it is on
   // screen. That keeps several megabytes of video off the critical path of the
