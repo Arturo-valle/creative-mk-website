@@ -27,7 +27,9 @@
 import { Renderer } from '/js/vendor/ogl/core/Renderer.js';
 import { Program } from '/js/vendor/ogl/core/Program.js';
 import { Mesh } from '/js/vendor/ogl/core/Mesh.js';
+import { Texture } from '/js/vendor/ogl/core/Texture.js';
 import { Triangle } from '/js/vendor/ogl/extras/Triangle.js';
+import { Flowmap } from '/js/vendor/ogl/extras/Flowmap.js';
 import { Vec2 } from '/js/vendor/ogl/math/Vec2.js';
 import { Color } from '/js/vendor/ogl/math/Color.js';
 
@@ -64,11 +66,13 @@ const FRAGMENT_BODY = /* glsl */ `
   uniform float uTime;
   uniform float uArrival;    // 0..1, the opening swell
   uniform float uScroll;     // 0..1 across the whole document
+  uniform float uDrift;      // world offset carried across page navigations
   uniform float uVel;        // smoothed scroll velocity, signed
-  uniform float uAct1End;    // normalized scroll where daylight begins
-  uniform float uAct2End;    // normalized scroll where the dark close begins
+  uniform float uDay;        // act weights, computed on the JS side so every
+  uniform float uClose;      // page shares one implementation (see actWeights)
   uniform vec2 uPointer;     // pointer in uv space (aspect-corrected)
   uniform float uPointerStrength;
+  uniform sampler2D tFlow;   // gesture memory: where the pointer has been
   uniform vec3 uInk;
   uniform vec3 uPaper;
   uniform vec3 uPanel;
@@ -89,8 +93,18 @@ const FRAGMENT_BODY = /* glsl */ `
     p.x *= aspect;
 
     /* The world moves as the visitor does: scroll drifts the field upward
-       and velocity stirs the phase, so even the quiet acts are alive. */
-    vec2 q = p + vec2(0.0, uScroll * 2.6);
+       and velocity stirs the phase, so even the quiet acts are alive.
+       uDrift carries the phase across page navigations — the contours a
+       visitor left on one URL are the contours that greet them on the next,
+       which is what makes the whole site read as one continuous surface. */
+    vec2 q = p + vec2(0.0, uDrift + uScroll * 2.6);
+
+    /* The flowmap bends the field where the hand has been: not the live
+       pointer (the gaussian below is that) but its wake, dissipating over a
+       couple of seconds. Ink remembers the gesture briefly. */
+    vec3 flow = TEXTURE_2D(tFlow, vUv).rgb;
+    q += flow.xy * 0.22;
+
     float t = uTime + uVel * 0.35;
 
     float h = wave(q, t) * uArrival;
@@ -99,10 +113,11 @@ const FRAGMENT_BODY = /* glsl */ `
     vec2 d = p - uPointer;
     h += uPointerStrength * uArrival * exp(-dot(d, d) * 14.0);
 
-    /* Act weights: 0→1 ramps at each boundary, softened over 8% of the
-       page so the shader turns with the color stage, not against it. */
-    float day = smoothstep(uAct1End - 0.04, uAct1End + 0.04, uScroll);
-    float close = smoothstep(uAct2End - 0.04, uAct2End + 0.04, uScroll);
+    /* Act weights arrive computed (terrain.js actWeights): same 8% ramps as
+       before, but owned by JS so subpages without the home's landmarks get
+       the same treatment from one implementation. */
+    float day = uDay;
+    float close = uClose;
 
     /* Contour density and presence per act: dense and confident at night,
        a whisper on paper, gathering again for the close. */
@@ -142,12 +157,14 @@ const FRAGMENT_300 = `#version 300 es
   in vec2 vUv;
   out vec4 fragColor;
   #define FRAG_OUT fragColor
+  #define TEXTURE_2D texture
 ` + FRAGMENT_BODY;
 
 const FRAGMENT_100 = `#extension GL_OES_standard_derivatives : enable
   precision highp float;
   varying vec2 vUv;
   #define FRAG_OUT gl_FragColor
+  #define TEXTURE_2D texture2D
 ` + FRAGMENT_BODY;
 
 function cssColor(name, fallback) {
@@ -155,10 +172,46 @@ function cssColor(name, fallback) {
   return new Color(value || fallback);
 }
 
+/* ---- cross-document handoff ----
+   A WebGL context cannot survive a navigation, but its state can. dispose()
+   writes the field's drift phase and earned quality tier to sessionStorage;
+   the next document reads them back and opens where the last one closed,
+   with the context reboot hidden under the View Transition snapshot. The
+   TTL keeps continuity a navigation feeling, not a souvenir — a visitor
+   returning after five minutes gets the arrival swell again. */
+const HANDOFF_KEY = 'mk:field';
+const HANDOFF_TTL = 300000;
+
+function readHandoff() {
+  try {
+    const raw = sessionStorage.getItem(HANDOFF_KEY);
+    if (!raw) return null;
+    const state = JSON.parse(raw);
+    if (!state || typeof state.drift !== 'number' || typeof state.at !== 'number') return null;
+    if (Date.now() - state.at > HANDOFF_TTL) return null;
+    return state;
+  } catch (error) {
+    return null;
+  }
+}
+
 export function initTerrain(canvas) {
+  const restored = readHandoff();
+
+  /* Tier ladder for the adaptive quality manager (direction.md §5.1.1),
+     needed before the renderer exists because a handed-off tier sets the
+     constructor's pixel ratio — a GPU that already proved it needs DPR 1.25
+     should not re-audition at 1.75 on every navigation. */
+  const TIER_DPRS = [Math.min(window.devicePixelRatio, 1.75), 1.5, 1.25, 1.0]
+    .filter((v, i, a) => v >= 1 && a.indexOf(v) === i)
+    .sort((a, b) => b - a);
+  let tier = restored && Number.isInteger(restored.tier)
+    && restored.tier > 0 && restored.tier < TIER_DPRS.length
+    ? restored.tier : 0;
+
   const renderer = new Renderer({
     canvas,
-    dpr: Math.min(window.devicePixelRatio, 1.75),
+    dpr: TIER_DPRS[tier],
     alpha: false,
     antialias: false,
     powerPreference: 'high-performance'
@@ -174,6 +227,14 @@ export function initTerrain(canvas) {
     throw new Error('no derivatives support');
   }
 
+  /* Gesture memory: a 128px ping-pong flowmap (vendored, proven on /lp/).
+     If float render targets are genuinely unavailable the wake is skipped —
+     an empty texture reads as zero flow and the field is simply stiller. */
+  let flowmap = null;
+  try {
+    flowmap = new Flowmap(gl, { size: 128, falloff: 0.3, dissipation: 0.96 });
+  } catch (error) { /* the wake is garnish; the field survives without it */ }
+
   const geometry = new Triangle(gl);
   const program = new Program(gl, {
     vertex: renderer.isWebgl2 ? VERTEX_300 : VERTEX_100,
@@ -183,11 +244,13 @@ export function initTerrain(canvas) {
       uTime: { value: 0 },
       uArrival: { value: 0 },
       uScroll: { value: 0 },
+      uDrift: { value: restored ? restored.drift : 0 },
       uVel: { value: 0 },
-      uAct1End: { value: 0.2 },
-      uAct2End: { value: 0.8 },
+      uDay: { value: 0 },
+      uClose: { value: 0 },
       uPointer: { value: new Vec2(-10, -10) },
       uPointerStrength: { value: 0 },
+      tFlow: flowmap ? flowmap.uniform : { value: new Texture(gl) },
       uInk: { value: cssColor('--color-black', '#0a0a0a') },
       uPaper: { value: cssColor('--color-paper', '#f7f5f0') },
       uPanel: { value: cssColor('--color-dark-panel', '#17233f') },
@@ -198,20 +261,36 @@ export function initTerrain(canvas) {
   const mesh = new Mesh(gl, { geometry, program });
   const u = program.uniforms;
 
-  /* ---- geometry of the story: where the acts turn ---- */
+  /* ---- geometry of the story: where the acts turn ----
+     Same DOM math as ever, now writing JS-side bounds; actWeight() turns
+     them into the uDay/uClose ramps each frame. Pages are told apart by
+     their landmarks: the homepage (showreel, news) plays all three acts
+     against scroll; every other URL is a daylight room — uDay locked at 1,
+     no close — so a subpage is the same surface with the lights already
+     up, continuous with the drift the visitor arrived carrying. */
+  const hasReel = !!document.getElementById('showreel');
+  const hasNews = !!document.getElementById('news');
+  const actBounds = { day: 0.2, close: 0.8 };
+
   function measureActs() {
     const doc = document.documentElement;
     const total = Math.max(doc.scrollHeight - window.innerHeight, 1);
     const reel = document.getElementById('showreel');
     const news = document.getElementById('news');
     if (reel) {
-      u.uAct1End.value = Math.min(
+      actBounds.day = Math.min(
         (reel.offsetTop + reel.offsetHeight - window.innerHeight * 0.4) / total, 0.95);
     }
     if (news) {
-      u.uAct2End.value = Math.min(
-        Math.max((news.offsetTop - window.innerHeight * 0.6) / total, u.uAct1End.value + 0.05), 0.98);
+      actBounds.close = Math.min(
+        Math.max((news.offsetTop - window.innerHeight * 0.6) / total, actBounds.day + 0.05), 0.98);
     }
+  }
+
+  /* The same smoothstep the shader used, over the same ±4% ramp. */
+  function actWeight(edge, x) {
+    const t = Math.min(Math.max((x - (edge - 0.04)) / 0.08, 0), 1);
+    return t * t * (3 - 2 * t);
   }
 
   /* Never measure the canvas itself: OGL's Renderer constructor stamps
@@ -241,6 +320,7 @@ export function initTerrain(canvas) {
     if (!width || !height) return false;
     renderer.setSize(width, height);
     u.uRes.value.set(gl.drawingBufferWidth, gl.drawingBufferHeight);
+    if (flowmap) flowmap.aspect = width / height;
     measureActs();
     return true;
   }
@@ -248,6 +328,9 @@ export function initTerrain(canvas) {
   /* ---- inputs ---- */
   const pointerTarget = new Vec2(-10, -10);
   let strengthTarget = 0;
+  let lastPointerX = null;
+  let lastPointerY = 0;
+  let lastPointerAt = 0;
 
   function onPointerMove(event) {
     const aspect = window.innerWidth / window.innerHeight;
@@ -256,6 +339,24 @@ export function initTerrain(canvas) {
       1 - event.clientY / window.innerHeight
     );
     strengthTarget = 1.0;
+
+    if (flowmap) {
+      flowmap.mouse.set(
+        event.clientX / window.innerWidth,
+        1 - event.clientY / window.innerHeight
+      );
+      const now = performance.now();
+      if (lastPointerX !== null) {
+        const dt = Math.max(now - lastPointerAt, 10);
+        flowmap.velocity.set(
+          Math.min(Math.max((event.clientX - lastPointerX) / dt, -1), 1),
+          Math.min(Math.max((event.clientY - lastPointerY) / dt, -1), 1)
+        );
+      }
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
+      lastPointerAt = now;
+    }
   }
 
   function onPointerLeave() { strengthTarget = 0; }
@@ -276,11 +377,10 @@ export function initTerrain(canvas) {
      The floor is stillness, not slideshow: at the lowest tier and still
      failing, the loop parks on the settled field and never restarts. A
      machine that cannot afford the field gets the field's final frame,
-     which is exactly what reduced-motion visitors get on purpose. */
-  const TIER_DPRS = [Math.min(window.devicePixelRatio, 1.75), 1.5, 1.25, 1.0]
-    .filter((v, i, a) => v >= 1 && a.indexOf(v) === i)
-    .sort((a, b) => b - a);
-  let tier = 0;
+     which is exactly what reduced-motion visitors get on purpose.
+
+     TIER_DPRS and tier live at the top of initTerrain — a handed-off tier
+     has to reach the Renderer constructor. */
   let parked = false;
   let frameTimes = [];
   let lastFrameAt = 0;
@@ -303,21 +403,34 @@ export function initTerrain(canvas) {
         applyTier(tier + 1, now);
       } else {
         parked = true;
-        if (raf !== null) cancelAnimationFrame(raf);
-        raf = null;
+        stopLoop();
       }
     } else if (avg < 12 && tier > 0) {
       applyTier(tier - 1, now);
     }
   }
 
-  /* ---- the loop: runs while the tab is visible; the canvas is the page's
-     background everywhere, so there is no offscreen state to pause for ---- */
+  /* ---- the loop ----
+     One heartbeat: when GSAP is present — and it always is when the stage
+     armed, because stage.js gates on it — the field renders from
+     gsap.ticker, the same clock that drives Lenis and every ScrollTrigger
+     scrub, so canvas and DOM cannot disagree about a frame (the Trionn
+     lesson). The private rAF path remains for the page where the vendor
+     stack failed but WebGL did not. Runs while the tab is visible; the
+     canvas is the page's background everywhere, so there is no offscreen
+     state to pause for. */
   let raf = null;
+  let running = false;
   let startedAt = 0;
+  const skipArrival = !!restored;
+  const useTicker = typeof window.gsap !== 'undefined' && !!window.gsap.ticker;
+
+  function tick() {
+    frame(performance.now());
+  }
 
   function frame(now) {
-    raf = requestAnimationFrame(frame);
+    if (!useTicker) raf = requestAnimationFrame(frame);
     // Keep trying to claim a size until layout gives us one.
     if (!gl.drawingBufferWidth && !resize()) return;
     if (!startedAt) startedAt = now;
@@ -331,13 +444,17 @@ export function initTerrain(canvas) {
     lastFrameAt = now;
     if (frameTimes.length >= 90 && now - tierChangedAt > 3000) evaluateTier(now);
 
+    /* A handed-off field is already risen — replaying the swell on every
+       navigation would say "new page" when the design says "same surface". */
     const t = Math.min(1, (now - startedAt) / ARRIVAL_MS);
-    u.uArrival.value = 1 - Math.pow(1 - t, 3);
+    u.uArrival.value = skipArrival ? 1 : 1 - Math.pow(1 - t, 3);
 
     const doc = document.documentElement;
     const total = Math.max(doc.scrollHeight - window.innerHeight, 1);
     const y = window.scrollY || 0;
     u.uScroll.value = Math.min(y / total, 1);
+    u.uDay.value = hasReel ? actWeight(actBounds.day, u.uScroll.value) : 1;
+    u.uClose.value = hasNews ? actWeight(actBounds.close, u.uScroll.value) : 0;
 
     velocity += ((y - lastScroll) * 0.02 - velocity) * 0.08;
     lastScroll = y;
@@ -347,19 +464,36 @@ export function initTerrain(canvas) {
     u.uPointer.value.lerp(pointerTarget, 0.06);
     u.uPointerStrength.value += (strengthTarget - u.uPointerStrength.value) * 0.05;
 
+    if (flowmap) {
+      flowmap.velocity.multiply(0.94);
+      flowmap.update();
+    }
+
     renderer.render({ scene: mesh });
   }
 
-  function sync() {
-    const visible = document.visibilityState === 'visible';
-    if (visible && raf === null && !parked) {
-      lastFrameAt = 0;
-      frameTimes = [];
-      raf = requestAnimationFrame(frame);
-    } else if (!visible && raf !== null) {
+  function startLoop() {
+    if (running || parked) return;
+    running = true;
+    lastFrameAt = 0;
+    frameTimes = [];
+    if (useTicker) window.gsap.ticker.add(tick);
+    else raf = requestAnimationFrame(frame);
+  }
+
+  function stopLoop() {
+    if (!running) return;
+    running = false;
+    if (useTicker) window.gsap.ticker.remove(tick);
+    if (raf !== null) {
       cancelAnimationFrame(raf);
       raf = null;
     }
+  }
+
+  function sync() {
+    if (document.visibilityState === 'visible') startLoop();
+    else stopLoop();
   }
 
   const remeasure = () => measureActs();
@@ -370,14 +504,27 @@ export function initTerrain(canvas) {
     : null;
 
   function dispose() {
-    if (raf !== null) cancelAnimationFrame(raf);
-    raf = null;
+    /* The context dies here; its state crosses the navigation. Written
+       before loseContext so the next document opens where this one closed:
+       the drift phase the eye was following, and the tier this GPU already
+       earned. */
+    try {
+      sessionStorage.setItem(HANDOFF_KEY, JSON.stringify({
+        drift: u.uDrift.value + u.uScroll.value * 2.6,
+        tier,
+        at: Date.now()
+      }));
+    } catch (error) { /* private mode: the next page simply gets the arrival */ }
+    stopLoop();
     if (observer) observer.disconnect();
     window.removeEventListener('resize', resize);
     window.removeEventListener('pointermove', onPointerMove);
     window.removeEventListener('pointerleave', onPointerLeave);
     document.removeEventListener('visibilitychange', sync);
     document.removeEventListener('mk:i18n', remeasure);
+    if (useTicker && typeof window.ScrollTrigger !== 'undefined') {
+      window.ScrollTrigger.removeEventListener('refresh', measureActs);
+    }
     window.removeEventListener('pagehide', dispose);
     geometry.remove();
     program.remove();
@@ -391,11 +538,17 @@ export function initTerrain(canvas) {
   window.addEventListener('pointerleave', onPointerLeave, { passive: true });
   document.addEventListener('visibilitychange', sync);
   document.addEventListener('mk:i18n', remeasure);
+  /* stage.js already calls ScrollTrigger.refresh() on mk:i18n and ST refreshes
+     itself on resize and font load — riding that event catches every relayout
+     the fallback listeners might miss. */
+  if (useTicker && typeof window.ScrollTrigger !== 'undefined') {
+    window.ScrollTrigger.addEventListener('refresh', measureActs);
+  }
   window.addEventListener('pagehide', dispose, { once: true });
 
   resize();
   sync();
-  document.documentElement.dataset.mkFieldTier = '0';
+  document.documentElement.dataset.mkFieldTier = String(tier);
 
   return dispose;
 }

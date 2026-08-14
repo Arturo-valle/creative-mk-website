@@ -33,7 +33,7 @@ eleventyComputed:
           <span aria-current="page">{{ note.en.category }}</span>
         </nav>
 
-        <h1 class="subpage__title note__title">{{ note.en.title }}</h1>
+        <h1 class="subpage__title note__title" data-fx="lines">{{ note.en.title }}</h1>
 
         {#- The read time is derived from the real word count at 230 wpm, so it
             can never drift from the text. These used to claim "6 min" over

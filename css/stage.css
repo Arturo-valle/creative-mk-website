@@ -702,6 +702,21 @@ html.js-stage .ai-automation {
   display: block;
 }
 
+/* The stage crossfades as its own view-transition layer, apart from the
+   page group. The old document's last painted frame — field included —
+   dissolves into the new one's first, and the WebGL context reboot that
+   happens between them (js/terrain.js handoff) is invisible under the
+   snapshot. Slightly longer than root so the ground settles after the
+   content. The reduced-motion block above already cuts every group. */
+.page-stage {
+  view-transition-name: mk-stage;
+}
+
+::view-transition-old(mk-stage),
+::view-transition-new(mk-stage) {
+  animation-duration: 0.34s;
+}
+
 /* ============================================
    The gold cursor and the sound toggle (audit gap 10, the garnish).
    ============================================ */

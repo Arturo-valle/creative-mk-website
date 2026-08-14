@@ -2,18 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "creativemk-dev",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev:contact"],
-      "port": 5173,
-      "url": "http://127.0.0.1:5173"
-    },
-    {
-      "name": "creativemk-dist-b",
+      "name": "dist",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--port", "8789", "--compatibility-date=2026-06-08"],
-      "port": 8789,
-      "url": "http://localhost:8789"
+      "runtimeArgs": ["http-server", "dist", "-p", "8931", "-c-1", "--silent"],
+      "port": 8931
     }
   ]
 }

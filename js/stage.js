@@ -51,8 +51,7 @@ function initStage() {
 
   var stage = document.querySelector('.page-stage');
   var ink = document.querySelector('.page-stage__ink');
-  var reel = document.getElementById('showreel');
-  if (!stage || !ink || !reel) return;
+  if (!stage || !ink) return;
 
   var root = document.documentElement;
   root.classList.add('js-stage');
@@ -61,16 +60,27 @@ function initStage() {
     return;
   }
 
-  gsap.to(ink, {
-    opacity: 0,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: reel,
-      start: 'bottom 80%',
-      end: 'bottom 20%',
-      scrub: true
-    }
-  });
+  var reel = document.getElementById('showreel');
+  if (reel) {
+    gsap.to(ink, {
+      opacity: 0,
+      ease: 'none',
+      scrollTrigger: {
+        trigger: reel,
+        start: 'bottom 80%',
+        end: 'bottom 20%',
+        scrub: true
+      }
+    });
+  } else {
+    /* Subpages carry no showreel and no night act: the ink plane yields to
+       paper before first paint, and the field — when the GPU gate lets it
+       engage — opens directly in its daylight whisper. Until 2026-08-13 the
+       missing reel bailed out of the whole stage here, which is why the
+       "persistent" canvas only ever ran on the homepage: every other URL
+       had the element and never the field. */
+    gsap.set(ink, { opacity: 0 });
+  }
 
   /* The EN/ES swap changes text length, which changes every section's offset.
      Re-measure instead of guessing. */
