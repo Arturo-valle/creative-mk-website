@@ -52,7 +52,27 @@
     <link rel="apple-touch-icon" href="/favicon.png" />
   </head>
   <body>
-    <div id="root"></div>
+    <!-- The static floor under the React island.
+
+         This is the one page every CTA on the site points at, and it served
+         an empty <div> — so crawlers, link-preview bots, and anyone whose JS
+         failed or was still loading got a blank document at the exact moment
+         they decided to make contact. React replaces this subtree on mount,
+         so a visitor with working JS never sees it; everyone else gets a
+         real address, the response promise, and a way through.
+
+         Deliberately unstyled beyond the inline rules: it must survive a
+         stylesheet that has not arrived either. -->
+    <div id="root">
+      <noscript-fallback style="display:block;max-width:38rem;margin:0 auto;padding:4rem 1.5rem;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;color:#111;">
+        <a href="/" style="display:inline-block;margin-bottom:2.5rem;font-weight:700;letter-spacing:-0.02em;color:#111;text-decoration:none;">CREATIVE<span style="color:#7A5C12;">mk</span></a>
+        <h1 style="font-size:2rem;line-height:1.2;margin:0 0 1rem;">Start a project</h1>
+        <p style="line-height:1.6;margin:0 0 1.5rem;">Tell us the bottleneck — the brand that does not hold, the site that does not explain, or the attention with nowhere to go. If it is not something this studio should take, we say so and point at who should.</p>
+        <p style="line-height:1.6;margin:0 0 0.5rem;"><strong>Email:</strong> <a href="mailto:hey@creativemk.net" style="color:#7A5C12;">hey@creativemk.net</a></p>
+        <p style="line-height:1.6;margin:0 0 2rem;color:#555;">Written reply within one business day.</p>
+        <p style="line-height:1.6;margin:0;color:#555;">Or read first: <a href="/services/" style="color:#7A5C12;">services</a> &middot; <a href="/work/" style="color:#7A5C12;">work</a> &middot; <a href="/studio/" style="color:#7A5C12;">the studio</a> &middot; <a href="/es/servicios/" style="color:#7A5C12;">en espa&ntilde;ol</a></p>
+      </noscript-fallback>
+    </div>
     <script type="module" src="/contact-src/src/main.jsx"></script>
   </body>
 </html>
