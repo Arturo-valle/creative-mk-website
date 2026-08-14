@@ -306,6 +306,199 @@
   color: #ffffff;
 }
 
+/* The case's business frame: set larger than body copy and above the
+   figure, because it is the sentence that decides whether a buyer keeps
+   reading a case about someone else's software. */
+.case__frame {
+  margin: clamp(1.5rem, 4vw, 2.5rem) 0 0;
+  max-width: 60ch;
+  font-size: clamp(1.05rem, 1.6vw, 1.3rem);
+  line-height: 1.6;
+  color: var(--color-black);
+}
+
+/* ---- The service page's own argument (src/_data/services.js) ----
+
+   These blocks carry the content that exists on no other URL. Set at a
+   comfortable reading measure rather than full bleed: the page is now long
+   enough that line length matters more than filling the grid. */
+
+.svc__intro {
+  margin: clamp(2rem, 5vw, 3rem) 0 0;
+  max-width: 62ch;
+}
+
+.svc__intro p {
+  margin: 0 0 var(--space-5);
+  font-size: var(--text-lg);
+  line-height: 1.7;
+  color: var(--color-gray-700, #3a3a3a);
+}
+
+.svc__intro p:last-child { margin-bottom: 0; }
+
+/* Deliverables: a ruled list of artifacts. The name is the promise and the
+   detail is what actually arrives, so the two are typographically split. */
+.svc__deliverables {
+  margin: var(--space-6) 0 0;
+}
+
+.svc__deliverable {
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.09);
+}
+
+.svc__deliverable dt {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  color: var(--color-black);
+  margin-bottom: var(--space-2);
+}
+
+.svc__deliverable dd {
+  margin: 0;
+  max-width: 62ch;
+  line-height: 1.65;
+  color: var(--color-gray-700, #3a3a3a);
+}
+
+/* Engagement shapes: the self-qualification step. Duration is tabular and
+   loud because it is the number a buyer is actually scanning for. */
+.svc__shapes {
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-5);
+}
+
+.svc__shape {
+  padding: var(--space-6);
+  background: rgba(10, 10, 10, 0.03);
+  border-left: 2px solid rgba(122, 92, 18, 0.5);
+}
+
+.svc__shape-name {
+  margin: 0 0 var(--space-2);
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+}
+
+.svc__shape-duration {
+  margin: 0 0 var(--space-3);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #7A5C12;
+}
+
+.svc__shape-includes {
+  margin: 0;
+  max-width: 60ch;
+  line-height: 1.65;
+  color: var(--color-gray-700, #3a3a3a);
+}
+
+@media (min-width: 900px) {
+  .svc__shapes { grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); }
+}
+
+/* The service's own questions, distributed out of the homepage FAQ. */
+.svc__faq { margin: var(--space-6) 0 0; }
+
+.svc__faq-item {
+  padding: var(--space-5) 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.09);
+}
+
+.svc__faq-item dt {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  margin-bottom: var(--space-2);
+}
+
+.svc__faq-item dd {
+  margin: 0;
+  max-width: 62ch;
+  line-height: 1.65;
+  color: var(--color-gray-700, #3a3a3a);
+}
+
+/* The honest proof line, or the honest absence of one. */
+.svc__proofnote {
+  margin: clamp(2.5rem, 5vw, 3.5rem) 0 0;
+  padding: var(--space-5) 0 0;
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+  max-width: 66ch;
+  font-size: var(--text-sm);
+  line-height: 1.7;
+  color: var(--color-gray-400);
+}
+
+/* ---- Page-specific media: the evidence a service page owed a buyer ----
+
+   Every subpage on this site was image-free until 2026-08-13, which is most
+   of why the homepage read as "the site" and everything behind it as an
+   appendix. The plate framing is the site's furniture — a hairline rule and
+   a paper field, not a card — and the raking sweep is the non-GL member of
+   the motion family: a CSS mask, so it runs where the WebGL field cannot
+   (mobile, software renderers) and settles instantly under reduced motion. */
+
+.svc__figure {
+  margin: clamp(2rem, 5vw, 3.5rem) 0 0;
+  padding: 0;
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+  padding-top: var(--space-6);
+}
+
+.svc__figure picture {
+  display: block;
+  position: relative;
+  overflow: hidden;
+  background: rgba(10, 10, 10, 0.04);
+}
+
+.svc__figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  filter: saturate(0.82) contrast(1.04);
+  transition: filter 0.6s ease, transform 0.9s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.svc__figure:hover img {
+  filter: saturate(1) contrast(1);
+  transform: scale(1.015);
+}
+
+/* The sweep: a narrow band of raking light crossing the plate once as the
+   figure arrives. Mask-only, so it never repaints the image itself. */
+@media (prefers-reduced-motion: no-preference) {
+  .svc__figure picture::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(105deg, transparent 42%, rgba(232, 200, 64, 0.28) 50%, transparent 58%);
+    transform: translateX(-120%);
+    pointer-events: none;
+  }
+
+  /* data-fx-done is set by js/fx.js the moment the figure reveals, so the
+     sweep rides the same trigger as the lift instead of guessing at it. */
+  .svc__figure[data-fx-done] picture::after,
+  .svc__figure:hover picture::after {
+    animation: svc-rake 1.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+}
+
+@keyframes svc-rake {
+  from { transform: translateX(-120%); }
+  to { transform: translateX(120%); }
+}
+
 /* ---- The related band: the graph, drawn (src/_data/relations.js) ----
 
    Siblings below keep a visitor inside one silo; this crosses them. Ruled

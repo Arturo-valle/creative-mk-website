@@ -24,13 +24,18 @@ pageSchema:
           <span class="workpage__slot-index" aria-hidden="true">L1</span>
           <h2 class="workpage__slot-title" data-i18n="labPage.pieceOneTitle">MK Growth Concierge</h2>
           <p class="workpage__slot-note" data-i18n="labPage.pieceOneText">An intake agent on Cloudflare Workers and Durable Objects: it receives a brief, matches it to a service, drafts the first response and hands off to a person. The diagram on the homepage illustrates that intake flow, and the form on the contact page feeds the agent behind it.</p>
-          <a class="link-arrow" href="/#ai-automation" data-i18n="labPage.pieceOneCta">See it run</a>
+          {#- Was /#ai-automation. A subpage whose payoff is "return to the
+              homepage" teaches the visitor that the homepage is the only real
+              destination — the owner's complaint, written as architecture.
+              Both CTAs now point at the case pages that exist for exactly
+              these two pieces. -#}
+          <a class="link-arrow" href="/work/intake-agent/" data-i18n="labPage.pieceOneCta">Read the case</a>
         </article>
         <article class="labpage__piece">
           <span class="workpage__slot-index" aria-hidden="true">L2</span>
           <h2 class="workpage__slot-title" data-i18n="labPage.pieceTwoTitle">Signal Terrain</h2>
           <p class="workpage__slot-note" data-i18n="labPage.pieceTwoText">The WebGL field behind the entire homepage: a contour terrain in the brand's gold and navy that swells on arrival, rises toward the cursor, and turns with the page's three acts — night, paper, night — as you scroll. One shader on one triangle, loaded only where a GPU can carry it.</p>
-          <a class="link-arrow" href="/#hero" data-i18n="labPage.pieceTwoCta">Watch the terrain</a>
+          <a class="link-arrow" href="/work/contour-field/" data-i18n="labPage.pieceTwoCta">Read the case</a>
         </article>
         <article class="labpage__piece labpage__piece--next">
           <span class="workpage__slot-index" aria-hidden="true">L3</span>

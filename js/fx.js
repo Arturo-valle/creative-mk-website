@@ -71,6 +71,12 @@
   }
 
   function reveal(el, kind, targets, delay, gsap, SplitTextCtor) {
+    /* The marker CSS hooks onto (css/subpage.css uses it for the figure's
+       raking sweep). An attribute, not a class, so it cannot collide with
+       the older .reveal/.revealed observer spine that still owns the
+       homepage. */
+    el.setAttribute('data-fx-done', '');
+
     if (kind === 'draw') {
       gsap.to(el, { scaleX: 1, duration: 0.9, delay: delay, ease: 'power3.inOut' });
       return;

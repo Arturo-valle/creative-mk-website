@@ -33,6 +33,12 @@ eleventyComputed:
         <span class="section-kicker" data-fx="fade-up">{{ case.en.lead }}</span>
         <h1 class="subpage__title" data-fx="lines">{{ case.en.title }}</h1>
 
+        {#- The business frame leads (2026-08-13). The engineering below is
+            unchanged and still true; it just stopped being the first thing a
+            buyer meets. A case that opens on Durable Objects asks the reader
+            to translate; this opens on what the system changes. -#}
+        <p class="case__frame" data-fx="fade-up" data-fx-delay="0.1">{{ case.en.businessFrame }}</p>
+
         <p class="case__figure" data-fx="fade-up" data-fx-delay="0.15">
           <span class="case__figure-value">{{ case.en.figure }}</span>
           <span class="case__figure-label">{{ case.en.figureLabel }}</span>

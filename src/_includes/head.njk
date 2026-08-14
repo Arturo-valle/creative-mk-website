@@ -38,8 +38,14 @@
 {%- if pageSchema %}
   <script type="application/ld+json">
 {%- set faqNode = { "@type": "FAQPage", "@id": site.origin + "/#faq", "mainEntity": faqEntities } -%}
+{#- A service page declares its OWN questions, built from the same array it
+    renders, so the schema can never promise a question the page does not
+    show — the failure the audit found on the homepage, where FAQPage was
+    declared over a section JS had not filled yet. -#}
+{%- set serviceFaqNode = { "@type": "FAQPage", "@id": site.origin + page.url + "#faq", "mainEntity": serviceFaqEntities } -%}
 {%- set graph = [(schema.studioFull if page.url == "/" else schema.studio), pageSchema] -%}
 {%- if extraSchema == "faq" %}{% set graph = graph | concat([faqNode]) %}{% endif -%}
+{%- if extraSchema == "serviceFaq" and serviceFaqEntities %}{% set graph = graph | concat([serviceFaqNode]) %}{% endif -%}
 {{ { "@context": "https://schema.org", "@graph": graph } | jsonld | safe }}
   </script>
 {%- elif jsonld %}
