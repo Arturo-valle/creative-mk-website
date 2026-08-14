@@ -306,6 +306,70 @@
   color: #ffffff;
 }
 
+/* ---- The related band: the graph, drawn (src/_data/relations.js) ----
+
+   Siblings below keep a visitor inside one silo; this crosses them. Ruled
+   rows rather than cards: the site's furniture is machined, and a card grid
+   here would compete with the case plates it points at. The kind label is
+   the smallest type on the page and the title is the biggest thing in the
+   row, so the eye reads "Case: the intake agent" as one line. */
+
+.related {
+  margin-top: clamp(3rem, 6vw, 5rem);
+  padding-top: var(--space-8);
+  border-top: 1px solid rgba(10, 10, 10, 0.12);
+}
+
+.related__list {
+  margin: var(--space-6) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.related__item {
+  display: grid;
+  grid-template-columns: minmax(4.5rem, auto) 1fr auto;
+  gap: var(--space-4);
+  align-items: baseline;
+  padding: var(--space-4) 0;
+  border-bottom: 1px solid rgba(10, 10, 10, 0.09);
+}
+
+.related__kind {
+  font-size: var(--text-xs);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-gray-400);
+}
+
+.related__link {
+  color: var(--color-black);
+  text-decoration: none;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-semibold);
+  line-height: 1.3;
+}
+
+.related__link:hover { color: #7A5C12; }
+
+.related__note {
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-gray-400);
+  text-align: right;
+}
+
+/* The three-column row collapses rather than crushing the title, which is
+   the column that has to survive Spanish running ~20% longer. */
+@media (max-width: 600px) {
+  .related__item {
+    grid-template-columns: 1fr;
+    gap: var(--space-2);
+  }
+
+  .related__note { text-align: left; }
+}
+
 /* ---- Sibling navigation: no page is a dead end ---- */
 
 .svc__siblings,

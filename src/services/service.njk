@@ -58,6 +58,11 @@ eleventyComputed:
         </ol>
       </section>
 
+      {%- set relCases = relations.byService[service.slug].cases %}
+      {%- set relNotes = relations.byService[service.slug].notes %}
+      {%- set relServices = [] %}
+      {% include "related.njk" %}
+
       <section class="svc__cta" aria-labelledby="svc-cta" data-fx="fade-up">
         <h2 id="svc-cta" class="svc__cta-title" data-i18n="servicePage.ctaTitle">Start with a diagnosis, not a quote.</h2>
         <p class="svc__cta-text" data-i18n="servicePage.ctaText">Tell us the bottleneck. If this is not the right service for it, we will say so and point at the one that is.</p>

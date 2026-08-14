@@ -77,6 +77,11 @@ eleventyComputed:
           <p class="case__stack"><span data-i18n="casePage.stack">Stack</span>: {{ case.en.stack | join(" · ") }}</p>
         </section>
 
+        {%- set relServices = relations.byCase[case.slug] %}
+        {%- set relCases = [] %}
+        {%- set relNotes = [] %}
+        {% include "related.njk" %}
+
         <section class="svc__cta" aria-labelledby="case-cta" data-fx="fade-up">
           <h2 id="case-cta" class="svc__cta-title" data-i18n="casePage.ctaTitle">This is the studio's own work.</h2>
           <p class="svc__cta-text" data-i18n="casePage.ctaText">Client engagements go up with a name and an agreed figure, or they do not go up. Two are signed and in production.</p>

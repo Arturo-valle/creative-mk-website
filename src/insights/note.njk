@@ -52,6 +52,11 @@ eleventyComputed:
           {%- endfor %}
         </div>
 
+        {%- set relServices = [relations.byNote[note.slug]] %}
+        {%- set relCases = [] %}
+        {%- set relNotes = [] %}
+        {% include "related.njk" %}
+
         <aside class="note__cta">
           <p data-i18n="insightsPage.ctaText">Notes are short on purpose. The long version happens in a project.</p>
           <a class="link-arrow" href="/contact" data-i18n="hero.primaryCta">Start a project</a>
