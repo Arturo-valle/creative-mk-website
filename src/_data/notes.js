@@ -13,6 +13,7 @@
 const raw = [
   {
     slug: 'ai-for-service-businesses',
+    esSlug: 'ia-para-negocios-de-servicio',
     iso: '2026-05-12',
     metaDesc: {
       en: 'Most service businesses do not need a custom model. They need the first five minutes after a lead arrives to stop being manual.',
@@ -33,6 +34,7 @@ const raw = [
   },
   {
     slug: 'premium-website-trust',
+    esSlug: 'confianza-en-sitios-premium',
     iso: '2026-04-08',
     metaDesc: {
       en: 'Premium sites do not win by adding decoration. They win by creating clarity: a strong promise, precise service paths, proof and rhythm.',
@@ -53,6 +55,7 @@ const raw = [
   },
   {
     slug: 'funnels-and-brand-systems',
+    esSlug: 'embudos-y-sistemas-de-marca',
     iso: '2026-03-17',
     metaDesc: {
       en: 'A funnel cannot repair a weak promise. Paid traffic and automation work better when the audience understands the offer fast.',

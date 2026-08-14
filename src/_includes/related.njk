@@ -4,37 +4,47 @@
     this; anything empty renders nothing, so a page never advertises a link
     it does not have. Declared once here because the alternative — three
     templates each growing their own version — is how the header ended up in
-    eight hand-maintained copies. -#}
+    eight hand-maintained copies.
+
+    Locale-aware since the Spanish tree landed: titles and hrefs follow the
+    page's own language, because a Spanish case page listing "AI Automation ·
+    Workflow intelligence" and linking into /services/ is the same broken
+    promise the runtime text swap used to make. -#}
+{%- set RL = L or "en" %}
+{%- set isEsRel = (RL == "es") %}
+{%- set workBase = "/es/trabajo/" if isEsRel else "/work/" %}
+{%- set svcBase = "/es/servicios/" if isEsRel else "/services/" %}
+{%- set noteBase = "/es/notas/" if isEsRel else "/insights/" %}
 {%- set hasCases = relCases and relCases.length %}
 {%- set hasNotes = relNotes and relNotes.length %}
 {%- set hasServices = relServices and relServices.length %}
 {%- if hasCases or hasNotes or hasServices %}
       <aside class="related" aria-labelledby="related-title" data-fx="fade-up">
-        <h2 class="svc__block-title" id="related-title" data-i18n="related.title">Related on this site</h2>
+        <h2 class="svc__block-title" id="related-title" data-i18n="related.title">{{ "Relacionado en este sitio" if isEsRel else "Related on this site" }}</h2>
         <ul class="related__list">
           {%- for slug in relCases %}
           {%- for case in cases %}{% if case.slug == slug %}
           <li class="related__item">
-            <span class="related__kind" data-i18n="related.kindCase">Case</span>
-            <a class="related__link" href="/work/{{ case.slug }}/">{{ case.en.title }}</a>
-            <span class="related__note">{{ case.en.figure }} {{ case.en.figureLabel }}</span>
+            <span class="related__kind" data-i18n="related.kindCase">{{ "Caso" if isEsRel else "Case" }}</span>
+            <a class="related__link" href="{{ workBase }}{{ case.esSlug if isEsRel else case.slug }}/">{{ case[RL].title }}</a>
+            <span class="related__note">{{ case[RL].figure }} {{ case[RL].figureLabel }}</span>
           </li>
           {%- endif %}{% endfor %}
           {%- endfor %}
           {%- for slug in relServices %}
           {%- for service in services %}{% if service.slug == slug %}
           <li class="related__item">
-            <span class="related__kind" data-i18n="related.kindService">Service</span>
-            <a class="related__link" href="/services/{{ service.slug }}/">{{ service.en.title }}</a>
-            <span class="related__note">{{ service.en.lead }}</span>
+            <span class="related__kind" data-i18n="related.kindService">{{ "Servicio" if isEsRel else "Service" }}</span>
+            <a class="related__link" href="{{ svcBase }}{{ service.esSlug if isEsRel else service.slug }}/">{{ service[RL].title }}</a>
+            <span class="related__note">{{ service[RL].lead }}</span>
           </li>
           {%- endif %}{% endfor %}
           {%- endfor %}
           {%- for slug in relNotes %}
           {%- for note in notes %}{% if note.slug == slug %}
           <li class="related__item">
-            <span class="related__kind" data-i18n="related.kindNote">Note</span>
-            <a class="related__link" href="/insights/{{ note.slug }}/">{{ note.en.title }}</a>
+            <span class="related__kind" data-i18n="related.kindNote">{{ "Nota" if isEsRel else "Note" }}</span>
+            <a class="related__link" href="{{ noteBase }}{{ note.esSlug if isEsRel else note.slug }}/">{{ note[RL].title }}</a>
             <span class="related__note">{{ note.minutes }} min</span>
           </li>
           {%- endif %}{% endfor %}

@@ -1,0 +1,61 @@
+{#- One note body, rendered in whichever locale the caller sets.
+    Same contract as service-body.njk and case-body.njk: the caller sets `L`
+    and `localePrefix`; this reads note[L] and note.paragraphs[L]. -#}
+{%- set copy = note[L] %}
+{%- set notesPath = localePrefix + ("/notas/" if L == "es" else "/insights/") %}
+    <div class="container">
+      <article class="note">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="{{ notesPath }}" data-i18n="insightsPage.kicker">{{ "Notas" if L == "es" else "Insights" }}</a>
+          <span aria-hidden="true">/</span>
+          {#- Was note.en.category, so the trail read "Insights / AI" on a
+              page titled something else entirely. -#}
+          <span aria-current="page">{{ copy.title }}</span>
+        </nav>
+
+        <h1 class="subpage__title note__title" data-fx="lines">{{ copy.title }}</h1>
+
+        {#- The read time is derived from the real word count at 230 wpm, so it
+            can never drift from the text. These used to claim "6 min" over
+            ninety words. -#}
+        <p class="note__meta">
+          <span>{{ copy.date }}</span>
+          <span aria-hidden="true">·</span>
+          <span>{{ note.minutes }} min</span>
+          <span aria-hidden="true">·</span>
+          <span>Arturo Valle</span>
+        </p>
+
+        <div class="note__body">
+          {%- for para in note.paragraphs[L] %}
+          {#- Nunjucks forwards method calls to the real JS string, so this
+              is String.prototype.startsWith — camelCase, not the Jinja-style
+              `startswith` that exists in Python and not here. -#}
+          {%- if para.startsWith("## ") %}
+          <h2 class="note__subhead">{{ para | replace("## ", "") }}</h2>
+          {%- else %}
+          <p>{{ para }}</p>
+          {%- endif %}
+          {%- endfor %}
+        </div>
+
+        {%- set relServices = [relations.byNote[note.slug]] %}
+        {%- set relCases = [] %}
+        {%- set relNotes = [] %}
+        {% include "related.njk" %}
+
+        <aside class="note__cta">
+          <p data-i18n="insightsPage.ctaText">{{ "Las notas son cortas a propósito. La versión larga pasa en un proyecto." if L == "es" else "Notes are short on purpose. The long version happens in a project." }}</p>
+          <a class="link-arrow" href="/contact{{ "?lang=es" if L == "es" }}" data-i18n="hero.primaryCta">{{ "Empezar un proyecto" if L == "es" else "Start a project" }}</a>
+        </aside>
+
+        <nav class="note__siblings" aria-label="{{ "Más notas" if L == "es" else "More notes" }}">
+          <h2 class="svc__block-title" data-i18n="insightsPage.moreTitle">{{ "Más notas" if L == "es" else "More notes" }}</h2>
+          <ul>
+            {%- for other in notes %}{% if other.slug != note.slug %}
+            <li><a href="{{ notesPath }}{{ other.esSlug if L == "es" else other.slug }}/">{{ other[L].title }}</a></li>
+            {%- endif %}{% endfor %}
+          </ul>
+        </nav>
+      </article>
+    </div>

@@ -1,0 +1,30 @@
+---
+pagination:
+  data: cases
+  size: 1
+  alias: case
+permalink: "/es/trabajo/{{ case.esSlug }}/"
+layout: "layout.njk"
+subpage: true
+lang: "es"
+L: "es"
+localePrefix: "/es"
+eleventyComputed:
+  title: "{{ case.es.title | safe }} | CREATIVE MK"
+  description: "{{ case.es.challenge | truncate(155) }}"
+  ogDescription: "{{ case.es.lead | safe }} — {{ case.es.client | safe }}."
+  canonical: "/es/trabajo/{{ case.esSlug }}/"
+  altEn: "/work/{{ case.slug }}/"
+  ogImage: "/images/og/case-{{ case.slug }}.png"
+  pageSchema:
+    "@type": "CreativeWork"
+    "@id": "https://creativemk.net/es/trabajo/{{ case.esSlug }}/#case"
+    name: "{{ case.es.title | safe }}"
+    url: "https://creativemk.net/es/trabajo/{{ case.esSlug }}/"
+    abstract: "{{ case.es.challenge | truncate(200) }}"
+    inLanguage: "es"
+    dateCreated: "{{ case.year }}"
+    creator:
+      "@id": "https://creativemk.net/#studio"
+---
+{% include "case-body.njk" %}

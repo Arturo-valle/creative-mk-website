@@ -1,0 +1,88 @@
+---
+layout: "layout.njk"
+subpage: true
+lang: "es"
+L: "es"
+localePrefix: "/es"
+title: "Trabajo seleccionado | CREATIVE MK"
+description: "El registro de CREATIVE MK: el trabajo de cliente se publica con nombre y una cifra acordada, o no se publica."
+ogDescription: "Lo publicado, y lo que todavía no."
+canonical: "/es/trabajo/"
+altEn: "/work/"
+ogImage: "/images/og/work.png"
+pageSchema:
+  "@type": "CollectionPage"
+  url: "https://creativemk.net/es/trabajo/"
+  name: "Trabajo seleccionado — CREATIVE MK"
+  inLanguage: "es"
+  about:
+    "@id": "https://creativemk.net/#studio"
+---
+    <div class="container">
+
+      <span class="section-kicker" data-fx="fade-up">El registro</span>
+      <h1 class="subpage__title" data-fx="lines">El registro: lo publicado, y lo que todavía no.</h1>
+      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15">El trabajo de cliente se publica con el nombre del cliente y una cifra acordada, o no se publica — por eso dos contratos aparecen abajo como barras de redacción y no como casos. Los dos abiertos son del propio estudio, y así están etiquetados.</p>
+
+      <section class="workpage__slots" aria-label="Trabajo publicado">
+        {%- for case in cases %}
+        <article class="workpage__slot workpage__slot--published">
+          <span class="workpage__slot-index" aria-hidden="true">0{{ loop.index }}</span>
+          <h2 class="workpage__slot-title"><a href="/es/trabajo/{{ case.esSlug }}/">{{ case.es.title }}</a></h2>
+          <p class="workpage__slot-note"><span class="workpage__own">Iniciativa propia</span> &middot; {{ case.es.lead }} &middot; {{ case.year }}</p>
+          <p class="workpage__slot-figure"><strong>{{ case.es.figure }}</strong> {{ case.es.figureLabel }}</p>
+        </article>
+        {%- endfor %}
+        <article class="workpage__slot">
+          <span class="workpage__slot-index" aria-hidden="true">03</span>
+          <span class="work__redaction workpage__slot-bar" aria-hidden="true"></span>
+          <h2 class="workpage__slot-title">Contrato firmado</h2>
+          <p class="workpage__slot-note">En producción. Se publica con el nombre del cliente y una cifra acordada, o no se publica.</p>
+        </article>
+        <article class="workpage__slot">
+          <span class="workpage__slot-index" aria-hidden="true">04</span>
+          <span class="work__redaction workpage__slot-bar" aria-hidden="true"></span>
+          <h2 class="workpage__slot-title">Contrato firmado</h2>
+          <p class="workpage__slot-note">En producción. Se publica con el nombre del cliente y una cifra acordada, o no se publica.</p>
+        </article>
+        <article class="workpage__slot workpage__slot--lab">
+          <span class="workpage__slot-index" aria-hidden="true">05</span>
+          <h2 class="workpage__slot-title">Iniciativa propia: el lab</h2>
+          <p class="workpage__slot-note">Lo que el estudio construye para sí mismo, en público.</p>
+          <a class="link-arrow" href="/es/lab/">Entrar al lab</a>
+        </article>
+      </section>
+
+      {#- El registro completo, igual que en /work/: esta es la página que un
+          prospecto abre para juzgar el portafolio, y las cifras tienen que
+          ser legibles sin JS y en el idioma de la página. -#}
+      <section class="work__ledger" aria-labelledby="work-ledger-title" data-fx="fade-up">
+        <h2 class="work__ledger-title" id="work-ledger-title">Lo que todavía no podemos demostrar</h2>
+        <p class="work__ledger-lead">Casi ningún sitio de estudio pone esta parte. El resto de esta página te pide que te fíes de unas cifras, así que también deberías saber cuáles no tenemos.</p>
+        <dl class="work__ledger-list">
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label">Proyectos de cliente publicados</dt>
+            <dd class="work__ledger-value">0</dd>
+          </div>
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label">Firmados, todavía no publicables</dt>
+            <dd class="work__ledger-value">2</dd>
+            <dd class="work__ledger-note">Se publican con el nombre del cliente y una cifra acordada, o no se publican.</dd>
+          </div>
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label">Premios</dt>
+            <dd class="work__ledger-value">0</dd>
+            <dd class="work__ledger-note">Ninguno. Este es el primer año que nos presentamos.</dd>
+          </div>
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label">Equipo</dt>
+            <dd class="work__ledger-value">1</dd>
+            <dd class="work__ledger-note">Una persona, más especialistas por proyecto</dd>
+          </div>
+        </dl>
+        <p class="work__ledger-close">El trabajo aparece aquí cuando el cliente firma la cifra, no antes.</p>
+      </section>
+
+      <p class="subpage__footnote">Sin logos prestados, sin "muestras de capacidad", sin stock. El trabajo propio dice de quién es; el trabajo de cliente espera permiso.</p>
+
+    </div>

@@ -45,12 +45,32 @@ eleventyExcludeFromCollections: true
     <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}/services/{{ service.slug }}/"/>
   </url>
 {%- endfor %}
+{#- Every locale pair below emits both sides with the same alternate set,
+    for the same reason the service pairs do: a cluster whose members
+    disagree is dropped whole. -#}
+{%- macro pair(enPath, esPath) -%}
+  <url>
+    <loc>{{ site.origin }}{{ enPath }}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.origin }}{{ enPath }}"/>
+    <xhtml:link rel="alternate" hreflang="es" href="{{ site.origin }}{{ esPath }}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}{{ enPath }}"/>
+  </url>
+  <url>
+    <loc>{{ site.origin }}{{ esPath }}</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.origin }}{{ enPath }}"/>
+    <xhtml:link rel="alternate" hreflang="es" href="{{ site.origin }}{{ esPath }}"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}{{ enPath }}"/>
+  </url>
+{%- endmacro -%}
+{{ pair("/es/trabajo/" | replace("/es/trabajo/", "/work/"), "/es/trabajo/") }}
 {%- for case in cases %}
-  <url><loc>{{ site.origin }}/work/{{ case.slug }}/</loc></url>
+{{ pair("/work/" + case.slug + "/", "/es/trabajo/" + case.esSlug + "/") }}
 {%- endfor %}
-  <url><loc>{{ site.origin }}/insights/</loc></url>
+{{ pair("/insights/", "/es/notas/") }}
 {%- for note in notes %}
-  <url><loc>{{ site.origin }}/insights/{{ note.slug }}/</loc></url>
+{{ pair("/insights/" + note.slug + "/", "/es/notas/" + note.esSlug + "/") }}
 {%- endfor %}
+{{ pair("/studio/", "/es/estudio/") }}
+{{ pair("/lab/", "/es/lab/") }}
   <url><loc>{{ site.origin }}/contact</loc></url>
 </urlset>

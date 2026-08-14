@@ -20,6 +20,7 @@
 const cases = [
   {
     "slug": "intake-agent",
+    "esSlug": "agente-de-recepcion",
     "kind": "self",
     "year": "2026",
     "en": {
@@ -113,6 +114,7 @@ const cases = [
   },
   {
     "slug": "contour-field",
+    "esSlug": "campo-de-contornos",
     "kind": "self",
     "year": "2026",
     "en": {

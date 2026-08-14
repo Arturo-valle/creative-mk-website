@@ -1,0 +1,34 @@
+---
+pagination:
+  data: notes
+  size: 1
+  alias: note
+permalink: "/es/notas/{{ note.esSlug | safe }}/"
+layout: "layout.njk"
+subpage: true
+lang: "es"
+L: "es"
+localePrefix: "/es"
+eleventyComputed:
+  title: "{{ note.es.title | safe }} | CREATIVE MK"
+  description: "{{ note.metaDesc.es | safe }}"
+  ogDescription: "{{ note.es.title | safe }} — una nota breve de CREATIVE MK."
+  canonical: "/es/notas/{{ note.esSlug | safe }}/"
+  altEn: "/insights/{{ note.slug | safe }}/"
+  ogImage: "/images/og/note-{{ note.slug | safe }}.png"
+  ogType: "article"
+  articlePublished: "{{ note.iso | safe }}"
+  pageSchema:
+    "@type": "Article"
+    headline: "{{ note.es.title | safe }}"
+    url: "https://creativemk.net/es/notas/{{ note.esSlug | safe }}/"
+    datePublished: "{{ note.iso | safe }}"
+    dateModified: "{{ note.iso | safe }}"
+    inLanguage: "es"
+    author:
+      "@type": "Person"
+      name: "Arturo Valle"
+    publisher:
+      "@id": "https://creativemk.net/#studio"
+---
+{% include "note-body.njk" %}

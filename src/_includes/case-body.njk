@@ -1,0 +1,94 @@
+{#- One case page body, rendered in whichever locale the caller sets.
+
+    Same contract as service-body.njk: the caller sets `L` and
+    `localePrefix`, this reads `case[L]`. Extracted when the Spanish tree
+    reached /work/ — a second copy of this markup would drift from the
+    first, which is the mistake that left the header in eight variants. -#}
+{%- set copy = case[L] %}
+{%- set workPath = localePrefix + ("/trabajo/" if L == "es" else "/work/") %}
+    <div class="container">
+      <article class="case">
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <a href="{{ workPath }}" data-i18n="work.kicker">{{ "Trabajo seleccionado" if L == "es" else "Selected work" }}</a>
+          <span aria-hidden="true">/</span>
+          {#- Was case.en.client, which rendered "Selected work / CREATIVE MK"
+              on both case pages — a trail that tells a visitor nothing about
+              where they are. The crumb is the page. -#}
+          <span aria-current="page">{{ copy.title }}</span>
+        </nav>
+
+        <span class="section-kicker" data-fx="fade-up">{{ copy.lead }}</span>
+        <h1 class="subpage__title" data-fx="lines">{{ copy.title }}</h1>
+
+        {#- The business frame leads (2026-08-13). The engineering below is
+            unchanged and still true; it just stopped being the first thing a
+            buyer meets. A case that opens on Durable Objects asks the reader
+            to translate; this opens on what the system changes. -#}
+        <p class="case__frame" data-fx="fade-up" data-fx-delay="0.1">{{ copy.businessFrame }}</p>
+
+        <p class="case__figure" data-fx="fade-up" data-fx-delay="0.15">
+          <span class="case__figure-value">{{ copy.figure }}</span>
+          <span class="case__figure-label">{{ copy.figureLabel }}</span>
+        </p>
+
+        <section class="svc__block" aria-labelledby="case-challenge">
+          <h2 id="case-challenge" class="svc__block-title" data-i18n="casePage.challenge">{{ "El problema" if L == "es" else "The problem" }}</h2>
+          <p class="case__prose" data-fx="fade-up">{{ copy.challenge }}</p>
+        </section>
+
+        <section class="svc__block" aria-labelledby="case-approach">
+          <h2 id="case-approach" class="svc__block-title" data-i18n="casePage.approach">{{ "Qué construimos" if L == "es" else "What we built" }}</h2>
+          <p class="case__prose" data-fx="fade-up">{{ copy.approach }}</p>
+        </section>
+
+        <section class="svc__block" aria-labelledby="case-result">
+          <h2 id="case-result" class="svc__block-title" data-i18n="casePage.result">{{ "En qué quedó" if L == "es" else "Where it stands" }}</h2>
+          <p class="case__prose" data-fx="fade-up">{{ copy.result }}</p>
+        </section>
+
+        {#- Every figure below is checkable in the public repository. A case
+            that cannot be verified does not get numbers. -#}
+        <section class="svc__block" aria-labelledby="case-proof">
+          <h2 id="case-proof" class="svc__block-title" data-i18n="casePage.proof">{{ "Cifras comprobables" if L == "es" else "Checkable figures" }}</h2>
+          <dl class="case__proof" data-fx="group">
+            {%- for item in copy.proof %}
+            <div>
+              <dt class="case__proof-value">{{ item.value }}</dt>
+              <dd class="case__proof-label">{{ item.label }}</dd>
+            </div>
+            {%- endfor %}
+          </dl>
+        </section>
+
+        <section class="svc__block" aria-labelledby="case-deliverables">
+          <h2 id="case-deliverables" class="svc__block-title" data-i18n="casePage.deliverables">{{ "Entregables" if L == "es" else "Deliverables" }}</h2>
+          <ul class="svc__tags" data-fx="group">
+            {%- for item in copy.deliverables %}
+            <li>{{ item }}</li>
+            {%- endfor %}
+          </ul>
+          <p class="case__stack"><span data-i18n="casePage.stack">Stack</span>: {{ copy.stack | join(" · ") }}</p>
+        </section>
+
+        {%- set relServices = relations.byCase[case.slug] %}
+        {%- set relCases = [] %}
+        {%- set relNotes = [] %}
+        {% include "related.njk" %}
+
+        <section class="svc__cta" aria-labelledby="case-cta" data-fx="fade-up">
+          <h2 id="case-cta" class="svc__cta-title" data-i18n="casePage.ctaTitle">{{ "Este es el trabajo propio del estudio." if L == "es" else "This is the studio's own work." }}</h2>
+          <p class="svc__cta-text" data-i18n="casePage.ctaText">{{ "Los proyectos de cliente se publican con nombre y una cifra acordada, o no se publican. Dos están firmados y en producción." if L == "es" else "Client engagements go up with a name and an agreed figure, or they do not go up. Two are signed and in production." }}</p>
+          <a class="hero__cta" href="/contact{{ "?lang=es" if L == "es" }}" data-i18n="hero.primaryCta">{{ "Empezar un proyecto" if L == "es" else "Start a project" }}</a>
+        </section>
+
+        <nav class="note__siblings" aria-label="{{ "Más trabajo" if L == "es" else "More work" }}">
+          <h2 class="svc__block-title" data-i18n="casePage.nextTitle">{{ "Siguiente" if L == "es" else "Next" }}</h2>
+          <ul>
+            {%- for other in cases %}{% if other.slug != case.slug %}
+            <li><a href="{{ workPath }}{{ other.esSlug if L == "es" else other.slug }}/">{{ other[L].title }}</a></li>
+            {%- endif %}{% endfor %}
+            <li><a href="{{ workPath }}">&larr; <span data-i18n="workPage.kicker">{{ "El registro" if L == "es" else "The ledger" }}</span></a></li>
+          </ul>
+        </nav>
+      </article>
+    </div>
