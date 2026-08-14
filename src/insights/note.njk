@@ -33,7 +33,9 @@ eleventyComputed:
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="/insights/" data-i18n="insightsPage.kicker">Insights</a>
           <span aria-hidden="true">/</span>
-          <span aria-current="page">{{ note.en.category }}</span>
+          {#- Was note.en.category, so the trail read "Insights / AI" on a
+              page titled something else entirely. -#}
+          <span aria-current="page">{{ note.en.title }}</span>
         </nav>
 
         <h1 class="subpage__title note__title" data-fx="lines">{{ note.en.title }}</h1>

@@ -19,8 +19,14 @@
 /
   Cache-Control: public, max-age=300
 
+# The paid lane stays out of the index. robots.txt deliberately does NOT
+# disallow it — a Disallow would prevent Googlebot from reading the page's
+# own noindex, which is how ad landing pages end up listed as bare URLs.
+# This header says the same thing at the edge, for crawlers that fetch
+# before parsing.
 /lp/*
   Cache-Control: public, max-age=300
+  X-Robots-Tag: noindex, follow
 
 /contact-assets/*
   Cache-Control: public, max-age=31536000, immutable

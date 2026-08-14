@@ -28,7 +28,10 @@ eleventyComputed:
         <nav class="crumbs" aria-label="Breadcrumb">
           <a href="/work/" data-i18n="work.kicker">Selected work</a>
           <span aria-hidden="true">/</span>
-          <span aria-current="page">{{ case.en.client }}</span>
+          {#- Was case.en.client, which rendered "Selected work / CREATIVE MK"
+              on both case pages — a trail that tells a visitor nothing about
+              where they are. The crumb is the page. -#}
+          <span aria-current="page">{{ case.en.title }}</span>
         </nav>
 
         <span class="section-kicker" data-fx="fade-up">{{ case.en.lead }}</span>

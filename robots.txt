@@ -1,6 +1,11 @@
+# /lp/ is deliberately not disallowed. The landing page carries
+# `noindex, follow` in its own head, and a Disallow would stop Googlebot
+# from ever fetching the page — so it could never read the noindex, and a
+# paid-social page that accumulates external links can then surface as a
+# bare URL under "Indexed, though blocked by robots.txt". The meta tag is
+# the correct instrument; _headers adds X-Robots-Tag as belt and braces.
 User-agent: *
 Allow: /
 Disallow: /admin/
-Disallow: /lp/
 
 Sitemap: https://creativemk.net/sitemap.xml
