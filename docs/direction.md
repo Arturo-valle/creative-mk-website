@@ -37,20 +37,42 @@ npm run verify && npx wrangler pages deploy dist --project-name=creative-mk-webs
 `npm run verify` is not optional politeness — it is the only gate between the
 working tree and the live site, because there is no CI in front of the upload.
 
-**⚠ Discovered 2026-08-13: the shell's `CLOUDFLARE_API_TOKEN` belongs to a
-different account** — `zyz.investments@gmail.com`, account
+**⚠ Discovered 2026-08-13: the shell's ambient `CLOUDFLARE_API_TOKEN`
+belongs to a different account** — `zyz.investments@gmail.com`, account
 `6b110c77818243752bd803fe71603797`, not this site's account above. The env
 var overrides wrangler's own login, so the publish command as documented
 would deploy `creative-mk-website` into the wrong account (Pages creates
-missing projects on deploy rather than failing). Before any deploy from this
-machine: unset the variable for the session
-(`$env:CLOUDFLARE_API_TOKEN = $null` in PowerShell) and let wrangler use the
-OAuth login for arturo.ordonezv@gmail.com, or export the correct account's
-token. `npx wrangler whoami` first, every time — the 2026-06 três-months-dark
-incident (§1) and the wrong-client `.netlify/` publish path (§1.2) were both
-this same class of failure: deploy state pointing somewhere true-looking and
-wrong. This also blocks the Counterscale/Web-Analytics install (§6.1) until
-the right credentials are in hand — analytics is owner-gated on that.
+missing projects on deploy rather than failing).
+
+**`npx wrangler whoami` first, every time, and read the account id.** The
+2026-06 three-months-dark incident (§1) and the wrong-client `.netlify/`
+publish path (§1.2) were the same class of failure: deploy state pointing
+somewhere true-looking and wrong. The check takes two seconds and is the
+only thing standing between a release and a stranger's account.
+
+A token scoped to the correct account was supplied on 2026-08-13 and the
+release below shipped with it. It is **not** stored in this repo and must
+never be: pass it inline for the one command
+(`CLOUDFLARE_API_TOKEN=… npx wrangler pages deploy …`) and let it leave with
+the shell.
+
+### 1.3 Release log
+
+**2026-08-13** — first publish since 2026-06-11. 40 pages, 82 changed files.
+Carries the whole August-13 workstream: the deep service pages, the Spanish
+URL tree, the cross-page field handoff, the Act II emboss, per-page OG cards,
+the related graph and the contact fallback. Verified live afterwards, never
+before (§1.1).
+
+Two things did not ship with it and are owner-gated:
+
+- **The zone cache was not purged.** Pages tokens do not carry
+  `Zone → Cache Purge`, so the purge has to happen in the dashboard (zone
+  `9c6d17208894937c1c029efaf2e3673e`). Until it does, the 4-hour browser TTL
+  means returning visitors can hold old CSS against new HTML.
+- **Analytics is still absent** (§6.1). The CSP already allows Cloudflare
+  Insights and the Meta Pixel; neither is installed, so the effect of this
+  release on bounce and conversion is unmeasurable by construction.
 
 ### 1.1 Purge after deploying, and never probe before
 
