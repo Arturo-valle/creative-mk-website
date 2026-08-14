@@ -316,4 +316,10 @@ extraSchema: "faq"
     </div>
   </section>
 
+  {#- The JSON island js/main.js renders the accordion and FAQ from — the
+      same src/_data bytes the service pages are built with, so the homepage
+      and its pages cannot drift apart. The jsonld filter escapes `<`, which
+      is the one sequence that could close this element early. -#}
+  <script type="application/json" id="mk-data">{{ mkIsland | jsonld | safe }}</script>
+
   

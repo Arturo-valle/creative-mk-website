@@ -2,175 +2,34 @@
    Main.js - Content Data & Initialization
    ============================================ */
 
-/* The accordion rows link to the pages generated from src/_data/services.js.
-   Order is the contract: this array is indexed by position, exactly as the
-   accordion is. */
-const SERVICE_SLUGS = ['branding', 'websites', 'product-ux-ui', 'growth', 'ai-automation', 'development'];
+/* One source of truth (audit 2026-08-13): the services and FAQ copy lives
+   in src/_data/ and reaches this script as a build-time JSON island in
+   index.html (#mk-data, emitted from src/_data/mkIsland.js). The August
+   rebuild copied these strings into the data files but left the originals
+   here, so a copy edit could make the accordion and the service pages
+   silently disagree. Now the accordion renders from the same bytes Eleventy
+   renders the pages from. On URLs without the island the arrays are empty
+   and the renderers no-op — those pages have no accordion. */
+const mkData = (() => {
+  const island = document.getElementById('mk-data');
+  if (!island) return null;
+  try { return JSON.parse(island.textContent); } catch (error) { return null; }
+})();
+
+const SERVICE_SLUGS = mkData
+  ? mkData.services.map((s) => s.slug)
+  : ['branding', 'websites', 'product-ux-ui', 'growth', 'ai-automation', 'development'];
 
 const servicesData = {
-  en: [
-    {
-      title: 'Branding',
-      lead: 'Identity and positioning',
-      desc: 'We define the promise, voice, visual identity, offer architecture, and brand rules that help a business feel consistent across website, ads, content, sales materials, and future campaigns.',
-      proof: 'Best for new brands, premium repositioning, service businesses, and teams that need trust before scaling attention.',
-      tags: ['Strategy', 'Identity', 'Guidelines'],
-      media: 'images/services/branding.jpg'
-    },
-    {
-      title: 'Websites',
-      lead: 'Marketing site',
-      desc: 'We design and build editorial, conversion-aware websites with clear messaging, UX structure, service pathways, proof blocks, SEO foundations, and a contact flow that respects the buyer.',
-      proof: 'Best for service brands, expert firms, local leaders, and companies whose current site does not explain the offer fast enough.',
-      tags: ['UX', 'Copy', 'SEO'],
-      media: 'images/services/web-design.jpg'
-    },
-    {
-      title: 'Digital Product UX/UI',
-      lead: 'Product experience',
-      desc: 'We map product journeys, dashboards, portals, onboarding flows, and app interfaces so complex actions feel clear before a team commits to a build.',
-      proof: 'Best for SaaS ideas, internal tools, client portals, MVPs, and businesses with a workflow that needs a better interface.',
-      tags: ['Flows', 'Prototype', 'Design System'],
-      media: 'images/services/ux-ui-design-premium-preview.jpg'
-    },
-    {
-      title: 'Growth & Marketing',
-      lead: 'Campaign system',
-      desc: 'We shape landing pages, funnels, Meta campaigns, content rhythms, tracking, and follow-up paths so attention has somewhere useful to go.',
-      proof: 'Best when the offer is clear enough to test traffic, capture demand, and learn from real audience signals.',
-      tags: ['Offer', 'Traffic', 'Follow-up'],
-      media: 'images/services/sales-funnels.jpg'
-    },
-    {
-      title: 'AI Automation',
-      lead: 'Workflow intelligence',
-      desc: 'We connect intake, service matching, first-response support, knowledge bases, dashboards, and follow-up rules so teams respond faster without losing human control.',
-      proof: 'Best for businesses with repeated questions, slow lead handoff, manual reporting, or operations that need a cleaner first layer.',
-      tags: ['Intake', 'Routing', 'Dashboards'],
-      media: 'images/services/email-marketing.jpg'
-    },
-    {
-      title: 'Development',
-      lead: 'Reliable build',
-      desc: 'We turn approved strategy and UX into responsive pages, front-end systems, forms, analytics, integrations, and lightweight app experiences that are ready to use.',
-      proof: 'Best when the brand, website, product screen, form, CRM, and automation need to work together instead of living as separate pieces.',
-      tags: ['Frontend', 'Forms', 'Integrations'],
-      media: 'images/services/landing-pages.jpg'
-    }
-  ],
-  es: [
-    {
-      title: 'Branding',
-      lead: 'Identidad y posicionamiento',
-      desc: 'Definimos promesa, voz, identidad visual, arquitectura de oferta y reglas de marca para que el negocio se sienta consistente en sitio web, anuncios, contenido, ventas y futuras campañas.',
-      proof: 'Ideal para marcas nuevas, reposicionamientos premium, negocios de servicio y equipos que necesitan confianza antes de escalar la atención.',
-      tags: ['Estrategia', 'Identidad', 'Guías'],
-      media: 'images/services/branding.jpg'
-    },
-    {
-      title: 'Sitios Web',
-      lead: 'Sitio de marketing',
-      desc: 'Diseñamos y construimos sitios editoriales orientados a conversión, con mensaje claro, estructura UX, rutas de servicio, bloques de prueba, bases SEO y un contacto respetuoso para el comprador.',
-      proof: 'Ideal para marcas de servicio, firmas expertas, líderes locales y empresas cuyo sitio actual no explica la oferta con suficiente rapidez.',
-      tags: ['UX', 'Copy', 'SEO'],
-      media: 'images/services/web-design.jpg'
-    },
-    {
-      title: 'Producto Digital UX/UI',
-      lead: 'Experiencia de producto',
-      desc: 'Mapeamos journeys, dashboards, portales, onboarding e interfaces de app para que acciones complejas se entiendan antes de comprometer al equipo con el desarrollo.',
-      proof: 'Ideal para ideas SaaS, herramientas internas, portales de cliente, MVPs y negocios con procesos que necesitan una mejor interfaz.',
-      tags: ['Flujos', 'Prototipo', 'Sistema UI'],
-      media: 'images/services/ux-ui-design-premium-preview.jpg'
-    },
-    {
-      title: 'Growth & Marketing',
-      lead: 'Sistema de campaña',
-      desc: 'Damos forma a landing pages, embudos, campañas Meta, ritmos de contenido, medición y rutas de seguimiento para que la atención tenga un siguiente paso útil.',
-      proof: 'Ideal cuando la oferta ya está lo suficientemente clara para probar tráfico, capturar demanda y aprender de señales reales de audiencia.',
-      tags: ['Oferta', 'Tráfico', 'Seguimiento'],
-      media: 'images/services/sales-funnels.jpg'
-    },
-    {
-      title: 'Automatización IA',
-      lead: 'Inteligencia operativa',
-      desc: 'Conectamos recepción de leads, recomendación de servicios, primera respuesta, bases de conocimiento, dashboards y reglas de seguimiento para responder más rápido sin perder control humano.',
-      proof: 'Ideal para negocios con preguntas repetidas, traspaso lento de leads, reportes manuales u operaciones que necesitan una primera capa más clara.',
-      tags: ['Recepción', 'Rutas', 'Dashboards'],
-      media: 'images/services/email-marketing.jpg'
-    },
-    {
-      title: 'Desarrollo',
-      lead: 'Construcción confiable',
-      desc: 'Convertimos estrategia y UX aprobadas en páginas responsivas, sistemas front-end, formularios, analítica, integraciones y experiencias ligeras de app listas para usar.',
-      proof: 'Ideal cuando marca, sitio, pantalla de producto, formulario, CRM y automatización deben trabajar juntos en lugar de vivir como piezas separadas.',
-      tags: ['Frontend', 'Formularios', 'Integraciones'],
-      media: 'images/services/landing-pages.jpg'
-    }
-  ]
+  en: mkData ? mkData.services.map((s) => Object.assign({ media: s.media }, s.en)) : [],
+  es: mkData ? mkData.services.map((s) => Object.assign({ media: s.media }, s.es)) : []
 };
 
-/**
- * Real client work. Nothing else.
- *
- * This held six fabricated entries — every one carrying `isRealClient: false`
- * and rendering with the label "Capability showcase". They were removed on
- * 2026-08-10: an award jury reads that label the same way a buyer does, and a
- * studio portfolio with no client in it is the one thing no amount of craft
- * around it can compensate for. See docs/direction.md §6.
- *
- * The shape below is what renderWork() and openCaseModal() consume, and it is
- * unchanged, so a real project drops straight in:
- *
- *   {
- *     name: 'Client name',
- *     category: 'Web',            // also the filter label
- *     desc: 'One line, what it is.',
- *     tags: ['Brand', 'Web'],
- *     color: '#191712',           // card field behind the image
- *     img: 'images/work/slug.jpg',// -480/-960 .avif/.webp beside it
- *     outcome: 'The number',      // shown on the card when isRealClient
- *     isRealClient: true,
- *     case: { challenge, solution, result, deliverables: [] }
- *   }
- *
- * Both language arrays must stay the same length: renderWork() indexes into
- * workData[currentLang] by position when a card is opened.
- */
-const workData = {
-  en: [],
-  es: []
-};
-
-/**
- * Signed work that cannot be published yet. Only the count, because that is the
- * only part that is honest to state without the client's name on it. When one
- * of them clears, it moves into workData and this drops by one.
- */
-const workPendingCount = 2;
-
-const newsImages = ['images/news/news-1.jpg', 'images/news/news-2.jpg', 'images/news/news-3.jpg'];
 
 
-const faqData = {
-  en: [
-    { q: 'What services does CREATIVE MK offer?', a: 'We work across branding, websites, digital product UX/UI, growth and marketing systems, development, and practical AI automation. The goal is to connect the pieces that shape how a business is understood, trusted, and contacted.' },
-    { q: 'Are the projects shown real client case studies?', a: "Client work is only published with a name and an agreed figure, and two engagements are signed but not yet publishable. The two cases open today are the studio's own, labelled as self-initiated. Two signed projects are waiting on their client to approve a name and a figure, and until then they are counted but not shown. Nothing invented stands in for them." },
-    { q: 'Can you redesign an existing website or brand?', a: 'Yes. We can audit the current experience, preserve what is working, rebuild weak sections, and turn the brand, site, and follow-up path into a clearer system.' },
-    { q: 'How do you approach AI automation?', a: 'We begin with a workflow, not a tool. Useful starting points include lead intake, service matching, first response, knowledge bases, dashboards, and follow-up prompts with a clear human handoff.' },
-    { q: 'How long does a typical project take?', a: 'A focused landing page or audit can take 1-2 weeks, a full website often takes 4-8 weeks, and deeper brand, product, or automation systems usually take 4-10 weeks depending on scope.' }
-  ],
-  es: [
-    { q: '¿Qué servicios ofrece CREATIVE MK?', a: 'Trabajamos branding, sitios web, producto digital UX/UI, sistemas de growth y marketing, desarrollo y automatización práctica con IA. El objetivo es conectar las piezas que hacen que un negocio se entienda, genere confianza y reciba mejores contactos.' },
-    { q: '¿Los proyectos mostrados son casos reales de clientes?', a: 'Sí, es lo único que admite la sección de trabajo. Hay dos proyectos firmados esperando a que el cliente apruebe nombre y cifra; hasta entonces se cuentan pero no se enseñan. No hay nada inventado ocupando su lugar.' },
-    { q: '¿Pueden rediseñar un sitio o marca existente?', a: 'Sí. Podemos auditar la experiencia actual, conservar lo que funciona, reconstruir secciones débiles y convertir marca, sitio y seguimiento en un sistema más claro.' },
-    { q: '¿Cómo integran automatización con IA?', a: 'Empezamos con un flujo, no con una herramienta. Los mejores puntos de inicio suelen ser recepción de leads, recomendación de servicio, primera respuesta, bases de conocimiento, dashboards y prompts de seguimiento con entrega clara a una persona.' },
-    { q: '¿Cuánto tiempo toma un proyecto?', a: 'Una landing o auditoría enfocada puede tomar 1-2 semanas, un sitio completo suele tomar 4-8 semanas y sistemas más profundos de marca, producto o automatización pueden tomar 4-10 semanas según el alcance.' }
-  ]
-};
+const faqData = mkData ? mkData.faq : { en: [], es: [] };
 
 const _capabilitiesVisualBound = new WeakSet();
-let lastFocusedElement = null;
 
 function renderCapabilities() {
   const list = document.getElementById('capabilities-list');
@@ -199,8 +58,7 @@ function renderCapabilities() {
       <div class="accordion-content" id="cap-content-${i}" role="region">
         <div class="accordion-content__inner">
           <div>
-            <p class="accordion-text">${s.desc}</p>
-            <div class="accordion-tags">${s.tags.map(t => `<span class="accordion-tag">${t}</span>`).join('')}</div>
+            <p class="accordion-text">${s.hook || s.proof}</p>
             <a class="accordion-more link-arrow" href="/services/${SERVICE_SLUGS[i]}/">${currentLang === 'es' ? 'Ver el servicio' : 'See the service'}</a>
           </div>
         </div>
@@ -312,164 +170,34 @@ function initCapabilitiesVisualSwap(list) {
 }
 
 /**
- * The ledger of what the studio cannot yet prove.
- *
- * This is deliberately not a placeholder. A portfolio section with two projects
- * in it looks thin; a portfolio section with two projects and an explicit
- * account of what is missing reads as a studio with a rule. It shrinks on its
- * own as workData fills up — the published figure is derived, never typed — so
- * it never needs removing.
+ * The home's work section is a teaser, not the ledger (audit 2026-08-13).
+ * The two workplates render at build time from src/_data/cases.js; this
+ * writes the one honest line under them. The full ledger — published,
+ * signed, awards, team, the redaction bars — now lives at /work/ as static
+ * bilingual markup: a homepage that repeats the destination teaches the
+ * visitor the destination is not worth the click. Kept as `renderWork`
+ * because js/i18n.js re-invokes that name on every language switch, and it
+ * still claims its own reveal elements for the observer.
  */
-function workLedger() {
-  /* js/i18n.js declares `translations` and `currentLang` at the top level of a
-     classic script and loads before this file, so both are in scope. Generated
-     markup cannot use data-i18n here: setLanguage() runs before renderWork() on
-     first paint, so the attributes would never be filled. */
-  const t = (key) => (translations[currentLang] || {})[key] || '';
-  const rows = [
-    [t('work.ledgerPublished'), String(workData[currentLang].length), ''],
-    [t('work.ledgerPending'), String(workPendingCount), t('work.ledgerPendingNote')],
-    [t('work.ledgerAwards'), '0', t('work.ledgerAwardsNote')],
-    [t('work.ledgerTeam'), '1', t('work.ledgerTeamValue')]
-  ];
-  const row = ([label, value, note]) => `
-          <div class="work__ledger-row">
-            <dt class="work__ledger-label">${label}</dt>
-            <dd class="work__ledger-value">${value}</dd>
-            ${note ? `<dd class="work__ledger-note">${note}</dd>` : ''}
-          </div>`;
-  /* The redaction bars (immersive-plan §8): each signed-but-unnamed
-     engagement is a drawn bar, not an apology. When a case publishes, its
-     bar's removal IS the announcement. No invented industries, no invented
-     figures — the bar and the count are the only honest statements. */
-  const redacted = Array.from({ length: workPendingCount }, () => `
-          <div class="work__ledger-row work__ledger-row--redacted">
-            <dt class="work__ledger-label">${t('work.ledgerRedactedLabel')}</dt>
-            <dd class="work__ledger-value"><span class="work__redaction" aria-hidden="true"></span></dd>
-            <dd class="work__ledger-note">${t('work.ledgerRedactedNote')}</dd>
-          </div>`).join('');
-  return `
-    <section class="work__ledger reveal" aria-labelledby="work-ledger-title">
-      <h3 class="work__ledger-title" id="work-ledger-title">${t('work.ledgerTitle')}</h3>
-      <p class="work__ledger-lead">${t('work.ledgerLead')}</p>
-      <dl class="work__ledger-list">
-        ${row(rows[0])}${row(rows[1])}${redacted}${row(rows[2])}${row(rows[3])}
-      </dl>
-      <p class="work__ledger-close">${t('work.ledgerClose')}</p>
-    </section>`;
-}
-
 function renderWork() {
   const grid = document.getElementById('work-grid');
   if (!grid) return;
-  const data = workData[currentLang];
-  const allLabel = currentLang === 'es' ? 'Todos' : 'All';
-  const viewText = currentLang === 'es' ? 'Ver sistema' : 'View system';
-  const categories = [allLabel, ...new Set(data.map(item => item.category))];
-
-  /* Filters need something to filter. With two cases they are furniture, and
-     with none they are a row of buttons over an empty box. */
-  const filters = categories.length > 2 ? `
-    <div class="work__filters" aria-label="${currentLang === 'es' ? 'Filtrar proyectos' : 'Filter work'}">
-      ${categories.map((category, i) => `<button class="work__filter${i === 0 ? ' active' : ''}" type="button" data-filter="${category}">${category}</button>`).join('')}
-    </div>` : '';
-
-  const cards = data.length ? `
-    <div class="work__cards">
-      ${data.map((p, i) => workCard(p, viewText, i)).join('')}
-    </div>` : '';
-
-  grid.innerHTML = filters + cards + workLedger();
-
-  grid.querySelectorAll('.work__card').forEach(card => {
-    const open = () => {
-      const idx = Number(card.dataset.workIndex);
-      const project = workData[currentLang][idx];
-      if (project && project.case) openCaseModal(project);
-    };
-    card.addEventListener('click', open);
-    card.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        open();
-      }
-    });
-  });
-
-  grid.querySelectorAll('.work__filter').forEach(button => {
-    button.addEventListener('click', () => {
-      const filter = button.dataset.filter;
-      grid.querySelectorAll('.work__filter').forEach(item => item.classList.toggle('active', item === button));
-      grid.querySelectorAll('.work__card').forEach(card => {
-        const match = filter === allLabel || card.dataset.category === filter;
-        card.hidden = !match;
-      });
-    });
-  });
-
-  /* Everything this function writes starts hidden behind `.js-reveal`, so it
-     has to be handed to the observer. It happened to work before only because
-     setLanguage() calls renderFAQ() after renderWork() and renderFAQ() ends
-     with this call — reorder those two and the whole section would go invisible
-     on the first EN/ES switch. Claiming it here removes that coupling; the call
-     is idempotent, since there is one observer and it only picks up elements
-     that are not revealed yet. */
+  const t = (key) => (translations[currentLang] || {})[key] || '';
+  grid.innerHTML = `
+      <p class="work__summary reveal">${t('work.summary')}</p>`;
   initAnimations();
 }
-
-/**
- * Build a <picture> for one of the derivatives produced by
- * scripts/convert-images.mjs.
- *
- * `fallback` is the path stored in the content data and is also the <img> src,
- * so it carries the right extension for that asset (.jpg, or .png where the
- * artwork actually uses transparency). The AVIF and WebP candidates are derived
- * from it; the pipeline emits 480 and 960 for every source, because none of the
- * source art is wider than 1024px.
- *
- * width/height are declared so the browser reserves the box before the image
- * decodes. Every source in this project is 1024x1024, so the ratio is 1:1 for
- * all of them. CSS still controls the rendered size; these only supply the
- * intrinsic aspect ratio, which is what stops the layout shifting.
- */
-function pictureMarkup(fallback, alt, sizes, { lazy = true } = {}) {
-  const base = fallback.replace(/\.(jpg|png)$/i, '');
-  const srcset = (ext) => `${base}-480.${ext} 480w, ${base}-960.${ext} 960w`;
-  const loading = lazy ? ' loading="lazy"' : '';
-  return `<picture>
-      <source type="image/avif" srcset="${srcset('avif')}" sizes="${sizes}">
-      <source type="image/webp" srcset="${srcset('webp')}" sizes="${sizes}">
-      <img src="${fallback}" alt="${alt}"${loading} decoding="async" width="960" height="960">
-    </picture>`;
-}
-
-function workCard(p, viewText, idx) {
-  return `<article class="work__card reveal" data-work-index="${idx}" data-category="${p.category}" role="button" tabindex="0" aria-label="${viewText}: ${p.name}">
-    <div class="work__card-media" style="background:${p.color}">
-      ${pictureMarkup(p.img, p.name, '(max-width: 768px) 100vw, 33vw')}
-      <span class="work__card-meta">${p.isRealClient ? 'Client work' : p.outcome}</span>
-      <div class="work__card-overlay">
-        <h3 class="work__card-name">${p.name}</h3>
-        <p class="work__card-desc">${p.desc}</p>
-        <div class="work__card-tags">${p.tags.map(t => `<span class="work__card-tag">${t}</span>`).join('')}</div>
-      </div>
-      <span class="work__card-cta">${viewText}</span>
-    </div>
-    <div class="work__card-info">
-      <div>
-        <h3 class="work__card-info-name">${p.name}</h3>
-        <p class="work__card-info-desc">${p.desc}</p>
-      </div>
-      <span class="work__card-outcome">${p.category}</span>
-    </div>
-  </article>`;
-}
-
 
 function renderFAQ() {
   const list = document.getElementById('faq-list');
   if (!list) return;
-  const data = faqData[currentLang];
+  /* Three at the door (audit 2026-08-13): the FAQ was the richest copy on
+     the property and it lived only here, which made the home the page of
+     record for every question. The service pages now carry their own FAQs;
+     the home keeps the three orientation questions and sends the rest
+     deeper. faqEntities.js slices identically so the schema never declares
+     more than the page shows. */
+  const data = faqData[currentLang].slice(0, 3);
   list.innerHTML = data.map((f, i) => `
     <div class="accordion-item reveal">
       <button class="accordion-header" aria-expanded="false" aria-controls="faq-content-${i}">
@@ -702,106 +430,6 @@ function initPlayShowreel() {
   }
 }
 
-function createModal() {
-  if (document.getElementById('detail-modal')) return;
-  const modal = document.createElement('div');
-  modal.id = 'detail-modal';
-  modal.className = 'detail-modal';
-  modal.setAttribute('role', 'dialog');
-  modal.setAttribute('aria-modal', 'true');
-  modal.setAttribute('aria-hidden', 'true');
-  modal.innerHTML = `
-    <div class="detail-modal__backdrop"></div>
-    <div class="detail-modal__container" role="document">
-      <button class="detail-modal__close" type="button" aria-label="Close">&times;</button>
-      <div class="detail-modal__content"></div>
-    </div>`;
-  document.body.appendChild(modal);
-}
-
-function openModal(html) {
-  const modal = document.getElementById('detail-modal');
-  if (!modal) return;
-  lastFocusedElement = document.activeElement;
-  modal.querySelector('.detail-modal__content').innerHTML = html;
-  const heading = modal.querySelector('.modal-case__title, .modal-news__title');
-  if (heading) {
-    heading.id = 'detail-modal-title';
-    modal.setAttribute('aria-labelledby', heading.id);
-  }
-  modal.classList.add('active');
-  modal.setAttribute('aria-hidden', 'false');
-  document.body.style.overflow = 'hidden';
-  const closeButton = modal.querySelector('.detail-modal__close');
-  if (closeButton) {
-    window.setTimeout(() => closeButton.focus(), 0);
-    window.setTimeout(() => {
-      if (!modal.contains(document.activeElement)) closeButton.focus();
-    }, 120);
-  }
-}
-
-function closeModal() {
-  const modal = document.getElementById('detail-modal');
-  if (!modal) return;
-  modal.classList.remove('active');
-  modal.setAttribute('aria-hidden', 'true');
-  modal.removeAttribute('aria-labelledby');
-  document.body.style.overflow = '';
-  if (lastFocusedElement && typeof lastFocusedElement.focus === 'function') {
-    lastFocusedElement.focus();
-  }
-}
-
-function openCaseModal(project) {
-  const labels = currentLang === 'es'
-    ? { challenge: 'El desafio', solution: 'Nuestra solucion', result: 'Resultado esperado', caseStudy: project.isRealClient ? 'Caso de estudio' : 'Showcase de capacidad', deliverables: 'Entregables' }
-    : { challenge: 'The challenge', solution: 'Our approach', result: 'Expected outcome', caseStudy: project.isRealClient ? 'Case study' : 'Capability showcase', deliverables: 'Deliverables' };
-
-  const html = `
-    <div class="modal-case">
-      <div class="modal-case__hero" style="background:${project.color}">
-        ${pictureMarkup(project.img, project.name, '(max-width: 900px) 100vw, 860px', { lazy: false })}
-      </div>
-      <div class="modal-case__body">
-        <span class="modal-case__label">${labels.caseStudy}</span>
-        <h2 class="modal-case__title">${project.name}</h2>
-        <p class="modal-case__desc">${project.desc}</p>
-        <div class="modal-case__tags">${project.tags.map(t => `<span class="modal-case__tag">${t}</span>`).join('')}</div>
-        <div class="modal-case__section">
-          <h3>${labels.challenge}</h3>
-          <p>${project.case.challenge}</p>
-        </div>
-        <div class="modal-case__section">
-          <h3>${labels.solution}</h3>
-          <p>${project.case.solution}</p>
-        </div>
-        <div class="modal-case__section">
-          <h3>${labels.deliverables}</h3>
-          <div class="modal-case__tags">${project.case.deliverables.map(t => `<span class="modal-case__tag">${t}</span>`).join('')}</div>
-        </div>
-        <div class="modal-case__section modal-case__section--result">
-          <h3>${labels.result}</h3>
-          <p>${project.case.result}</p>
-        </div>
-      </div>
-    </div>`;
-  openModal(html);
-}
-
-
-function initModal() {
-  createModal();
-  document.addEventListener('click', (e) => {
-    if (e.target.closest('.detail-modal__close') || e.target.closest('.detail-modal__backdrop') || e.target.closest('.modal-news__back')) {
-      closeModal();
-    }
-  });
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') closeModal();
-  });
-}
-
 /**
  * Ambient WebGL background for the hero.
  *
@@ -898,6 +526,5 @@ document.addEventListener('DOMContentLoaded', () => {
   renderFAQ();
   initNewsletter();
   initPlayShowreel();
-  initModal();
   initAnimations();
 });

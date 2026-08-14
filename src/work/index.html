@@ -54,6 +54,39 @@ pageSchema:
         </article>
       </section>
 
+      {#- The ledger, which used to render from JS on the homepage and only
+          there. It belongs here: this is the page a visitor opens to judge
+          the portfolio, and a homepage that already showed it gave the click
+          nothing to find. Static markup in both languages now — it was
+          invisible to crawlers and to anyone without JS, on the one page
+          whose entire argument is that the figures are checkable. -#}
+      <section class="work__ledger" aria-labelledby="work-ledger-title" data-fx="fade-up">
+        <h2 class="work__ledger-title" id="work-ledger-title" data-i18n="work.ledgerTitle">What we can't prove yet</h2>
+        <p class="work__ledger-lead" data-i18n="work.ledgerLead">Most studio sites leave this part out. The rest of this page asks you to trust figures, so you should also know which figures we don't have.</p>
+        <dl class="work__ledger-list">
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label" data-i18n="work.ledgerPublished">Published client projects</dt>
+            <dd class="work__ledger-value">0</dd>
+          </div>
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label" data-i18n="work.ledgerPending">Signed, not yet publishable</dt>
+            <dd class="work__ledger-value">2</dd>
+            <dd class="work__ledger-note" data-i18n="work.ledgerPendingNote">They go up with the client's name and an agreed number, or they don't go up.</dd>
+          </div>
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label" data-i18n="work.ledgerAwards">Awards</dt>
+            <dd class="work__ledger-value">0</dd>
+            <dd class="work__ledger-note" data-i18n="work.ledgerAwardsNote">None. This is the first year we're entering.</dd>
+          </div>
+          <div class="work__ledger-row">
+            <dt class="work__ledger-label" data-i18n="work.ledgerTeam">Team</dt>
+            <dd class="work__ledger-value">1</dd>
+            <dd class="work__ledger-note" data-i18n="work.ledgerTeamValue">One, plus specialists per project</dd>
+          </div>
+        </dl>
+        <p class="work__ledger-close" data-i18n="work.ledgerClose">Work appears here when the client signs off on the number, not before.</p>
+      </section>
+
       <p class="subpage__footnote" data-i18n="workPage.close">No borrowed logos, no "capability showcases", no stock. The self-initiated work says whose it is; the client work waits for permission.</p>
 
     </div>

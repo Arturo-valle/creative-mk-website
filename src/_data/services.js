@@ -14,6 +14,7 @@
 const services = [
   {
     slug: 'branding',
+    media: 'images/services/branding.jpg',
     esSlug: 'branding',
     index: 0,
     en: {
@@ -33,6 +34,7 @@ const services = [
   },
   {
     slug: 'websites',
+    media: 'images/services/web-design.jpg',
     esSlug: 'sitios-web',
     index: 1,
     en: {
@@ -52,6 +54,7 @@ const services = [
   },
   {
     slug: 'product-ux-ui',
+    media: 'images/services/ux-ui-design-premium-preview.jpg',
     esSlug: 'producto-digital-ux-ui',
     index: 2,
     en: {
@@ -71,6 +74,7 @@ const services = [
   },
   {
     slug: 'growth',
+    media: 'images/services/sales-funnels.jpg',
     esSlug: 'growth-marketing',
     index: 3,
     en: {
@@ -90,6 +94,7 @@ const services = [
   },
   {
     slug: 'ai-automation',
+    media: 'images/services/email-marketing.jpg',
     esSlug: 'automatizacion-ia',
     index: 4,
     en: {
@@ -109,6 +114,7 @@ const services = [
   },
   {
     slug: 'development',
+    media: 'images/services/landing-pages.jpg',
     esSlug: 'desarrollo',
     index: 5,
     en: {
