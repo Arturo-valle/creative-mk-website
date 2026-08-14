@@ -68,6 +68,51 @@
       live.forEach(function (entry) { entry.split = null; });
       live.length = 0;
     });
+
+    /* The failsafe direction.md §3.2 made standing practice.
+
+       Hiding an element from JS and revealing it from a scroll trigger has
+       one catastrophic failure mode: the hide runs, the reveal never does,
+       and content is invisible forever on a page that looks like it loaded.
+       That happened here once already with the .reveal spine.
+
+       Two guards. On `load`, anything already inside the viewport is
+       revealed outright — it should never have needed a scroll. And a
+       ceiling: three seconds after load, any node still hidden is shown
+       regardless of where it sits, because a reveal that has not fired by
+       then is a bug, and a bug must not cost the visitor the page. */
+    function rescue(viewportOnly) {
+      nodes.forEach(function (el) {
+        /* The test is visibility, not the data-fx-done marker. The marker
+           means "the reveal fired", which is not the same as "the element
+           can be read": a tween that was created and then never advanced
+           leaves the element marked and invisible, and an earlier version of
+           this guard skipped exactly those. */
+        var kindNow = el.getAttribute('data-fx');
+        var probe = kindNow === 'group' ? (el.firstElementChild || el) : el;
+        if (kindNow !== 'draw' && getComputedStyle(probe).visibility !== 'hidden') return;
+        if (viewportOnly) {
+          var box = el.getBoundingClientRect();
+          if (box.top > window.innerHeight || box.bottom < 0) return;
+        }
+        var kind = el.getAttribute('data-fx');
+        var targets = kind === 'group' ? Array.prototype.slice.call(el.children) : [el];
+        el.setAttribute('data-fx-done', '');
+        /* Kill first, then set. A reveal tween that was created but never
+           advanced is still live, and it re-asserts opacity 0 on the next
+           tick — so a rescue that only writes the final state gets quietly
+           overwritten by the animation it was rescuing the element from. */
+        gsap.killTweensOf(targets);
+        if (kind === 'draw') gsap.set(el, { scaleX: 1 });
+        else gsap.set(targets, { autoAlpha: 1, y: 0 });
+      });
+    }
+
+    window.addEventListener('load', function () {
+      ScrollTrigger.refresh();
+      rescue(true);
+      window.setTimeout(function () { rescue(false); }, 3000);
+    });
   }
 
   function reveal(el, kind, targets, delay, gsap, SplitTextCtor) {
