@@ -263,6 +263,54 @@ export function initTerrain(canvas) {
   let lastScroll = window.scrollY || 0;
   let velocity = 0;
 
+  /* ---- adaptive quality (direction.md §5.1.1) ----
+
+     The 22-second SwiftShader incident taught this file that GPU capability
+     is bimodal and lied about by every static signal. So capability is now
+     measured where it is spent: a rolling buffer of frame deltas, evaluated
+     once it holds ~1.5s of frames and at most once per 3s. Sustained above
+     22ms the pixel ratio steps down a tier; sustained under 12ms it steps
+     back up, never past where it started. Tiers touch resolution only —
+     the story is not a tier.
+
+     The floor is stillness, not slideshow: at the lowest tier and still
+     failing, the loop parks on the settled field and never restarts. A
+     machine that cannot afford the field gets the field's final frame,
+     which is exactly what reduced-motion visitors get on purpose. */
+  const TIER_DPRS = [Math.min(window.devicePixelRatio, 1.75), 1.5, 1.25, 1.0]
+    .filter((v, i, a) => v >= 1 && a.indexOf(v) === i)
+    .sort((a, b) => b - a);
+  let tier = 0;
+  let parked = false;
+  let frameTimes = [];
+  let lastFrameAt = 0;
+  let tierChangedAt = 0;
+
+  function applyTier(next, now) {
+    tier = next;
+    tierChangedAt = now;
+    frameTimes = [];
+    renderer.dpr = TIER_DPRS[tier];
+    resize();
+    document.documentElement.dataset.mkFieldTier = String(tier);
+  }
+
+  function evaluateTier(now) {
+    const avg = frameTimes.reduce((sum, d) => sum + d, 0) / frameTimes.length;
+    frameTimes = [];
+    if (avg > 22) {
+      if (tier < TIER_DPRS.length - 1) {
+        applyTier(tier + 1, now);
+      } else {
+        parked = true;
+        if (raf !== null) cancelAnimationFrame(raf);
+        raf = null;
+      }
+    } else if (avg < 12 && tier > 0) {
+      applyTier(tier - 1, now);
+    }
+  }
+
   /* ---- the loop: runs while the tab is visible; the canvas is the page's
      background everywhere, so there is no offscreen state to pause for ---- */
   let raf = null;
@@ -273,6 +321,15 @@ export function initTerrain(canvas) {
     // Keep trying to claim a size until layout gives us one.
     if (!gl.drawingBufferWidth && !resize()) return;
     if (!startedAt) startedAt = now;
+
+    /* Deltas above 250ms are pauses (tab switch, debugger), not frames —
+       counting one would poison the average a downgrade decides on. */
+    if (lastFrameAt) {
+      const delta = now - lastFrameAt;
+      if (delta < 250) frameTimes.push(delta);
+    }
+    lastFrameAt = now;
+    if (frameTimes.length >= 90 && now - tierChangedAt > 3000) evaluateTier(now);
 
     const t = Math.min(1, (now - startedAt) / ARRIVAL_MS);
     u.uArrival.value = 1 - Math.pow(1 - t, 3);
@@ -295,7 +352,9 @@ export function initTerrain(canvas) {
 
   function sync() {
     const visible = document.visibilityState === 'visible';
-    if (visible && raf === null) {
+    if (visible && raf === null && !parked) {
+      lastFrameAt = 0;
+      frameTimes = [];
       raf = requestAnimationFrame(frame);
     } else if (!visible && raf !== null) {
       cancelAnimationFrame(raf);
@@ -336,6 +395,7 @@ export function initTerrain(canvas) {
 
   resize();
   sync();
+  document.documentElement.dataset.mkFieldTier = '0';
 
   return dispose;
 }

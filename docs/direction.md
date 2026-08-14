@@ -37,6 +37,21 @@ npm run verify && npx wrangler pages deploy dist --project-name=creative-mk-webs
 `npm run verify` is not optional politeness — it is the only gate between the
 working tree and the live site, because there is no CI in front of the upload.
 
+**⚠ Discovered 2026-08-13: the shell's `CLOUDFLARE_API_TOKEN` belongs to a
+different account** — `zyz.investments@gmail.com`, account
+`6b110c77818243752bd803fe71603797`, not this site's account above. The env
+var overrides wrangler's own login, so the publish command as documented
+would deploy `creative-mk-website` into the wrong account (Pages creates
+missing projects on deploy rather than failing). Before any deploy from this
+machine: unset the variable for the session
+(`$env:CLOUDFLARE_API_TOKEN = $null` in PowerShell) and let wrangler use the
+OAuth login for arturo.ordonezv@gmail.com, or export the correct account's
+token. `npx wrangler whoami` first, every time — the 2026-06 três-months-dark
+incident (§1) and the wrong-client `.netlify/` publish path (§1.2) were both
+this same class of failure: deploy state pointing somewhere true-looking and
+wrong. This also blocks the Counterscale/Web-Analytics install (§6.1) until
+the right credentials are in hand — analytics is owner-gated on that.
+
 ### 1.1 Purge after deploying, and never probe before
 
 The zone's Browser Cache TTL is **14400s (4 hours)** and it overrides the
@@ -199,11 +214,73 @@ because it turns "more show" into three numbers that can be argued about.
 | Dial | Today | Target | Why |
 |---|---|---|---|
 | `DESIGN_VARIANCE` | ~4 | **8** | Asymmetry is free. It is CSS Grid and negative margins: no runtime cost, no i18n risk, no mobile penalty. |
-| `MOTION_INTENSITY` | ~3 | **6** | Motion is the expensive axis and the only one that can regress §3.1, §3.2 and §3.3 simultaneously. |
+| `MOTION_INTENSITY` | ~3 | **7** | Amended 2026-08-13, §5.1.1. Motion is the expensive axis and the only one that can regress §3.1, §3.2 and §3.3 simultaneously. |
 | `VISUAL_DENSITY` | ~4 | **3** | More air. Costs nothing, and it is what reads as expensive. |
 
 The reference preset for "agency / creative landing" is 9 / 8 / 3. We are
 deliberately taking the variance and holding back the motion.
+
+### 5.1.1 The 2026-08-13 amendment: motion 6 → 7, with its justification
+
+The owner's directive of 2026-08-13 — the whole site dynamic, every page
+inside one motion language, built to compete for international awards —
+raises `MOTION_INTENSITY` from 6 to 7. This section is the justification
+that the original rule demanded for every point above 6.
+
+The evidence that licenses it: the SOTM winners of 2026 do not win on heavier
+motion but on *complete* motion — Son Daven's lesson is that no block (FAQ,
+footer, contact) drops out of the motion language, and its Usability 7.16 was
+still the score's floor. So the point is spent on **coverage, not intensity**:
+a declarative effect system every page inherits, not bigger effects on the
+homepage. 8+ stays out; the taste-skill preset's 9-10 is where the three
+contracts of §3 start losing.
+
+The point is only affordable under three **binding acceptance criteria** —
+every new effect, no exceptions, checked before merge:
+
+1. **Settled under `prefers-reduced-motion`** — the effect resolves to its
+   completed end-state, verified with the media query forced on. CI checks
+   the global kill-switch exists; this criterion checks each effect actually
+   uses it. (The Trionn convention of merely *slowing* idle motion under PRM
+   is explicitly not imported — stillness on purpose is the accessibility
+   thesis, and the winners' weakest subscore is the one we intend to beat.)
+2. **Survives EN→ES→EN** — a full round trip through the language switch with
+   re-measure (`mk:i18n` → `ScrollTrigger.refresh()` and any split text
+   reverted, rewritten, re-split). Spanish runs ~20% longer; an effect that
+   measures once is an effect that breaks in half the market.
+3. **Renders as content with JS blocked** — the no-JS document shows the
+   finished content, per the §3.2 contract. Effects are added by script,
+   never assumed by markup.
+
+Two enforcement mechanisms ride with the amendment:
+
+- **Adaptive quality tiers in the field renderer** (js/terrain.js): a rolling
+  frame-time buffer degrades resolution before a visitor ever sees jank —
+  above ~22ms sustained the tier steps down, below ~12ms it steps back up;
+  tiers touch pixel ratio only, never story. This converts the binary
+  SwiftShader gate into measured tiers, and it is the only lawful path §3.1
+  leaves toward mobile 3D: the runtime measurement *is* the number the rule
+  demands. The floor tier stops the loop and leaves the settled field —
+  degradation ends in stillness, not slideshow.
+- **A per-frame budget for the field's program stack: ≤6ms at DPR 1.5 on the
+  dev machine,** measured before each merge that touches the shader, the
+  number recorded here the way the 22s SwiftShader figure was. Today's
+  baseline (2026-08-13, single-pass contour shader): ~1.2ms at DPR 1.5,
+  1440p, RTX-class hardware — headroom is real but finite; the raymarched
+  Act II (immersive plan's successor) spends most of it.
+
+Decisions recorded with the amendment, so a later taste pass reads them as
+chosen rather than accidental: the persistent canvas stays (per-section
+scenes are rework with no payoff at this page count — steal only the idle
+warm-up); no plugin enters while a shipped hand-rolled equivalent exists
+(ScrambleText, DrawSVG, MorphSVG stay out; Flip enters content-gated when
+the case plates have imagery); three.js stays banned from site pages — its
+techniques port to the vendored OGL tree, and the /lab/ authored piece may
+reach `three/webgpu` only via dynamic import with a deliberate gate amendment
+in the same commit. The gold cursor, which §12 of the immersive plan killed
+and Phase 6 shipped anyway, must either acquire narrative (it becomes the
+raking-light source over the Act II emboss) or go — it does not stay as
+decoration.
 
 **The point worth remembering: variance is free, motion is not.** Most of the
 perceived transformation is available on the axis that carries no cost. Spend
