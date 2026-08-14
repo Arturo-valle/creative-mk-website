@@ -14,6 +14,7 @@ eleventyComputed:
   description: "{{ service.en.desc | truncate(155) }}"
   ogDescription: "{{ service.en.lead | safe }} — {{ service.en.title | safe }} at CREATIVE MK."
   canonical: "/services/{{ service.slug }}/"
+  ogImage: "/images/og/service-{{ service.slug }}.png"
   altEs: "/es/servicios/{{ service.esSlug }}/"
   pageSchema:
     "@type": "Service"

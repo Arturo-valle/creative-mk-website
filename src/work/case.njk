@@ -11,6 +11,7 @@ eleventyComputed:
   description: "{{ case.en.challenge | truncate(155) }}"
   ogDescription: "{{ case.en.lead | safe }} — {{ case.en.client | safe }}."
   canonical: "/work/{{ case.slug }}/"
+  ogImage: "/images/og/case-{{ case.slug }}.png"
   pageSchema:
     "@type": "CreativeWork"
     "@id": "https://creativemk.net/work/{{ case.slug }}/#case"

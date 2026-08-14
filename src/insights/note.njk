@@ -11,6 +11,9 @@ eleventyComputed:
   description: "{{ note.metaDesc.en | safe }}"
   ogDescription: "{{ note.en.title | safe }} — a short note from CREATIVE MK."
   canonical: "/insights/{{ note.slug | safe }}/"
+  ogImage: "/images/og/note-{{ note.slug | safe }}.png"
+  ogType: "article"
+  articlePublished: "{{ note.iso | safe }}"
   pageSchema:
     "@type": "Article"
     headline: "{{ note.en.title | safe }}"
