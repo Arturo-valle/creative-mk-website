@@ -1,5 +1,9 @@
 <!DOCTYPE html>
-<html lang="{{ lang or 'en' }}">
+{#- data-alt-* carry this page's sibling in the other language, when one
+    exists. js/i18n.js reads them so the EN/ES control navigates instead of
+    rewriting the document in place — one URL per language, which is what
+    Google asks for and what makes the Spanish half indexable at all. -#}
+<html lang="{{ lang or 'en' }}"{% if altEn %} data-alt-en="{{ altEn }}"{% endif %}{% if altEs %} data-alt-es="{{ altEs }}"{% endif %}>
 <head>
 {% include "head.njk" %}
 </head>

@@ -401,6 +401,13 @@ const translations = {
 const LANG_STORAGE_KEY = 'creativeMkLang';
 
 function getStoredLanguage() {
+  /* The document wins over the preference. A page under /es/ is Spanish in
+     its served HTML — title, body copy, schema — so a stored 'en' must not
+     start rewriting it into a chimera the moment JS runs. Storage only
+     decides for the pages that carry both languages in one document (the
+     homepage and the shared chrome). */
+  const docLang = document.documentElement.lang;
+  if (docLang === 'es' || docLang === 'en') return docLang;
   try {
     return localStorage.getItem(LANG_STORAGE_KEY) === 'es' ? 'es' : 'en';
   } catch (error) {
@@ -461,8 +468,25 @@ function setLanguage(lang) {
 }
 
 function initI18n() {
+  /* Where a real sibling URL exists, the switcher navigates to it: Google
+     asks for one URL per language, and a page that only swaps strings in
+     place has no Spanish document to index. The sibling paths are stamped
+     on <html> by the layout (data-alt-en / data-alt-es); pages that carry
+     both languages in one document — the homepage today — have neither, and
+     fall back to the in-place swap that has always run there. */
+  const root = document.documentElement;
   document.querySelectorAll('.lang-switch__btn').forEach(btn => {
-    btn.addEventListener('click', () => setLanguage(btn.dataset.lang));
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.lang;
+      if (target === currentLang) return;
+      const sibling = target === 'es' ? root.dataset.altEs : root.dataset.altEn;
+      if (sibling) {
+        storeLanguage(target);
+        window.location.href = sibling;
+        return;
+      }
+      setLanguage(target);
+    });
   });
   if (currentLang !== 'en') {
     setLanguage(currentLang);

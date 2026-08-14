@@ -5,6 +5,7 @@ title: "Services | CREATIVE MK"
 description: "Six services that chain into one system: branding, websites, product UX/UI, growth, AI automation and development."
 ogDescription: "Six services, one system. Branding through AI automation."
 canonical: "/services/"
+altEs: "/es/servicios/"
 pageSchema:
   "@type": "CollectionPage"
   url: "https://creativemk.net/services/"
@@ -26,7 +27,7 @@ pageSchema:
           <div class="svcindex__body">
             <h2 class="svcindex__title"><a href="/services/{{ service.slug }}/">{{ service.en.title }}</a></h2>
             <p class="svcindex__lead">{{ service.en.lead }}</p>
-            <p class="svcindex__desc">{{ service.en.desc }}</p>
+            <p class="svcindex__desc">{{ service.en.hook }}</p>
           </div>
           <a class="svcindex__go" href="/services/{{ service.slug }}/" aria-label="{{ service.en.title }}">&rarr;</a>
         </li>

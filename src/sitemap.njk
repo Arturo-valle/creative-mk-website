@@ -8,16 +8,42 @@ eleventyExcludeFromCollections: true
     already fallen behind the routes that existed. Paginated outputs are
     enumerated from their source data rather than collections.all, because a
     template that paginates contributes only its first output there. -#}
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 {%- for item in collections.all %}
-{%- if item.url and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/work/" not in item.url and "/404" not in item.url %}
+{%- if item.url and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/work/" not in item.url and "/es/" not in item.url and "/404" not in item.url %}
   <url><loc>{{ site.origin }}{{ item.url }}</loc></url>
 {%- endif %}
 {%- endfor %}
   <url><loc>{{ site.origin }}/work/</loc></url>
-  <url><loc>{{ site.origin }}/services/</loc></url>
+  <url>
+    <loc>{{ site.origin }}/services/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.origin }}/services/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="{{ site.origin }}/es/servicios/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}/services/"/>
+  </url>
+  <url>
+    <loc>{{ site.origin }}/es/servicios/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.origin }}/services/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="{{ site.origin }}/es/servicios/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}/services/"/>
+  </url>
+{#- Each locale pair is declared with xhtml:link alternates as well as in the
+    page head. Google reads either, and a cluster is only honoured when the
+    set is identical and bidirectional on every member — emitting both sides
+    from this one loop is what guarantees that. -#}
 {%- for service in services %}
-  <url><loc>{{ site.origin }}/services/{{ service.slug }}/</loc></url>
+  <url>
+    <loc>{{ site.origin }}/services/{{ service.slug }}/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.origin }}/services/{{ service.slug }}/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="{{ site.origin }}/es/servicios/{{ service.esSlug }}/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}/services/{{ service.slug }}/"/>
+  </url>
+  <url>
+    <loc>{{ site.origin }}/es/servicios/{{ service.esSlug }}/</loc>
+    <xhtml:link rel="alternate" hreflang="en" href="{{ site.origin }}/services/{{ service.slug }}/"/>
+    <xhtml:link rel="alternate" hreflang="es" href="{{ site.origin }}/es/servicios/{{ service.esSlug }}/"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}/services/{{ service.slug }}/"/>
+  </url>
 {%- endfor %}
 {%- for case in cases %}
   <url><loc>{{ site.origin }}/work/{{ case.slug }}/</loc></url>

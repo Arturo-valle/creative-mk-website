@@ -15,7 +15,8 @@ export default {
    * schema in the same build.
    */
   serviceFaqEntities: (data) => {
-    const faqs = data.service && data.service.en && data.service.en.faqs;
+    const loc = data.L === 'es' ? 'es' : 'en';
+    const faqs = data.service && data.service[loc] && data.service[loc].faqs;
     if (!faqs || !faqs.length) return null;
     return faqs.map((item) => ({
       '@type': 'Question',

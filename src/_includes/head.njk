@@ -24,7 +24,18 @@
   <meta name="twitter:description" content="{{ (ogDescription or description) | attr | safe }}">
   <meta name="twitter:image" content="{{ site.origin }}{{ ogImage or site.defaultOgImage }}">
   <link rel="canonical" href="{{ site.origin }}{{ canonical }}">
-{%- if hreflang %}
+{#- hreflang. Two ways in: the legacy `hreflang` list (the privacy pair set
+    it by hand), or the `altEn`/`altEs` pair a locale template computes.
+    Google requires the set to be identical on both sides, self-referencing
+    and bidirectional — an asymmetric cluster is ignored wholesale — so the
+    triplet is emitted from one place with x-default pointing at English. -#}
+{%- if altEn or altEs %}
+{%- set enHref = altEn if altEn else canonical %}
+{%- set esHref = altEs if altEs else canonical %}
+  <link rel="alternate" hreflang="en" href="{{ site.origin }}{{ enHref }}">
+  <link rel="alternate" hreflang="es" href="{{ site.origin }}{{ esHref }}">
+  <link rel="alternate" hreflang="x-default" href="{{ site.origin }}{{ enHref }}">
+{%- elif hreflang %}
 {%- for alt in hreflang %}
   <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ site.origin }}{{ alt.href }}">
 {%- endfor %}

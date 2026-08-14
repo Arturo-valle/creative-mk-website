@@ -1,0 +1,149 @@
+{#- One service page body, rendered in whichever locale the caller sets.
+
+    Callers set `L` ('en' or 'es') and `localePrefix` ('' or '/es'); this
+    file reads `service[L]` throughout. Extracted 2026-08-13 when the Spanish
+    tree landed: the alternative was a second copy of 130 lines of markup
+    that would drift from this one within a month, which is the exact
+    mistake that left the header in eight hand-maintained variants.
+
+    The data-i18n attributes stay on the shared chrome strings, so the
+    runtime switcher still works for a visitor who toggles instead of
+    navigating — but the body no longer depends on it. -#}
+{%- set copy = service[L] %}
+{%- set servicesPath = localePrefix + ("/servicios/" if L == "es" else "/services/") %}
+    <div class="container">
+      <nav class="crumbs" aria-label="Breadcrumb">
+        <a href="{{ servicesPath }}" data-i18n="servicesPage.kicker">{{ "Servicios" if L == "es" else "Services" }}</a>
+        <span aria-hidden="true">/</span>
+        <span aria-current="page">{{ copy.title }}</span>
+      </nav>
+
+      <span class="section-kicker" data-fx="fade-up">{{ copy.lead }}</span>
+      <h1 class="subpage__title" data-fx="lines">{{ copy.title }}</h1>
+      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15">{{ copy.desc }}</p>
+
+      {#- The service image. It shipped in the repo, sized and converted to
+          AVIF/WebP, and was used only by the homepage accordion — so every
+          service page was typography on an empty canvas while its own
+          picture sat in dist/. The raking sweep (css/subpage.css) is the
+          non-GL tier of the site's motion language: it works on mobile and
+          on software renderers, where the field cannot run. -#}
+      {%- set imgBase = service.media | replace(".jpg", "") %}
+      <figure class="svc__figure" data-fx="fade-up" data-fx-delay="0.2">
+        <picture>
+          <source type="image/avif" srcset="/{{ imgBase }}-480.avif 480w, /{{ imgBase }}-960.avif 960w" sizes="(max-width: 900px) 100vw, 860px">
+          <source type="image/webp" srcset="/{{ imgBase }}-480.webp 480w, /{{ imgBase }}-960.webp 960w" sizes="(max-width: 900px) 100vw, 860px">
+          <img src="/{{ service.media }}" alt="{{ copy.title }}{{ " en CREATIVE MK" if L == "es" else " work at CREATIVE MK" }}" loading="lazy" decoding="async" width="960" height="960">
+        </picture>
+      </figure>
+
+      {#- The page's own argument. Until 2026-08-13 the whole body was the
+          desc above plus one sentence, all of it already visible in the
+          homepage accordion — which is why a click into a service delivered
+          deja vu. Everything from here down exists only on this URL. -#}
+      <div class="svc__intro" data-fx="fade-up">
+        {%- for para in copy.intro %}
+        <p>{{ para }}</p>
+        {%- endfor %}
+      </div>
+
+      <section class="svc__block" aria-labelledby="svc-fit">
+        <h2 id="svc-fit" class="svc__block-title" data-fx="fade-up" data-i18n="servicePage.fitTitle">{{ "Para quién es" if L == "es" else "Who this is for" }}</h2>
+        <p class="svc__proof" data-fx="fade-up">{{ copy.proof }}</p>
+      </section>
+
+      <section class="svc__block" aria-labelledby="svc-what">
+        <h2 id="svc-what" class="svc__block-title" data-fx="fade-up" data-i18n="servicePage.whatTitle">{{ "Qué incluye" if L == "es" else "What it covers" }}</h2>
+        <ul class="svc__tags" data-fx="group">
+          {%- for tag in copy.tags %}
+          <li>{{ tag }}</li>
+          {%- endfor %}
+        </ul>
+      </section>
+
+      {#- Deliverables as artifacts, not adjectives: what actually arrives. -#}
+      <section class="svc__block" aria-labelledby="svc-deliverables">
+        <h2 id="svc-deliverables" class="svc__block-title" data-fx="fade-up" data-i18n="servicePage.deliverablesTitle">{{ "Qué recibes" if L == "es" else "What you get" }}</h2>
+        <dl class="svc__deliverables" data-fx="group">
+          {%- for item in copy.deliverables %}
+          <div class="svc__deliverable">
+            <dt>{{ item.name }}</dt>
+            <dd>{{ item.detail }}</dd>
+          </div>
+          {%- endfor %}
+        </dl>
+      </section>
+
+      {#- Engagement shapes with the published duration ranges. Nothing here
+          is a package and no price is quoted; the shape is what lets a buyer
+          self-qualify before a call, which is the step the audit found
+          missing. -#}
+      <section class="svc__block" aria-labelledby="svc-shapes">
+        <h2 id="svc-shapes" class="svc__block-title" data-fx="fade-up" data-i18n="servicePage.shapesTitle">{{ "Formas de empezar" if L == "es" else "Ways to start" }}</h2>
+        <ul class="svc__shapes" data-fx="group">
+          {%- for item in copy.engagements %}
+          <li class="svc__shape">
+            <h3 class="svc__shape-name">{{ item.name }}</h3>
+            <p class="svc__shape-duration">{{ item.duration }}</p>
+            <p class="svc__shape-includes">{{ item.includes }}</p>
+          </li>
+          {%- endfor %}
+        </ul>
+      </section>
+
+      <section class="svc__block" aria-labelledby="svc-how">
+        <h2 id="svc-how" class="svc__block-title" data-fx="fade-up" data-i18n="servicePage.howTitle">{{ "Cómo corre el trabajo" if L == "es" else "How the work runs" }}</h2>
+        <ol class="svc__process" data-fx="group">
+          {%- if L == "es" %}
+          <li><span>01</span><strong data-i18n="process.stepOneTitle">Diagnóstico</strong><span data-i18n="process.stepOneText">Clarificamos audiencia, oferta, el cuello de botella actual y qué debe probar la primera versión.</span></li>
+          <li><span>02</span><strong data-i18n="process.stepTwoTitle">Forma</strong><span data-i18n="process.stepTwoText">Definimos mensajes, estructura, dirección visual, flujo UX y la ruta de servicio prioritaria.</span></li>
+          <li><span>03</span><strong data-i18n="process.stepThreeTitle">Construcción</strong><span data-i18n="process.stepThreeText">Diseñamos y desarrollamos los activos, páginas, automatizaciones o pantallas necesarias para lanzar.</span></li>
+          <li><span>04</span><strong data-i18n="process.stepFourTitle">Medición</strong><span data-i18n="process.stepFourText">Conectamos captura, seguimiento, analítica e iteración para que el sistema mejore después del lanzamiento.</span></li>
+          {%- else %}
+          <li><span>01</span><strong data-i18n="process.stepOneTitle">Diagnose</strong><span data-i18n="process.stepOneText">We clarify the audience, offer, current bottleneck, and what the first version must prove.</span></li>
+          <li><span>02</span><strong data-i18n="process.stepTwoTitle">Shape</strong><span data-i18n="process.stepTwoText">We define messaging, structure, visual direction, UX flow, and the priority service path.</span></li>
+          <li><span>03</span><strong data-i18n="process.stepThreeTitle">Build</strong><span data-i18n="process.stepThreeText">We design and develop the assets, pages, automations, or product screens needed for launch.</span></li>
+          <li><span>04</span><strong data-i18n="process.stepFourTitle">Measure</strong><span data-i18n="process.stepFourText">We connect capture, follow-up, analytics, and iteration so the system can improve after launch.</span></li>
+          {%- endif %}
+        </ol>
+      </section>
+
+      {#- The honest proof line for this specific service, or the honest
+          absence of it. -#}
+      <p class="svc__proofnote" data-fx="fade-up">{{ copy.proofNote }}</p>
+
+      {#- The questions a buyer asks about THIS service, which used to live
+          only in the homepage FAQ. Each page emits its own FAQPage node from
+          the same array it renders, so schema and page can never disagree. -#}
+      <section class="svc__block" aria-labelledby="svc-faq">
+        <h2 id="svc-faq" class="svc__block-title" data-fx="fade-up" data-i18n="servicePage.faqTitle">{{ "Preguntas" if L == "es" else "Questions" }}</h2>
+        <dl class="svc__faq" data-fx="group">
+          {%- for item in copy.faqs %}
+          <div class="svc__faq-item">
+            <dt>{{ item.q }}</dt>
+            <dd>{{ item.a }}</dd>
+          </div>
+          {%- endfor %}
+        </dl>
+      </section>
+
+      {%- set relCases = relations.byService[service.slug].cases %}
+      {%- set relNotes = relations.byService[service.slug].notes %}
+      {%- set relServices = [] %}
+      {% include "related.njk" %}
+
+      <section class="svc__cta" aria-labelledby="svc-cta" data-fx="fade-up">
+        <h2 id="svc-cta" class="svc__cta-title" data-i18n="servicePage.ctaTitle">{{ "Empieza con un diagnóstico, no con una cotización." if L == "es" else "Start with a diagnosis, not a quote." }}</h2>
+        <p class="svc__cta-text" data-i18n="servicePage.ctaText">{{ "Cuéntanos el cuello de botella. Si este no es el servicio adecuado, lo decimos y señalamos el que sí." if L == "es" else "Tell us the bottleneck. If this is not the right service for it, we will say so and point at the one that is." }}</p>
+        <a class="hero__cta" href="/contact?service={{ service.slug }}{{ "&lang=es" if L == "es" }}" data-i18n="hero.primaryCta">{{ "Empezar un proyecto" if L == "es" else "Start a project" }}</a>
+      </section>
+
+      <nav class="svc__siblings" aria-label="{{ "Otros servicios" if L == "es" else "Other services" }}">
+        <h2 class="svc__block-title" data-i18n="servicesPage.othersTitle">{{ "Los otros cinco" if L == "es" else "The other five" }}</h2>
+        <ul>
+          {%- for other in services %}{% if other.slug != service.slug %}
+          <li><a href="{{ servicesPath }}{{ other.esSlug if L == "es" else other.slug }}/"><span>{{ "0" + (loop.index | string) }}</span>{{ other[L].title }}</a></li>
+          {%- endif %}{% endfor %}
+        </ul>
+      </nav>
+    </div>

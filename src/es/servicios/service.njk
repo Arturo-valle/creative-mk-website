@@ -1,0 +1,31 @@
+---
+pagination:
+  data: services
+  size: 1
+  alias: service
+permalink: "/es/servicios/{{ service.esSlug }}/"
+layout: "layout.njk"
+subpage: true
+lang: "es"
+L: "es"
+localePrefix: "/es"
+eleventyComputed:
+  title: "{{ service.es.title | safe }} — {{ service.es.lead | safe }} | CREATIVE MK"
+  description: "{{ service.es.desc | truncate(155) }}"
+  ogDescription: "{{ service.es.lead | safe }} — {{ service.es.title | safe }} en CREATIVE MK."
+  canonical: "/es/servicios/{{ service.esSlug }}/"
+  altEn: "/services/{{ service.slug }}/"
+  pageSchema:
+    "@type": "Service"
+    "@id": "https://creativemk.net/es/servicios/{{ service.esSlug }}/#service"
+    name: "{{ service.es.title | safe }}"
+    url: "https://creativemk.net/es/servicios/{{ service.esSlug }}/"
+    serviceType: "{{ service.es.lead | safe }}"
+    description: "{{ service.es.desc | safe }}"
+    provider:
+      "@id": "https://creativemk.net/#studio"
+    areaServed: "Worldwide"
+    availableLanguage: ["es", "en"]
+  extraSchema: "serviceFaq"
+---
+{% include "service-body.njk" %}

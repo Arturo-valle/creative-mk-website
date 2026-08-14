@@ -25,11 +25,19 @@
               (#capabilities) and merely opened an accordion row. Now each one
               is its own page. This is the mechanism the owner named when he
               said the site felt like a single landing page. -#}
+          {#- On a Spanish page the dropdown points at the Spanish tree.
+              Sending a visitor who is reading /es/servicios/ back into the
+              English pages is the same broken promise as the runtime swap
+              this replaced. -#}
           <div class="header__dropdown-menu">
             {%- for service in services %}
+            {%- if L == "es" %}
+            <a href="/es/servicios/{{ service.esSlug }}/" class="header__dropdown-item">{{ service.es.title }}</a>
+            {%- else %}
             <a href="/services/{{ service.slug }}/" class="header__dropdown-item">{{ service.en.title }}</a>
+            {%- endif %}
             {%- endfor %}
-            <a href="/services/" class="header__dropdown-item" data-i18n="nav.allServices">All Capabilities</a>
+            <a href="{{ "/es/servicios/" if L == "es" else "/services/" }}" class="header__dropdown-item" data-i18n="nav.allServices">{{ "Todas las capacidades" if L == "es" else "All Capabilities" }}</a>
           </div>
         </div>
         <a href="/lab/" class="header__nav-link" data-nav-section="lab"{% if page.url == "/lab/" %} aria-current="page"{% endif %} data-i18n="nav.lab">Lab</a>

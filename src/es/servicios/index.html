@@ -1,0 +1,48 @@
+---
+layout: "layout.njk"
+subpage: true
+lang: "es"
+L: "es"
+localePrefix: "/es"
+title: "Servicios | CREATIVE MK"
+description: "Seis servicios que se encadenan en un sistema: branding, sitios web, producto UX/UI, growth, automatización con IA y desarrollo."
+ogDescription: "Seis servicios, un sistema. De branding a automatización con IA."
+canonical: "/es/servicios/"
+altEn: "/services/"
+pageSchema:
+  "@type": "CollectionPage"
+  url: "https://creativemk.net/es/servicios/"
+  name: "Servicios — CREATIVE MK"
+  inLanguage: "es"
+  about:
+    "@id": "https://creativemk.net/#studio"
+---
+    <div class="container">
+
+      <span class="section-kicker" data-fx="fade-up">Servicios</span>
+      <h1 class="subpage__title" data-fx="lines">Seis servicios que se encadenan, no seis cosas en un menú.</h1>
+      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15">Casi todo el trabajo aquí empieza en uno de tres lugares — una marca que no sostiene, un sitio que no explica, o atención que no tiene a dónde ir — y el resto sigue en un orden predecible. Puedes comprar uno solo. Solo ayuda saber dónde encaja.</p>
+
+      <ol class="svcindex">
+        {%- for service in services %}
+        <li class="svcindex__row">
+          <span class="svcindex__num" aria-hidden="true">0{{ loop.index }}</span>
+          <div class="svcindex__body">
+            <h2 class="svcindex__title"><a href="/es/servicios/{{ service.esSlug }}/">{{ service.es.title }}</a></h2>
+            <p class="svcindex__lead">{{ service.es.lead }}</p>
+            {#- The index card shows the hook, not the desc. The English index
+                served the same sentence three times on one click path — card,
+                page lede, meta description — which made the click feel
+                pointless at the exact moment a visitor tests the site's
+                depth. Spanish opens with something the next page will not
+                repeat. -#}
+            <p class="svcindex__desc">{{ service.es.hook }}</p>
+          </div>
+          <a class="svcindex__go" href="/es/servicios/{{ service.esSlug }}/" aria-label="{{ service.es.title }}">&rarr;</a>
+        </li>
+        {%- endfor %}
+      </ol>
+
+      <p class="subpage__footnote">Nada de esto es un paquete. Cada proyecto empieza con una propuesta escrita que nombra el alcance, los entregables y el precio — mira los <a href="/terms/">términos</a>.</p>
+
+    </div>
