@@ -218,6 +218,23 @@ async function checkReferences() {
     }
   }
 
+  /* Media referenced through data- attributes rather than src.
+     The showreel's four sources are read by js/main.js and assigned to
+     video.src at runtime, so the scan above — which only knows href and src —
+     never saw them. They were written relative ("video/...") and therefore
+     resolved correctly on / and 404'd on /es/, where the browser asked for
+     /es/video/. Nothing static caught it; it was found by opening the page.
+     Anything the site loads by hand is now weighed by hand. */
+  const DATA_URL_ATTRS = /\s(data-(?:src|av1|poster)-[a-z0-9]+|data-src)\s*=\s*"([^"]+)"/gi;
+  for (const file of htmlFiles) {
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+    for (const match of html.matchAll(DATA_URL_ATTRS)) {
+      if (!isServed(match[2], file)) {
+        error(check, `${rel(file)} sets ${match[1]}="${match[2]}", which does not exist in dist/`);
+      }
+    }
+  }
+
   // In-page anchors must point at a real id.
   for (const file of htmlFiles) {
     const html = stripHtmlComments(await readFile(file, 'utf8'));
