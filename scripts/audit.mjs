@@ -1008,19 +1008,37 @@ async function auditTechnical() {
       /<aside\b[^>]*\bdata-audit-ignore\b[\s\S]*?<\/aside>/gi,
       ' '
     );
+    /* A block inside an element that declares its own language is correctly
+       marked, and the severity has to reflect that. Marking the sections of a
+       bilingual document is the WCAG 3.1.2 fix; it is not the same thing as
+       having one document per language, and reporting both at the same level
+       would either overstate the accessibility problem or understate the
+       indexing one. Regions are found by their opening tag position, which is
+       enough for the two documents this applies to. */
+    const markedRegions = [...main.matchAll(/<(\w+)\b[^>]*\slang\s*=\s*"([a-z]{2})[^"]*"[^>]*>/gi)];
+    const regionAt = (index) => {
+      let found = null;
+      for (const region of markedRegions) {
+        if (region.index <= index) found = region[2].toLowerCase();
+      }
+      return found;
+    };
+
     const blocks = [...main.matchAll(/<(p|li|h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/gi)]
-      .map((m) => textOf(m[2]))
-      .filter((text) => words(text).length >= 8);
+      .filter((m) => words(textOf(m[2])).length >= 8)
+      .map((m) => ({ text: textOf(m[2]), marked: regionAt(m.index) }));
     if (blocks.length < 6) continue;
 
     const other = page.lang === 'es' ? 'en' : 'es';
     let run = 0;
     let longest = 0;
     let foreign = 0;
+    let unmarked = 0;
     for (const block of blocks) {
-      const detected = blockLanguage(block);
+      const detected = blockLanguage(block.text);
       if (detected === other) {
         foreign += 1;
+        if (block.marked !== other) unmarked += 1;
         run += 1;
         longest = Math.max(longest, run);
       } else if (detected !== null) {
@@ -1031,12 +1049,21 @@ async function auditTechnical() {
     /* Three consecutive blocks is a section, not a quotation. One borrowed
        term or a bilingual heading must never trip this. */
     if (longest >= 3) {
-      tech(
-        'high',
-        'language',
-        `${page.url} declares lang="${page.lang}" and carries a run of ${longest} consecutive blocks in ${other} (${foreign} of ${blocks.length})`,
-        'one document per language: split it, or fix the lang attribute'
-      );
+      if (unmarked > 0) {
+        tech(
+          'high',
+          'language',
+          `${page.url} declares lang="${page.lang}" and carries ${unmarked} unmarked block(s) in ${other}, in a run of ${longest}`,
+          'a screen reader will pronounce them with the wrong phonemes: mark the region with lang, then split the document'
+        );
+      } else {
+        tech(
+          'medium',
+          'language',
+          `${page.url} is one document in two languages — ${foreign} of ${blocks.length} blocks are ${other}, correctly marked`,
+          'the reading is fixed; the indexing is not — one URL per language is what hreflang expects'
+        );
+      }
     }
   }
 
