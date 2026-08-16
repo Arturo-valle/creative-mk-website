@@ -102,7 +102,8 @@ are recorded because the same class of mistake will recur:
 6. Each service page was measured against all six services' deliverables, so
    the AI Automation page was marked down for never naming "Positioning brief".
 7. Notes were expected to name all six services, which is a request for keyword
-   stuffing in an essay. They now need one.
+   stuffing in an essay. (The first fix over-corrected to "one is enough, full
+   marks"; see the review section below. It is now a proportional floor of two.)
 8. A homepage's target term was inferred from the opening words of its H1,
    producing a phantom: "lead the title with *digital experiences for brands*".
    A homepage ranks for the brand.
