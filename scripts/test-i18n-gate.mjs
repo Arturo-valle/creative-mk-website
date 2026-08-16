@@ -35,45 +35,97 @@ const page = (body) => `<!DOCTYPE html>
 </head><body><main><h1>Fixture</h1>${body}</main></body></html>`;
 
 /* nav.work is "Work" in the en dictionary. Each fixture breaks it differently. */
+/* Each fixture pairs a defect with the diagnostic the gate must emit for it.
+   Asserting only "errors went up" is what let two deleted guards pass: the
+   plain value comparison fired instead and the count still rose. */
 const FIXTURES = {
-  'plain mismatch (control)': '<span data-i18n="nav.work">Totally wrong</span>',
-  'nested same tag hides the tail':
-    '<div data-i18n="nav.work">Work<div>x</div> AND A COMPLETELY WRONG TAIL</div>',
-  'single-quoted attribute': "<span data-i18n='nav.work'>Totally wrong</span>",
-  'void element': '<input data-i18n="nav.work" value="Totally wrong">',
-  'greater-than inside an earlier attribute':
-    '<span title="a > b" data-i18n="nav.work">Totally wrong</span>',
-  'empty element': '<span data-i18n="nav.work"></span>',
-  'placeholder mismatch':
-    '<input data-i18n-placeholder="footer.emailPlaceholder" placeholder="Totally wrong">',
-  'alt shows the same language instead of the other':
-    '<span data-i18n-alt="footer.ctaTitle">Let\'s Talk</span>'
+  'plain mismatch (control)': {
+    body: '<span data-i18n="nav.work">Totally wrong</span>',
+    expect: 'but en says'
+  },
+  'nested same tag hides the tail': {
+    body: '<div data-i18n="nav.work">Work<div>x</div> AND A COMPLETELY WRONG TAIL</div>',
+    expect: 'cannot be verified'
+  },
+  'single-quoted attribute': {
+    body: "<span data-i18n='nav.work'>Totally wrong</span>",
+    expect: 'could be read'
+  },
+  'unquoted attribute': {
+    body: '<span data-i18n=nav.work>Totally wrong</span>',
+    expect: 'could be read'
+  },
+  'uppercase attribute name': {
+    body: '<span DATA-I18N="nav.work">Totally wrong</span>',
+    expect: 'could be read'
+  },
+  'void element': {
+    body: '<input data-i18n="nav.work" value="Totally wrong">',
+    expect: 'could be read'
+  },
+  'greater-than inside an earlier attribute': {
+    body: '<span title="a > b" data-i18n="nav.work">Totally wrong</span>',
+    expect: 'could be read'
+  },
+  'empty element': {
+    body: '<span data-i18n="nav.work"></span>',
+    expect: 'the dictionary would overwrite nothing visible'
+  },
+  'href diverges from the dictionary': {
+    body: '<p data-i18n="servicesPage.close">Nothing here is a package. Every engagement starts with a written proposal that names the scope, the deliverables and the price — see the <a href="/privacy/">terms</a>.</p>',
+    expect: 'dictionary links to'
+  },
+  'placeholder mismatch': {
+    body: '<input data-i18n-placeholder="footer.emailPlaceholder" placeholder="Totally wrong">',
+    expect: 'but en says'
+  },
+  'unreadable placeholder binding': {
+    body: "<input data-i18n-placeholder='footer.emailPlaceholder' placeholder='x'>",
+    expect: 'cannot read'
+  },
+  'alt shows the same language instead of the other': {
+    body: `<span data-i18n-alt="footer.ctaTitle">Let's Talk</span>`,
+    expect: 'must show the other language'
+  },
+  'unreadable alt binding': {
+    body: "<span data-i18n-alt='footer.ctaTitle'>x</span>",
+    expect: 'cannot read'
+  }
 };
 
 const run = () => {
   try {
-    const out = execFileSync('node', [join(root, 'scripts/check-site.mjs')], {
+    return execFileSync('node', [join(root, 'scripts/check-site.mjs')], {
       cwd: root, encoding: 'utf8'
     });
-    return Number(out.match(/(\d+) error\(s\)/)?.[1] ?? 0);
   } catch (e) {
-    return Number((e.stdout ?? '').match(/(\d+) error\(s\)/)?.[1] ?? -1);
+    return e.stdout ?? '';
   }
 };
+const errorsIn = (out) => Number(out.match(/(\d+) error\(s\)/)?.[1] ?? -1);
 
 const target = join(dist, 'gate-fixture.html');
-const baseline = run();
-console.log(`baseline errors with a clean dist/: ${baseline}\n`);
+const baseline = errorsIn(run());
+console.log(`baseline errors with a clean dist/: ${baseline}
+`);
 
 let caught = 0;
-for (const [name, body] of Object.entries(FIXTURES)) {
+const names = Object.keys(FIXTURES);
+for (const [name, { body, expect }] of Object.entries(FIXTURES)) {
   writeFileSync(target, page(body), 'utf8');
-  const errors = run();
-  const detected = errors > baseline;
-  if (detected) caught += 1;
-  console.log(`${detected ? 'CAUGHT  ' : 'MISSED  '} ${name}  (errors ${baseline} -> ${errors})`);
+  const out = run();
+  const errors = errorsIn(out);
+  /* Both conditions. The count proves the gate reacted; the diagnostic proves
+     the RIGHT guard reacted, which is what stops a deleted guard passing
+     because a different one happened to fire. */
+  const rose = errors > baseline;
+  const named = out.includes(expect);
+  if (rose && named) caught += 1;
+  const verdict = rose && named ? 'CAUGHT ' : !rose ? 'MISSED ' : 'WRONG  ';
+  console.log(`${verdict} ${name}  (errors ${baseline} -> ${errors}${rose && !named ? `, but never said "${expect}"` : ''})`);
 }
 if (existsSync(target)) unlinkSync(target);
 
-console.log(`\n${caught}/${Object.keys(FIXTURES).length} constructs detected.`);
-process.exit(caught === Object.keys(FIXTURES).length ? 0 : 1);
+console.log(`
+${caught}/${names.length} constructs detected by the guard that owns them.`);
+process.exit(caught === names.length ? 0 : 1);

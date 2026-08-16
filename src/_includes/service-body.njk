@@ -121,7 +121,12 @@
           {%- for item in copy.faqs %}
           <div class="svc__faq-item">
             <dt>{{ item.q }}</dt>
-            <dd>{{ item.a }}</dd>
+            <dd>{{ item.a }}{% if item.link %}
+              {#- The answer stays plain text because the same string becomes
+                  acceptedAnswer.text in the FAQPage graph. A cross-reference
+                  is a link, not a sentence telling the reader to go and find
+                  one. -#}
+              <a class="link-arrow" href="{{ item.link.url }}">{{ item.link.label }}</a>{% endif %}</dd>
           </div>
           {%- endfor %}
         </dl>

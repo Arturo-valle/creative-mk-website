@@ -198,20 +198,25 @@ async function checkI18n() {
        attribute, a case-mismatched close — produce no match at all, and the
        old version reported success either way. Counting the openings against
        the pairs turns every one of those from a silent pass into a failure. */
-    /* The counter has to be BLIND TO NOTHING, or it inherits the reader's
-       blind spots and confirms them. A first version counted openings with a
-       tag-aware pattern that also required a double quote and also stopped at
-       the first ">", so a single-quoted attribute and a ">" inside an earlier
-       attribute were invisible to both regexes at once — the counts agreed and
-       the gate passed. This counts the attribute itself, quote-agnostic and
-       with no tag context at all, so anything the reader below cannot parse
-       shows up here as a shortfall. `data-i18n-alt` and
-       `data-i18n-placeholder` do not match: the `=` must follow immediately. */
-    const declared = [...html.matchAll(/\sdata-i18n\s*=\s*["']([^"']+)["']/g)];
+    /* The counter must be blind to less than the reader, or it inherits the
+       reader's blind spots and certifies them.
+       Three versions of this were wrong in the same way. The first was
+       tag-aware and stopped at the first ">". The second required a quote and
+       was case-sensitive, so `data-i18n=nav.work` (valid HTML5) and
+       `DATA-I18N="nav.work"` (HTML lowercases attribute names, so the runtime
+       still swaps it) passed reader and counter together. This one accepts an
+       unquoted value and matches case-insensitively, and it counts all three
+       bindings — the two siblings had no counter at all, which left the same
+       silent-pass hole open on 74 of them. */
+    const countBinding = (attr) =>
+      [...html.matchAll(new RegExp(`\\s${attr}\\s*=\\s*(?:"([^"]+)"|'([^']+)'|([^\\s>]+))`, 'gi'))]
+        .map((m) => m[1] ?? m[2] ?? m[3]);
+
+    const declared = countBinding('data-i18n(?!-)');
     const pairs = [...html.matchAll(/<(\w+)\b[^>]*\sdata-i18n\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)];
     if (declared.length !== pairs.length) {
       const seen = new Set(pairs.map((m) => m[2]));
-      const missed = declared.map((m) => m[1]).filter((key) => !seen.has(key));
+      const missed = declared.filter((key) => !seen.has(key));
       error(
         check,
         `${rel(file)} declares ${declared.length} data-i18n bindings but only ${pairs.length} could be read` +
@@ -240,6 +245,21 @@ async function checkI18n() {
           `${rel(file)} renders "${rendered.slice(0, 48)}" for data-i18n="${key}", ` +
             `but ${lang} says "${collapse(expected).slice(0, 48)}"`
         );
+        continue;
+      }
+      /* Text alone is not enough. collapse() strips tags from both sides, and
+         setLanguage assigns innerHTML — so a dictionary value whose <a> points
+         somewhere different from the markup's compares equal here and then
+         silently changes where the link goes the moment anyone switches
+         language. Two versions live at once on the same link is the class this
+         gate exists for. */
+      const hrefs = (text) => [...String(text).matchAll(/href\s*=\s*["']([^"']+)["']/gi)].map((m) => m[1]).join(' ');
+      if (hrefs(inner) !== hrefs(expected)) {
+        error(
+          check,
+          `${rel(file)} links to "${hrefs(inner) || 'nothing'}" inside data-i18n="${key}", ` +
+            `but the ${lang} dictionary links to "${hrefs(expected) || 'nothing'}"`
+        );
       }
     }
 
@@ -248,7 +268,11 @@ async function checkI18n() {
        against the same locale; data-i18n-alt deliberately shows the OTHER
        language — that is the footer's bilingual finale — so it is compared
        against the other dictionary. */
-    for (const match of html.matchAll(/\sdata-i18n-placeholder\s*=\s*"([^"]+)"/g)) {
+    const placeholderPairs = [...html.matchAll(/\sdata-i18n-placeholder\s*=\s*"([^"]+)"/g)];
+    if (countBinding('data-i18n-placeholder').length !== placeholderPairs.length) {
+      error(check, `${rel(file)} has data-i18n-placeholder bindings this check cannot read`);
+    }
+    for (const match of placeholderPairs) {
       const key = match[1];
       const expected = dict[key];
       if (typeof expected !== 'string') continue;
@@ -263,9 +287,13 @@ async function checkI18n() {
       }
     }
 
-    for (const match of html.matchAll(
+    const altPairs = [...html.matchAll(
       /<(\w+)\b[^>]*\sdata-i18n-alt\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g
-    )) {
+    )];
+    if (countBinding('data-i18n-alt').length !== altPairs.length) {
+      error(check, `${rel(file)} has data-i18n-alt bindings this check cannot read`);
+    }
+    for (const match of altPairs) {
       const [, , key, inner] = match;
       const expected = other[key];
       if (typeof expected !== 'string' || !expected.trim()) continue;

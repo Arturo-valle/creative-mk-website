@@ -1015,13 +1015,20 @@ async function auditTechnical() {
        would either overstate the accessibility problem or understate the
        indexing one. Regions are found by their opening tag position, which is
        enough for the two documents this applies to. */
-    const markedRegions = [...main.matchAll(/<(\w+)\b[^>]*\slang\s*=\s*"([a-z]{2})[^"]*"[^>]*>/gi)];
+    /* A marked region has an END. The first version took the last opening tag
+       carrying `lang` before a block, which meant one inline `<span lang="es">`
+       marked every block after it to the end of the document — and dist/404.html
+       already carries exactly that span. A fully unmarked bilingual page with
+       one such span injected reported "correctly marked", which is the worst
+       kind of wrong: the check asserting the opposite of the truth about a
+       document with zero correct markings. Regions are now spans, so a block
+       counts as marked only if it is genuinely inside one. */
+    const markedRegions = [...main.matchAll(/<(\w+)\b[^>]*\slang\s*=\s*"([a-z]{2})[^"]*"[^>]*>([\s\S]*?)<\/\1>/gi)].map(
+      (m) => ({ lang: m[2].toLowerCase(), start: m.index, end: m.index + m[0].length })
+    );
     const regionAt = (index) => {
-      let found = null;
-      for (const region of markedRegions) {
-        if (region.index <= index) found = region[2].toLowerCase();
-      }
-      return found;
+      const region = markedRegions.find((r) => index >= r.start && index < r.end);
+      return region ? region.lang : null;
     };
 
     const blocks = [...main.matchAll(/<(p|li|h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/gi)]

@@ -212,9 +212,11 @@ reports both pages.
   retention, marketing email and what is collected. `/privacidad/` was written
   for the `/lp/` funnel and still styles itself with `css/lp.css`. Which text
   is authoritative is a legal decision, not a build step, so nothing was merged.
-- **`/privacy/` and `/terms/` are bilingual single documents** declared
-  `lang="en"`. A screen reader pronounces half of each with the wrong phonemes.
-  Splitting them means deciding the canonical Spanish text — see above.
+- **`/privacy/` and `/terms/` are still one URL each carrying two languages.**
+  The halves are now marked with `lang`, so a screen reader pronounces each
+  correctly and the audit reports this at MEDIUM rather than HIGH — but one
+  document per language is what hreflang expects, and splitting them means
+  deciding the canonical Spanish text first. See above.
 - **`/terms/` has no Spanish sibling** and therefore no hreflang. A
   machine-translated contract is worse than an English one; the footer link is
   marked `hreflang="en"` and says so.
