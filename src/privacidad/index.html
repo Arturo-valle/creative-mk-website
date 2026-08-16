@@ -22,15 +22,15 @@ pageSchema:
   inLanguage: "es"
   publisher:
     "@id": "https://creativemk.net/#studio"
-hreflang:
-  - lang: "es"
-    href: "/privacidad/"
-  - lang: "en"
-    href: "/privacy/"
-  - lang: "x-default"
-    href: "/privacy/"
-extraCss: ["/css/lp.css"]
-mainClass: "sec sec--papel"
+# altEn/altEs, not the legacy `hreflang:` list. Only head.njk reads that
+# list; header.njk builds the visible language control from these two, so
+# declaring the pair only in the list left the switcher on its <button>
+# branch — and clicking it rewrote the page in place, putting English
+# chrome over Spanish legal text under lang="en" and never arriving at the
+# sibling that exists. The crawler could traverse the pair; a visitor could
+# not.
+altEn: "/privacy/"
+altEs: "/privacidad/"
 ---
 
   <div class="wrap" style="max-width:820px">

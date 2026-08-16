@@ -12,13 +12,15 @@ pageSchema:
   inLanguage: "en"
   publisher:
     "@id": "https://creativemk.net/#studio"
-hreflang:
-  - lang: "en"
-    href: "/privacy/"
-  - lang: "es"
-    href: "/privacidad/"
-  - lang: "x-default"
-    href: "/privacy/"
+# altEn/altEs, not the legacy `hreflang:` list. Only head.njk reads that
+# list; header.njk builds the visible language control from these two, so
+# declaring the pair only in the list left the switcher on its <button>
+# branch — and clicking it rewrote the page in place, putting English
+# chrome over Spanish legal text under lang="en" and never arriving at the
+# sibling that exists. The crawler could traverse the pair; a visitor could
+# not.
+altEn: "/privacy/"
+altEs: "/privacidad/"
 ---
 
     <div class="container subpage__legal">
@@ -27,7 +29,8 @@ hreflang:
       <h1 class="subpage__title">Privacy Notice</h1>
       <span class="subpage__updated">Last updated / Última actualización: 2026-08-10</span>
 
-      <h2>English</h2>
+      <section lang="en">
+      <h2 lang="en">English</h2>
 
       <h3>What we collect</h3>
       <ul>
@@ -53,7 +56,10 @@ hreflang:
       <h3>Where this applies</h3>
       <p>The systems named above are described in the open. The lead store, the quota gate and the nightly digest are documented in the <a href="/work/intake-agent/">intake agent case study</a>, and the studio's wider publishing rule — client work goes up with a name and an agreed figure or it does not go up — is stated on <a href="/studio/">the studio page</a>. Commercial terms are separate and live in the <a href="/terms/">service terms</a>.</p>
 
-      <h2>Español</h2>
+      </section>
+
+      <section lang="es">
+      <h2 lang="es">Español</h2>
 
       <h3>Qué recopilamos</h3>
       <ul>
@@ -76,5 +82,6 @@ hreflang:
       <h3>Tus derechos</h3>
       <p>Escribe a <a href="mailto:hey@creativemk.net">hey@creativemk.net</a> para saber qué tenemos sobre ti, corregirlo o borrarlo. Respondemos, y borramos.</p>
 
-    </div>
+    </section>
+</div>
   

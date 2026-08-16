@@ -188,20 +188,93 @@ async function checkI18n() {
     const lang = html.match(/<html[^>]*\slang\s*=\s*"([^"]+)"/i)?.[1]?.slice(0, 2);
     if (lang !== 'en' && lang !== 'es') continue;
     const dict = translations[lang];
+    const other = translations[lang === 'es' ? 'en' : 'es'];
 
-    for (const match of html.matchAll(
-      /<(\w+)\b[^>]*\sdata-i18n\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g
-    )) {
-      const [, , key, inner] = match;
+    /* A gate has to know what it could not see.
+       This matcher is non-greedy to the first closing tag of the same name, so
+       an element wrapping a nested element of the same tag would compare a
+       truncated string and pass. Six other constructs — void elements,
+       self-closing tags, single-quoted attributes, a ">" inside an earlier
+       attribute, a case-mismatched close — produce no match at all, and the
+       old version reported success either way. Counting the openings against
+       the pairs turns every one of those from a silent pass into a failure. */
+    /* The counter has to be BLIND TO NOTHING, or it inherits the reader's
+       blind spots and confirms them. A first version counted openings with a
+       tag-aware pattern that also required a double quote and also stopped at
+       the first ">", so a single-quoted attribute and a ">" inside an earlier
+       attribute were invisible to both regexes at once — the counts agreed and
+       the gate passed. This counts the attribute itself, quote-agnostic and
+       with no tag context at all, so anything the reader below cannot parse
+       shows up here as a shortfall. `data-i18n-alt` and
+       `data-i18n-placeholder` do not match: the `=` must follow immediately. */
+    const declared = [...html.matchAll(/\sdata-i18n\s*=\s*["']([^"']+)["']/g)];
+    const pairs = [...html.matchAll(/<(\w+)\b[^>]*\sdata-i18n\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)];
+    if (declared.length !== pairs.length) {
+      const seen = new Set(pairs.map((m) => m[2]));
+      const missed = declared.map((m) => m[1]).filter((key) => !seen.has(key));
+      error(
+        check,
+        `${rel(file)} declares ${declared.length} data-i18n bindings but only ${pairs.length} could be read` +
+          (missed.length ? ` (unread: ${[...new Set(missed)].slice(0, 4).join(', ')})` : '')
+      );
+    }
+
+    for (const match of pairs) {
+      const [, tag, key, inner] = match;
       const expected = dict[key];
       if (typeof expected !== 'string' || !expected.trim()) continue;
+
+      if (new RegExp(`<${tag}[\\s>]`, 'i').test(inner)) {
+        error(check, `${rel(file)} nests a <${tag}> inside data-i18n="${key}", so its text cannot be verified`);
+        continue;
+      }
+
       const rendered = collapse(inner);
-      if (!rendered) continue; // filled at runtime, nothing to compare
+      if (!rendered) {
+        error(check, `${rel(file)} has an empty data-i18n="${key}"; the dictionary would overwrite nothing visible`);
+        continue;
+      }
       if (rendered !== collapse(expected)) {
         error(
           check,
           `${rel(file)} renders "${rendered.slice(0, 48)}" for data-i18n="${key}", ` +
             `but ${lang} says "${collapse(expected).slice(0, 48)}"`
+        );
+      }
+    }
+
+    /* The other two bindings were outside the gate entirely: 74 of them, all
+       correct today and nothing keeping them so. A placeholder is compared
+       against the same locale; data-i18n-alt deliberately shows the OTHER
+       language — that is the footer's bilingual finale — so it is compared
+       against the other dictionary. */
+    for (const match of html.matchAll(/\sdata-i18n-placeholder\s*=\s*"([^"]+)"/g)) {
+      const key = match[1];
+      const expected = dict[key];
+      if (typeof expected !== 'string') continue;
+      const tag = html.slice(html.lastIndexOf('<', match.index), match.index + 400);
+      const placeholder = tag.match(/\splaceholder\s*=\s*"([^"]*)"/)?.[1];
+      if (placeholder !== undefined && collapse(placeholder) !== collapse(expected)) {
+        error(
+          check,
+          `${rel(file)} has placeholder="${placeholder}" for data-i18n-placeholder="${key}", ` +
+            `but ${lang} says "${collapse(expected)}"`
+        );
+      }
+    }
+
+    for (const match of html.matchAll(
+      /<(\w+)\b[^>]*\sdata-i18n-alt\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g
+    )) {
+      const [, , key, inner] = match;
+      const expected = other[key];
+      if (typeof expected !== 'string' || !expected.trim()) continue;
+      const rendered = collapse(inner);
+      if (rendered && rendered !== collapse(expected)) {
+        error(
+          check,
+          `${rel(file)} renders "${rendered.slice(0, 40)}" for data-i18n-alt="${key}", ` +
+            `but it must show the other language: "${collapse(expected).slice(0, 40)}"`
         );
       }
     }

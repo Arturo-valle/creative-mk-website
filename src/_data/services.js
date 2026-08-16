@@ -249,7 +249,7 @@ const services = [
       "faqs": [
         {
           "q": "Do you write the copy, or do I bring it?",
-          "a": "Structure and copy are shaped together, because a layout designed around missing text is a guess. You bring the knowledge of your business; we turn it into a message and a page order. The work runs in English and Spanish, natively in both."
+          "a": "Structure and copy are shaped together, because a layout designed around missing text is a guess. You bring the knowledge of your business; we turn it into a message and a page order. The work runs in English and Spanish, with the message defined in each language rather than written once and translated at the end."
         },
         {
           "q": "Can you work from my existing site instead of starting over?",
@@ -331,7 +331,7 @@ const services = [
       "faqs": [
         {
           "q": "¿Escriben ustedes los textos o los traigo yo?",
-          "a": "Estructura y copy se trabajan juntos, porque un layout diseñado alrededor de texto que no existe es una apuesta. Tú traes el conocimiento del negocio; nosotros lo convertimos en mensaje y orden de páginas. El trabajo corre en español e inglés, nativo en los dos."
+          "a": "Estructura y copy se trabajan juntos, porque un layout diseñado alrededor de texto que no existe es una apuesta. Tú traes el conocimiento del negocio; nosotros lo convertimos en mensaje y orden de páginas. El trabajo corre en español e inglés, con el mensaje definido en cada idioma en lugar de escribirse una vez y traducirse al final."
         },
         {
           "q": "¿Pueden partir de mi sitio actual en lugar de empezar de cero?",
@@ -392,7 +392,7 @@ const services = [
         },
         {
           "name": "Bilingual interface copy",
-          "detail": "Labels, empty states, and error messages written in English and Spanish by the same hands, not run through a translator."
+          "detail": "Labels, empty states, and error messages drafted in English and Spanish during design, so the shorter language never dictates the layout the longer one has to live in."
         }
       ],
       "engagements": [
@@ -422,7 +422,7 @@ const services = [
         },
         {
           "q": "Our interface needs to exist in Spanish and English. Is that two projects?",
-          "a": "One. The studio works in both languages natively, so interface copy is written twice, not translated once. The prototype can carry both versions, and you see where each language strains the layout before development does."
+          "a": "One project, not two. Interface copy is drafted in both languages during design rather than sent out for translation after the screens are signed off, which is what keeps a label from outgrowing the button it sits in. The prototype carries both versions, so you see where each language strains the layout before development does. What that standard costs is visible on this site: read the branding FAQ, where we publish how far our own Spanish falls short of it."
         }
       ],
       "proofNote": "The closest live proof is on this site: the intake agent's conversation flow and the admin dashboard behind it are a small product the studio mapped, designed, and built for itself, running where you can use it. No client product case is publishable yet, and nothing invented stands in for one."
@@ -465,7 +465,7 @@ const services = [
         },
         {
           "name": "Copy de interfaz bilingüe",
-          "detail": "Etiquetas, estados vacíos y mensajes de error escritos en español e inglés por las mismas manos, no pasados por un traductor."
+          "detail": "Etiquetas, estados vacíos y mensajes de error redactados en español e inglés durante el diseño, para que el idioma más corto no imponga el layout en el que tiene que caber el más largo."
         }
       ],
       "engagements": [
@@ -495,7 +495,7 @@ const services = [
         },
         {
           "q": "Nuestra interfaz necesita existir en español e inglés. ¿Son dos proyectos?",
-          "a": "Uno. El estudio trabaja en ambos idiomas de forma nativa, así que el copy de interfaz se escribe dos veces, no se traduce una. El prototipo puede llevar ambas versiones, y ves dónde cada idioma tensiona el layout antes de que lo descubra el desarrollo."
+          "a": "Un proyecto, no dos. El copy de interfaz se redacta en los dos idiomas durante el diseño, en lugar de mandarse a traducir cuando las pantallas ya están aprobadas, que es lo que evita que una etiqueta se le salga al botón donde vive. El prototipo lleva ambas versiones, así que ves dónde cada idioma tensiona el layout antes de que lo descubra el desarrollo. Lo que cuesta ese estándar se ve en este sitio: lee el FAQ de branding, donde publicamos cuánto le falta a nuestro propio español para cumplirlo."
         }
       ],
       "proofNote": "La prueba viva más cercana está en este sitio: el flujo conversacional del agente de recepción y el panel admin detrás de él son un producto pequeño que el estudio mapeó, diseñó y construyó para sí mismo, corriendo donde puedes usarlo. Todavía no hay un caso de producto de cliente publicable, y nada inventado ocupa su lugar."
