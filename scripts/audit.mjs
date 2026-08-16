@@ -68,7 +68,13 @@ if (!existsSync(distDir)) {
  * ------------------------------------------------------------------ */
 
 const TYPE_SPEC = {
-  home: { floor: 450, target: 900, minH2: 4, commercial: true },
+  /* The homepage target is deliberately low. This site's architecture makes
+     the homepage a trailer whose cards navigate — depth lives on /work/,
+     /services/ and /studio/ — and the studio homepages it competes with in
+     this market run shorter still. A 900-word target here would be an audit
+     arguing with a decision the site made on purpose and documented. The
+     floor is real: below it the trailer stops previewing anything. */
+  home: { floor: 350, target: 600, minH2: 4, commercial: true },
   service: { floor: 700, target: 1100, minH2: 4, commercial: true },
   'service-index': { floor: 250, target: 550, minH2: 3, commercial: true },
   case: { floor: 550, target: 900, minH2: 4, commercial: true },
@@ -77,7 +83,13 @@ const TYPE_SPEC = {
   'note-index': { floor: 150, target: 350, minH2: 2, commercial: true },
   studio: { floor: 400, target: 750, minH2: 3, commercial: true },
   lab: { floor: 250, target: 500, minH2: 2, commercial: true },
-  legal: { floor: 300, target: 900, minH2: 3, commercial: false },
+  /* A privacy notice is the one page type where length is not a virtue. The
+     300-word floor was imported from the commercial types without thinking:
+     it marked down a notice that states what is collected, what is not done
+     with it, where it lives and how to have it deleted, in 156 words, which
+     is the version a person actually reads. Legal pages are excluded from
+     the site score anyway; the floor only decides whether the report shouts. */
+  legal: { floor: 120, target: 400, minH2: 3, commercial: false },
   utility: { floor: 0, target: 0, minH2: 0, commercial: false }
 };
 
@@ -338,6 +350,8 @@ const normalise = (text) =>
  * 5. Page typing and the target term.
  * ------------------------------------------------------------------ */
 
+const BRAND = 'CREATIVE MK';
+
 function typeOf(url) {
   if (url === '/' || url === '/es/') return 'home';
   if (/^\/(es\/)?(servicios|services)\/$/.test(url)) return 'service-index';
@@ -362,9 +376,13 @@ function targetTerm(page) {
   const slug = page.url.replace(/\/$/, '').split('/').filter(Boolean).pop() ?? '';
   const fromSlug = slug.replace(/-/g, ' ').trim();
   const h1 = page.mainHeadings.find((h) => h.level === 1)?.text ?? '';
-  if (page.type === 'home' || !fromSlug) {
-    return normalise(h1).split(' ').slice(0, 4).join(' ') || 'creative mk';
-  }
+  /* A homepage has no slug to infer from, and taking the first words of its H1
+     produced a phantom: the site was told to "lead the title with digital
+     experiences for brands" because that is how the headline happens to open.
+     A homepage ranks for the brand and its category set. The brand is the
+     term; the categories are already what Entity coverage measures. */
+  if (page.type === 'home') return normalise(BRAND);
+  if (!fromSlug) return normalise(h1).split(' ').slice(0, 4).join(' ') || normalise(BRAND);
   return normalise(fromSlug);
 }
 
@@ -427,19 +445,28 @@ async function loadVocabulary() {
 
 const vocabulary = await loadVocabulary();
 
-/** Which vocabulary sets each page type is expected to touch. */
+/**
+ * Which vocabulary sets each page type is expected to touch, and how.
+ *
+ * `mode: 'ratio'` means the page should cover most of the set — a services
+ * index that names two of six services is incomplete. `mode: 'any'` means one
+ * is enough: a note is about its own subject, and demanding it name all six
+ * services would be asking for keyword stuffing in an essay. Getting this
+ * wrong in the first version produced exactly that reading — a 1,200-word note
+ * on AI intake marked down for not mentioning Branding.
+ */
 const ENTITY_EXPECTATION = {
-  home: ['services', 'cases'],
-  'service-index': ['services'],
-  service: ['deliverables', 'engagements'],
-  'work-index': ['cases'],
-  case: ['stack'],
-  'note-index': [],
-  note: ['services'],
-  studio: ['services'],
-  lab: [],
-  legal: [],
-  utility: []
+  home: { sets: ['services', 'cases'], mode: 'ratio' },
+  'service-index': { sets: ['services'], mode: 'ratio' },
+  service: { sets: ['deliverables', 'engagements'], mode: 'ratio' },
+  'work-index': { sets: ['cases'], mode: 'ratio' },
+  case: { sets: ['stack'], mode: 'ratio' },
+  'note-index': { sets: [], mode: 'ratio' },
+  note: { sets: ['services'], mode: 'any' },
+  studio: { sets: ['services'], mode: 'ratio' },
+  lab: { sets: [], mode: 'ratio' },
+  legal: { sets: [], mode: 'ratio' },
+  utility: { sets: [], mode: 'ratio' }
 };
 
 /* ------------------------------------------------------------------ *
@@ -539,7 +566,12 @@ function scoreKeyword(page) {
   if (inTitle) points += 5;
   else notes.push(note('high', `the title never states "${term}"`, 'lead the title with the term the page is trying to own'));
 
-  if (inH1) points += 4;
+  /* A homepage H1 is a positioning line, not a keyword slot. The brand is
+     carried by the logo, the title and the opening paragraph — all of which
+     are still checked — and no studio site worth benchmarking against puts
+     its own name in the H1. Every other page type keeps the rule, because
+     there the H1 and the URL genuinely have to agree. */
+  if (inH1 || page.type === 'home') points += 4;
   else notes.push(note('high', `the H1 never states "${term}"`, 'the H1 and the URL should agree about the subject'));
 
   if (inDescription) points += 3;
@@ -614,7 +646,11 @@ function scoreHeadings(page) {
     previous = heading.level;
   }
 
-  const vague = page.mainHeadings.filter((h) => h.level > 1 && words(h.text).length < 2 && h.text.length < 12);
+  /* H2 only. An H3 inside a numbered process step is legitimately one word —
+     "Diagnose", "Shape", "Build", "Measure" is the design, not a shortfall.
+     An H2 is the section's promise to a skimmer, and a promise needs a verb
+     or an object. */
+  const vague = page.mainHeadings.filter((h) => h.level === 2 && words(h.text).length < 2 && h.text.length < 12);
   if (vague.length > 2) {
     points -= 3;
     notes.push(note('low', `${vague.length} headings are one short word`, 'a subheading is a promise about the section; single words rarely make one'));
@@ -666,7 +702,7 @@ function scoreReadability(page) {
 /* --- 8.5 Entity coverage — 15 --- */
 function scoreEntities(page) {
   const notes = [];
-  const expected = ENTITY_EXPECTATION[page.type] ?? [];
+  const { sets: expected, mode } = ENTITY_EXPECTATION[page.type] ?? { sets: [], mode: 'ratio' };
   if (!expected.length) return { points: 15, max: 15, notes, detail: null };
 
   const vocab = vocabulary[page.lang] ?? vocabulary.en;
@@ -680,10 +716,20 @@ function scoreEntities(page) {
      agent case to name GLSL and Lenis — two pages penalised for not being
      each other. The set is only meaningful per document. */
   const own = { ...vocab };
+  const slug = page.url.replace(/\/$/, '').split('/').pop();
   if (page.type === 'case') {
-    const slug = page.url.replace(/\/$/, '').split('/').pop();
     const match = vocabulary.cases.find((c) => c.slug === slug || c.esSlug === slug);
     own.stack = match ? match[page.lang]?.stack ?? match.en.stack : [];
+  }
+  /* Same correction for services: a service page was being measured against
+     the union of all six services' deliverables, so the AI Automation page
+     was marked down for never mentioning "Positioning brief" — a deliverable
+     of Branding. Sixteen of fifty-four is a meaningless denominator. */
+  if (page.type === 'service') {
+    const match = vocabulary.services.find((s) => s.slug === slug || s.esSlug === slug);
+    const locale = match ? match[page.lang] ?? match.en : null;
+    own.deliverables = locale ? locale.deliverables.map((d) => d.name) : [];
+    own.engagements = locale ? locale.engagements.map((e) => e.name) : [];
   }
 
   for (const set of expected) {
@@ -700,6 +746,14 @@ function scoreEntities(page) {
       if (hit) covered += 1;
       else missing.push(entity);
     }
+  }
+
+  if (mode === 'any') {
+    if (covered > 0) return { points: 15, max: 15, notes, detail: { covered, total } };
+    notes.push(
+      note('medium', `names none of the ${total} services`, 'a note should connect its argument to something the studio actually sells')
+    );
+    return { points: 6, max: 15, notes, detail: { covered, total, missing } };
   }
 
   const ratio = total ? covered / total : 1;
@@ -766,7 +820,10 @@ function scoreStructure(page) {
   else if (out.size >= 1) points += 2;
   else notes.push(note('high', 'the body links nowhere', 'a page that recommends no other page is a dead end for a reader and a crawler'));
 
-  if (inn.size >= 2) points += 3;
+  /* A homepage is what other pages are reached from, not recommended by. The
+     technical layer already carries this exemption; the scorer did not, so
+     both language roots were being marked down for being roots. */
+  if (page.type === 'home' || inn.size >= 2) points += 3;
   else if (inn.size === 1) points += 2;
   else notes.push(note('high', 'no other page links to this one from its body', 'orphaned in the body graph: only chrome points here, so nothing signals it matters'));
 
@@ -822,6 +879,68 @@ async function auditTechnical() {
       if (!backs) {
         tech('high', 'hreflang', `${page.url} points at ${target.url} but ${target.url} does not point back`, 'non-reciprocal hreflang is discarded entirely');
       }
+    }
+  }
+
+  /* --- scent: the title is the promise a searcher clicks, the H1 is what
+     they land on. If the two share no content word, the visitor has to
+     re-orient in the first second and some of them simply leave. This is the
+     check that replaced a phantom: inferring a homepage's target term from
+     the opening words of its H1 reported the same situation as a keyword
+     failure, which it is not — the homepage ranks for the brand. --- */
+  for (const page of indexable) {
+    const h1 = page.mainHeadings.find((h) => h.level === 1)?.text;
+    if (!h1) continue;
+    /* Crude stemming, deliberately. "Branding" in the title and "brands" in
+       the H1 carry the same scent for a reader, and a check that fires on
+       morphology reports style as a defect. Suffix-stripping is enough for
+       both languages here; a real stemmer would be a dependency for one
+       check. */
+    const stem = (w) =>
+      w.replace(/(ing|ings|iones|ciones|mente|ment|ed|es|s)$/u, '').slice(0, 8);
+    const contentWords = (text) =>
+      new Set(
+        normalise(text)
+          .split(' ')
+          .filter((w) => w.length > 3 && !STOPWORDS.has(w) && !normalise(BRAND).includes(w))
+          .map(stem)
+          .filter((w) => w.length > 2)
+      );
+    const titleWords = contentWords(page.title);
+    const h1Words = contentWords(h1);
+    if (!titleWords.size || !h1Words.size) continue;
+    const shared = [...titleWords].filter((w) => h1Words.has(w));
+    if (!shared.length) {
+      tech('medium', 'scent', `${page.url} title and H1 share no content word`, `"${page.title.slice(0, 45)}" then "${h1.slice(0, 45)}" — the click and the landing describe different pages`);
+    }
+  }
+
+  /* --- the document's declared language against the language it is actually
+     written in. Found by reading, not by any check that existed: /privacy/
+     declares lang="en" and carries a full Spanish section below its English
+     one, so a screen reader pronounces half the page with the wrong phonemes
+     and a crawler indexes one document for two languages. Detection is a
+     function-word count, which is crude and completely sufficient to tell
+     these two languages apart over a few hundred words. --- */
+  const MARKERS = {
+    es: [' que ', ' de ', ' los ', ' las ', ' para ', ' con ', ' del ', ' una ', ' por ', ' qué ', ' tus ', ' se '],
+    en: [' the ', ' of ', ' and ', ' to ', ' with ', ' for ', ' that ', ' your ', ' we ', ' is ', ' are ', ' from ']
+  };
+  const languageOf = (text) => {
+    const haystack = ` ${text.toLowerCase()} `;
+    const count = (list) =>
+      list.reduce((sum, marker) => sum + (haystack.split(marker).length - 1), 0);
+    return { es: count(MARKERS.es), en: count(MARKERS.en) };
+  };
+  for (const page of indexable) {
+    if (words(page.text).length < 120) continue;
+    const hits = languageOf(page.text);
+    const total = hits.es + hits.en;
+    if (total < 15) continue;
+    const otherLang = page.lang === 'es' ? 'en' : 'es';
+    const otherShare = hits[otherLang] / total;
+    if (otherShare > 0.45) {
+      tech('high', 'language', `${page.url} declares lang="${page.lang}" but ${(otherShare * 100).toFixed(0)}% of its body reads as ${otherLang}`, 'one document per language: split it, or fix the lang attribute');
     }
   }
 
