@@ -7,6 +7,18 @@
 {%- set navStudio = "/es/estudio/" if isEs else "/studio/" %}
 {%- set navNotes = "/es/notas/" if isEs else "/insights/" %}
 {%- set navServices = "/es/servicios/" if isEs else "/services/" %}
+{#- Nav labels, resolved at build time. They used to be English in the markup
+    on every page, with js/i18n.js swapping them after load — so the anchor
+    text a crawler read on /es/servicios/ was "Work", "About", "Services".
+    Anchor text is one of the few signals a crawler gets for free, and the
+    Spanish tree was spending all of it on English words. -#}
+{%- set labelWork = "Proyectos" if isEs else "Work" %}
+{%- set labelServices = "Servicios" if isEs else "Services" %}
+{%- set labelLab = "Lab" %}
+{%- set labelAbout = "Nosotros" if isEs else "About" %}
+{%- set labelNotes = "Insights" %}
+{%- set labelContact = "Contacto" if isEs else "Contact" %}
+{%- set labelAll = "Todas las capacidades" if isEs else "All Capabilities" %}
 {#- Current-section tests, so wayfinding works on both trees. They match the
     section rather than one exact URL: a case page should light "Work", which
     the old equality test never did. -#}
@@ -15,6 +27,35 @@
 {%- set atStudio = ("/studio/" in page.url) or ("/es/estudio/" in page.url) %}
 {%- set atNotes = ("/insights/" in page.url) or ("/es/notas/" in page.url) %}
 {%- set atServices = ("/services/" in page.url) or ("/es/servicios/" in page.url) %}
+{#- The language control, as links wherever a real sibling URL exists.
+
+    It was two <button>s. Buttons are not links: a crawler does not press them,
+    so the entire Spanish tree had no crawlable path in from the English one —
+    the audit found seventeen URLs reachable only through the sitemap. The JS
+    handler in js/i18n.js already navigated to the sibling; the markup simply
+    never told anyone but a mouse. An <a href> is the same gesture for a
+    visitor, a real edge for a crawler, and middle-click-openable for the
+    bilingual reader who wants both.
+
+    Where a page genuinely has no sibling — /terms/ today — that side stays a
+    button and keeps the in-place dictionary swap, which is the honest shape:
+    there is no other document to point at. -#}
+{%- set enHref = altEn if altEn else (canonical if L != "es" else "") %}
+{%- set esHref = altEs if altEs else (canonical if L == "es" else "") %}
+{%- macro langSwitch(id) %}
+        <div class="lang-switch"{% if id %} id="{{ id }}"{% endif %}>
+          {%- if enHref %}
+          <a class="lang-switch__btn{{ " active" if L != "es" }}" href="{{ enHref }}" hreflang="en" data-lang="en" lang="en"{% if L != "es" %} aria-current="true"{% endif %} aria-label="Switch to English">EN</a>
+          {%- else %}
+          <button class="lang-switch__btn{{ " active" if L != "es" }}" type="button" data-lang="en" aria-label="Switch to English">EN</button>
+          {%- endif %}
+          {%- if esHref %}
+          <a class="lang-switch__btn{{ " active" if L == "es" }}" href="{{ esHref }}" hreflang="es" data-lang="es" lang="es"{% if L == "es" %} aria-current="true"{% endif %} aria-label="Cambiar a Espa&ntilde;ol">ES</a>
+          {%- else %}
+          <button class="lang-switch__btn{{ " active" if L == "es" }}" type="button" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
+          {%- endif %}
+        </div>
+{%- endmacro %}
 {#- One header for the whole site. It used to exist in eight hand-maintained
     variants across three technologies, which is the economic reason the site
     stopped at six URLs: every new page meant another copy to keep in sync.
@@ -24,7 +65,11 @@
     visitor who reached them could only go home or to the contact form. -#}
   <header class="header{% if subpage %} scrolled subpage__header{% endif %}" id="header">
     <div class="header__inner">
-      <a href="/" class="header__logo" aria-label="CREATIVE MK Home">
+      {#- The logo was hardcoded to "/". On a Spanish page that is the one link
+          every visitor trusts to mean "start over", and it dropped them into
+          English — the same broken promise the nav table above exists to
+          prevent. It has a Spanish front door to point at now. -#}
+      <a href="{{ "/es/" if isEs else "/" }}" class="header__logo" aria-label="{{ "CREATIVE MK — Inicio" if isEs else "CREATIVE MK Home" }}">
         <span class="header__logo-mark">CREATIVE<span class="header__logo-mk">mk</span></span>
       </a>
       {#- Wayfinding (immersive-plan §12): the underline slides to the link
@@ -32,10 +77,10 @@
           The dropdown stops being furniture: each item opens its own
           accordion row via data-cap-index, or jumps to its real section. -#}
       <nav class="header__nav" id="main-nav" aria-label="Main navigation">
-        <a href="{{ navWork }}" class="header__nav-link" data-nav-section="work"{% if atWork %} aria-current="page"{% endif %} data-i18n="nav.work">Work</a>
+        <a href="{{ navWork }}" class="header__nav-link" data-nav-section="work"{% if atWork %} aria-current="page"{% endif %} data-i18n="nav.work">{{ labelWork }}</a>
         <div class="header__dropdown">
           <button class="header__dropdown-trigger" data-nav-section="capabilities"{% if atServices %} aria-current="true"{% endif %} aria-expanded="false" aria-controls="services-menu">
-            <span data-i18n="nav.services">Services</span>
+            <span data-i18n="nav.services">{{ labelServices }}</span>
             <svg class="header__dropdown-icon" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 4l4 4 4-4"/></svg>
           </button>
           {#- Was: seven links, five of which resolved to the SAME anchor
@@ -54,23 +99,20 @@
             <a href="/services/{{ service.slug }}/" class="header__dropdown-item">{{ service.en.title }}</a>
             {%- endif %}
             {%- endfor %}
-            <a href="{{ "/es/servicios/" if L == "es" else "/services/" }}" class="header__dropdown-item" data-i18n="nav.allServices">{{ "Todas las capacidades" if L == "es" else "All Capabilities" }}</a>
+            <a href="{{ "/es/servicios/" if L == "es" else "/services/" }}" class="header__dropdown-item" data-i18n="nav.allServices">{{ labelAll }}</a>
           </div>
         </div>
-        <a href="{{ navLab }}" class="header__nav-link" data-nav-section="lab"{% if atLab %} aria-current="page"{% endif %} data-i18n="nav.lab">Lab</a>
-        <a href="{{ navStudio }}" class="header__nav-link" data-nav-section="about"{% if atStudio %} aria-current="page"{% endif %} data-i18n="nav.about">About</a>
-        <a href="{{ navNotes }}" class="header__nav-link" data-nav-section="news"{% if atNotes %} aria-current="page"{% endif %} data-i18n="nav.blog">Insights</a>
+        <a href="{{ navLab }}" class="header__nav-link" data-nav-section="lab"{% if atLab %} aria-current="page"{% endif %} data-i18n="nav.lab">{{ labelLab }}</a>
+        <a href="{{ navStudio }}" class="header__nav-link" data-nav-section="about"{% if atStudio %} aria-current="page"{% endif %} data-i18n="nav.about">{{ labelAbout }}</a>
+        <a href="{{ navNotes }}" class="header__nav-link" data-nav-section="news"{% if atNotes %} aria-current="page"{% endif %} data-i18n="nav.blog">{{ labelNotes }}</a>
         <span class="header__nav-underline" aria-hidden="true"></span>
       </nav>
       <div class="header__right">
         <button class="sound-toggle" id="sound-toggle" type="button" aria-pressed="false" aria-label="Ambient sound / Sonido ambiental">
           <span class="sound-toggle__bar"></span><span class="sound-toggle__bar"></span><span class="sound-toggle__bar"></span>
         </button>
-        <div class="lang-switch" id="lang-switch">
-          <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
-          <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
-        </div>
-        <a href="/contact" class="header__contact-btn" data-i18n="nav.contact">Contact</a>
+{{ langSwitch("lang-switch") }}
+        <a href="/contact" class="header__contact-btn" data-i18n="nav.contact">{{ "Contacto" if isEs else "Contact" }}</a>
       </div>
       <button class="header__menu-toggle" id="menu-toggle" aria-label="Toggle menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -78,15 +120,12 @@
     </div>
     <div class="header__rule" aria-hidden="true"></div>
     <nav class="header__mobile-nav" id="mobile-nav" aria-label="Mobile navigation">
-      <a href="{{ navWork }}" class="header__mobile-nav-link" data-i18n="nav.work">Work</a>
-      <a href="{{ navLab }}" class="header__mobile-nav-link" data-i18n="nav.lab">Lab</a>
-      <a href="{{ navServices }}" class="header__mobile-nav-link" data-i18n="nav.services">Services</a>
-      <a href="{{ navStudio }}" class="header__mobile-nav-link" data-i18n="nav.about">About</a>
-      <a href="{{ navNotes }}" class="header__mobile-nav-link" data-i18n="nav.blog">Insights</a>
-      <a href="/contact" class="header__mobile-nav-link" data-i18n="nav.contact">Contact</a>
-      <div class="lang-switch" style="margin-top:auto;">
-        <button class="lang-switch__btn active" data-lang="en" aria-label="Switch to English">EN</button>
-        <button class="lang-switch__btn" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
-      </div>
+      <a href="{{ navWork }}" class="header__mobile-nav-link" data-i18n="nav.work">{{ labelWork }}</a>
+      <a href="{{ navLab }}" class="header__mobile-nav-link" data-i18n="nav.lab">{{ labelLab }}</a>
+      <a href="{{ navServices }}" class="header__mobile-nav-link" data-i18n="nav.services">{{ labelServices }}</a>
+      <a href="{{ navStudio }}" class="header__mobile-nav-link" data-i18n="nav.about">{{ labelAbout }}</a>
+      <a href="{{ navNotes }}" class="header__mobile-nav-link" data-i18n="nav.blog">{{ labelNotes }}</a>
+      <a href="/contact" class="header__mobile-nav-link" data-i18n="nav.contact">{{ labelContact }}</a>
+      <div class="lang-switch-wrap" style="margin-top:auto;">{{ langSwitch("") }}</div>
     </nav>
   </header>

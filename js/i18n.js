@@ -80,7 +80,7 @@ const translations = {
 
     "work.kicker": "Selected work",
     "work.title": "The ledger: what is published, and what is not yet.",
-    "work.viewAll": "Start a project",
+    "work.viewAll": "See the ledger",
     "work.summary": "Two engagements are signed and in production; they go up with the client's name and an agreed number, or they don't go up. The full ledger — including what we can't prove yet — is on the work page.",
     "work.ledgerTitle": "What we can't prove yet",
     "work.ledgerLead": "Most studio sites leave this part out. The rest of this page asks you to trust figures, so you should also know which figures we don't have.",
@@ -173,12 +173,12 @@ const translations = {
 
     "about.title": "A compact digital studio with strategy, design and build in one conversation.",
     "about.text": "CREATIVE MK helps businesses turn scattered digital needs into a coherent system: brand, website, product experience, content, paid growth, automation, and measurement.",
-    "about.viewServices": "View our services",
+    "about.viewServices": "Meet the studio",
     "about.bottomText": "The work is intentionally focused: understand the business, sharpen the message, design the experience, build what is needed, and connect the follow-up path so every touchpoint has a job.",
-    "about.learnMore": "Talk to CREATIVE MK",
+    "about.learnMore": "About the studio",
 
     "news.title": "Insights",
-    "news.visitBlog": "Ask for guidance",
+    "news.visitBlog": "Read the notes",
     "faq.title": "Frequently Asked Questions",
 
     "footer.ctaLabel": "Start a project",
@@ -277,7 +277,7 @@ const translations = {
 
     "work.kicker": "Trabajo seleccionado",
     "work.title": "El registro: lo publicado, y lo que todavía no.",
-    "work.viewAll": "Empezar un proyecto",
+    "work.viewAll": "Ver el registro",
     "work.summary": "Hay dos contratos firmados y en producción; se publican con el nombre del cliente y una cifra acordada, o no se publican. El registro completo — incluido lo que todavía no podemos demostrar — está en la página de trabajo.",
     "work.ledgerTitle": "Lo que todavía no podemos demostrar",
     "work.ledgerLead": "Casi ningún sitio de estudio pone esta parte. El resto de esta página te pide que te fíes de unas cifras, así que también deberías saber cuáles no tenemos.",
@@ -370,12 +370,12 @@ const translations = {
 
     "about.title": "Un estudio digital compacto con estrategia, diseño y construcción en una sola conversación.",
     "about.text": "CREATIVE MK ayuda a convertir necesidades digitales dispersas en un sistema coherente: marca, sitio web, experiencia de producto, contenido, pauta, automatización y medición.",
-    "about.viewServices": "Ver nuestros servicios",
+    "about.viewServices": "Conocer el estudio",
     "about.bottomText": "El trabajo es intencionalmente enfocado: entender el negocio, afinar el mensaje, diseñar la experiencia, construir lo necesario y conectar el seguimiento para que cada punto de contacto tenga una función.",
-    "about.learnMore": "Hablar con CREATIVE MK",
+    "about.learnMore": "Sobre el estudio",
 
     "news.title": "Insights",
-    "news.visitBlog": "Pedir orientación",
+    "news.visitBlog": "Leer las notas",
     "faq.title": "Preguntas frecuentes",
 
     "footer.ctaLabel": "Iniciar un proyecto",
@@ -476,9 +476,22 @@ function initI18n() {
      fall back to the in-place swap that has always run there. */
   const root = document.documentElement;
   document.querySelectorAll('.lang-switch__btn').forEach(btn => {
-    btn.addEventListener('click', () => {
+    btn.addEventListener('click', event => {
       const target = btn.dataset.lang;
-      if (target === currentLang) return;
+      if (target === currentLang) {
+        /* The active side is a self-link now, so it would reload the page for
+           nothing. Swallow it and leave the visitor where they are. */
+        if (btn.tagName === 'A') event.preventDefault();
+        return;
+      }
+      /* The control is an <a href> wherever a sibling document exists, so the
+         browser already knows where to go — remember the choice and let the
+         navigation happen natively. Calling location.href here as well would
+         race the default action for the same URL. */
+      if (btn.tagName === 'A' && btn.getAttribute('href')) {
+        storeLanguage(target);
+        return;
+      }
       const sibling = target === 'es' ? root.dataset.altEs : root.dataset.altEn;
       if (sibling) {
         storeLanguage(target);

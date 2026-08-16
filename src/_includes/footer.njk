@@ -1,6 +1,24 @@
-{#- One footer everywhere — it is the site's sitemap, and every page needs it.
-    Anchors are prefixed with {{ home }} so a subpage's "Services" link goes to
-    the homepage section instead of nowhere. -#}
+{#- One footer everywhere — it is the site's densest block of links, which is
+    exactly why it mattered that every one of them pointed into English.
+
+    Before this, a visitor reading /es/servicios/branding/ reached a footer
+    whose eighteen links all led to the English tree, under English headings.
+    The header had already been given a per-locale route table for this reason;
+    the footer, which carries three times as many links, had not. For a crawler
+    that made the Spanish half a set of leaves with no internal edges: every
+    page fed authority back into English and none into Spanish.
+
+    Terms is the one deliberate exception. There is no /es/terminos/ because a
+    machine-translated contract is worse than an English one, and translating
+    it is the owner's call, not a build step. The link stays English and says
+    so with hreflang. -#}
+{%- set isEs = (L == "es") %}
+{%- set fWork = "/es/trabajo/" if isEs else "/work/" %}
+{%- set fLab = "/es/lab/" if isEs else "/lab/" %}
+{%- set fServices = "/es/servicios/" if isEs else "/services/" %}
+{%- set fStudio = "/es/estudio/" if isEs else "/studio/" %}
+{%- set fNotes = "/es/notas/" if isEs else "/insights/" %}
+{%- set fPrivacy = "/privacidad/" if isEs else "/privacy/" %}
   <footer class="footer" id="contact">
     <div class="container">
       {#- The finale (immersive-plan §11): the CTA fills with gold as you
@@ -9,74 +27,76 @@
           design device. i18n.js keeps the pair inverted on every swap via
           data-i18n-alt. Without JS the gold layer simply shows filled. -#}
       <div class="footer__cta reveal">
-        <p class="footer__cta-label" data-i18n="footer.ctaLabel">Start a project</p>
+        <p class="footer__cta-label" data-i18n="footer.ctaLabel">{{ "Iniciar un proyecto" if isEs else "Start a project" }}</p>
         <div class="footer__cta-stack">
-          <span class="footer__cta-title footer__cta-title--ghost" aria-hidden="true" data-i18n-alt="footer.ctaTitle">Hablemos</span>
-          <a href="/contact" class="footer__cta-title footer__cta-title--fill" data-i18n="footer.ctaTitle">Let's Talk</a>
+          <span class="footer__cta-title footer__cta-title--ghost" aria-hidden="true" data-i18n-alt="footer.ctaTitle">{{ "Let's Talk" if isEs else "Hablemos" }}</span>
+          <a href="/contact" class="footer__cta-title footer__cta-title--fill" data-i18n="footer.ctaTitle">{{ "Hablemos" if isEs else "Let's Talk" }}</a>
         </div>
       </div>
       <div class="footer__contact">
         <div class="footer__contact-item">
-          <span class="footer__contact-label" data-i18n="footer.emailLabel">New Business</span>
+          <span class="footer__contact-label" data-i18n="footer.emailLabel">{{ "Nuevos Negocios" if isEs else "New Business" }}</span>
           <a href="mailto:hey@creativemk.net" class="footer__contact-value">hey@creativemk.net</a>
         </div>
         <div class="footer__contact-item">
-          <span class="footer__contact-label" data-i18n="footer.phoneLabel">Project Path</span>
-          <a href="/contact" class="footer__contact-value" data-i18n="footer.projectPath">Send a brief</a>
+          <span class="footer__contact-label" data-i18n="footer.phoneLabel">{{ "Ruta de proyecto" if isEs else "Project Path" }}</span>
+          <a href="/contact" class="footer__contact-value" data-i18n="footer.projectPath">{{ "Enviar brief" if isEs else "Send a brief" }}</a>
         </div>
       </div>
       <div class="footer__main">
         <div>
-          <h2 class="footer__column-title" data-i18n="footer.navigation">Navigation</h2>
+          <h2 class="footer__column-title" data-i18n="footer.navigation">{{ "Navegación" if isEs else "Navigation" }}</h2>
           <ul class="footer__nav-list">
-            <li><a href="/work/" class="footer__nav-link" data-i18n="nav.work">Work</a></li>
-            <li><a href="/lab/" class="footer__nav-link" data-i18n="nav.lab">Lab</a></li>
-            <li><a href="/services/" class="footer__nav-link" data-i18n="nav.services">Services</a></li>
-            <li><a href="/studio/" class="footer__nav-link" data-i18n="nav.about">About</a></li>
-            <li><a href="/insights/" class="footer__nav-link" data-i18n="nav.blog">Insights</a></li>
-            <li><a href="/contact" class="footer__nav-link" data-i18n="nav.contact">Contact</a></li>
+            <li><a href="{{ fWork }}" class="footer__nav-link" data-i18n="nav.work">{{ "Proyectos" if isEs else "Work" }}</a></li>
+            <li><a href="{{ fLab }}" class="footer__nav-link" data-i18n="nav.lab">Lab</a></li>
+            <li><a href="{{ fServices }}" class="footer__nav-link" data-i18n="nav.services">{{ "Servicios" if isEs else "Services" }}</a></li>
+            <li><a href="{{ fStudio }}" class="footer__nav-link" data-i18n="nav.about">{{ "Nosotros" if isEs else "About" }}</a></li>
+            <li><a href="{{ fNotes }}" class="footer__nav-link" data-i18n="nav.blog">Insights</a></li>
+            <li><a href="/contact" class="footer__nav-link" data-i18n="nav.contact">{{ "Contacto" if isEs else "Contact" }}</a></li>
           </ul>
         </div>
         <div>
-          <h2 class="footer__column-title" data-i18n="footer.services">Services</h2>
+          <h2 class="footer__column-title" data-i18n="footer.services">{{ "Servicios" if isEs else "Services" }}</h2>
           <ul class="footer__nav-list">
             {%- for service in services %}
-            <li><a href="/services/{{ service.slug }}/" class="footer__nav-link">{{ service.en.title }}</a></li>
+            <li><a href="{{ fServices }}{{ service.esSlug if isEs else service.slug }}/" class="footer__nav-link">{{ service.es.title if isEs else service.en.title }}</a></li>
             {%- endfor %}
           </ul>
         </div>
         <div>
-          <h2 class="footer__column-title" data-i18n="footer.office">Office</h2>
+          <h2 class="footer__column-title" data-i18n="footer.office">{{ "Oficina" if isEs else "Office" }}</h2>
           <div class="footer__offices">
             <div class="footer__office">
               <span class="footer__office-city">CREATIVE MK HQ</span>
-              <span class="footer__office-address" data-i18n="footer.address">Digital-first agency<br>Available worldwide</span>
+              <span class="footer__office-address" data-i18n="footer.address">{{ ("Estudio digital-first<br>Disponible de forma remota" if isEs else "Digital-first agency<br>Available worldwide") | safe }}</span>
             </div>
           </div>
         </div>
         <div>
-          <h2 class="footer__column-title" data-i18n="footer.stayUpdated">Stay Updated</h2>
+          <h2 class="footer__column-title" data-i18n="footer.stayUpdated">{{ "Mantente al día" if isEs else "Stay Updated" }}</h2>
           <div class="footer__newsletter">
-            <p class="footer__newsletter-text" data-i18n="footer.newsletterText">Get occasional notes on branding, UX, websites, growth systems, and practical AI.</p>
+            <p class="footer__newsletter-text" data-i18n="footer.newsletterText">{{ "Recibe notas ocasionales sobre branding, UX, sitios web, sistemas de crecimiento e IA práctica." if isEs else "Get occasional notes on branding, UX, websites, growth systems, and practical AI." }}</p>
             <form class="footer__newsletter-form" id="newsletter-form">
-              <input type="email" class="footer__newsletter-input" placeholder="Your email" data-i18n-placeholder="footer.emailPlaceholder" required>
-              <button type="submit" class="footer__newsletter-btn" data-i18n="footer.subscribe">Subscribe</button>
+              <input type="email" class="footer__newsletter-input" placeholder="{{ "Tu email" if isEs else "Your email" }}" data-i18n-placeholder="footer.emailPlaceholder" required>
+              <button type="submit" class="footer__newsletter-btn" data-i18n="footer.subscribe">{{ "Suscribirse" if isEs else "Subscribe" }}</button>
             </form>
-            <p class="footer__newsletter-success" id="newsletter-success" hidden>&#10003; <span data-i18n="footer.subscribeSuccess">Thanks for subscribing!</span></p>
+            <p class="footer__newsletter-success" id="newsletter-success" hidden>&#10003; <span data-i18n="footer.subscribeSuccess">{{ "Gracias por suscribirte!" if isEs else "Thanks for subscribing!" }}</span></p>
             <div class="footer__social">
-              <a href="/contact" class="footer__social-link" data-i18n="hero.primaryCta">Start a project</a>
+              <a href="/contact" class="footer__social-link" data-i18n="hero.primaryCta">{{ "Iniciar proyecto" if isEs else "Start a project" }}</a>
               <a href="mailto:hey@creativemk.net" class="footer__social-link">Email</a>
-              <a href="/services/" class="footer__social-link" data-i18n="nav.services">Services</a>
-              <a href="/insights/" class="footer__social-link" data-i18n="nav.blog">Insights</a>
+              <a href="{{ fServices }}" class="footer__social-link" data-i18n="nav.services">{{ "Servicios" if isEs else "Services" }}</a>
+              <a href="{{ fNotes }}" class="footer__social-link" data-i18n="nav.blog">Insights</a>
             </div>
           </div>
         </div>
       </div>
       <div class="footer__bottom">
-        <p class="footer__copyright">&copy; 2026 CREATIVE MK. <span data-i18n="footer.rights">All rights reserved.</span></p>
+        <p class="footer__copyright">&copy; 2026 CREATIVE MK. <span data-i18n="footer.rights">{{ "Todos los derechos reservados." if isEs else "All rights reserved." }}</span></p>
         <div class="footer__legal">
-          <a href="/privacy/" class="footer__legal-link" data-i18n="footer.privacy">Privacy Notice</a>
-          <a href="/terms/" class="footer__legal-link" data-i18n="footer.terms">Service Terms</a>
+          <a href="{{ fPrivacy }}" class="footer__legal-link" data-i18n="footer.privacy">{{ "Aviso de privacidad" if isEs else "Privacy Notice" }}</a>
+          {#- English-only, and honest about it: hreflang tells a browser and a
+              crawler that this link leaves the reader's language. -#}
+          <a href="/terms/" class="footer__legal-link"{% if isEs %} hreflang="en" lang="en"{% endif %} data-i18n="footer.terms">{{ "Términos de servicio" if isEs else "Service Terms" }}</a>
         </div>
       </div>
     </div>

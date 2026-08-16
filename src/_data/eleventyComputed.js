@@ -9,6 +9,28 @@ export default {
   home: (data) => (data.page && data.page.url === '/' ? '' : '/'),
 
   /**
+   * The homepage FAQ in schema.org shape, in the language of the document.
+   *
+   * This was a global data file that hardcoded `faq.en.slice(0, 3)`. That was
+   * correct while English was the only homepage; the day /es/ shipped it would
+   * have declared three English questions over a page showing three Spanish
+   * ones — schema contradicting the rendered content, which is the one thing
+   * structured data must never do. Computed here because only a computed value
+   * can see `L`.
+   *
+   * Still sliced to three, because three is what the accordion renders.
+   */
+  faqEntities: (data) => {
+    const loc = data.L === 'es' ? 'es' : 'en';
+    const items = (data.faq && data.faq[loc]) || [];
+    return items.slice(0, 3).map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: { '@type': 'Answer', text: item.a }
+    }));
+  },
+
+  /**
    * A service page's own FAQPage entities, derived from the same array the
    * template renders. Computed rather than written into front matter so the
    * two cannot drift: delete a question from services.js and it leaves the

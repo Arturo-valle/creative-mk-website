@@ -10,7 +10,11 @@ eleventyExcludeFromCollections: true
     template that paginates contributes only its first output there. -#}
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
 {%- for item in collections.all %}
-{%- if item.url and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/work/" not in item.url and "/es/" not in item.url and "/404" not in item.url %}
+{#- The homepage is excluded here and declared as a pair below. It used to fall
+    through this loop as a bare <loc> with no alternates, while /es/ was
+    filtered out entirely by the "/es/" rule — so the site's two most important
+    URLs were the only pair in the file that did not declare each other. -#}
+{%- if item.url and item.url != "/" and not item.data.robots and "/services/" not in item.url and "/insights/" not in item.url and "/work/" not in item.url and "/es/" not in item.url and "/404" not in item.url %}
   <url><loc>{{ site.origin }}{{ item.url }}</loc></url>
 {%- endif %}
 {%- endfor %}
@@ -62,6 +66,7 @@ eleventyExcludeFromCollections: true
     <xhtml:link rel="alternate" hreflang="x-default" href="{{ site.origin }}{{ enPath }}"/>
   </url>
 {%- endmacro -%}
+{{ pair("/", "/es/") }}
 {{ pair("/es/trabajo/" | replace("/es/trabajo/", "/work/"), "/es/trabajo/") }}
 {%- for case in cases %}
 {{ pair("/work/" + case.slug + "/", "/es/trabajo/" + case.esSlug + "/") }}

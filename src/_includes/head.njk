@@ -61,13 +61,16 @@
     references every page makes actually resolve inside its own document. -#}
 {%- if pageSchema %}
   <script type="application/ld+json">
-{%- set faqNode = { "@type": "FAQPage", "@id": site.origin + "/#faq", "mainEntity": faqEntities } -%}
+{#- The @id is page-scoped. It used to be hardcoded to "/#faq", which was
+    harmless while one document carried an FAQ and became a collision the day
+    /es/ shipped: two pages declaring the same node with different questions. -#}
+{%- set faqNode = { "@type": "FAQPage", "@id": site.origin + page.url + "#faq", "mainEntity": faqEntities } -%}
 {#- A service page declares its OWN questions, built from the same array it
     renders, so the schema can never promise a question the page does not
     show — the failure the audit found on the homepage, where FAQPage was
     declared over a section JS had not filled yet. -#}
 {%- set serviceFaqNode = { "@type": "FAQPage", "@id": site.origin + page.url + "#faq", "mainEntity": serviceFaqEntities } -%}
-{%- set graph = [(schema.studioFull if page.url == "/" else schema.studio), pageSchema] -%}
+{%- set graph = [(schema.studioFull if (page.url == "/" or page.url == "/es/") else schema.studio), pageSchema] -%}
 {%- if extraSchema == "faq" %}{% set graph = graph | concat([faqNode]) %}{% endif -%}
 {%- if extraSchema == "serviceFaq" and serviceFaqEntities %}{% set graph = graph | concat([serviceFaqNode]) %}{% endif -%}
 {%- if breadcrumbEntities %}{% set graph = graph | concat([breadcrumbEntities]) %}{% endif -%}
