@@ -158,7 +158,7 @@ async function checkI18n() {
   for (const file of htmlFiles) {
     const html = stripHtmlComments(await readFile(file, 'utf8'));
     const referenced = new Set(
-      [...html.matchAll(/\sdata-i18n(?:-[a-z]+)?\s*=\s*"([^"]+)"/g)].map((m) => m[1])
+      [...html.matchAll(/[\s/]data-i18n(?:-[a-z]+)?\s*=\s*"([^"]+)"/g)].map((m) => m[1])
     );
     for (const key of referenced) {
       if (!en.has(key)) error(check, `${rel(file)} references data-i18n="${key}" with no en translation`);
@@ -200,20 +200,24 @@ async function checkI18n() {
        the pairs turns every one of those from a silent pass into a failure. */
     /* The counter must be blind to less than the reader, or it inherits the
        reader's blind spots and certifies them.
-       Three versions of this were wrong in the same way. The first was
-       tag-aware and stopped at the first ">". The second required a quote and
-       was case-sensitive, so `data-i18n=nav.work` (valid HTML5) and
-       `DATA-I18N="nav.work"` (HTML lowercases attribute names, so the runtime
-       still swaps it) passed reader and counter together. This one accepts an
-       unquoted value and matches case-insensitively, and it counts all three
-       bindings — the two siblings had no counter at all, which left the same
-       silent-pass hole open on 74 of them. */
+       Four versions of this were wrong in the same way, and the fourth is the
+       reason this comment no longer claims to be blind to nothing. The first
+       was tag-aware and stopped at the first ">". The second required a quote
+       and was case-sensitive, so `data-i18n=nav.work` (valid HTML5) and
+       `DATA-I18N="..."` (HTML lowercases attribute names, so the runtime still
+       swaps it) passed reader and counter together. The third required
+       whitespace before the attribute, and HTML5 also accepts a solidus, so
+       `<span/data-i18n="...">` binds at runtime and matched neither.
+       What is claimed now is narrower and testable: every construct in
+       scripts/test-i18n-gate.mjs is detected by the guard that owns it. That
+       list is not the set of all possible HTML; it is the set this gate has
+       been shown to catch. Add to it when the next one is found. */
     const countBinding = (attr) =>
-      [...html.matchAll(new RegExp(`\\s${attr}\\s*=\\s*(?:"([^"]+)"|'([^']+)'|([^\\s>]+))`, 'gi'))]
+      [...html.matchAll(new RegExp(`[\\s/]${attr}\\s*=\\s*(?:"([^"]+)"|'([^']+)'|([^\\s>]+))`, 'gi'))]
         .map((m) => m[1] ?? m[2] ?? m[3]);
 
     const declared = countBinding('data-i18n(?!-)');
-    const pairs = [...html.matchAll(/<(\w+)\b[^>]*\sdata-i18n\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)];
+    const pairs = [...html.matchAll(/<(\w+)\b[^>]*[\s/]data-i18n\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g)];
     if (declared.length !== pairs.length) {
       const seen = new Set(pairs.map((m) => m[2]));
       const missed = declared.filter((key) => !seen.has(key));
@@ -268,7 +272,7 @@ async function checkI18n() {
        against the same locale; data-i18n-alt deliberately shows the OTHER
        language — that is the footer's bilingual finale — so it is compared
        against the other dictionary. */
-    const placeholderPairs = [...html.matchAll(/\sdata-i18n-placeholder\s*=\s*"([^"]+)"/g)];
+    const placeholderPairs = [...html.matchAll(/[\s/]data-i18n-placeholder\s*=\s*"([^"]+)"/g)];
     if (countBinding('data-i18n-placeholder').length !== placeholderPairs.length) {
       error(check, `${rel(file)} has data-i18n-placeholder bindings this check cannot read`);
     }
@@ -288,7 +292,7 @@ async function checkI18n() {
     }
 
     const altPairs = [...html.matchAll(
-      /<(\w+)\b[^>]*\sdata-i18n-alt\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g
+      /<(\w+)\b[^>]*[\s/]data-i18n-alt\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g
     )];
     if (countBinding('data-i18n-alt').length !== altPairs.length) {
       error(check, `${rel(file)} has data-i18n-alt bindings this check cannot read`);

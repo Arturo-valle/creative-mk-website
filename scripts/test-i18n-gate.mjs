@@ -9,10 +9,17 @@
  * this one can is to break something on purpose and watch it complain.
  *
  * Each fixture below is a page carrying exactly one defect the gate must
- * catch. Two of them — a single-quoted attribute and a ">" inside an earlier
- * attribute — were still missed after the first hardening, because the
- * counter that was supposed to notice unread elements shared the reader's
- * blind spots. That is why the counter is now quote-agnostic and tag-free.
+ * catch, paired with the diagnostic that must appear. Asserting only that the
+ * error count rose was not enough: two guards were deleted and the suite still
+ * reported a clean pass, because a different guard fired instead.
+ *
+ * Three fixtures pin a guard's CONDITION rather than its existence — a
+ * mismatch sharing a long prefix, a nested tag of a type no other fixture
+ * uses, and a solidus attribute separator. Each of those was added after a
+ * weakened (not deleted) guard survived the suite.
+ *
+ * This list is not the set of all possible HTML. It is the set this gate has
+ * been shown to catch. Add to it when the next construct is found.
  *
  * Usage: node scripts/test-i18n-gate.mjs   (exit 1 if any fixture goes unseen)
  */
@@ -86,6 +93,22 @@ const FIXTURES = {
   'alt shows the same language instead of the other': {
     body: `<span data-i18n-alt="footer.ctaTitle">Let's Talk</span>`,
     expect: 'must show the other language'
+  },
+  'mismatch sharing a long prefix': {
+    // Kills a value comparison narrowed to a prefix: the first 12 characters
+    // are identical and everything after them is wrong.
+    body: '<span data-i18n="servicePage.faqTitle">QuestionsXXXX TOTALLY WRONG</span>',
+    expect: 'but en says'
+  },
+  'nested tag of a type the fixture set did not use': {
+    // Kills a nested-tag guard narrowed to one tag name.
+    body: '<p data-i18n="nav.work">Work<p>x</p> AND A WRONG TAIL</p>',
+    expect: 'cannot be verified'
+  },
+  'solidus as attribute separator': {
+    // HTML5 accepts "/" where whitespace is expected, so this binds at runtime.
+    body: '<span/data-i18n="nav.work">TOTALLY WRONG</span>',
+    expect: 'but en says'
   },
   'unreadable alt binding': {
     body: "<span data-i18n-alt='footer.ctaTitle'>x</span>",

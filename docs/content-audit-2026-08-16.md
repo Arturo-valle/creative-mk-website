@@ -205,6 +205,56 @@ pushing it under and silencing the finding it was written to catch. It now
 detects a run of three or more consecutive blocks in the other language, and
 reports both pages.
 
+## Five rounds of adversarial review
+
+An arbiter was run against the work five times, each round told to refute the
+last. Rounds 1-4 returned FAIL. What they found, in the order it matters:
+
+1. **47% of the headline score gain came from editing the scorer**, not the
+   site. Four threshold loosenings were undisclosed. All reverted; the number
+   is now stated with attribution.
+2. **Three published figures were false.** The byte comparison mixed gzip and
+   brotli; "4 stations" counted circles in a diagram; "0 render-blocking
+   scripts" was true of files and not of the inline bootstrap.
+3. **A false answer in structured data.** The Spanish FAQ said "Sí" to a
+   question the English and the ledger both answer no.
+4. **The claim was fixed as a string, not as a class** — the same assertion
+   shipped one page over, unqualified.
+5. **The replacement claim was also false**, and was written without running
+   the test that disproved the original.
+6. **An invented statistic** — "independent Spanish runs 15-25%" — printed
+   inside an answer arguing that an unsourced number is decoration.
+7. **Three gates asserted things about themselves that were not true.** The
+   binding counter's comment said "blind to nothing" through four versions of
+   being blind to something. The fixture suite passed with two guards deleted.
+   The language check called a document with zero correct markings "correctly
+   marked".
+
+Round 5 passed. Two of its findings were fixed anyway, because both concerned
+whether a gate can be trusted: a solidus attribute separator defeated reader
+and counter together, and the fixture suite pinned each guard's existence but
+not its condition — a comparison narrowed to a four-character prefix survived
+the whole pipeline.
+
+The pattern worth carrying forward: **every one of these was a claim about
+correctness rather than the correctness itself.** The fix in each case was to
+make the claim measurable and then let the build check it. Three checks now
+exist for that reason alone — `scripts/test-i18n-gate.mjs` (sixteen fixtures,
+each owned by one guard), `scripts/measure-bilingual.mjs` (fails when published
+figures drift from the corpus), and the declared-versus-readable counter in
+`check-site.mjs`.
+
+### Noted, not fixed
+
+- **Fourteen Spanish dictionary values appear nowhere on their Spanish page.**
+  They are dead strings, not live defects: a Spanish document never runs the
+  in-place swap, because `getStoredLanguage()` lets the document's own `lang`
+  win. Worth a pass, invisible to the gate, which only compares bound elements.
+- **`dist/admin/admin.js` embeds the Cloudflare account id.** `robots.txt` does
+  not stop a direct fetch. It is not a credential — auth is a server-validated
+  bearer token — but it is infrastructure detail on a public URL, and whether
+  that matters is the owner's call.
+
 ## Still open, and all of it owner-gated
 
 - **Two Spanish privacy notices exist with different content.** The Spanish half

@@ -496,9 +496,11 @@ function initI18n() {
   /* Where a real sibling URL exists, the switcher navigates to it: Google
      asks for one URL per language, and a page that only swaps strings in
      place has no Spanish document to index. The sibling paths are stamped
-     on <html> by the layout (data-alt-en / data-alt-es); pages that carry
-     both languages in one document — the homepage today — have neither, and
-     fall back to the in-place swap that has always run there. */
+     on <html> by the layout (data-alt-en / data-alt-es). The homepage used to
+     be the example of a page with neither; it has a real /es/ twin now and
+     navigates like the rest. What is left on the fallback path is /terms/,
+     which is one document carrying both languages and has no sibling to go
+     to, so the in-place swap is the correct behaviour there. */
   const root = document.documentElement;
   document.querySelectorAll('.lang-switch__btn').forEach(btn => {
     btn.addEventListener('click', event => {

@@ -71,21 +71,36 @@ console.log(`Paired prose blocks (services + cases): ${total}`);
 console.log(`Identical sentence counts            : ${identical}  (${((identical / total) * 100).toFixed(1)}%)`);
 console.log(`ES/EN word ratio                     : ${ratio.toFixed(3)}  (Spanish ${longerPct}% longer)`);
 
-/* The published claim has to agree with the measurement above. Both figures
-   appear in the branding and UX/UI FAQ answers, in both languages. */
-const source = await readFile(resolve(root, 'src/_data/services.js'), 'utf8');
+/* The published claim has to agree with the measurement above.
+   The first version of this check greped one file and accepted either number
+   in any position, which is most of the way to not checking. Every data file
+   is scanned now, and each figure is matched in the phrase that carries it. */
 const problems = [];
-
-const publishedTotals = [...source.matchAll(/(\d+)\s+(?:keep the English sentence count|paired passages|pasajes emparejados|conservan exactamente)/g)];
-for (const match of publishedTotals) {
-  const value = Number(match[1]);
-  if (value !== total && value !== identical) {
-    problems.push(`copy publishes "${value}" where the corpus measures ${identical} of ${total}`);
+const dataFiles = ['services.js', 'cases.js', 'notes.js', 'homeCopy.js', 'faq.js'];
+for (const name of dataFiles) {
+  let source;
+  try {
+    source = await readFile(resolve(root, 'src/_data', name), 'utf8');
+  } catch {
+    continue;
   }
-}
-for (const match of source.matchAll(/(\d+)%\s*(?:longer|más largo)/g)) {
-  if (Number(match[1]) !== longerPct) {
-    problems.push(`copy publishes "${match[1]}% longer" where the corpus measures ${longerPct}%`);
+
+  /* "Measured across 122 paired passages, all 122 keep the English sentence
+     count" and its Spanish twin. Both numbers are checked in place. */
+  for (const m of source.matchAll(/across (\d+) paired passages, (?:all (\d+)|only (\d+))/g)) {
+    if (Number(m[1]) !== total) problems.push(`${name}: publishes ${m[1]} paired passages, corpus has ${total}`);
+    const claimed = Number(m[2] ?? m[3]);
+    if (claimed !== identical) problems.push(`${name}: publishes ${claimed} identical, corpus has ${identical}`);
+  }
+  for (const m of source.matchAll(/sobre (\d+) pasajes emparejados, (?:los (\d+)|(\d+))/g)) {
+    if (Number(m[1]) !== total) problems.push(`${name}: publica ${m[1]} pasajes, el corpus tiene ${total}`);
+    const claimed = Number(m[2] ?? m[3]);
+    if (claimed !== identical) problems.push(`${name}: publica ${claimed} idénticos, el corpus tiene ${identical}`);
+  }
+  for (const m of source.matchAll(/(\d+)%\s*(?:longer|más largo)/g)) {
+    if (Number(m[1]) !== longerPct) {
+      problems.push(`${name}: publishes "${m[1]}% longer", corpus measures ${longerPct}%`);
+    }
   }
 }
 
