@@ -36,7 +36,7 @@ const faq = {
     },
     {
       "q": "¿Los proyectos mostrados son casos reales de clientes?",
-      "a": "Sí, es lo único que admite la sección de trabajo. Hay dos proyectos firmados esperando a que el cliente apruebe nombre y cifra; hasta entonces se cuentan pero no se enseñan. No hay nada inventado ocupando su lugar."
+      "a": "El trabajo de cliente solo se publica con un nombre y una cifra acordada, y hay dos proyectos firmados que todavía no se pueden publicar. Los dos casos abiertos hoy son del propio estudio, y están etiquetados como iniciativa propia. Los dos firmados esperan a que el cliente apruebe nombre y cifra; hasta entonces se cuentan pero no se enseñan. No hay nada inventado ocupando su lugar."
     },
     {
       "q": "¿Pueden rediseñar un sitio o marca existente?",

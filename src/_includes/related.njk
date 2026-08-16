@@ -45,7 +45,7 @@
           <li class="related__item">
             <span class="related__kind" data-i18n="related.kindNote">{{ "Nota" if isEsRel else "Note" }}</span>
             <a class="related__link" href="{{ noteBase }}{{ note.esSlug if isEsRel else note.slug }}/">{{ note[RL].title }}</a>
-            <span class="related__note">{{ note.minutes }} min</span>
+            <span class="related__note">{{ note.minutesByLang[L or "en"] }} min</span>
           </li>
           {%- endif %}{% endfor %}
           {%- endfor %}

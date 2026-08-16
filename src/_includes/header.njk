@@ -45,12 +45,12 @@
 {%- macro langSwitch(id) %}
         <div class="lang-switch"{% if id %} id="{{ id }}"{% endif %}>
           {%- if enHref %}
-          <a class="lang-switch__btn{{ " active" if L != "es" }}" href="{{ enHref }}" hreflang="en" data-lang="en" lang="en"{% if L != "es" %} aria-current="page" aria-label="English, current language"{% else %} aria-label="Switch to English"{% endif %}>EN</a>
+          <a class="lang-switch__btn{{ " active" if L != "es" }}" href="{{ enHref }}" hreflang="en" data-lang="en" lang="en"{% if L != "es" %} aria-current="page"{% endif %} aria-label="English">EN</a>
           {%- else %}
           <button class="lang-switch__btn{{ " active" if L != "es" }}" type="button" data-lang="en" aria-label="Switch to English">EN</button>
           {%- endif %}
           {%- if esHref %}
-          <a class="lang-switch__btn{{ " active" if L == "es" }}" href="{{ esHref }}" hreflang="es" data-lang="es" lang="es"{% if L == "es" %} aria-current="page" aria-label="Espa&ntilde;ol, idioma actual"{% else %} aria-label="Cambiar a Espa&ntilde;ol"{% endif %}>ES</a>
+          <a class="lang-switch__btn{{ " active" if L == "es" }}" href="{{ esHref }}" hreflang="es" data-lang="es" lang="es"{% if L == "es" %} aria-current="page"{% endif %} aria-label="Espa&ntilde;ol">ES</a>
           {%- else %}
           <button class="lang-switch__btn{{ " active" if L == "es" }}" type="button" data-lang="es" aria-label="Cambiar a Espa&ntilde;ol">ES</button>
           {%- endif %}

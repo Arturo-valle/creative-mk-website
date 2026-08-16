@@ -1226,7 +1226,12 @@ if (asJson) {
   process.exit(0);
 }
 
-if (emitPath && !args.includes('--report')) process.exit(0);
+/* --emit used to exit here, so `npm run build` printed a score and swallowed
+   every finding behind it — including two HIGH technical ones. A gate whose
+   output you have to remember to go and look at is not a gate. The summary
+   below always prints; --quiet restores the old behaviour for callers that
+   only want the file. */
+if (emitPath && args.includes('--quiet')) process.exit(0);
 
 const bar = (score) => {
   const filled = Math.round(score / 5);

@@ -93,7 +93,7 @@ export default {
       eyebrow: 'Branding, UX/UI, sitios web, crecimiento e IA',
       title: 'Experiencias digitales para marcas listas para crecer con claridad',
       lede: 'CREATIVE MK es un estudio digital bilingüe que integra identidad de marca, UX/UI, sitios web, sistemas de crecimiento, desarrollo y automatización con IA en una presencia coherente.',
-      primaryCta: 'Iniciar proyecto',
+      primaryCta: 'Empezar un proyecto',
       secondaryCta: 'Explorar servicios',
       soundEnable: 'Activar sonido'
     },

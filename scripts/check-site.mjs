@@ -65,6 +65,25 @@ const rel = (f) => relative(distDir, f).split('\\').join('/');
 
 /** Strip comments so we never lint commented-out markup. */
 const stripHtmlComments = (html) => html.replace(/<!--[\s\S]*?-->/g, '');
+
+/**
+ * Just enough entity decoding to compare rendered text against a dictionary
+ * value. The templates escape through the `attr` filter and Nunjucks' own
+ * autoescape, so an apostrophe or an ampersand arrives encoded on one side of
+ * the comparison and raw on the other.
+ */
+const NAMED_ENTITIES = {
+  amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: ' ', ntilde: 'ñ',
+  aacute: 'á', eacute: 'é', iacute: 'í', oacute: 'ó', uacute: 'ú', uuml: 'ü',
+  Aacute: 'Á', Eacute: 'É', Iacute: 'Í', Oacute: 'Ó', Uacute: 'Ú', Ntilde: 'Ñ',
+  iquest: '¿', iexcl: '¡', mdash: '—', ndash: '–', rsquo: '’', hellip: '…',
+  middot: '·'
+};
+const decodeEntities = (text) =>
+  text
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(Number(code)))
+    .replace(/&#x([0-9a-f]+);/gi, (_, code) => String.fromCharCode(parseInt(code, 16)))
+    .replace(/&([a-zA-Z]+);/g, (match, name) => NAMED_ENTITIES[name] ?? match);
 const stripCssComments = (css) => css.replace(/\/\*[\s\S]*?\*\//g, '');
 
 /* ---------- 1. i18n parity ---------- */
@@ -144,6 +163,47 @@ async function checkI18n() {
     for (const key of referenced) {
       if (!en.has(key)) error(check, `${rel(file)} references data-i18n="${key}" with no en translation`);
       else if (!es.has(key)) error(check, `${rel(file)} references data-i18n="${key}" with no es translation`);
+    }
+  }
+
+  /* The static text and the dictionary must agree.
+     This bug class has now shipped three times. The markup said "See the
+     ledger" while the dictionary said "Start a project", so the first read
+     and every read after a language round trip disagreed — both live at once,
+     on the same link. Fixing the four known cases by hand left forty more,
+     including the primary call to action on eleven Spanish pages. Key parity
+     was already gated; the VALUES were not, and a key that resolves to the
+     wrong sentence is worse than one that resolves to nothing, because
+     nothing is visible.
+
+     Only same-language pairs are compared: `data-i18n-alt` deliberately shows
+     the other language, and is skipped. */
+  const collapse = (text) =>
+    decodeEntities(text.replace(/<[^>]+>/g, ''))
+      .replace(/\s+/g, ' ')
+      .trim();
+
+  for (const file of htmlFiles) {
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+    const lang = html.match(/<html[^>]*\slang\s*=\s*"([^"]+)"/i)?.[1]?.slice(0, 2);
+    if (lang !== 'en' && lang !== 'es') continue;
+    const dict = translations[lang];
+
+    for (const match of html.matchAll(
+      /<(\w+)\b[^>]*\sdata-i18n\s*=\s*"([^"]+)"[^>]*>([\s\S]*?)<\/\1>/g
+    )) {
+      const [, , key, inner] = match;
+      const expected = dict[key];
+      if (typeof expected !== 'string' || !expected.trim()) continue;
+      const rendered = collapse(inner);
+      if (!rendered) continue; // filled at runtime, nothing to compare
+      if (rendered !== collapse(expected)) {
+        error(
+          check,
+          `${rel(file)} renders "${rendered.slice(0, 48)}" for data-i18n="${key}", ` +
+            `but ${lang} says "${collapse(expected).slice(0, 48)}"`
+        );
+      }
     }
   }
 

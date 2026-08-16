@@ -2,6 +2,14 @@
 layout: "layout.njk"
 subpage: true
 lang: "es"
+# `lang` sets the <html> attribute; `L` is what header.njk and footer.njk key
+# their route tables and labels off. This page set the first and not the second,
+# so a document declaring itself Spanish shipped an English header and footer
+# and sent fifteen of its sixteen chrome links into the English tree — the exact
+# defect the August audit was run to find, still live on the one page nobody
+# re-checked because it was written for the /lp/ funnel rather than the site.
+L: "es"
+localePrefix: "/es"
 motion: false
 title: "Política de privacidad | CREATIVE MK"
 description: "Qué datos recoge CREATIVE MK, para qué se usan y cómo pedir su corrección o borrado. Corto y en claro."
@@ -52,6 +60,6 @@ mainClass: "sec sec--papel"
       </div>
     </div>
 
-    <p style="margin-top:3rem"><a class="btn" href="/lp/sitios-web/">← Volver</a></p>
+    <p style="margin-top:3rem"><a class="btn" href="/es/">← Volver al inicio</a></p>
     <p class="mini" style="margin-top:2rem">Última revisión: agosto de 2026.</p>
   </div>
