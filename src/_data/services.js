@@ -95,7 +95,7 @@ const services = [
         },
         {
           "q": "How does this work in two languages?",
-          "a": "One project, two languages, quoted as one. Voice rules and key messages are defined separately in English and Spanish rather than translated at the end, because a promise that only sounds native in one language is only trusted in one market. On this site that standard is met by the page copy and not yet by the long-form notes, whose Spanish was drafted from the English and still follows its shape — a distinction we would rather publish than have a reader find."
+          "a": "One project, two languages, quoted as one. In a client engagement the voice rules and key messages are defined in parallel rather than translated at the end, because a promise that only sounds native in one language is only trusted in one market. This site is not the sample for that: its Spanish was drafted from the English and still follows its sentence structure closely, which is measurable and which we would rather state than have you notice. It is the honest version of a claim most studios make and none of them test."
         },
         {
           "q": "Why are there no client branding cases on this page?",
@@ -173,7 +173,7 @@ const services = [
         },
         {
           "q": "¿Cómo funciona en dos idiomas?",
-          "a": "Un proyecto, dos idiomas, una sola cotización. Las reglas de voz y los mensajes clave se definen por separado en español y en inglés, en lugar de traducirse al final, porque una promesa que solo suena nativa en un idioma solo genera confianza en un mercado. En este sitio ese estándar lo cumple el copy de las páginas, y todavía no las notas largas: su versión en español se redactó a partir del inglés y aún sigue su forma. Preferimos publicar esa distinción a que la encuentre quien lee."
+          "a": "Un proyecto, dos idiomas, una sola cotización. En un proyecto de cliente las reglas de voz y los mensajes clave se definen en paralelo, no se traducen al final, porque una promesa que solo suena nativa en un idioma solo genera confianza en un mercado. Este sitio no es la muestra de eso: su español se redactó a partir del inglés y todavía sigue de cerca su estructura de frases. Es medible, y preferimos decirlo a que lo notes. Es la versión honesta de una afirmación que hacen casi todos los estudios y que no comprueba ninguno."
         },
         {
           "q": "¿Por qué no hay casos de branding de clientes en esta página?",

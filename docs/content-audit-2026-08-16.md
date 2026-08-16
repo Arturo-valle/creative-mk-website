@@ -174,6 +174,27 @@ that its claims are checkable:
 - **"0 render-blocking scripts, site-wide"** is true of script *files* and not
   of the inline reveal bootstrap in every `<head>`. Qualified.
 
+## The claim that failed twice
+
+Round 2 disproved *"The Spanish is written, not translated… this site runs the
+same way, and it is the standing sample"* arithmetically: across the three
+long-form notes, **57 of 57 Spanish paragraphs preserve the English sentence
+count exactly**. Independently authored prose does not do that.
+
+The first correction claimed the *page copy* met the standard even though the
+notes did not. Running the same test on the page copy — 122 paired prose blocks
+across `services.js` and `cases.js` — returned **121 identical, 99.2%**, with an
+ES/EN word ratio of **1.088** where independently authored Spanish runs about
+1.15–1.25. The replacement claim was as false as the one it replaced, and it
+was written without running the test that was sitting right there.
+
+The self-citation is now gone entirely. The service commitment stays, because
+it describes how a client engagement is scoped; what the site says about its
+own Spanish is that it was drafted from the English, still follows its sentence
+structure, and that this is measurable. Worth recording as a pattern: the first
+instinct on being caught was to narrow the claim until it fitted, rather than
+to measure it again.
+
 ## A known defect, now fixed
 
 The `language` check compared function-word frequency across the whole body and
