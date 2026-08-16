@@ -4,13 +4,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "npm run build:contact && node scripts/copy-assets.mjs && npx @11ty/eleventy && node scripts/fingerprint.mjs && node scripts/check-site.mjs",
+    "build": "npm run build:contact && node scripts/copy-assets.mjs && npx @11ty/eleventy && node scripts/fingerprint.mjs && node scripts/audit.mjs --emit .audit.json && node scripts/colophon.mjs && node scripts/check-site.mjs",
     "dev:contact": "vite --host 127.0.0.1",
     "build:contact": "vite build && node scripts/copy-contact-build.mjs",
     "preview:contact": "vite preview --host 127.0.0.1",
     "typecheck": "wrangler types cloudflare/agent/worker-configuration.d.ts --config cloudflare/agent/wrangler.jsonc && tsc -p cloudflare/agent/tsconfig.json",
     "check:site": "node scripts/check-site.mjs",
-    "verify": "npm run build && npm run typecheck && npm run check:site"
+    "verify": "npm run build && npm run typecheck && npm run check:site",
+    "audit": "node scripts/audit.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",

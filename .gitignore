@@ -29,3 +29,4 @@ cloudflare/agent/.wrangler/
 
 # Logs
 *.log
+.audit.json

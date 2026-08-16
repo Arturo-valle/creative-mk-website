@@ -2275,3 +2275,158 @@ a.accordion-title:hover { color: #7A5C12; }
 }
 
 .accordion-more { display: inline-flex; margin-top: var(--space-5); }
+
+/* ==========================================================================
+   The colophon (src/_includes/colophon.njk)
+
+   A printer's mark at the foot of every page, opening onto that page's own
+   measurements. It is furniture at the very end of the document, so it is
+   sized to be found rather than noticed: one hairline rule, a registration
+   target, and figures set in the same tabular style as the work ledger it is
+   a cousin of.
+
+   Two things it must not assume.
+
+   Its width. It aligns to --container-max / --container-padding rather than
+   inventing its own, because it sits directly under blocks that use
+   .container and a colophon on a different measure reads as a mistake before
+   it reads as a margin note.
+
+   Its ground. The page's three acts are painted by the canvas in
+   js/terrain.js, not by a class on a section, so nothing in the markup knows
+   whether this block landed on paper or on ink. Every colour here is
+   therefore derived from currentColor and opacity instead of being named —
+   the mark, the rules and the labels all resolve against whatever the stage
+   is painting behind them.
+
+   The one piece of motion earns its place: opening the disclosure draws the
+   four crosshair arms inward until they meet the ring — plates coming into
+   register, which is what the mark means and what the panel is claiming. One
+   transform on one path, settled under prefers-reduced-motion.
+   ========================================================================== */
+
+.colophon {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  margin-top: clamp(4rem, 9vw, 7rem);
+  padding-inline: var(--container-padding);
+  color: inherit;
+}
+
+.colophon__details {
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  padding-top: var(--space-4);
+}
+
+/* No entry in the audit payload means no figures were stamped. An empty
+   disclosure that opens onto nothing is worse than no disclosure. */
+.colophon:has(.colophon__body:empty) { display: none; }
+
+.colophon__summary {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  cursor: pointer;
+  list-style: none;
+  padding: var(--space-2) 0;
+  font-size: 11px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  transition: opacity var(--duration-fast, 0.2s) var(--ease-out, ease);
+}
+
+.colophon__summary::-webkit-details-marker { display: none; }
+.colophon__summary::marker { content: ""; }
+
+.colophon__summary:hover,
+.colophon__details[open] .colophon__summary { opacity: 1; }
+
+.colophon__summary:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 4px;
+  opacity: 1;
+}
+
+.colophon__mark {
+  flex: none;
+  width: 22px;
+  height: 22px;
+}
+
+.colophon__mark svg { width: 100%; height: 100%; overflow: visible; display: block; }
+
+.colophon__mark-ring,
+.colophon__mark-cross {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.25;
+}
+
+.colophon__mark-dot { fill: currentColor; opacity: 0; transition: opacity 0.35s ease; }
+
+/* The arms sit long when closed and converge on open. */
+.colophon__mark-cross {
+  transform-origin: 16px 16px;
+  transform: scale(1);
+  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.colophon__details[open] .colophon__mark-cross { transform: scale(0.42); }
+.colophon__details[open] .colophon__mark-dot { opacity: 1; }
+
+.colophon__hint {
+  margin-left: auto;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+.colophon__body { padding: var(--space-4) 0 var(--space-6); }
+
+.colophon__figures {
+  margin: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  border-top: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.colophon__row {
+  padding: var(--space-3) var(--space-4) var(--space-3) 0;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 12%, transparent);
+}
+
+.colophon__row dt {
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.6;
+}
+
+.colophon__row dd {
+  margin: var(--space-1) 0 0;
+  font-size: clamp(0.95rem, 1.5vw, 1.1rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.colophon__note {
+  margin: var(--space-4) 0 0;
+  max-width: 66ch;
+  font-size: 0.85rem;
+  line-height: 1.6;
+  opacity: 0.7;
+}
+
+.colophon__note a { color: inherit; text-underline-offset: 3px; }
+
+@media (max-width: 560px) {
+  .colophon__hint { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .colophon__summary,
+  .colophon__mark-cross,
+  .colophon__mark-dot { transition: none; }
+}

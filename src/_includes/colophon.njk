@@ -1,0 +1,46 @@
+{#- The colophon: a printer's mark at the foot of every page, carrying that
+    page's own measurements.
+
+    Why it exists. This site's whole competitive argument is that its claims
+    are checkable — the work section publishes the counts that read as zero,
+    the cases publish what shipped broken, the read time is derived from the
+    text so it can never drift. Every one of those is the studio checking
+    itself and then asking you to take the result on trust. This is the same
+    move made visible: the figures the build measured, printed where the work
+    ends, on the page they describe.
+
+    It is a colophon in the literal sense — the note at the back of a book
+    stating how it was made — and the mark is a registration target, the thing
+    a printer aligns plates against to check the impression came out right.
+    §5.3 of the direction record settled the ground on exactly that metaphor:
+    a machinist's inspection plate and a printer's proof are the same object,
+    a flat surface where you check whether something came out right.
+
+    What is deliberately NOT here: the page's composite audit score. A score
+    is an opinion the studio awarded itself, and publishing your own grade is
+    weaker proof than publishing the measurements someone else can recompute.
+    The numbers below are facts about the document you are reading.
+
+    Mechanics. A native <details>, so it opens with a keyboard, is announced
+    correctly, and works with JavaScript blocked — the §3.2 contract. The body
+    is stamped after the build by scripts/colophon.mjs from the same payload
+    scripts/audit.mjs emits, so there is exactly one definition of "words on
+    this page". `data-audit-ignore` keeps the auditor from counting its own
+    output as content. -#}
+{%- set isEs = (L == "es") %}
+      <aside class="colophon" data-audit-ignore aria-label="{{ "Colofón de la página" if isEs else "Page colophon" }}">
+        <details class="colophon__details">
+          <summary class="colophon__summary">
+            <span class="colophon__mark" aria-hidden="true">
+              <svg viewBox="0 0 32 32" focusable="false">
+                <circle class="colophon__mark-ring" cx="16" cy="16" r="10"/>
+                <circle class="colophon__mark-dot" cx="16" cy="16" r="2.25"/>
+                <path class="colophon__mark-cross" d="M16 1v9M16 22v9M1 16h9M22 16h9"/>
+              </svg>
+            </span>
+            <span class="colophon__label">{{ "Medido" if isEs else "Measured" }}</span>
+            <span class="colophon__hint">{{ "Las cifras de esta página" if isEs else "This page, in figures" }}</span>
+          </summary>
+          <div class="colophon__body" data-colophon-body></div>
+        </details>
+      </aside>

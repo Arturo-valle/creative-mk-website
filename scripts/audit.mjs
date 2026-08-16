@@ -49,6 +49,12 @@ const distDir = join(root, 'dist');
 
 const args = process.argv.slice(2);
 const asJson = args.includes('--json');
+/* --emit writes the same payload --json prints, so scripts/colophon.mjs can
+   stamp each page with its own measurements without ever re-implementing a
+   measurement. One definition of "words on this page", or the number in the
+   margin and the number in the report will disagree the first time either
+   changes. */
+const emitPath = args.includes('--emit') ? args[args.indexOf('--emit') + 1] : null;
 const minScore = Number(args[args.indexOf('--min') + 1]) || 0;
 const onlyPage = args.includes('--page') ? args[args.indexOf('--page') + 1] : null;
 
@@ -156,6 +162,11 @@ function decode(text) {
 function textOf(html) {
   return decode(
     html
+      /* The colophon publishes this audit's own measurements at the foot of
+         the page. Counting it as content would let the audit inflate the
+         numbers it is reporting — every page would gain words and links for
+         carrying its own score. It is marked and skipped. */
+      .replace(/<aside\b[^>]*\bdata-audit-ignore\b[\s\S]*?<\/aside>/gi, ' ')
       .replace(/<(script|style|svg|template|noscript)\b[^>]*>[\s\S]*?<\/\1>/gi, ' ')
       // Navigation inside <main> — breadcrumbs, sibling links, related rails.
       // It is chrome that happens to sit in the content well, not content.
@@ -174,7 +185,14 @@ function metaContent(html, attr, value) {
 
 function readPage(file, raw) {
   const html = stripComments(raw);
-  const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? '';
+  /* Stripped here, not only inside textOf, because links, paragraphs and list
+     items are counted straight off this string. The colophon carries an
+     internal link and a definition list; leaving it in would credit every
+     page with both. */
+  const main = (html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? '').replace(
+    /<aside\b[^>]*\bdata-audit-ignore\b[\s\S]*?<\/aside>/gi,
+    ' '
+  );
 
   const headings = [...html.matchAll(/<(h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/gi)].map((m) => ({
     level: Number(m[1][1]),
@@ -1111,16 +1129,25 @@ const siteScore = commercial.length
 
 const SEVERITY_ORDER = { high: 0, medium: 1, low: 2 };
 
-if (asJson) {
-  console.log(
-    JSON.stringify(
-      { siteScore: Number(siteScore.toFixed(1)), pages: results, technical },
-      (key, value) => (value instanceof Set ? [...value] : value),
-      2
-    )
+const payload = () =>
+  JSON.stringify(
+    { siteScore: Number(siteScore.toFixed(1)), pages: results, technical },
+    (key, value) => (value instanceof Set ? [...value] : value),
+    2
   );
+
+if (emitPath) {
+  const { writeFile } = await import('node:fs/promises');
+  await writeFile(resolve(root, emitPath), payload(), 'utf8');
+  if (!asJson) console.log(`Audit written to ${emitPath} — site score ${siteScore.toFixed(1)}.`);
+}
+
+if (asJson) {
+  console.log(payload());
   process.exit(0);
 }
+
+if (emitPath && !args.includes('--report')) process.exit(0);
 
 const bar = (score) => {
   const filled = Math.round(score / 5);

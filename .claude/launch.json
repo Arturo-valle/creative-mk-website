@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dist",
+      "name": "creativemk-dist",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["http-server", "dist", "-p", "8931", "-c-1", "--silent"],
-      "port": 8931
+      "runtimeArgs": ["--yes", "serve", "dist", "-l", "5599"],
+      "port": 5599
     }
   ]
 }

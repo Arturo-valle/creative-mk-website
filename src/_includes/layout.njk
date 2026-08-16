@@ -28,6 +28,9 @@
       viewport. mainClass lets a page keep its own wrapper classes. -#}
   <main id="main-content" tabindex="-1"{% if mainClass %} class="{{ mainClass }}"{% elif subpage %} class="subpage__main"{% endif %}>
 {{ content | safe }}
+{%- if colophon != false %}
+{% include "colophon.njk" %}
+{%- endif %}
   </main>
 
 {% include "footer.njk" %}
