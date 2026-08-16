@@ -467,7 +467,14 @@ function setLanguage(lang) {
   document.documentElement.lang = lang;
   document.querySelectorAll('.lang-switch').forEach(sw => {
     sw.querySelectorAll('.lang-switch__btn').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.lang === lang);
+      const isCurrent = btn.dataset.lang === lang;
+      btn.classList.toggle('active', isCurrent);
+      /* aria-current has to move with the class, or the visual state and the
+         announced state disagree. Only the in-place swap path reaches this —
+         /terms/ is the one page with no Spanish sibling — and it used to leave
+         aria-current on the language the visitor had just left. */
+      if (isCurrent) btn.setAttribute('aria-current', 'page');
+      else btn.removeAttribute('aria-current');
     });
   });
   if (typeof resetAccordion === 'function') {

@@ -33,38 +33,18 @@ if (!existsSync(auditPath)) {
 const audit = JSON.parse(await readFile(auditPath, 'utf8'));
 const byUrl = new Map(audit.pages.map((p) => [p.url, p]));
 
-/** The reading-time constant the notes already use. One source, one rate. */
-const WPM = 230;
-
-/**
- * Reading ease bands, named in words rather than left as a bare number.
- * A visitor reading "58" learns nothing; the band is the finding.
+/*
+ * There is no band table here any more. There were two — this file's and
+ * scripts/audit.mjs's — with different cut points, so the report called the
+ * homepage "demanding" while the homepage printed "hard" about the same
+ * number. The band now arrives in the payload with the score it describes,
+ * for the same reason the word count does: one definition, or two numbers
+ * that disagree the first time either changes.
  */
-function easeBand(score, lang) {
-  const bands =
-    lang === 'es'
-      ? [
-          [80, 'muy fácil'],
-          [65, 'fácil'],
-          [50, 'normal'],
-          [35, 'exigente'],
-          [0, 'difícil']
-        ]
-      : [
-          [80, 'very easy'],
-          [65, 'easy'],
-          [50, 'plain'],
-          [35, 'demanding'],
-          [0, 'hard']
-        ];
-  return bands.find(([floor]) => score >= floor)[1];
-}
 
 const COPY = {
   en: {
     words: 'Words',
-    reading: 'Reading time',
-    minutes: (n) => `${n} min at ${WPM} wpm`,
     ease: 'Reading ease',
     easeValue: (score, band) => `${score} of 100 — ${band}`,
     links: 'Links to other pages here',
@@ -76,8 +56,6 @@ const COPY = {
   },
   es: {
     words: 'Palabras',
-    reading: 'Tiempo de lectura',
-    minutes: (n) => `${n} min a ${WPM} ppm`,
     ease: 'Facilidad de lectura',
     easeValue: (score, band) => `${score} de 100 — ${band}`,
     links: 'Enlaces a otras páginas de aquí',
@@ -110,15 +88,19 @@ function bodyFor(page) {
   const t = COPY[page.lang] ?? COPY.en;
   const wordCount = page.categories['Word count']?.detail?.count ?? 0;
   const ease = page.categories.Readability?.detail?.ease;
+  const band = page.categories.Readability?.detail?.band;
   const linksOut = page.categories['Internal structure']?.detail?.out ?? 0;
-  const minutes = Math.max(1, Math.round(wordCount / WPM));
 
+  /* No reading-time row. The colophon measures the rendered page; the badge
+     on a note measures the article. Both are honest and they differ by about
+     a minute, which put two reading times on one document — the precise
+     contradiction this block exists to prevent. Word count and reading ease
+     carry the same information without claiming to be the other number. */
   const rows = [
     row(t.words, wordCount.toLocaleString(page.lang === 'es' ? 'es-ES' : 'en-US')),
-    row(t.reading, t.minutes(minutes)),
     ease === undefined || ease === null
       ? ''
-      : row(t.ease, t.easeValue(Math.round(ease), easeBand(ease, page.lang))),
+      : row(t.ease, t.easeValue(Math.round(ease), band)),
     row(t.links, String(linksOut)),
     row(t.built, isoDate)
   ].join('');

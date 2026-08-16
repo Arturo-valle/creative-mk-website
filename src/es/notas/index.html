@@ -30,7 +30,7 @@ pageSchema:
           <div class="noteindex__meta">
             <span class="noteindex__cat">{{ note.es.category }}</span>
             <span class="noteindex__date">{{ note.es.date }}</span>
-            <span class="noteindex__time">{{ note.minutes }} min</span>
+            <span class="noteindex__time">{{ note.minutesByLang.es }} min</span>
           </div>
           <h2 class="noteindex__title"><a href="/es/notas/{{ note.esSlug }}/">{{ note.es.title }}</a></h2>
           <p class="noteindex__standfirst">{{ note.standfirst.es }}</p>

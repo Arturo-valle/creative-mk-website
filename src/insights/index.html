@@ -27,7 +27,7 @@ pageSchema:
           <div class="noteindex__meta">
             <span class="noteindex__cat">{{ note.en.category }}</span>
             <span class="noteindex__date">{{ note.en.date }}</span>
-            <span class="noteindex__time">{{ note.minutes }} min</span>
+            <span class="noteindex__time">{{ note.minutesByLang.en }} min</span>
           </div>
           <h2 class="noteindex__title"><a href="/insights/{{ note.slug }}/">{{ note.en.title }}</a></h2>
           {#- A standfirst, not the meta description. The index is where a

@@ -74,13 +74,12 @@ if (!existsSync(distDir)) {
  * ------------------------------------------------------------------ */
 
 const TYPE_SPEC = {
-  /* The homepage target is deliberately low. This site's architecture makes
-     the homepage a trailer whose cards navigate — depth lives on /work/,
-     /services/ and /studio/ — and the studio homepages it competes with in
-     this market run shorter still. A 900-word target here would be an audit
-     arguing with a decision the site made on purpose and documented. The
-     floor is real: below it the trailer stops previewing anything. */
-  home: { floor: 350, target: 600, minH2: 4, commercial: true },
+  /* Restored to the original 450/900 after an adversarial review. It had been
+     lowered to 350/600 with a rationalisation about the homepage being a
+     trailer by design — which is true, and was still a threshold moved by the
+     same hand it was scoring, after seeing the number. The homepage is under
+     target. That is a true statement and the report should keep making it. */
+  home: { floor: 450, target: 900, minH2: 4, commercial: true },
   service: { floor: 700, target: 1100, minH2: 4, commercial: true },
   'service-index': { floor: 250, target: 550, minH2: 3, commercial: true },
   case: { floor: 550, target: 900, minH2: 4, commercial: true },
@@ -89,13 +88,11 @@ const TYPE_SPEC = {
   'note-index': { floor: 150, target: 350, minH2: 2, commercial: true },
   studio: { floor: 400, target: 750, minH2: 3, commercial: true },
   lab: { floor: 250, target: 500, minH2: 2, commercial: true },
-  /* A privacy notice is the one page type where length is not a virtue. The
-     300-word floor was imported from the commercial types without thinking:
-     it marked down a notice that states what is collected, what is not done
-     with it, where it lives and how to have it deleted, in 156 words, which
-     is the version a person actually reads. Legal pages are excluded from
-     the site score anyway; the floor only decides whether the report shouts. */
-  legal: { floor: 120, target: 400, minH2: 3, commercial: false },
+  /* Restored to 300 after review. It had been lowered to 120 — a number whose
+     only property is that it sits just under /privacidad/'s 156 words. Legal
+     pages carry no score weight, so the change bought nothing but a quieter
+     report, which is the worst reason to move a threshold. */
+  legal: { floor: 300, target: 900, minH2: 3, commercial: false },
   utility: { floor: 0, target: 0, minH2: 0, commercial: false }
 };
 
@@ -352,7 +349,31 @@ function readingEase(text, lang) {
     lang === 'es'
       ? 206.84 - 60 * syllablesPerWord - 1.02 * wordsPerSentence
       : 206.835 - 1.015 * wordsPerSentence - 84.6 * syllablesPerWord;
-  return { score: Math.max(0, Math.min(100, score)), wordsPerSentence, syllablesPerWord, sentences: ss };
+  const clamped = Math.max(0, Math.min(100, score));
+  return { score: clamped, band: easeBand(clamped, lang), wordsPerSentence, syllablesPerWord, sentences: ss };
+}
+
+/**
+ * The one reading-ease band table.
+ *
+ * There were two: this scale, and a second one inside scripts/colophon.mjs
+ * with different cut points, so the report called the homepage "demanding"
+ * while the homepage itself printed "hard" about the same number. The colophon
+ * now reads the band out of the payload. Two tables for one scale is the same
+ * defect as two implementations of a word count, which the colophon was built
+ * to avoid.
+ *
+ * Note that the two languages are scored by different formulas — Flesch for
+ * English, Fernández-Huerta for Spanish — and Spanish reads roughly four
+ * points higher on identical prose. The bands are shared anyway, because the
+ * alternative is two vocabularies for one label.
+ */
+function easeBand(score, lang) {
+  const bands =
+    lang === 'es'
+      ? [[80, 'muy fácil'], [65, 'fácil'], [50, 'normal'], [35, 'exigente'], [0, 'difícil']]
+      : [[80, 'very easy'], [65, 'easy'], [50, 'plain'], [35, 'demanding'], [0, 'hard']];
+  return bands.find(([floor]) => score >= floor)[1];
 }
 
 const normalise = (text) =>
@@ -480,7 +501,14 @@ const ENTITY_EXPECTATION = {
   'work-index': { sets: ['cases'], mode: 'ratio' },
   case: { sets: ['stack'], mode: 'ratio' },
   'note-index': { sets: [], mode: 'ratio' },
-  note: { sets: ['services'], mode: 'any' },
+  /* `atLeast` scores proportionally up to a floor instead of demanding most of
+     the set. A note is about its own subject and should not be asked to name
+     all six services — but the first version of this exemption awarded a full
+     15/15 for naming one of six, which stopped measuring anything. Two is the
+     number: an argument worth publishing touches at least a couple of the
+     things the studio sells, or it is not an argument this studio should be
+     making. */
+  note: { sets: ['services'], mode: 'atLeast', atLeast: 2 },
   studio: { sets: ['services'], mode: 'ratio' },
   lab: { sets: [], mode: 'ratio' },
   legal: { sets: [], mode: 'ratio' },
@@ -509,11 +537,20 @@ function internalUrl(href, from) {
   }
   const clean = href.split('#')[0].split('?')[0];
   if (!clean) return null;
-  let url = clean.startsWith('/')
+  const url = clean.startsWith('/')
     ? clean
     : new URL(clean, `https://x${from.url}`).pathname;
-  if (!url.endsWith('/') && !url.includes('.')) url += '/';
-  return byUrl.has(url) ? url : null;
+  /* Both forms, because Pages serves /work/ from work/index.html and /contact
+     from contact.html. Appending a slash unconditionally — which this did —
+     turned /contact into /contact/, which matches nothing, so every body link
+     to the contact page was silently dropped from the graph. Twenty-six of
+     thirty-seven scored pages link to it, and none of those links were being
+     counted in their outbound total or its inbound one. */
+  if (byUrl.has(url)) return url;
+  const slashed = url.endsWith('/') ? url : url + '/';
+  if (byUrl.has(slashed)) return slashed;
+  const bare = url.replace(/\/$/, '');
+  return byUrl.has(bare) ? bare : null;
 }
 
 const inbound = new Map(pages.map((p) => [p.url, new Set()]));
@@ -584,12 +621,13 @@ function scoreKeyword(page) {
   if (inTitle) points += 5;
   else notes.push(note('high', `the title never states "${term}"`, 'lead the title with the term the page is trying to own'));
 
-  /* A homepage H1 is a positioning line, not a keyword slot. The brand is
-     carried by the logo, the title and the opening paragraph — all of which
-     are still checked — and no studio site worth benchmarking against puts
-     its own name in the H1. Every other page type keeps the rule, because
-     there the H1 and the URL genuinely have to agree. */
-  if (inH1 || page.type === 'home') points += 4;
+  /* The homepage used to be exempted here, on the argument that an H1 is a
+     positioning line rather than a keyword slot. The argument is defensible
+     and the exemption was still self-granted, stacked on top of already
+     redefining the homepage's target term, which together made homepage
+     keyword usage close to unfailable. If the finding is wrong it belongs in
+     the write-up as a disagreement, not in the scorer as a silent pass. */
+  if (inH1) points += 4;
   else notes.push(note('high', `the H1 never states "${term}"`, 'the H1 and the URL should agree about the subject'));
 
   if (inDescription) points += 3;
@@ -664,11 +702,11 @@ function scoreHeadings(page) {
     previous = heading.level;
   }
 
-  /* H2 only. An H3 inside a numbered process step is legitimately one word —
-     "Diagnose", "Shape", "Build", "Measure" is the design, not a shortfall.
-     An H2 is the section's promise to a skimmer, and a promise needs a verb
-     or an object. */
-  const vague = page.mainHeadings.filter((h) => h.level === 2 && words(h.text).length < 2 && h.text.length < 12);
+  /* Restored to every sub-heading after review. Narrowing this to H2 was
+     defended as "an H3 in a numbered step is legitimately one word", which is
+     true of the homepage's process grid and was still a rule narrowed to
+     dismiss a live finding. */
+  const vague = page.mainHeadings.filter((h) => h.level > 1 && words(h.text).length < 2 && h.text.length < 12);
   if (vague.length > 2) {
     points -= 3;
     notes.push(note('low', `${vague.length} headings are one short word`, 'a subheading is a promise about the section; single words rarely make one'));
@@ -689,13 +727,13 @@ function scoreReadability(page) {
      for them and above 80 it stops sounding like an expert. */
   if (reading.score < 30) {
     points -= 7;
-    notes.push(note('high', `reading ease ${reading.score.toFixed(0)} — very hard`, 'shorten sentences; the argument is being lost in the syntax'));
+    notes.push(note('high', `reading ease ${reading.score.toFixed(0)} — ${reading.band}`, 'shorten sentences; the argument is being lost in the syntax'));
   } else if (reading.score < 45) {
     points -= 3;
-    notes.push(note('low', `reading ease ${reading.score.toFixed(0)} — demanding`, 'acceptable for a technical case, costly on a page that has to sell'));
+    notes.push(note('low', `reading ease ${reading.score.toFixed(0)} — ${reading.band}`, 'acceptable for a technical case, costly on a page that has to sell'));
   } else if (reading.score > 85) {
     points -= 3;
-    notes.push(note('low', `reading ease ${reading.score.toFixed(0)} — very simple`, 'the prose may be under-selling the expertise'));
+    notes.push(note('low', `reading ease ${reading.score.toFixed(0)} — ${reading.band}`, 'the prose may be under-selling the expertise'));
   }
 
   if (reading.wordsPerSentence > 26) {
@@ -713,14 +751,14 @@ function scoreReadability(page) {
     points: Math.max(0, points),
     max: 15,
     notes,
-    detail: { ease: reading.score, wordsPerSentence: reading.wordsPerSentence }
+    detail: { ease: reading.score, band: reading.band, wordsPerSentence: reading.wordsPerSentence }
   };
 }
 
 /* --- 8.5 Entity coverage — 15 --- */
 function scoreEntities(page) {
   const notes = [];
-  const { sets: expected, mode } = ENTITY_EXPECTATION[page.type] ?? { sets: [], mode: 'ratio' };
+  const { sets: expected, mode, atLeast = 1 } = ENTITY_EXPECTATION[page.type] ?? { sets: [], mode: 'ratio' };
   if (!expected.length) return { points: 15, max: 15, notes, detail: null };
 
   const vocab = vocabulary[page.lang] ?? vocabulary.en;
@@ -766,12 +804,18 @@ function scoreEntities(page) {
     }
   }
 
-  if (mode === 'any') {
-    if (covered > 0) return { points: 15, max: 15, notes, detail: { covered, total } };
-    notes.push(
-      note('medium', `names none of the ${total} services`, 'a note should connect its argument to something the studio actually sells')
-    );
-    return { points: 6, max: 15, notes, detail: { covered, total, missing } };
+  if (mode === 'atLeast') {
+    const points = Math.round(15 * Math.min(1, covered / atLeast));
+    if (covered < atLeast) {
+      notes.push(
+        note(
+          covered === 0 ? 'medium' : 'low',
+          `names ${covered} of the ${total} services, against a floor of ${atLeast}`,
+          'a note should connect its argument to more than one of the things the studio actually sells'
+        )
+      );
+    }
+    return { points, max: 15, notes, detail: { covered, total, atLeast, missing } };
   }
 
   const ratio = total ? covered / total : 1;
@@ -932,35 +976,70 @@ async function auditTechnical() {
       tech('medium', 'scent', `${page.url} title and H1 share no content word`, `"${page.title.slice(0, 45)}" then "${h1.slice(0, 45)}" — the click and the landing describe different pages`);
     }
   }
+  /* --- the document's declared language against the language it is written
+     in. /privacy/ and /terms/ each declare lang="en" and carry a full Spanish
+     section below the English one, so a screen reader pronounces half of each
+     with the wrong phonemes and a crawler indexes one document for two
+     languages.
 
-  /* --- the document's declared language against the language it is actually
-     written in. Found by reading, not by any check that existed: /privacy/
-     declares lang="en" and carries a full Spanish section below its English
-     one, so a screen reader pronounces half the page with the wrong phonemes
-     and a crawler indexes one document for two languages. Detection is a
-     function-word count, which is crude and completely sufficient to tell
-     these two languages apart over a few hundred words. --- */
+     Detection is per BLOCK, and what it looks for is a contiguous RUN. The
+     first version compared whole-body function-word frequency against a 45%
+     threshold; the two pages sit at 37% and 47%, so the check reported
+     whichever had been edited last, and adding a single English paragraph to
+     /privacy/ silenced it there while the Spanish half it was built to find
+     stayed exactly where it was. A ratio cannot see a section. A run of blocks
+     is what a section is. --- */
   const MARKERS = {
-    es: [' que ', ' de ', ' los ', ' las ', ' para ', ' con ', ' del ', ' una ', ' por ', ' qué ', ' tus ', ' se '],
+    es: [' que ', ' de ', ' los ', ' las ', ' para ', ' con ', ' del ', ' una ', ' por ', ' se ', ' es ', ' en '],
     en: [' the ', ' of ', ' and ', ' to ', ' with ', ' for ', ' that ', ' your ', ' we ', ' is ', ' are ', ' from ']
   };
-  const languageOf = (text) => {
+  const blockLanguage = (text) => {
     const haystack = ` ${text.toLowerCase()} `;
-    const count = (list) =>
-      list.reduce((sum, marker) => sum + (haystack.split(marker).length - 1), 0);
-    return { es: count(MARKERS.es), en: count(MARKERS.en) };
+    const count = (list) => list.reduce((sum, marker) => sum + (haystack.split(marker).length - 1), 0);
+    const es = count(MARKERS.es);
+    const en = count(MARKERS.en);
+    if (es + en < 4 || es === en) return null; // too short, or genuinely ambiguous
+    return es > en ? 'es' : 'en';
   };
+
   for (const page of indexable) {
-    if (words(page.text).length < 120) continue;
-    const hits = languageOf(page.text);
-    const total = hits.es + hits.en;
-    if (total < 15) continue;
-    const otherLang = page.lang === 'es' ? 'en' : 'es';
-    const otherShare = hits[otherLang] / total;
-    if (otherShare > 0.45) {
-      tech('high', 'language', `${page.url} declares lang="${page.lang}" but ${(otherShare * 100).toFixed(0)}% of its body reads as ${otherLang}`, 'one document per language: split it, or fix the lang attribute');
+    const raw = stripComments(await readFile(page.file, 'utf8'));
+    const main = (raw.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] ?? '').replace(
+      /<aside\b[^>]*\bdata-audit-ignore\b[\s\S]*?<\/aside>/gi,
+      ' '
+    );
+    const blocks = [...main.matchAll(/<(p|li|h[1-6])\b[^>]*>([\s\S]*?)<\/\1>/gi)]
+      .map((m) => textOf(m[2]))
+      .filter((text) => words(text).length >= 8);
+    if (blocks.length < 6) continue;
+
+    const other = page.lang === 'es' ? 'en' : 'es';
+    let run = 0;
+    let longest = 0;
+    let foreign = 0;
+    for (const block of blocks) {
+      const detected = blockLanguage(block);
+      if (detected === other) {
+        foreign += 1;
+        run += 1;
+        longest = Math.max(longest, run);
+      } else if (detected !== null) {
+        run = 0;
+      }
+    }
+
+    /* Three consecutive blocks is a section, not a quotation. One borrowed
+       term or a bilingual heading must never trip this. */
+    if (longest >= 3) {
+      tech(
+        'high',
+        'language',
+        `${page.url} declares lang="${page.lang}" and carries a run of ${longest} consecutive blocks in ${other} (${foreign} of ${blocks.length})`,
+        'one document per language: split it, or fix the lang attribute'
+      );
     }
   }
+
 
   /* --- canonical self-reference --- */
   for (const page of indexable) {

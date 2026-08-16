@@ -257,7 +257,7 @@ const services = [
         },
         {
           "q": "How do I know the site will be fast?",
-          "a": "Because the site you are reading is the reference, and its performance work is published as a case. The animated field behind these pages runs on 31 KB of renderer with zero render-blocking scripts site-wide, and the measurements live in the case study, not in this paragraph."
+          "a": "Because the site you are reading is the reference, and its performance work is published as a case. The animated field behind these pages runs on 36 KB of renderer, gzipped, with zero render-blocking script files site-wide, and the measurements live in the case study, not in this paragraph."
         },
         {
           "q": "What do I actually have while the work runs?",
@@ -339,7 +339,7 @@ const services = [
         },
         {
           "q": "¿Cómo sé que el sitio va a ser rápido?",
-          "a": "Porque el sitio que estás leyendo es la referencia, y su trabajo de rendimiento está publicado como caso. El campo animado detrás de estas páginas corre sobre 31 KB de renderer, con cero scripts bloqueantes en todo el sitio, y las mediciones viven en el caso, no en este párrafo."
+          "a": "Porque el sitio que estás leyendo es la referencia, y su trabajo de rendimiento está publicado como caso. El campo animado detrás de estas páginas corre sobre 36 KB de renderer con gzip, sin ningún archivo de script bloqueante en todo el sitio, y las mediciones viven en el caso, no en este párrafo."
         },
         {
           "q": "¿Qué tengo en la mano mientras avanzamos?",
@@ -854,7 +854,7 @@ const services = [
       "deliverables": [
         {
           "name": "Production front end",
-          "detail": "Responsive pages built from the approved design, with fingerprinted assets and zero render-blocking scripts — the standard this site itself meets."
+          "detail": "Responsive pages built from the approved design, with fingerprinted assets and no render-blocking script files — the standard this site itself meets."
         },
         {
           "name": "Forms and lead capture",
@@ -909,7 +909,7 @@ const services = [
         },
         {
           "q": "How do you keep pages fast?",
-          "a": "By treating bytes as a budget, not a consequence. Assets are fingerprinted, no script blocks the first paint, and anything decorative has to pay for itself: the 3D field behind this site's homepage replaced 184 KB of engine with 31 KB of renderer. That work is published as a case, measurements included."
+          "a": "By treating bytes as a budget, not a consequence. Assets are fingerprinted, no script blocks the first paint, and anything decorative has to pay for itself: the 3D field behind this site's homepage replaced 183 KB of engine with 36 KB of renderer, both gzipped. That work is published as a case, measurements included."
         }
       ],
       "proofNote": "The proof is the page you are on: this site — the field running behind it (contour-field) and the agent answering on it (intake-agent) — is the studio's own development work, deployed and documented down to the commits where it broke."
@@ -932,7 +932,7 @@ const services = [
       "deliverables": [
         {
           "name": "Front end de producción",
-          "detail": "Páginas responsivas construidas desde el diseño aprobado, con archivos con huella por hash y cero scripts bloqueantes — el estándar que este mismo sitio cumple."
+          "detail": "Páginas responsivas construidas desde el diseño aprobado, con archivos con huella por hash y sin archivos de script bloqueantes — el estándar que este mismo sitio cumple."
         },
         {
           "name": "Formularios y captura de leads",
@@ -987,7 +987,7 @@ const services = [
         },
         {
           "q": "¿Cómo mantienen las páginas rápidas?",
-          "a": "Tratando los bytes como presupuesto, no como consecuencia. Los archivos llevan huella por hash, ningún script bloquea el primer render y todo lo decorativo tiene que pagarse a sí mismo: el campo 3D detrás de la portada de este sitio reemplazó 184 KB de motor con 31 KB de renderer. Ese trabajo está publicado como caso, con mediciones incluidas."
+          "a": "Tratando los bytes como presupuesto, no como consecuencia. Los archivos llevan huella por hash, ningún script bloquea el primer render y todo lo decorativo tiene que pagarse a sí mismo: el campo 3D detrás de la portada de este sitio reemplazó 183 KB de motor por 36 KB de renderer, ambos con gzip. Ese trabajo está publicado como caso, con mediciones incluidas."
         }
       ],
       "proofNote": "La prueba es la página en la que estás: este sitio — el campo que corre detrás (contour-field) y el agente que responde encima (intake-agent) — es el trabajo de desarrollo del propio estudio, publicado y documentado hasta los commits donde se rompió."
