@@ -18,8 +18,8 @@ pageSchema:
     <div class="container">
 
       <span class="section-kicker" data-fx="fade-up" data-i18n="insightsPage.kicker">Insights</span>
-      <h1 class="subpage__title" data-fx="lines" data-i18n="insightsPage.title">Short notes, signed.</h1>
-      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15" data-i18n="insightsPage.lede">No content calendar, no filler. These are the arguments that come up often enough in client conversations to be worth writing down once — a minute each, and they say a minute.</p>
+      <h1 class="subpage__title" data-fx="lines" data-i18n="insightsPage.title">Insights from inside the work, not around it.</h1>
+      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15" data-i18n="insightsPage.lede">No content calendar and no filler. These are the arguments that come up often enough in client conversations to be worth writing down properly — each one carried to its end, with the figures it rests on named and checkable in this repository.</p>
 
       <ol class="noteindex">
         {%- for note in notes %}
@@ -30,6 +30,10 @@ pageSchema:
             <span class="noteindex__time">{{ note.minutes }} min</span>
           </div>
           <h2 class="noteindex__title"><a href="/insights/{{ note.slug }}/">{{ note.en.title }}</a></h2>
+          {#- A standfirst, not the meta description. The index is where a
+              reader chooses; repeating the SERP snippet they already read
+              makes the click feel spent before it happens. -#}
+          <p class="noteindex__standfirst">{{ note.standfirst.en }}</p>
         </li>
         {%- endfor %}
       </ol>

@@ -697,6 +697,17 @@
 .noteindex__title a { color: inherit; text-decoration: none; }
 .noteindex__title a:hover { color: #7A5C12; }
 
+/* The standfirst. Narrower than the title's measure is wrong here — the title
+   is set tight at 24ch to break as a display line, while this is read as
+   prose, so it takes the body measure. */
+.noteindex__standfirst {
+  margin: var(--space-3) 0 0;
+  max-width: 62ch;
+  font-size: clamp(0.95rem, 1.4vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--color-gray-600, #4a4a4a);
+}
+
 .note { max-width: 68ch; }
 .note__title { max-width: 20ch; }
 

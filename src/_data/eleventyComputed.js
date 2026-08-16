@@ -47,6 +47,60 @@ export default {
    * data.service means the trail, the crumb and the schema all come from
    * one source and cannot disagree.
    */
+  /**
+   * ItemList for the three index pages, in both languages.
+   *
+   * The indexes declared CollectionPage and Blog — correct, and silent about
+   * what they actually list. An ItemList names the members in order, which is
+   * what lets a SERP show the list rather than a single blue link, and it is
+   * derived from the same arrays the page renders so it cannot list a page
+   * that is not there.
+   */
+  collectionListSchema: (data) => {
+    const origin = 'https://creativemk.net';
+    const url = data.page && data.page.url;
+    if (!url) return null;
+    const es = data.L === 'es';
+    const loc = es ? 'es' : 'en';
+
+    let items = null;
+    let name = null;
+    if (url === '/services/' || url === '/es/servicios/') {
+      name = es ? 'Servicios' : 'Services';
+      items = data.services.map((s) => ({
+        url: `${origin}${es ? '/es/servicios/' + s.esSlug : '/services/' + s.slug}/`,
+        label: s[loc].title
+      }));
+    } else if (url === '/work/' || url === '/es/trabajo/') {
+      name = es ? 'Trabajo seleccionado' : 'Selected work';
+      items = data.cases.map((c) => ({
+        url: `${origin}${es ? '/es/trabajo/' + c.esSlug : '/work/' + c.slug}/`,
+        label: c[loc].title
+      }));
+    } else if (url === '/insights/' || url === '/es/notas/') {
+      name = es ? 'Notas' : 'Insights';
+      items = data.notes.map((n) => ({
+        url: `${origin}${es ? '/es/notas/' + n.esSlug : '/insights/' + n.slug}/`,
+        label: n[loc].title
+      }));
+    }
+    if (!items || !items.length) return null;
+
+    return {
+      '@type': 'ItemList',
+      '@id': origin + url + '#list',
+      name,
+      numberOfItems: items.length,
+      itemListOrder: 'https://schema.org/ItemListOrderAscending',
+      itemListElement: items.map((item, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: item.label,
+        url: item.url
+      }))
+    };
+  },
+
   breadcrumbEntities: (data) => {
     const origin = 'https://creativemk.net';
     const loc = data.L === 'es' ? 'es' : 'en';

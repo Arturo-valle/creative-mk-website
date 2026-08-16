@@ -21,8 +21,8 @@ pageSchema:
     <div class="container">
 
       <span class="section-kicker" data-fx="fade-up">Notas</span>
-      <h1 class="subpage__title" data-fx="lines">Notas breves, firmadas.</h1>
-      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15">Sin calendario de contenido y sin relleno. Son los argumentos que salen suficientes veces en conversaciones con clientes como para escribirlos una vez.</p>
+      <h1 class="subpage__title" data-fx="lines">Notas desde dentro del trabajo, no alrededor.</h1>
+      <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15">Sin calendario de contenido y sin relleno. Son los argumentos que salen suficientes veces en conversaciones con clientes como para escribirlos bien — cada uno llevado hasta el final, con las cifras en las que se apoya nombradas y verificables en este repositorio.</p>
 
       <ol class="noteindex">
         {%- for note in notes %}
@@ -33,6 +33,7 @@ pageSchema:
             <span class="noteindex__time">{{ note.minutes }} min</span>
           </div>
           <h2 class="noteindex__title"><a href="/es/notas/{{ note.esSlug }}/">{{ note.es.title }}</a></h2>
+          <p class="noteindex__standfirst">{{ note.standfirst.es }}</p>
         </li>
         {%- endfor %}
       </ol>

@@ -74,6 +74,7 @@
 {%- if extraSchema == "faq" %}{% set graph = graph | concat([faqNode]) %}{% endif -%}
 {%- if extraSchema == "serviceFaq" and serviceFaqEntities %}{% set graph = graph | concat([serviceFaqNode]) %}{% endif -%}
 {%- if breadcrumbEntities %}{% set graph = graph | concat([breadcrumbEntities]) %}{% endif -%}
+{%- if collectionListSchema %}{% set graph = graph | concat([collectionListSchema]) %}{% endif -%}
 {{ { "@context": "https://schema.org", "@graph": graph } | jsonld | safe }}
   </script>
 {%- elif jsonld %}
