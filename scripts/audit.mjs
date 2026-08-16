@@ -226,6 +226,28 @@ function readPage(file, raw) {
       alt: m[0].match(/\salt\s*=\s*"([^"]*)"/i)?.[1] ?? null
     })),
     text: textOf(main),
+    /* Readability is measured on prose only.
+       Running it over the whole content well produced nonsense: a ledger's
+       <dt>/<dd> cells carry no terminal punctuation, so "See the ledger",
+       "Where things actually stand", "Team", "1", "plus specialists per
+       project" concatenated into one 46-word "sentence" and the page was
+       told to break it up. A definition list has no reading ease. Splitting
+       on every block boundary instead would bias the other way, filling the
+       average with two-word cells. Paragraphs are the thing a person reads. */
+    prose: [...main.matchAll(/<p\b[^>]*>([\s\S]*?)<\/p>/gi)]
+      .map((m) => textOf(m[1]))
+      .filter(Boolean)
+      .join(' '),
+    /* Values presented AS figures — a ledger cell, a stat tile, a proof row.
+       The unit-bearing regex in scoreDepth cannot see these, because the
+       whole point of the pattern is that the number stands alone in its own
+       element and the label sits in a sibling. */
+    figureCells: [
+      ...main.matchAll(/<(?:strong|dd)\b[^>]*>([\s\S]*?)<\/(?:strong|dd)>/gi),
+      ...main.matchAll(/<[a-z]+\b[^>]*class="[^"]*(?:figure|digit|proof__value|stat)[^"]*"[^>]*>([\s\S]*?)<\//gi)
+    ]
+      .map((m) => textOf(m[1]))
+      .filter((value) => /^[^\p{L}]*\d[\d.,\s]*[^\p{L}]*$/u.test(value) && value.trim()),
     listItems: [...main.matchAll(/<li\b/gi)].length,
     paragraphs: [...main.matchAll(/<p\b/gi)].length,
     type: null // assigned below
@@ -353,9 +375,20 @@ function countTerm(text, term) {
   return (normalise(text).match(new RegExp(`\\b${escaped}\\b`, 'g')) || []).length;
 }
 
-/** Partial credit: how many of the term's words appear at all. */
+/**
+ * Function words carry no ranking signal and should not be able to fail a
+ * coverage test. Without this, the slug `ia-para-negocios-de-servicio`
+ * demanded the word "para" in the H1 — four characters long, so the length
+ * filter let it through, and no headline will ever be written around it.
+ */
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'with', 'from', 'that', 'this', 'into', 'your', 'our',
+  'para', 'por', 'con', 'los', 'las', 'una', 'uno', 'del', 'que', 'como', 'sin'
+]);
+
+/** Partial credit: how many of the term's content words appear at all. */
 function termCoverage(text, term) {
-  const parts = term.split(' ').filter((w) => w.length > 2);
+  const parts = term.split(' ').filter((w) => w.length > 2 && !STOPWORDS.has(w));
   if (!parts.length) return 0;
   const body = normalise(text);
   const hit = parts.filter((p) => new RegExp(`\\b${p}`).test(body)).length;
@@ -593,7 +626,7 @@ function scoreHeadings(page) {
 /* --- 8.4 Readability — 15 --- */
 function scoreReadability(page) {
   const notes = [];
-  const reading = readingEase(page.text, page.lang);
+  const reading = readingEase(page.prose || page.text, page.lang);
   if (!reading) return { points: 15, max: 15, notes, detail: null };
 
   let points = 15;
@@ -642,8 +675,19 @@ function scoreEntities(page) {
   let covered = 0;
   let total = 0;
 
+  /* A case is measured against its OWN stack, not the union of every case's.
+     The union asked the WebGL case to name Durable Objects and D1, and the
+     agent case to name GLSL and Lenis — two pages penalised for not being
+     each other. The set is only meaningful per document. */
+  const own = { ...vocab };
+  if (page.type === 'case') {
+    const slug = page.url.replace(/\/$/, '').split('/').pop();
+    const match = vocabulary.cases.find((c) => c.slug === slug || c.esSlug === slug);
+    own.stack = match ? match[page.lang]?.stack ?? match.en.stack : [];
+  }
+
   for (const set of expected) {
-    for (const entity of vocab[set] ?? []) {
+    for (const entity of own[set] ?? []) {
       total += 1;
       /* Match on the entity's distinctive words rather than the exact string:
          "Positioning brief" is covered by a sentence that says "the brief that
@@ -691,7 +735,9 @@ function scoreDepth(page) {
   /* Specific figures are the difference between "we make sites fast" and
      "31 KB of renderer replacing 184 KB". Juries and buyers both read for
      them, and a page with none is a page making claims it never checks. */
-  const figures = (page.text.match(/\b\d[\d.,]*\s?(%|KB|MB|ms|s\b|weeks?|semanas?|days?|días?|×|x\b)/gi) || []).length;
+  const figures =
+    (page.text.match(/\b\d[\d.,]*\s?(%|KB|MB|ms|s\b|weeks?|semanas?|days?|días?|×|x\b)/gi) || []).length +
+    page.figureCells.length;
   if (figures >= 4) points += 3;
   else if (figures >= 1) points += 2;
   else notes.push(note('medium', 'no concrete figures anywhere in the body', 'name a number: a duration, a size, a count — something checkable'));

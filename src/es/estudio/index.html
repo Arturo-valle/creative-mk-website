@@ -5,7 +5,7 @@ lang: "es"
 L: "es"
 localePrefix: "/es"
 title: "El estudio | CREATIVE MK"
-description: "CREATIVE MK es Arturo Valle: estrategia, diseño y construcción en una sola conversación, con especialistas nombrados cuando el trabajo lo pide."
+description: "El estudio es Arturo Valle: estrategia, diseño y construcción en una sola conversación, con especialistas nombrados cuando el trabajo lo pide."
 ogDescription: "Un operador senior, y especialistas cuando el trabajo los pide."
 canonical: "/es/estudio/"
 altEn: "/studio/"
@@ -21,7 +21,7 @@ pageSchema:
     <div class="container">
 
       <span class="section-kicker" data-fx="fade-up">El estudio</span>
-      <h1 class="subpage__title" data-fx="lines">Un operador senior, y especialistas cuando el trabajo los pide.</h1>
+      <h1 class="subpage__title" data-fx="lines">Un estudio de un operador senior, y especialistas cuando el trabajo los pide.</h1>
       <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15">CREATIVE MK es Arturo Valle. Estrategia, diseño y construcción pasan en una sola conversación porque pasan con una sola persona — y cuando un proyecto necesita a alguien de motion, una editora de texto o un segundo par de manos de ingeniería, se les trae y se les nombra, no se les esconde detrás de un plural.</p>
 
       <section class="studio__block" aria-labelledby="studio-rule">
@@ -50,6 +50,26 @@ pageSchema:
             <dd><span class="studio__figure">0</span> <span>primer año que nos presentamos</span></dd>
           </div>
         </dl>
+      </section>
+
+      <section class="studio__block" aria-labelledby="studio-what">
+        <h2 id="studio-what" class="svc__block-title">Qué vende el estudio, y en qué orden</h2>
+        <p class="studio__text">Seis servicios, y no son un menú: se encadenan. Casi todos los proyectos empiezan en uno de tres lugares — una marca que no sostiene, un sitio que no explica, o atención que no tiene a dónde ir — y lo que sigue suele ser predecible. Por eso el orden está publicado, en vez de descubrirse a mitad del proyecto.</p>
+        <ol class="studio__disciplines">
+          {%- for service in services %}
+          <li>
+            <a href="/es/servicios/{{ service.esSlug }}/">{{ service.es.title }}</a>
+            <span>{{ service.es.hook }}</span>
+          </li>
+          {%- endfor %}
+        </ol>
+        <a class="link-arrow" href="/es/servicios/">Cómo se encadenan los seis</a>
+      </section>
+
+      <section class="studio__block" aria-labelledby="studio-how">
+        <h2 id="studio-how" class="svc__block-title">Los límites honestos de un estudio de este tamaño</h2>
+        <p class="studio__text">Un solo operador es una ventaja hasta que es una restricción, y vale la pena nombrar las dos. La ventaja: la persona que lee tu brief es la persona que hace el trabajo, así que nada se pierde en el traspaso entre un estratega que lo vendió y un diseñador que lo heredó, y una decisión tomada el martes está en el desarrollo el miércoles. La restricción: este estudio lleva pocos proyectos a la vez, a propósito. Cuando la agenda está llena se te dice la fecha, en lugar de venderte un lugar y formarte detrás de ella.</p>
+        <p class="studio__text">Dos cosas existen para que el trabajo no dependa de que una persona esté disponible. Todo está versionado y documentado — el repositorio, la ruta de publicación, las notas de entrega — para que otro ingeniero lo retome sin una fase de arqueología. Y cada proyecto termina con lo necesario para correr sin nosotros: una sesión de edición, notas de qué corre dónde, y un sistema que el negocio opera en vez de rentar.</p>
       </section>
 
       <section class="studio__block" aria-labelledby="studio-lab">

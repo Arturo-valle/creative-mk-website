@@ -33,17 +33,23 @@
 
         <section class="svc__block" aria-labelledby="case-challenge">
           <h2 id="case-challenge" class="svc__block-title" data-i18n="casePage.challenge">{{ "El problema" if L == "es" else "The problem" }}</h2>
-          <p class="case__prose" data-fx="fade-up">{{ copy.challenge }}</p>
+          {%- for para in copy.challengeParas %}
+          <p class="case__prose" data-fx="fade-up">{{ para }}</p>
+          {%- endfor %}
         </section>
 
         <section class="svc__block" aria-labelledby="case-approach">
           <h2 id="case-approach" class="svc__block-title" data-i18n="casePage.approach">{{ "Qué construimos" if L == "es" else "What we built" }}</h2>
-          <p class="case__prose" data-fx="fade-up">{{ copy.approach }}</p>
+          {%- for para in copy.approachParas %}
+          <p class="case__prose" data-fx="fade-up">{{ para }}</p>
+          {%- endfor %}
         </section>
 
         <section class="svc__block" aria-labelledby="case-result">
           <h2 id="case-result" class="svc__block-title" data-i18n="casePage.result">{{ "En qué quedó" if L == "es" else "Where it stands" }}</h2>
-          <p class="case__prose" data-fx="fade-up">{{ copy.result }}</p>
+          {%- for para in copy.resultParas %}
+          <p class="case__prose" data-fx="fade-up">{{ para }}</p>
+          {%- endfor %}
         </section>
 
         {#- Every figure below is checkable in the public repository. A case

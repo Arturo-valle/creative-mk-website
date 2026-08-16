@@ -2,7 +2,7 @@
 layout: "layout.njk"
 subpage: true
 title: "The Studio | CREATIVE MK"
-description: "CREATIVE MK is Arturo Valle plus specialists, working bilingually across brand, web, product, growth and AI automation. The ledger, in public."
+description: "The studio is Arturo Valle plus named specialists, working bilingually across brand, web, product, growth and AI automation. The ledger, in public."
 ogDescription: "Arturo Valle plus specialists. The ledger, in public."
 canonical: "/studio/"
 altEs: "/es/estudio/"
@@ -24,7 +24,7 @@ pageSchema:
     <div class="container">
 
       <span class="section-kicker" data-fx="fade-up" data-i18n="studioPage.kicker">The studio</span>
-      <h1 class="subpage__title" data-fx="lines" data-i18n="studioPage.title">One senior operator, and specialists when the work calls for them.</h1>
+      <h1 class="subpage__title" data-fx="lines" data-i18n="studioPage.title">A studio of one senior operator, and specialists when the work calls for them.</h1>
       <p class="subpage__lede" data-fx="fade-up" data-fx-delay="0.15" data-i18n="studioPage.lede">CREATIVE MK is Arturo Valle. Strategy, design and build happen in one conversation because they happen with one person — and when a project needs a motion designer, a copy editor or a second pair of engineering hands, they are brought in and named, not hidden behind a plural.</p>
 
       <section class="studio__block" aria-labelledby="studio-rule">
@@ -53,6 +53,26 @@ pageSchema:
             <dd><span class="studio__figure">0</span> <span data-i18n="studioPage.ledgerAwardsNote">first year entering</span></dd>
           </div>
         </dl>
+      </section>
+
+      <section class="studio__block" aria-labelledby="studio-what">
+        <h2 id="studio-what" class="svc__block-title" data-i18n="studioPage.whatTitle">What the studio sells, and in what order</h2>
+        <p class="studio__text" data-i18n="studioPage.whatText">Six services, and they are not a menu — they chain. Almost every engagement starts in one of three places: a brand that does not hold, a site that does not explain, or attention with nowhere to go. What follows is usually predictable, which is why the order is published rather than discovered halfway through a project.</p>
+        <ol class="studio__disciplines">
+          {%- for service in services %}
+          <li>
+            <a href="/services/{{ service.slug }}/">{{ service.en.title }}</a>
+            <span>{{ service.en.hook }}</span>
+          </li>
+          {%- endfor %}
+        </ol>
+        <a class="link-arrow" href="/services/" data-i18n="studioPage.whatCta">How the six chain together</a>
+      </section>
+
+      <section class="studio__block" aria-labelledby="studio-how">
+        <h2 id="studio-how" class="svc__block-title" data-i18n="studioPage.howTitle">The honest limits of a studio this size</h2>
+        <p class="studio__text" data-i18n="studioPage.howText">One operator is an advantage until it is a constraint, and it is worth naming both. The advantage: the person who reads your brief is the person who does the work, so nothing is lost in a handoff between a strategist who sold it and a designer who inherited it, and a decision made on Tuesday is in the build on Wednesday. The constraint: this studio runs few projects at once, on purpose. When the calendar is full you are told the date rather than sold a slot and queued behind it.</p>
+        <p class="studio__text" data-i18n="studioPage.howText2">Two things exist so the work does not depend on one person being available. Everything is versioned and documented — the repository, the deploy path, the handover notes — so another engineer can pick it up without an archaeology phase. And every engagement ends with what it takes to run without us: an editing session, notes on what runs where, and a system that a business operates rather than rents.</p>
       </section>
 
       <section class="studio__block" aria-labelledby="studio-lab">
