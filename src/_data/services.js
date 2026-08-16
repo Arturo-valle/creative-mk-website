@@ -95,7 +95,7 @@ const services = [
         },
         {
           "q": "How does this work in two languages?",
-          "a": "One project, two languages, quoted as one. In a client engagement the voice rules and key messages are defined in parallel rather than translated at the end, because a promise that only sounds native in one language is only trusted in one market. This site is not the sample for that: its Spanish was drafted from the English and still follows its sentence structure. Measured across 122 paired passages, 121 keep the English sentence count exactly, and the Spanish runs only 9% longer where independent Spanish runs 15-25%. It is the honest version of a claim most studios make and none of them test."
+          "a": "One project, two languages, quoted as one. In a client engagement the voice rules and key messages are defined in parallel rather than translated at the end, because a promise that only sounds native in one language is only trusted in one market. This site is not the sample for that: its Spanish was drafted from the English and still follows its sentence structure. Measured across 122 paired passages, all 122 keep the English sentence count exactly, and the Spanish runs only 9% longer — against the roughly 20% expansion this site's own design notes budget for when Spanish is written rather than fitted to English. It is the honest version of a claim most studios make and none of them test."
         },
         {
           "q": "Why are there no client branding cases on this page?",
@@ -173,7 +173,7 @@ const services = [
         },
         {
           "q": "¿Cómo funciona en dos idiomas?",
-          "a": "Un proyecto, dos idiomas, una sola cotización. En un proyecto de cliente las reglas de voz y los mensajes clave se definen en paralelo, no se traducen al final, porque una promesa que solo suena nativa en un idioma solo genera confianza en un mercado. Este sitio no es la muestra de eso: su español se redactó a partir del inglés y todavía sigue su estructura de frases. Medido sobre 122 pasajes emparejados, 121 conservan exactamente el número de frases del inglés, y el español corre apenas un 9% más largo donde un español independiente corre entre 15% y 25%. Es la versión honesta de una afirmación que hacen casi todos los estudios y que no comprueba ninguno."
+          "a": "Un proyecto, dos idiomas, una sola cotización. En un proyecto de cliente las reglas de voz y los mensajes clave se definen en paralelo, no se traducen al final, porque una promesa que solo suena nativa en un idioma solo genera confianza en un mercado. Este sitio no es la muestra de eso: su español se redactó a partir del inglés y todavía sigue su estructura de frases. Medido sobre 122 pasajes emparejados, los 122 conservan exactamente el número de frases del inglés, y el español corre apenas un 9% más largo — frente al 20% aproximado de expansión que las propias notas de diseño de este sitio presupuestan cuando el español se escribe en lugar de ajustarse al inglés. Es la versión honesta de una afirmación que hacen casi todos los estudios y que no comprueba ninguno."
         },
         {
           "q": "¿Por qué no hay casos de branding de clientes en esta página?",
@@ -422,7 +422,7 @@ const services = [
         },
         {
           "q": "Our interface needs to exist in Spanish and English. Is that two projects?",
-          "a": "One project, not two. Interface copy is drafted in both languages during design rather than sent out for translation after the screens are signed off, which is what keeps a label from outgrowing the button it sits in. The prototype can carry both versions, so you see where each language strains the layout before development does. What that standard costs is visible on this site, and measured: our own Spanish sits at 99% identical sentence structure to the English, where independently written Spanish runs 15-25% longer. The branding service publishes the figure and what it means.",
+          "a": "One project, not two. Interface copy is drafted in both languages during design rather than sent out for translation after the screens are signed off, which is what keeps a label from outgrowing the button it sits in. The prototype can carry both versions, so you see where each language strains the layout before development does. What that standard costs is visible on this site, and measured: our own Spanish matches the English sentence structure in every paired passage, and runs 9% longer where this site budgets roughly 20% for Spanish that is written rather than fitted. The branding service publishes the figure and what it means.",
           "link": { "url": "/services/branding/", "label": "How far our own Spanish falls short" }
         }
       ],
@@ -496,7 +496,7 @@ const services = [
         },
         {
           "q": "Nuestra interfaz necesita existir en español e inglés. ¿Son dos proyectos?",
-          "a": "Un proyecto, no dos. El copy de interfaz se redacta en los dos idiomas durante el diseño, en lugar de mandarse a traducir cuando las pantallas ya están aprobadas, que es lo que evita que una etiqueta se le salga al botón donde vive. El prototipo puede llevar ambas versiones, así que ves dónde cada idioma tensiona el layout antes de que lo descubra el desarrollo. Lo que cuesta ese estándar se ve en este sitio, y está medido: nuestro propio español tiene un 99% de estructura de frase idéntica al inglés, cuando un español escrito de forma independiente corre entre 15% y 25% más largo. El servicio de branding publica la cifra y lo que significa.",
+          "a": "Un proyecto, no dos. El copy de interfaz se redacta en los dos idiomas durante el diseño, en lugar de mandarse a traducir cuando las pantallas ya están aprobadas, que es lo que evita que una etiqueta se le salga al botón donde vive. El prototipo puede llevar ambas versiones, así que ves dónde cada idioma tensiona el layout antes de que lo descubra el desarrollo. Lo que cuesta ese estándar se ve en este sitio, y está medido: nuestro propio español calca la estructura de frase del inglés en todos los pasajes emparejados, y corre un 9% más largo donde este sitio presupuesta cerca de un 20% para un español escrito y no ajustado. El servicio de branding publica la cifra y lo que significa.",
           "link": { "url": "/es/servicios/branding/", "label": "Cuánto le falta a nuestro propio español" }
         }
       ],
