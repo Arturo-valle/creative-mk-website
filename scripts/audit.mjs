@@ -271,7 +271,13 @@ function readPage(file, raw) {
        element and the label sits in a sibling. */
     figureCells: [
       ...main.matchAll(/<(?:strong|dd)\b[^>]*>([\s\S]*?)<\/(?:strong|dd)>/gi),
-      ...main.matchAll(/<[a-z]+\b[^>]*class="[^"]*(?:figure|digit|proof__value|stat)[^"]*"[^>]*>([\s\S]*?)<\//gi)
+      /* Class names, not a fixed list of them. The first version matched
+         `proof__value` and the case pages use `case__proof-value`, so four
+         published figures per case page — 7,500 lines, 3 migrations, 2 Durable
+         Objects, 3 Workflows — were invisible and the report told pages that
+         lead with numbers to "name a number". A false finding is worse than a
+         missed one: it sends someone to fix what is already right. */
+      ...main.matchAll(/<[a-z]+\b[^>]*class="[^"]*(?:figure|digit|stat|proof[_-]?value|value)[^"]*"[^>]*>([\s\S]*?)<\//gi)
     ]
       .map((m) => textOf(m[1]))
       .filter((value) => /^[^\p{L}]*\d[\d.,\s]*[^\p{L}]*$/u.test(value) && value.trim()),
