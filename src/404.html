@@ -25,13 +25,21 @@ permalink: "/404.html"
   <link rel="stylesheet" href="/css/base.css">
   <style>
     /* Self-contained on purpose: the 404 must render even if every other
-       stylesheet is the thing that broke. Dark act, contour motif, done. */
+       stylesheet is the thing that broke. Dark act, contour motif, done.
+
+       Repainted 2026-08-17 onto the closed set. The values are written as
+       literals rather than var() precisely because this page has to survive
+       variables.css failing to load — but they are COPIES of the tokens, not
+       independent choices, and the token guard in scripts/check-site.mjs
+       whitelists them only at these values, so a drift here fails the build.
+       plate #191712 · plate-ink #EDE9E1 · gold #E8C840 (legal at 10.89:1 on
+       the plate) · rule-strong #6B6355. */
     body {
       min-height: 100svh;
       display: grid;
       place-items: center;
-      background: #0a0a0a;
-      color: #ffffff;
+      background: #191712;
+      color: #EDE9E1;
       text-align: center;
       padding: 2rem;
     }
@@ -51,7 +59,7 @@ permalink: "/404.html"
     }
     .nf__text {
       margin: 1.5rem 0 0;
-      color: rgba(255, 255, 255, 0.75);
+      color: rgba(237, 233, 225, 0.75);
       font-size: 1.05rem;
       line-height: 1.6;
     }
@@ -70,7 +78,7 @@ permalink: "/404.html"
   <main>
     <h1 class="nf__code">404</h1>
     <svg class="nf__contour" viewBox="0 0 420 60" aria-hidden="true" fill="none">
-      <path d="M0 44 C60 44 80 18 130 18 S200 52 250 52 320 12 360 12 410 40 420 40" stroke="#2A3D66" stroke-width="1.5"/>
+      <path d="M0 44 C60 44 80 18 130 18 S200 52 250 52 320 12 360 12 410 40 420 40" stroke="#6B6355" stroke-width="1.5"/>
       <path d="M0 52 C70 52 95 30 140 30 S210 58 260 58 330 24 368 24 412 48 420 48" stroke="rgba(232,200,64,0.7)" stroke-width="1.5"/>
     </svg>
     <p class="nf__text">

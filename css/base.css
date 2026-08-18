@@ -298,11 +298,14 @@ body.menu-open {
   top: -100%;
   left: var(--space-4);
   padding: var(--space-3) var(--space-6);
-  background-color: var(--color-primary);
-  color: var(--color-navy);
+  /* The skip link is the first thing a keyboard visitor meets, so it is the
+     last place to spend a 2.87:1 gold-on-navy pair. Plate and its own ink:
+     14.79:1, and it reads as a pressed plate rather than a highlighter. */
+  background-color: var(--plate);
+  color: var(--plate-ink);
   font-weight: var(--weight-semibold);
   font-size: var(--text-sm);
-  border-radius: var(--radius-md);
+  border-radius: 0;
   z-index: 10000;
   transition: top var(--duration-fast) var(--ease-out);
 }
@@ -312,26 +315,29 @@ body.menu-open {
 }
 
 /* ---- Focus Visible (Accessibility) ----
-   Two tones, because one cannot serve both grounds this site uses: brand gold
-   measures 1.51:1 on the paper tone and the aged cut is weak on ink. The
-   outline is the dark core; the box-shadow is a light halo just outside it.
-   Whichever ground the element sits on, one of the two reads. */
+   The two-sided rule of direction.md §5.4.1, and the reason it exists: raw
+   gold is 1.36:1 on paper — under half of what SC 1.4.11 requires — so the
+   ring cannot be one colour across both grounds. On paper the core is ink
+   (15.45:1) with a paper halo; on the plate it inverts to raw gold (10.89:1)
+   with an ink halo. The halo is cut from the ground it sits on, not from
+   white: a neutral-white halo on warm paper reads as a rendering artefact. */
 :focus-visible {
-  outline: 2px solid #14120E;
+  outline: 2px solid var(--ink);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(255, 255, 255, 0.9);
-  border-radius: var(--radius-sm);
+  box-shadow: 0 0 0 4px rgba(237, 233, 225, 0.9);
+  border-radius: 0;
 }
 
-/* On the dark acts the pair inverts: gold core, ink halo. */
+/* On the dark acts the pair inverts: gold core, ink halo. Raw --gold here,
+   never the aged cut — aged gold on the plate is the weak half of the pair. */
 .hero :focus-visible,
 .showreel :focus-visible,
 .news :focus-visible,
 .faq :focus-visible,
 .footer :focus-visible,
 .header:not(.scrolled) :focus-visible {
-  outline-color: var(--color-primary);
-  box-shadow: 0 0 0 4px rgba(10, 10, 10, 0.9);
+  outline-color: var(--gold);
+  box-shadow: 0 0 0 4px rgba(25, 23, 18, 0.9);
 }
 
 /* ---- Newsletter Success ---- */

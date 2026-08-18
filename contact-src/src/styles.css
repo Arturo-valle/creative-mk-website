@@ -2,16 +2,33 @@
 @tailwind components;
 @tailwind utilities;
 
+/* ---------------------------------------------------------------------------
+   TOKEN BRIDGE to the site's closed set (docs/awards-build-plan.md §2.2).
+
+   This island is a separate Vite/React build, and its tokens used to COLLIDE
+   BY NAME with the site's while holding different values: --ink was #0a0a0a
+   against the site's #14120E, and --paper was pure white against the site's
+   warm #EDE9E1. The names matching made the divergence invisible — the
+   conversion page looked like a different website and no grep would say so.
+
+   These are now copies of css/variables.css, written as literals because this
+   build cannot import that file. The names and every call site are unchanged,
+   so the bridge is one block.
+
+   Gold is the one judgment call: this page is paper end to end, and raw gold
+   is 1.36:1 there, so BOTH cuts resolve to the aged one. Nothing on this page
+   is allowed to be the bright gold — it has no dark field to be legal on.
+   --------------------------------------------------------------------------- */
 :root {
-  --ink: #0a0a0a;
-  --paper: #ffffff;
-  --smoke: #f5f5f5;
-  --muted: #666666;
-  --line: rgba(10, 10, 10, 0.1);
-  --gold: #e8c840;
-  --gold-dark: #d4b530;
-  --radius: 16px;
-  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ink: #14120E;         /* site --ink        15.45:1 on paper */
+  --paper: #EDE9E1;       /* site --paper                       */
+  --smoke: #E3DED4;       /* site --paper-sunk                  */
+  --muted: #4E4840;       /* site --ink-muted   7.46:1          */
+  --line: #CFC7B8;        /* site --rule                        */
+  --gold: #7A5C12;        /* site --gold-aged   5.15:1          */
+  --gold-dark: #7A5C12;
+  --radius: 0;            /* machined furniture: no soft corners */
+  --ease: cubic-bezier(0.19, 0.86, 0.15, 1);  /* site --ease-seat */
 }
 
 * {
@@ -29,8 +46,8 @@ body {
   margin: 0;
   min-width: 320px;
   background:
-    linear-gradient(90deg, rgba(10, 10, 10, 0.035) 1px, transparent 1px) 0 0 / 120px 120px,
-    linear-gradient(180deg, rgba(10, 10, 10, 0.03) 1px, transparent 1px) 0 0 / 120px 120px,
+    linear-gradient(90deg, rgba(20, 18, 14, 0.035) 1px, transparent 1px) 0 0 / 120px 120px,
+    linear-gradient(180deg, rgba(20, 18, 14, 0.03) 1px, transparent 1px) 0 0 / 120px 120px,
     var(--paper);
 }
 
@@ -68,7 +85,7 @@ button {
   align-items: center;
   gap: clamp(1rem, 3vw, 2rem);
   padding: 1.1rem clamp(1.25rem, 4vw, 3rem);
-  background: rgba(255, 255, 255, 0.88);
+  background: rgba(237, 233, 225, 0.88);
   backdrop-filter: blur(18px);
   border-bottom: 1px solid var(--line);
 }
@@ -97,7 +114,7 @@ button {
 .contact-header__nav a {
   padding: 0.55rem 0.8rem;
   border-radius: 999px;
-  color: #555;
+  color: var(--muted);
   font-size: 0.9rem;
   font-weight: 500;
   transition: background 220ms var(--ease), color 220ms var(--ease);
@@ -127,30 +144,30 @@ button {
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
   background: transparent;
-  color: #666;
+  color: var(--muted);
   cursor: pointer;
   font-size: 0.78rem;
   font-weight: 700;
 }
 
 .contact-lang button.active {
-  background: #fff;
+  background: var(--paper);
   color: var(--ink);
-  box-shadow: 0 1px 5px rgba(10, 10, 10, 0.09);
+  box-shadow: 0 1px 5px rgba(20, 18, 14, 0.09);
 }
 
 .contact-header__cta {
   padding: 0.75rem 1.35rem;
   border-radius: 999px;
   background: var(--ink);
-  color: #fff;
+  color: var(--paper);
   font-size: 0.9rem;
   font-weight: 700;
   transition: transform 260ms var(--ease), background 260ms var(--ease);
 }
 
 .contact-header__cta:hover {
-  background: #262626;
+  background: var(--ink);
   transform: translateY(-1px);
 }
 
@@ -196,7 +213,7 @@ button {
 .contact-copy p {
   margin: clamp(1.5rem, 3vw, 2.2rem) 0 0;
   max-width: 660px;
-  color: #343434;
+  color: var(--ink);
   font-size: clamp(1.1rem, 1.8vw, 1.65rem);
   line-height: 1.34;
   letter-spacing: -0.02em;
@@ -215,7 +232,7 @@ button {
 .signal-card span,
 .live-summary span,
 .required-note {
-  color: #888;
+  color: var(--muted);
   font-size: 0.76rem;
   font-weight: 700;
   letter-spacing: 0.08em;
@@ -239,7 +256,7 @@ button {
   padding: 1.25rem;
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  background: rgba(245, 245, 245, 0.72);
+  background: rgba(227, 222, 212, 0.72);
   overflow: hidden;
 }
 
@@ -279,10 +296,11 @@ button {
 .request-panel {
   border: 1px solid var(--line);
   border-radius: clamp(16px, 2vw, 26px);
-  background:
-    radial-gradient(circle at 94% 8%, rgba(232, 200, 64, 0.28), transparent 28%),
-    linear-gradient(180deg, #ffffff, #f8f8f8);
-  box-shadow: 0 36px 90px rgba(10, 10, 10, 0.13);
+  /* The gold corner-glow is gone: gold is not an interface colour, and a warm
+     radial bloom behind a form is the template tell the repaint exists to
+     remove. The panel is raised paper — it reads by tone, not by light. */
+  background: var(--paper);
+  box-shadow: 0 36px 90px rgba(20, 18, 14, 0.13);
   overflow: hidden;
 }
 
@@ -305,7 +323,7 @@ button {
 .request-panel__top p {
   margin: 1rem 0 0;
   max-width: 560px;
-  color: #5f5f5f;
+  color: var(--muted);
   line-height: 1.6;
 }
 
@@ -333,7 +351,7 @@ button {
 .progress-meter circle {
   fill: none;
   stroke-width: 4;
-  stroke: rgba(10, 10, 10, 0.08);
+  stroke: rgba(20, 18, 14, 0.08);
 }
 
 .progress-meter circle:nth-child(2) {
@@ -349,7 +367,7 @@ button {
   margin: -1px clamp(1.4rem, 3vw, 2.25rem) 0;
   border-radius: 999px;
   overflow: hidden;
-  background: rgba(10, 10, 10, 0.08);
+  background: rgba(20, 18, 14, 0.08);
 }
 
 .progress-fill {
@@ -391,7 +409,7 @@ button {
   justify-content: space-between;
   gap: 1rem;
   margin-bottom: 0.45rem;
-  color: #202020;
+  color: var(--ink);
   font-size: 0.86rem;
   font-weight: 750;
 }
@@ -402,7 +420,7 @@ button {
 }
 
 .field label em {
-  color: #949494;
+  color: var(--muted);
   font-style: normal;
   font-weight: 600;
 }
@@ -410,9 +428,9 @@ button {
 .field input,
 .field textarea {
   width: 100%;
-  border: 1px solid rgba(10, 10, 10, 0.14);
+  border: 1px solid rgba(20, 18, 14, 0.14);
   border-radius: 12px;
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(237, 233, 225, 0.9);
   color: var(--ink);
   padding: 0.98rem 1rem;
   font-size: 0.98rem;
@@ -446,9 +464,9 @@ button {
 }
 
 .chip {
-  border: 1px solid rgba(10, 10, 10, 0.12);
+  border: 1px solid rgba(20, 18, 14, 0.12);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(237, 233, 225, 0.72);
   color: #3f3f3f;
   cursor: pointer;
   padding: 0.7rem 0.95rem;
@@ -458,25 +476,25 @@ button {
 }
 
 .chip:hover {
-  border-color: rgba(10, 10, 10, 0.34);
+  border-color: rgba(20, 18, 14, 0.34);
   transform: translateY(-1px);
 }
 
 .chip.is-selected {
   border-color: var(--ink);
   background: var(--ink);
-  color: #fff;
+  color: var(--paper);
 }
 
 .live-summary {
   padding: 1rem;
   border-radius: 14px;
   background: #101010;
-  color: #fff;
+  color: var(--paper);
 }
 
 .live-summary span {
-  color: rgba(255, 255, 255, 0.58);
+  color: rgba(237, 233, 225, 0.58);
 }
 
 .live-summary strong {
@@ -488,7 +506,7 @@ button {
 
 .live-summary p {
   margin: 0.75rem 0 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(237, 233, 225, 0.72);
   line-height: 1.5;
 }
 
@@ -496,10 +514,10 @@ button {
   display: grid;
   gap: 0.25rem;
   padding: 0.95rem 1rem;
-  border: 1px solid rgba(15, 118, 110, 0.22);
+  border: 1px solid rgba(122, 92, 18, 0.22);
   border-radius: 8px;
   background: rgba(240, 253, 250, 0.92);
-  color: #134e4a;
+  color: var(--ink);
 }
 
 .agent-brief-note strong {
@@ -507,7 +525,7 @@ button {
 }
 
 .agent-brief-note span {
-  color: #3f6f69;
+  color: var(--muted);
   font-size: 0.86rem;
   line-height: 1.45;
 }
@@ -522,9 +540,9 @@ button {
   gap: 0.75rem;
   align-items: start;
   padding: 0.92rem 1rem;
-  border: 1px solid rgba(10, 10, 10, 0.12);
+  border: 1px solid rgba(20, 18, 14, 0.12);
   border-radius: 8px;
-  background: rgba(255, 255, 255, 0.72);
+  background: rgba(237, 233, 225, 0.72);
   color: #232323;
   font-size: 0.9rem;
   line-height: 1.45;
@@ -543,7 +561,7 @@ button {
 }
 
 .consent-line small {
-  color: #737373;
+  color: var(--muted);
   font-size: 0.78rem;
   line-height: 1.42;
 }
@@ -551,7 +569,7 @@ button {
 .form-notice {
   margin: 0;
   padding: 0.9rem 1rem;
-  border: 1px solid rgba(15, 118, 110, 0.18);
+  border: 1px solid rgba(122, 92, 18, 0.18);
   border-radius: 8px;
   background: rgba(240, 253, 250, 0.85);
   color: #115e59;
@@ -585,7 +603,7 @@ button {
   min-height: 58px;
   border-radius: 999px;
   background: var(--ink);
-  color: #fff;
+  color: var(--paper);
   cursor: pointer;
   font-size: 0.96rem;
   font-weight: 800;
@@ -632,13 +650,13 @@ button {
 .contact-legal article {
   min-height: 180px;
   padding: clamp(1.25rem, 3vw, 2rem);
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(237, 233, 225, 0.9);
 }
 
 .contact-legal span {
   display: inline-flex;
   margin-bottom: 1.3rem;
-  color: #888;
+  color: var(--muted);
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -655,7 +673,7 @@ button {
 .contact-legal p {
   margin: 0.9rem 0 0;
   max-width: 620px;
-  color: #5f5f5f;
+  color: var(--muted);
   line-height: 1.6;
 }
 

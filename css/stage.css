@@ -23,7 +23,7 @@
    ============================================ */
 
 :root {
-  --color-paper: #f7f5f0;
+  --color-paper: var(--paper);
 }
 
 .page-stage {
@@ -125,7 +125,7 @@ html.js-stage .ai-automation {
 .js-arrival .hero__title .word--in {
   opacity: 1;
   transform: translateY(0);
-  color: #ffffff;
+  color: var(--paper);
   -webkit-text-stroke-color: transparent;
 }
 
@@ -144,7 +144,7 @@ html.js-stage .ai-automation {
   animation: none;
   opacity: 1;
   transform: none;
-  color: #ffffff;
+  color: var(--paper);
   -webkit-text-stroke: 0 transparent;
 }
 
@@ -168,7 +168,7 @@ html.js-stage .ai-automation {
   backdrop-filter: none;
   -webkit-backdrop-filter: none;
   padding: 0;
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(237, 233, 225, 0.72);
   letter-spacing: 0.14em;
 }
 
@@ -206,7 +206,7 @@ html.js-stage .ai-automation {
   left: 0;
   right: 0;
   height: 1px;
-  background: linear-gradient(90deg, rgba(232, 200, 64, 0.7), rgba(10, 10, 10, 0.15) 35%);
+  background: linear-gradient(90deg, rgba(232, 200, 64, 0.7), rgba(20, 18, 14, 0.15) 35%);
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.9s var(--ease-out);
@@ -228,7 +228,7 @@ html.js-stage .ai-automation {
   right: 0;
   bottom: 0;
   width: 1px;
-  background: rgba(10, 10, 10, 0.1);
+  background: rgba(20, 18, 14, 0.1);
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 0.7s var(--ease-out);
@@ -259,7 +259,7 @@ html.js-stage .ai-automation {
 
 /* The one real figure on the strip. Tabular so it cannot wobble, linked to
    the work ledger it corroborates. Aged gold on hover — raw gold fails
-   contrast on paper (1.36:1); #7A5C12 is the same hue at 5.15:1. */
+   contrast on paper (1.36:1); var(--gold-aged) is the same hue at 5.15:1. */
 .proof__count {
   color: inherit;
   text-decoration: none;
@@ -277,7 +277,7 @@ html.js-stage .ai-automation {
 
 .proof__count:hover .proof__digit,
 .proof__count:focus-visible .proof__digit {
-  color: #7A5C12;
+  color: var(--gold-aged);
 }
 
 /* ============================================
@@ -377,7 +377,7 @@ html.js-stage .ai-automation {
 }
 
 .ai-trace__rail {
-  stroke: rgba(42, 61, 102, 0.25);
+  stroke: rgba(35, 32, 25, 0.25);
   stroke-width: 1;
 }
 
@@ -400,7 +400,7 @@ html.js-stage .ai-automation {
 }
 
 .ai-trace__label {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(237, 233, 225, 0.85);
   font-size: var(--text-sm);
   font-weight: var(--weight-semibold);
   letter-spacing: 0.04em;
@@ -409,7 +409,7 @@ html.js-stage .ai-automation {
 }
 
 .js-daylight .ai-trace__label.is-pending {
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(237, 233, 225, 0.35);
 }
 
 /* ============================================
@@ -428,7 +428,7 @@ html.js-stage .ai-automation {
   max-width: 460px;
   border-radius: 28px;
   overflow: hidden;
-  box-shadow: 0 30px 70px rgba(10, 10, 10, 0.12);
+  box-shadow: 0 30px 70px rgba(20, 18, 14, 0.12);
 }
 
 .cap-layer {
@@ -473,20 +473,20 @@ html.js-stage .ai-automation {
 }
 
 .accordion-item.active .accordion-index {
-  color: #7A5C12;
+  color: var(--gold-aged);
 }
 
 /* ============================================
    The dark close (immersive-plan §11).
 
    News, FAQ and footer become one continuous closing act on a single navy —
-   the mismatched #11151f / #17233f pair dies here — and the footer deepens
+   the mismatched var(--plate-ink) / var(--plate-ink) pair dies here — and the footer deepens
    to the page's opening black at the bottom bar, so the site closes the way
    it opened. Gold lives on dark, where it has its strongest legal contrast.
    ============================================ */
 
 :root {
-  --color-dark-panel: #17233f;
+  --color-dark-panel: var(--plate);
 }
 
 .news {
@@ -498,29 +498,29 @@ html.js-stage .ai-automation {
 }
 
 .footer {
-  background: linear-gradient(180deg, var(--color-dark-panel) 0%, #0a0a0a 100%);
-  color: rgba(255, 255, 255, 0.82);
+  background: linear-gradient(180deg, var(--color-dark-panel) 0%, var(--plate) 100%);
+  color: rgba(237, 233, 225, 0.82);
 }
 
 .footer__cta-label {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(237, 233, 225, 0.55);
 }
 
 .footer__contact-label,
 .footer__column-title,
 .footer__office-city {
-  color: rgba(255, 255, 255, 0.55);
+  color: rgba(237, 233, 225, 0.55);
 }
 
 .footer__contact-value,
 .footer__office-address {
-  color: rgba(255, 255, 255, 0.88);
+  color: rgba(237, 233, 225, 0.88);
 }
 
 .footer__nav-link,
 .footer__social-link,
 .footer__legal-link {
-  color: rgba(255, 255, 255, 0.72);
+  color: rgba(237, 233, 225, 0.72);
 }
 
 .footer__nav-link:hover,
@@ -531,22 +531,22 @@ html.js-stage .ai-automation {
 
 .footer__newsletter-text,
 .footer__copyright {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(237, 233, 225, 0.6);
 }
 
 .footer__newsletter-input {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(255, 255, 255, 0.18);
-  color: #ffffff;
+  background: rgba(237, 233, 225, 0.07);
+  border-color: rgba(237, 233, 225, 0.18);
+  color: var(--paper);
 }
 
 .footer__newsletter-input::placeholder {
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(237, 233, 225, 0.45);
 }
 
 .footer__newsletter-btn {
   background: var(--color-primary);
-  color: #0a0a0a;
+  color: var(--ink);
 }
 
 .footer__newsletter-btn:hover {
@@ -554,7 +554,7 @@ html.js-stage .ai-automation {
 }
 
 .footer__bottom {
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(237, 233, 225, 0.12);
 }
 
 /* ---- The finale: the CTA fills with gold over its other-language ghost ---- */
@@ -647,7 +647,7 @@ html.js-stage .ai-automation {
   display: inline-block;
   width: min(14ch, 100%);
   height: 0.9em;
-  background: #14120E;
+  background: var(--ink);
   border-bottom: 2px solid var(--color-primary);
   vertical-align: baseline;
 }
@@ -803,7 +803,7 @@ html.js-stage .ai-automation {
 /* The current page states itself without JavaScript — the animated underline
    is the homepage scroll-spy and cannot speak for a subpage. */
 .header__nav-link[aria-current="page"] {
-  color: #7A5C12;
+  color: var(--gold-aged);
   font-weight: var(--weight-semibold);
 }
 

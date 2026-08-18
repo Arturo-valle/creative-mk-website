@@ -858,9 +858,104 @@ async function checkCanonicalUrls() {
   }
 }
 
+/* ---------- 9. the closed token set ----------
+   The repaint of 2026-08-17 (docs/awards-build-plan.md §2.2) collapsed 75
+   unique hex values, 108 distinct rgba tones and three private token sets onto
+   one closed set. A repaint that is not guarded is a repaint that comes back:
+   the previous one drifted from 57 unique hexes to 75 without anyone noticing,
+   because nothing counted.
+
+   So this check counts. Dead values are ERRORS — they are the palette this
+   site deliberately left behind. Legacy token NAMES are warnings with a
+   running total: they all resolve to closed-set values through the
+   compatibility layer in variables.css, so they are correct on screen and
+   merely un-renamed. That count is the stage-B progress meter; when it reaches
+   zero the compatibility layer can be deleted and these become errors too. */
+
+/** Values the repaint retired. Any of these in shipped CSS is a regression. */
+const DEAD_HEXES = [
+  '#0a0a0a', '#1a1a1a', '#111111', '#161616', '#171717', '#1d1d1d', '#222222',
+  '#252525', '#2d2d2d', '#262626', '#404040', '#525252', '#737373', '#a3a3a3',
+  '#d4d4d4', '#e8e8e8', '#f5f5f5', '#fafafa', '#f6f6f6', '#f0f0f0', '#f7f5f0',
+  '#edeae4', '#eef1f5', '#e8e4d4', '#e0e0e0', '#4a5d80', '#3a3a3a', '#4a4a4a',
+  '#686868', '#6b6b6b', '#9a948c', '#94a3b8', '#a5b4fc', '#b8860b', '#0f766e',
+  '#134e4a', '#3f6f69', '#315a55', '#3f8678', '#e8764f', '#16a34a', '#1d6b3f',
+  // the navy family, killed by direction.md §5.3
+  '#17233f', '#11151f', '#0d1b3e', '#1b2a4a', '#2a3d66',
+];
+
+/** Legacy token names — correct on screen, not yet renamed. */
+const LEGACY_TOKENS = [
+  '--color-gray-', '--color-navy', '--color-primary', '--color-black',
+  '--color-white', '--color-text-muted', '--shadow-sm', '--shadow-md',
+  '--shadow-lg', '--shadow-xl', '--radius-sm', '--radius-md', '--radius-lg',
+  '--radius-xl', '--radius-2xl', '--radius-full', '--ease-out', '--ease-in-out',
+  '--ease-spring', '--duration-fast', '--duration-normal', '--duration-slow',
+  '--duration-slower',
+];
+
+/** src/404.html carries literals on purpose (it must render with no CSS at
+ *  all). They are permitted only at their closed-set values. */
+const SELF_CONTAINED_OK = new Set(['#191712', '#ede9e1', '#e8c840', '#6b6355']);
+
+async function checkTokens() {
+  let legacyTokenUses = 0;
+
+  for (const file of cssFiles) {
+    // variables.css is where the closed set and the compatibility layer live.
+    if (/(^|\/)variables(\.[a-f0-9]+)?\.css$/.test(rel(file))) continue;
+    // admin/ is the internal console, not a public surface: it is deliberately
+    // outside the brand's design system and is not repainted with it.
+    if (rel(file).startsWith('admin/')) continue;
+    const css = stripCssComments(await readFile(file, 'utf8'));
+
+    for (const hex of DEAD_HEXES) {
+      const re = new RegExp(hex.replace('#', '#') + '\\b', 'gi');
+      const hits = css.match(re);
+      if (hits) {
+        error(
+          'tokens',
+          `${rel(file)} still paints with ${hex} (${hits.length}x) — retired by the repaint, use the closed set in css/variables.css`
+        );
+      }
+    }
+
+    for (const token of LEGACY_TOKENS) {
+      const hits = css.match(new RegExp(`var\\(\\s*${token}`, 'g'));
+      if (hits) legacyTokenUses += hits.length;
+    }
+  }
+
+  // Inline styles in built HTML — the 404's self-contained block lives here.
+  for (const file of htmlFiles) {
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+    const styleBlocks = html.match(/<style[\s\S]*?<\/style>/gi) || [];
+    for (const block of styleBlocks) {
+      for (const hex of block.match(/#[0-9a-fA-F]{6}\b/g) || []) {
+        if (SELF_CONTAINED_OK.has(hex.toLowerCase())) continue;
+        if (DEAD_HEXES.includes(hex.toLowerCase())) {
+          error(
+            'tokens',
+            `${rel(file)} inline <style> paints with ${hex} — retired by the repaint`
+          );
+        }
+      }
+    }
+  }
+
+  if (legacyTokenUses) {
+    warn(
+      'tokens',
+      `${legacyTokenUses} legacy token references remain (they resolve to closed-set values through the compatibility layer in css/variables.css). ` +
+        `Repaint stage B renames them; when this reaches 0 the layer can be deleted.`
+    );
+  }
+}
+
 /* ---------- report ---------- */
 
 await checkI18n();
+await checkTokens();
 await checkReferences();
 await checkCanonicalUrls();
 await checkSeo();

@@ -82,39 +82,80 @@
      the event that breaks it. */
   --font-display:     'Fit', 'Inter', system-ui, sans-serif;
   --font-text:        'Inter', system-ui, -apple-system, sans-serif;
+
+  /* ---- Furniture: machined, so almost nothing is round ----
+     Rules, plates, fields and controls are cut square. The only curve in the
+     set is the pill, and it is spelled exactly once — the old set spelled it
+     four ways (--radius-full, 999px, 9999px, 100px) across 21 distinct radii. */
+  --radius-pill:      9999px;
+
+  /* ---- Shadow: paper does not float ----
+     Two, and both are ink-tinted rather than black: a shadow on warm paper
+     that is neutral grey reads as a screenshot pasted onto the page. The old
+     set had 24 distinct shadows. */
+  --shadow-lift:      0 1px 2px rgba(20, 18, 14, 0.06);
+  --shadow-overlay:   0 24px 60px rgba(20, 18, 14, 0.18);
 }
 
 /* ---------------------------------------------------------------------------
-   LEGACY — what the site still renders against. Removed in the repaint pass.
+   COMPATIBILITY LAYER — the old names, pointing at the closed set above.
+   Repaint stage A, 2026-08-17 (awards-build-plan.md §2.2).
+
+   The repaint had to be atomic — half a repaint reads worse than either
+   ground — but rewriting ~180 token references across 6,300 lines in one
+   commit is where layout regressions come from. So the seam is here instead:
+   every legacy name now RESOLVES to a closed-set value, which repaints the
+   whole site in one edit with zero risk to layout, and leaves only the
+   hardcoded hexes that bypass tokens as real work.
+
+   These names are deprecated the moment they are written. Stage B renames the
+   call sites (a visual no-op, because both spellings already resolve to the
+   same value), then deletes this block and turns the token guard to error.
+
+   Ambiguity was checked, not assumed: --color-white is a background 7 times
+   and a text colour 10 times, and both roles land on #EDE9E1 (--paper and
+   --plate-ink are the same value), so the alias is exact. --color-black is
+   text 26 times and a field 9 times; it aliases to --ink and the nine field
+   uses are promoted to --plate by hand. Every --color-gray-* call site was
+   read: all sit on paper, none on plate.
    --------------------------------------------------------------------------- */
 
 :root {
-  /* ---- Brand Colors ---- */
-  --color-primary: #E8C840;
-  --color-primary-dark: #D4B530;
-  --color-primary-light: #F0D860;
-  --color-navy: #1B2A4A;
-  --color-navy-light: #2A3D66;
+  /* ---- Brand ----
+     Gold stops being an interface colour here rather than at every call site:
+     raw gold is 1.36:1 on paper, so the alias points at the aged cut (5.15:1)
+     and every gold *fill* is promoted by hand. */
+  --color-primary: var(--gold-aged);
+  --color-primary-dark: var(--gold-aged);
+  --color-primary-light: var(--gold);
+  --color-navy: var(--plate);
+  --color-navy-light: var(--plate-raised);
 
   /* ---- Neutrals ---- */
-  --color-black: #0a0a0a;
-  --color-black-pure: #000000;
-  --color-white: #ffffff;
-  --color-gray-50: #ffffff;
-  --color-gray-100: #f5f5f5;
-  --color-gray-200: #e8e8e8;
-  --color-gray-300: #d4d4d4;
-  --color-gray-400: #a3a3a3;
-  --color-gray-500: #737373;
-  --color-gray-600: #525252;
-  --color-gray-700: #404040;
-  --color-gray-800: #262626;
-  --color-gray-900: #171717;
-  --color-text-muted: #4a5d80;
+  --color-black: var(--ink);
+  --color-black-pure: var(--ink);
+  --color-white: var(--paper);
+  --color-gray-50: var(--paper);
+  --color-gray-100: var(--paper-sunk);
+  --color-gray-200: var(--rule);
+  --color-gray-300: var(--rule);
+  --color-gray-400: var(--ink-faint);   /* was #a3a3a3, 2.61:1 — now 4.62:1 */
+  --color-gray-500: var(--ink-faint);
+  --color-gray-600: var(--ink-muted);
+  --color-gray-700: var(--ink-muted);
+  --color-gray-800: var(--ink);
+  --color-gray-900: var(--ink);
+  --color-text-muted: var(--ink-muted);
 
-  /* ---- Typography ---- */
+  /* ---- Typography ----
+     --font-display is NOT redefined here. It used to be, and because this
+     legacy block comes second at equal specificity, the redefinition silently
+     beat the 'Fit' declaration above — the display face would not have
+     rendered even once it was bought. Removed 2026-08-17 (awards-build-plan.md
+     §1). Until Fit lands, --font-display falls through its own stack to Inter,
+     so this removal changes no pixels today and changes everything the day the
+     licence lands. */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-display: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   /* Font Sizes */
   --text-xs: 0.75rem;     /* 12px */
@@ -181,33 +222,104 @@
   --container-padding: clamp(1.25rem, 4vw, 3rem);
   --header-height: 72px;
 
-  /* ---- Borders ---- */
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --radius-2xl: 24px;
-  --radius-full: 9999px;
-  --border-color: var(--color-gray-200);
+  /* ---- Borders — the middle class of radii is gone ----
+     4/8/12/16/24px all collapse to a square edge: the furniture is machined,
+     and a machined part does not have a soft corner. Only the pill survives. */
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-full: var(--radius-pill);
+  --border-color: var(--rule);
 
   /* ---- Shadows ---- */
-  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
-  --shadow-md: 0 4px 6px rgba(0,0,0,0.07);
-  --shadow-lg: 0 10px 15px rgba(0,0,0,0.1);
-  --shadow-xl: 0 20px 25px rgba(0,0,0,0.1);
+  --shadow-sm: var(--shadow-lift);
+  --shadow-md: var(--shadow-lift);
+  --shadow-lg: var(--shadow-overlay);
+  --shadow-xl: var(--shadow-overlay);
 
-  /* ---- Transitions ---- */
-  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-  --duration-fast: 150ms;
-  --duration-normal: 300ms;
-  --duration-slow: 500ms;
-  --duration-slower: 700ms;
+  /* ---- Transitions ----
+     Nine curves become two. --ease-spring is the important casualty: it
+     overshoots, and a piece that bounces is a piece that was made wrong, so
+     it resolves to the seat curve like everything else. */
+  --ease-out: var(--ease-seat);
+  --ease-in-out: var(--ease-seat);
+  --ease-spring: var(--ease-seat);
+  --duration-fast: var(--dur-release);
+  --duration-normal: var(--dur-release);
+  --duration-slow: var(--dur-seat);
+  --duration-slower: var(--dur-seat);
 
   /* ---- Z-Index Scale ---- */
   --z-header: 1000;
   --z-dropdown: 1100;
   --z-overlay: 1200;
   --z-modal: 1300;
+}
+
+/* ---------------------------------------------------------------------------
+   THE PLATE SCOPE — the ground tells the ink which cut it is.
+
+   A token that resolves to one value everywhere cannot survive a site with two
+   grounds: --ink-faint is 4.62:1 on paper and 3.34:1 on the plate, and raw
+   gold inverts even harder — 1.36:1 on paper, 10.89:1 on the plate. The same
+   declaration is therefore a contrast failure in one act and the brightest
+   legal mark in the other, and no amount of care at the call site fixes that,
+   because the call site does not know which act it will be rendered in.
+
+   So the compatibility aliases resolve to their PAPER cut by default — the
+   safe side, since paper is most of the site — and this block re-cuts them
+   inside the dark acts. Everything that lands in a plate inherits the right
+   values without knowing it did.
+
+   Only marks are re-cut here. Field tokens are deliberately absent: a
+   background that flipped with its context would invert the act itself. */
+.hero,
+.showreel,
+.news,
+.faq,
+.footer,
+.ai-automation__card,
+.header:not(.scrolled),
+.sec--navy,
+.sec--negro {
+  /* gold becomes legal here, and only here */
+  --color-primary: var(--gold);
+  --color-primary-dark: var(--gold);
+  --oro: var(--gold);
+
+  /* muted marks re-cut for the dark ground: --plate-muted is 8.06:1 where
+     --ink-faint would have been 3.34:1. Verified as text-only tokens — none
+     of these is ever a field (checked across every call site in css/). */
+  --color-gray-400: var(--plate-muted);
+  --color-gray-600: var(--plate-muted);
+  --color-gray-700: var(--plate-muted);
+  --color-text-muted: var(--plate-muted);
+  --border-color: var(--plate-rule);
+}
+
+/* ---------------------------------------------------------------------------
+   ...and back to paper, for the light surfaces that float inside a dark act.
+
+   The scope above re-cuts by ancestry, which is right until a paper panel is
+   nested in a plate scope: the header dropdown is a paper menu hanging off a
+   header that sits on the dark hero, so it inherited the plate cuts and put
+   --plate-muted on paper — 1.84:1, invisible. A scope that only ever darkens
+   is half a system; this is the other half, and any future light panel opened
+   from a dark act belongs in this list.
+   --------------------------------------------------------------------------- */
+.header__dropdown-menu,
+.header .lang-switch__btn.active,
+.modal,
+.modal-case,
+.modal-news {
+  --color-primary: var(--gold-aged);
+  --color-primary-dark: var(--gold-aged);
+  --oro: var(--gold-aged);
+  --color-gray-400: var(--ink-faint);
+  --color-gray-600: var(--ink-muted);
+  --color-gray-700: var(--ink-muted);
+  --color-text-muted: var(--ink-muted);
+  --border-color: var(--rule);
 }
