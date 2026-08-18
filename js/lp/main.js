@@ -10,6 +10,7 @@
   const $ = (s) => document.querySelector(s);
   const reducido = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const anchoOk = window.matchMedia('(min-width: 900px)').matches;
+  let reelVivo = false; // solo true si el flowmap llegó a montarse; gobierna el título de pestaña
 
   /* ---------- puerta de capacidad para el reel ----------
      failIfMajorPerformanceCaveat es la deteccion primaria: sobre
@@ -92,11 +93,12 @@
     if (!puertasReel()) { iniciarVideoPlano(); return; }
     import('/js/lp/reel.js')
       .then((mod) => {
+        reelVivo = true;
         mod.iniciar({
           hero: $('#hero'),
           video: $('#hero-video'),
           posterUrl: '/images/lp/hero-poster-1280-v1.avif',
-          alFallar: iniciarVideoPlano
+          alFallar: () => { reelVivo = false; iniciarVideoPlano(); }
         });
       })
       .catch(iniciarVideoPlano);
@@ -208,7 +210,9 @@
   function iniciarAcabados() {
     const original = document.title;
     document.addEventListener('visibilitychange', () => {
-      document.title = document.hidden ? '← El reel sigue aquí — CREATIVE MK' : original;
+      document.title = document.hidden
+        ? (reelVivo ? '← El reel sigue aquí — CREATIVE MK' : '← Tu propuesta en 1 día hábil — CREATIVE MK')
+        : original;
     });
   }
 
@@ -252,6 +256,55 @@
     return d;
   }
 
+  /* ---------- medicion first-party ----------
+     El Worker ya acepta page-view y capture-open en su whitelist de eventos
+     (80 por sesion). Esto cierra el denominador del embudo con infraestructura
+     propia: no es la decision pendiente de analitica de terceros.
+     fetch keepalive y no sendBeacon: el fallback a workers.dev es cross-origin
+     y un Blob application/json no es CORS-safelisted para sendBeacon. */
+
+  function beacon(eventType, metadata) {
+    const url = endpoint().replace(/lead-capture$/, 'events');
+    try {
+      fetch(url, {
+        method: 'POST',
+        keepalive: true,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ eventType, lang: 'es', metadata })
+      }).catch(() => {});
+    } catch { /* sin red no hay medicion, y no pasa nada mas */ }
+  }
+
+  function iniciarMedicion() {
+    const attr = atribucion();
+    beacon('page-view', {
+      page: 'lp-sitios-web',
+      referrer: attr.referrer,
+      utm_source: attr.utm_source,
+      utm_campaign: attr.utm_campaign
+    });
+
+    /* capture-open: una sola vez, cuando el formulario entra en pantalla o
+       recibe foco, lo primero que ocurra. Mide cuanta gente LLEGA al form. */
+    let abierto = false;
+    const abrir = () => {
+      if (abierto) return;
+      abierto = true;
+      beacon('capture-open', { page: 'lp-sitios-web' });
+    };
+    const form = $('#form');
+    if (form) form.addEventListener('focusin', abrir, { once: true });
+    /* Se observa el formulario y no la seccion: la seccion mide ~2400px y con
+       un umbral proporcional nunca alcanzaria el ratio en viewports moviles
+       (el ratio maximo visible es viewport/alto del objetivo). */
+    if (form && 'IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entradas) => {
+        entradas.forEach((e) => { if (e.isIntersecting) { abrir(); io.disconnect(); } });
+      }, { threshold: 0.25 });
+      io.observe(form);
+    }
+  }
+
   function iniciarFormulario() {
     const form = $('#form');
     if (!form) return;
@@ -259,14 +312,25 @@
     const boton = form.querySelector('button[type="submit"]');
     const etiqueta = boton ? boton.textContent : '';
     let punto = '';
+    let banda = '';
 
-    document.querySelectorAll('.chip').forEach((c) => {
-      c.addEventListener('click', () => {
-        document.querySelectorAll('.chip').forEach((o) => o.setAttribute('aria-pressed', 'false'));
-        c.setAttribute('aria-pressed', 'true');
-        punto = c.textContent.trim();
+    /* Dos grupos independientes: elegir en uno no borra el otro, y volver a
+       pulsar el chip activo lo des-selecciona (el rango es opcional). */
+    const grupo = (selector, alElegir) => {
+      const chips = Array.from(document.querySelectorAll(selector));
+      chips.forEach((c) => {
+        c.addEventListener('click', () => {
+          const estaba = c.getAttribute('aria-pressed') === 'true';
+          chips.forEach((o) => o.setAttribute('aria-pressed', 'false'));
+          if (estaba) { alElegir('', c); return; }
+          c.setAttribute('aria-pressed', 'true');
+          alElegir(c.textContent.trim(), c);
+        });
       });
-    });
+    };
+
+    grupo('.chip--etapa', (v) => { punto = v; });
+    grupo('.chip--banda', (v, c) => { banda = v ? (c.dataset.slug || '') : ''; });
 
     const decir = (e, m) => { if (estado) { estado.dataset.e = e; estado.textContent = m; } };
 
@@ -278,8 +342,11 @@
 
       const datos = Object.fromEntries(new FormData(form).entries());
       const payload = Object.assign({}, datos, atribucion(), {
-        consent: true, lang: 'es', service: 'websites', source: 'lp-campana',
-        budget_slug: punto, page_url: location.href, agent_session_id: sessionId()
+        consent: !!(form.elements.consent && form.elements.consent.checked),
+        lang: 'es', service: 'websites', source: 'lp-campana',
+        project_notes: punto ? `Etapa: ${punto}` : '',
+        budget_slug: banda,
+        page_url: location.href, agent_session_id: sessionId()
       });
 
       try {
@@ -295,6 +362,9 @@
         if (typeof window.creativeMkTrackLead === 'function') {
           window.creativeMkTrackLead({ content_name: 'LP campaña', content_category: 'Website lead' });
         }
+        // La thank-you page es la URL de conversión de campaña; el mensaje
+        // inline queda como respaldo si la navegación no ocurre.
+        location.assign('/lp/sitios-web/gracias/');
       } catch {
         decir('error', 'No he podido enviarlo. Escríbeme a hey@creativemk.net y lo resolvemos.');
       } finally {
@@ -308,6 +378,7 @@
   };
 
   function iniciar() {
+    iniciarMedicion();
     iniciarFormulario();
     iniciarLenis();
     iniciarAnimacion();

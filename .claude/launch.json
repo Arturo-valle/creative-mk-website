@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "creativemk-dist",
+      "name": "lp-dist",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "dist", "-l", "5599"],
-      "port": 5599
+      "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--port", "8788", "--compatibility-date", "2026-06-08"],
+      "port": 8788
     }
   ]
 }

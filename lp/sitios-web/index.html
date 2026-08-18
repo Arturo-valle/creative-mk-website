@@ -13,12 +13,12 @@
 <meta property="og:title" content="Tu sitio web, hecho a medida | CREATIVE MK">
 <meta property="og:description" content="Diseño y desarrollo completo en 4 a 8 semanas. Respuesta en 1 día hábil.">
 <meta property="og:url" content="https://creativemk.net/lp/sitios-web/">
-<meta property="og:image" content="https://creativemk.net/Logos/logo-dark.png">
+<meta property="og:image" content="https://creativemk.net/images/lp/og-lp-sitios-web-v1.jpg">
 <meta property="og:locale" content="es_ES">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Tu sitio web, hecho a medida | CREATIVE MK">
 <meta name="twitter:description" content="Diseño y desarrollo completo en 4 a 8 semanas. Respuesta en 1 día hábil.">
-<meta name="twitter:image" content="https://creativemk.net/Logos/logo-dark.png">
+<meta name="twitter:image" content="https://creativemk.net/images/lp/og-lp-sitios-web-v1.jpg">
 
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="preload" href="/css/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
@@ -184,6 +184,9 @@
     </div>
 
     <form id="form" novalidate>
+      <!-- Trampa para bots: el Worker descarta en silencio todo envío que la rellene. -->
+      <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" aria-hidden="true"
+             style="position:absolute;left:-9999px;height:0;width:0;opacity:0">
       <div class="campo">
         <label for="c-nombre">Nombre</label>
         <input id="c-nombre" name="name" type="text" autocomplete="name" required placeholder="Tu nombre">
@@ -199,14 +202,27 @@
 
       <p class="mini" id="lab-punto" style="margin-top:1.75rem">¿En qué punto estás?</p>
       <div class="chips" role="group" aria-labelledby="lab-punto">
-        <button class="chip" type="button" aria-pressed="false">Explorando</button>
-        <button class="chip" type="button" aria-pressed="false">Tengo un rango en mente</button>
-        <button class="chip" type="button" aria-pressed="false">Presupuesto aprobado</button>
+        <button class="chip chip--etapa" type="button" aria-pressed="false">Explorando</button>
+        <button class="chip chip--etapa" type="button" aria-pressed="false">Tengo un rango en mente</button>
+        <button class="chip chip--etapa" type="button" aria-pressed="false">Presupuesto aprobado</button>
       </div>
 
-      <p style="margin-top:2rem"><button class="btn" type="submit">Enviar el mensaje</button></p>
+      <p class="mini" id="lab-banda" style="margin-top:1.25rem">¿Rango de inversión? (opcional)</p>
+      <div class="chips" role="group" aria-labelledby="lab-banda">
+        <button class="chip chip--banda" type="button" data-slug="1000-3000" aria-pressed="false">$1,000–$3,000</button>
+        <button class="chip chip--banda" type="button" data-slug="3000-7500" aria-pressed="false">$3,000–$7,500</button>
+        <button class="chip chip--banda" type="button" data-slug="7500-15000" aria-pressed="false">$7,500–$15,000</button>
+        <button class="chip chip--banda" type="button" data-slug="15000-plus" aria-pressed="false">$15,000+</button>
+      </div>
+
+      <label class="consent">
+        <input type="checkbox" name="consent" required>
+        <span>Acepto que uses estos datos solo para responderme. <a href="/privacidad/">Política de privacidad</a>.</span>
+      </label>
+
+      <p style="margin-top:1.5rem"><button class="btn" type="submit">Recibir mi propuesta en 1 día hábil</button></p>
+      <p class="mini" style="margin-top:.6rem">Sin compromiso. Te respondo yo.</p>
       <p class="estado" id="estado" role="status" aria-live="polite"></p>
-      <p class="mini" style="margin-top:1rem">Solo uso tus datos para responderte. <a href="/privacidad/">Política de privacidad</a>.</p>
     </form>
   </div>
 </section>

@@ -207,6 +207,14 @@ p { margin: 0; text-wrap: pretty; }
 .estado[data-e='error'] { color: #a8261a; }
 .estado[data-e='ok'] { color: #1d6b3f; }
 
+/* Consentimiento: texto legal legible, sin el uppercase de .mini */
+.consent {
+  display: flex; gap: .6rem; align-items: flex-start;
+  margin-top: 1.75rem; font-size: .85rem; line-height: 1.5; color: #6b6b6b;
+}
+.consent input { margin-top: .2em; width: 1rem; height: 1rem; flex: none; accent-color: var(--negro); }
+.consent a { color: inherit; }
+
 .faq { display: grid; margin-top: 2.5rem; }
 .faq div { display: grid; gap: .2rem; padding: 1rem 0; border-top: 1px solid var(--papel-linea); }
 .faq b { font-size: 1rem; font-weight: 700; }
