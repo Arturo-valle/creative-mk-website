@@ -2,9 +2,9 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "lp-dist",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["wrangler", "pages", "dev", "dist", "--port", "8788", "--compatibility-date", "2026-06-08"],
+      "name": "dist",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["C:/Users/artur/AppData/Local/Temp/claude/C--Users-artur-Desktop-Proyectos-CreativeMk---Sitio-Web/7345c5eb-8f9b-41af-a43b-b27454b91ccf/scratchpad/serve-dist.mjs"],
       "port": 8788
     }
   ]

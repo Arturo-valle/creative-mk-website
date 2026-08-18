@@ -486,3 +486,47 @@ lead (+ `form-click`/whatsapp desde F3). Objetivos de lectura, no de vanidad:
 3. La primera campaña pequeña instrumentada es también el test de demanda del
    posicionamiento (riesgo de fondo del blueprint §6.10) — si `page-view`
    cualificado no aparece, el problema es de oferta/tráfico, no de la página.
+
+---
+
+## Registro de ejecución — 2026-08-18
+
+**Fase 0 — desplegada.** `whoami` con el token correcto confirmó la cuenta
+`2a432f7e8d56266c9dd713199ecf5b47` antes de publicar (el token OAuth y el
+ambiental del shell siguen apuntando a la cuenta equivocada — verificar
+SIEMPRE). `npm run verify` en verde, deploy de 337 archivos (53 nuevos),
+`/es/` responde 200 en el apex. **La purga de zona sigue pendiente**: el token
+no lleva `Zone → Cache Purge` (error 10000 por API); hasta purgar en el
+dashboard, visitantes recurrentes pueden retener caché de hasta 4 h.
+
+**Fases 1 y 2 — implementadas en `a75402b` y desplegadas el mismo día.**
+T1-T6 y T8 completas; T7 (analítica de terceros) sigue esperando la decisión
+D3. T16 confirmado pendiente: el `main` huelleado aún importa `reel.js` sin
+huella (funciona; higiene para F4).
+
+**Pruebas ejecutadas (10/10 en verde):**
+
+| Prueba | Vía | Resultado |
+|---|---|---|
+| Honeypot `_gotcha` relleno | curl → Worker prod | `{"status":"ignored"}` 200, sin lead |
+| Consentimiento ausente | curl → Worker prod | 400 con mensaje ES |
+| Evento fuera de whitelist | curl → Worker prod | 400 "Unknown event type" |
+| `page-view` (workers.dev) | curl | `accepted:true` |
+| Ruta same-origin `creativemk.net/agents/*` | curl | `accepted:true` — el beacon de prod tiene camino |
+| Lead con `budget_slug:"3000-7500"` + etapa en notas | curl | 200, score 68 con señal `budget`, prioridad warm, brief generado |
+| Chips: grupos independientes + toggle | Chrome real (JS) | selección por grupo correcta, deselección sin tocar al otro |
+| Puerta de consentimiento en cliente | Chrome real (JS) | `checkValidity()` false, envío bloqueado, sin request |
+| `page-view` + `capture-open` en página | Chrome real (red + espía fetch) | ambos POST salen con el cuerpo correcto |
+| Envío e2e completo | Chrome real | payload exacto del plan (`_gotcha:""`, `consent:true`, slug real, etapa en notas) → redirige a `/gracias/` |
+
+Leads de prueba creados (borrables): sesiones `mk-test-f1f2-20260818a` y
+`mk-msylejkh-ndmkpfar`, nombre "PRUEBA … (ignorar)", email
+`arturo.ordonezv+lp-test@gmail.com`.
+
+**Lección de prueba:** en pestañas ocultas Chrome suspende el rendering: los
+IntersectionObserver no entregan callbacks y `focus()` se difiere, así que
+`capture-open` no puede probarse en una pestaña de fondo — usar `focusin`
+sintético o pestaña visible. No es un bug de la página.
+
+**Siguiente:** purga de zona (dashboard, owner) → decisión D3 e instalación
+(T7) → 1-2 semanas de baseline → Fase 3 (D1/D2/D4).
