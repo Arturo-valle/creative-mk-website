@@ -10,8 +10,21 @@ in-chat, essentials in project memory) owns the concept verdicts this plan
 sequences. When a later change contradicts something here, change this file in
 the same commit.
 
-> **Status 2026-08-17:** plan written and reviewed, nothing started. Next
-> action: Phase 0, plus the owner's Aug-18 Fit purchase (§2.1, blocking).
+> **Status 2026-08-18:**
+> - **Phase 0 — code done, deploy owner-gated.** The `--font-display` footgun
+>   is fixed. The deploy did NOT run: `wrangler whoami` reports
+>   `zyz.investments@gmail.com` / `6b110c77…`, i.e. the ambient token is the
+>   wrong account exactly as §1 warns, and Pages would have created the project
+>   there. Needs the owner's correctly-scoped token, passed inline.
+> - **Phase 1 §2.2 — the atomic repaint is DONE and verified** (commit
+>   `41e8f04`): 180 hexes and 145 rgba tones onto the closed set, the three
+>   private token sets re-pointed, the contact island bridged, the 404
+>   retinted, five real contrast failures fixed, and the token guard live in
+>   `check-site.mjs` (0 errors; 676 legacy names remain as the stage-B rename
+>   meter). Zero contrast failures on the EN homepage, the ES homepage,
+>   /work/ and contact.
+> - **Next:** §2.1's fitter module (buildable now, dormant until the face
+>   lands), then the owner's Fit purchase, then Phase 2 item 0.
 
 **The unit:** 1 plan-week ≈ 15–20 focused hours (evenings + one weekend day).
 Every estimate below is in these part-time weeks, and phases are **serialized

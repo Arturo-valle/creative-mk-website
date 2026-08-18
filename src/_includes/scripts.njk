@@ -25,6 +25,12 @@
   <script src="/js/ambient.js" defer></script>
   <script src="/js/fx.js" defer></script>
 {%- endif %}
+{#- The fitter ships outside the motion gate on purpose: fitting is
+    measurement, not animation. A legal page with `motion: false` still wants
+    its headline set to the measure, and the module resolves to its solved
+    width with no transition, so it is already in its reduced-motion state.
+    It loads before i18n.js so its mk:i18n listener is registered first. -#}
+  <script src="/js/fitter.js" defer></script>
   <script src="/js/i18n.js" defer></script>
   <script src="/js/accordion.js" defer></script>
   <script src="/js/animations.js" defer></script>
