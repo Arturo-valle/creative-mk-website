@@ -23,8 +23,17 @@ the same commit.
 >   `check-site.mjs` (0 errors; 676 legacy names remain as the stage-B rename
 >   meter). Zero contrast failures on the EN homepage, the ES homepage,
 >   /work/ and contact.
-> - **Next:** §2.1's fitter module (buildable now, dormant until the face
->   lands), then the owner's Fit purchase, then Phase 2 item 0.
+> - **Phase 1 §2.1 — the fitter module is DONE and dormant** (commit
+>   `1512dc8`): `js/fitter.js` probes the axis rather than assuming a range,
+>   measures in the DOM, caches per string+language+measure, and owns the
+>   refit→re-split ordering via a `mk:fitter` event. It correctly reports
+>   `hasAxis: false` against the shipped Inter and leaves every element
+>   untouched, so it wakes up the day the licence lands with no other change.
+>   7.6 KB deferred, nothing added to the critical path.
+> - **Next, in order:** the owner's Fit purchase (§2.1, blocking and the only
+>   thing holding §2.3's display voice); Phase 2 item 0 (type roles, and
+>   killing the remaining glassmorphism on `.hero__link` and the unscrolled
+>   lang-switch); then the deploy, when a correctly-scoped token exists.
 
 **The unit:** 1 plan-week ≈ 15–20 focused hours (evenings + one weekend day).
 Every estimate below is in these part-time weeks, and phases are **serialized
