@@ -38,10 +38,15 @@ entrada ~7.65. WCAG 2.2 AA: 4.5:1 texto, 3:1 UI (SC 1.4.11), target 24 px
 
 ## Hallazgos confirmados durante la investigación
 
-1. **[CRÍTICO] Promesa de privacidad falsa en producción.** `src/privacy/index.html:45`
-   afirma "No advertising pixels run on this site" mientras esa misma página carga
-   `js/meta-pixel.js` (39 de 43 páginas lo cargan), que escribe `_fbp` sin
-   consentimiento. No hay banner en ninguna página. → decisión de dueño, ver abajo.
+1. **[CRÍTICO] Promesa de privacidad falsa en producción** → **cerrado 2026-08-18**
+   (`3750e4f`): el píxel se queda pero detrás de consentimiento real. `js/consent.js`
+   pregunta una vez (EN/ES), respeta Global Privacy Control como rechazo silencioso
+   y expone retirada en ambas páginas de privacidad; `js/meta-pixel.js` solo arranca
+   con aceptación — sin ella `fbevents.js` no se inyecta y `_fbp` no se escribe.
+   Los beacons `noscript` de la LP (disparaban sin condición) se eliminaron. Ambos
+   avisos reescritos para describir exactamente lo que corre. Verificado en
+   navegador: rechazar persiste, aceptar arranca `fbq` al instante, retirar
+   funciona bilingüe. **Pendiente de deploy** (direct upload + purga).
 2. **[CRÍTICO] Dos tokens de Cloudflare sin rotar**, pegados en transcripts de chat.
    → rotar hoy; es la acción de mejor ratio urgencia/esfuerzo del documento.
 3. **[CRÍTICO] Medición rota en el punto de conversión.** `/contact` no carga el
@@ -110,16 +115,18 @@ entrada ~7.65. WCAG 2.2 AA: 4.5:1 texto, 3:1 UI (SC 1.4.11), target 24 px
 
 ## Decisiones que solo el dueño puede tomar
 
-1. **Pixel ↔ `/privacy/`** (bloqueante para medición de terceros): (a) quitar el
-   pixel hasta tener consentimiento — la promesa publicada vuelve a ser verdad
-   hoy; o (b) mantenerlo con banner y aviso reescrito — necesario si la campaña
-   de la LP escala.
+1. ~~Pixel ↔ `/privacy/`~~ **Resuelto 2026-08-18** en dirección (b) mejorada:
+   consentimiento previo real en vez de banner-formalidad (ver hallazgo 1). La
+   medición de terceros queda desbloqueada para quien acepte; la primera-parte
+   nunca estuvo bloqueada.
 2. **Rotar los dos tokens de Cloudflare.**
 3. **Turnstile:** crear la site key y poner `TURNSTILE_REQUIRED=true`.
 4. **`workers.dev`:** apagar `workers_dev` (y quitar el fallback del JS) o
    replicar las cabeceras en el Worker.
 5. **Vídeo:** recortar los 17 MB o subir el presupuesto de dist con justificación
    escrita.
+6. **Deploy:** los commits `49e6dbe` y `3750e4f` no publican nada por sí solos —
+   Pages es direct upload: `wrangler pages deploy dist` + purga de caché.
 
 ## Guardarraíles
 
