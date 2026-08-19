@@ -37,6 +37,10 @@
   <script src="/js/header.js" defer></script>
   <script src="/js/main.js" defer></script>
   <script src="/js/ai-concierge.js" defer></script>
-{#- Meta Pixel (decisión D3, 2026-08-18). Fuera de la puerta de motion: la
-    medición no es animación. El ID vive en js/meta-pixel.js. -#}
+{#- Meta Pixel (decisión D3, 2026-08-18; enmendada el mismo día: detrás de
+    consentimiento). Fuera de la puerta de motion: la medición no es
+    animación. consent.js pregunta una vez y meta-pixel.js solo arranca con
+    aceptación — el orden importa solo para que la tarjeta exista antes de la
+    primera visita; el píxel escucha el evento, no el orden. -#}
+  <script src="/js/consent.js" defer></script>
   <script src="/js/meta-pixel.js" defer></script>

@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "dist",
-      "runtimeExecutable": "node",
-      "runtimeArgs": ["C:/Users/artur/AppData/Local/Temp/claude/C--Users-artur-Desktop-Proyectos-CreativeMk---Sitio-Web/7345c5eb-8f9b-41af-a43b-b27454b91ccf/scratchpad/serve-dist.mjs"],
-      "port": 8788
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["http-server", "dist", "-p", "8137", "-c-1", "--silent"],
+      "port": 8137
     }
   ]
 }
