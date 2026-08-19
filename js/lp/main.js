@@ -126,8 +126,12 @@
       tl.from(h1, { yPercent: 8, opacity: 0, duration: .9 }, 0.15);
     }
 
-    tl.from('[data-rev="1"]', { y: 22, opacity: 0, duration: .8, stagger: .09 }, 0.5)
-      .to('[data-rev="1"]', { opacity: 1, duration: 0 }, 0.5);
+    /* fromTo explícito, no .from(): con .anim ya puesto, el computed opacity
+       es 0 y un .from() capturaría 0→0 — el hero entero quedaba invisible.
+       El destino tiene que declararse, no inferirse. */
+    tl.fromTo('[data-rev="1"]',
+      { y: 22, opacity: 0 },
+      { y: 0, opacity: 1, duration: .8, stagger: .09 }, 0.5);
 
     if (!window.ScrollTrigger) {
       gsap.set('[data-rev]', { opacity: 1 });

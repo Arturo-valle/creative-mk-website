@@ -22,6 +22,10 @@
 
 <link rel="icon" href="/favicon.png" type="image/png">
 <link rel="preload" href="/css/fonts/inter-latin-variable.woff2" as="font" type="font/woff2" crossorigin fetchpriority="high">
+<!-- variables.css ANTES que lp.css: desde el repaint 2026-08-18, lp.css es una
+     capa de nombres sobre el closed set (--plate/--paper/--ink/--gold) que vive
+     aquí. Sin este link, todos los var() colapsan y la página pierde sus fondos. -->
+<link rel="stylesheet" href="/css/variables.css">
 <link rel="stylesheet" href="/css/lp.css">
 
 <script type="application/ld+json">
