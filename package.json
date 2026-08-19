@@ -4,13 +4,14 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "npm run build:contact && node scripts/copy-assets.mjs && npx @11ty/eleventy && node scripts/fingerprint.mjs && node scripts/audit.mjs --emit .audit.json && node scripts/colophon.mjs && node scripts/check-site.mjs",
+    "build": "npm run build:contact && node scripts/copy-assets.mjs && npx @11ty/eleventy && node scripts/fingerprint.mjs && node scripts/audit.mjs --emit .audit.json && node scripts/colophon.mjs && node scripts/audit-history.mjs && node scripts/check-site.mjs",
     "dev:contact": "vite --host 127.0.0.1",
     "build:contact": "vite build && node scripts/copy-contact-build.mjs",
     "preview:contact": "vite preview --host 127.0.0.1",
     "typecheck": "wrangler types cloudflare/agent/worker-configuration.d.ts --config cloudflare/agent/wrangler.jsonc && tsc -p cloudflare/agent/tsconfig.json",
     "check:site": "node scripts/check-site.mjs",
-    "verify": "npm run build && npm run test:i18n && npm run measure:bilingual && npm run typecheck && npm run check:site",
+    "verify": "npm run build && npm run test:i18n && npm run measure:bilingual && npm run typecheck && npm run check:site && npm run audit:deps",
+    "audit:deps": "npm audit --audit-level=high",
     "audit": "node scripts/audit.mjs",
     "test:i18n": "node scripts/test-i18n-gate.mjs",
     "measure:bilingual": "node scripts/measure-bilingual.mjs"
@@ -27,7 +28,7 @@
     "react-dom": "^19.0.0",
     "tailwindcss": "^3.4.0",
     "typescript": "^5.8.0",
-    "vite": "^7.0.0"
+    "vite": "^7.3.6"
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",

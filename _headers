@@ -1,9 +1,16 @@
+# The CSP allows only what the pages actually load — check-site's csp gate
+# fails the build when the two drift apart in either direction. Two hosts were
+# removed 2026-08-18 as dead grants: fonts.googleapis.com / fonts.gstatic.com
+# (Inter is self-hosted since the woff2 landed in css/fonts/) and
+# static.cloudflareinsights.com (no page ever loaded the beacon).
+# challenges.cloudflare.com stays although nothing loads it yet: Turnstile is
+# wired end-to-end behind TURNSTILE_REQUIRED and only waits for a site key.
 /*
   X-Content-Type-Options: nosniff
   X-Frame-Options: SAMEORIGIN
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://connect.facebook.net https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://creativemk.net https://www.creativemk.net https://creative-mk-concierge.arturo-ordonezv.workers.dev https://challenges.cloudflare.com https://connect.facebook.net https://static.cloudflareinsights.com; frame-src https://challenges.cloudflare.com; form-action 'self' https://formspree.io; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'self'; script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com https://connect.facebook.net; style-src 'self' 'unsafe-inline'; font-src 'self' data:; img-src 'self' data: https:; media-src 'self'; connect-src 'self' https://creativemk.net https://www.creativemk.net https://creative-mk-concierge.arturo-ordonezv.workers.dev https://challenges.cloudflare.com https://connect.facebook.net; frame-src https://challenges.cloudflare.com; form-action 'self' https://formspree.io; upgrade-insecure-requests
 
 /admin/*
   X-Robots-Tag: noindex, nofollow, noarchive
@@ -44,6 +51,11 @@
 /video/*
   Cache-Control: public, max-age=604800, stale-while-revalidate=86400
 
+# Two tiers share these directories. The content-hashed copies are immutable
+# by construction, but a glob cannot say so without also freezing the un-hashed
+# originals that HTML cached for up to five minutes still references — so the
+# glob carries the short TTL, and scripts/fingerprint.mjs appends a per-file
+# immutable rule for every hashed name it mints (last matching rule wins).
 /css/*
   Cache-Control: public, max-age=3600
 

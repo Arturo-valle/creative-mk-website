@@ -952,6 +952,193 @@ async function checkTokens() {
   }
 }
 
+/* ---------- 10. the ratios the tokens claim ----------
+   Every contrast ratio in css/variables.css was computed, not estimated — and
+   then nothing kept it true. The repaint's five real contrast failures were
+   fixed without an instrument, and the two-sided gold rule (aged on paper,
+   raw on plate) exists only as prose in direction.md §5.4.1. A palette whose
+   whole competitive argument is measured accessibility cannot have its
+   measurements live in comments.
+
+   So this check recomputes them. Each pair below is a claim variables.css
+   publishes: a WCAG floor the token must clear for its declared role, and the
+   exact ratio the comment states. Drift in either — a token edit that sinks a
+   ratio below its class, or a comment that no longer matches the value beside
+   it — is an ERROR, same contract as measure-bilingual: a published number
+   that stops being true fails the build. */
+
+/** fg token, bg token, WCAG floor for its declared role (null = documented as
+ *  decorative/failing on purpose — only the claim is verified), claimed ratio. */
+const CONTRAST_CLAIMS = [
+  ['--ink',              '--paper', 7,    15.45], // body and headings, AAA
+  ['--ink-muted',        '--paper', 7,    7.46],  // secondary text, AAA
+  ['--ink-faint',        '--paper', 4.5,  4.62],  // labels and captions, AA
+  ['--rule-strong',      '--paper', 3,    3.14],  // control borders, SC 1.4.11
+  ['--plate-ink',        '--plate', 7,    14.79], // text on the dark act, AAA
+  ['--plate-muted',      '--plate', 7,    8.06],  // muted on plate, AAA
+  ['--plate-rule-strong','--plate', 3,    3.02],  // plate borders, SC 1.4.11
+  ['--gold',             '--plate', 4.5,  10.89], // gold is legal on plate only
+  ['--gold-aged',        '--paper', 4.5,  5.15],  // the aged cut, AA on paper
+  ['--alert',            '--paper', 4.5,  5.65],  // the one red, AA
+  ['--gold',             '--paper', null, 1.36],  // documented UNUSABLE as text
+  ['--rule',             '--paper', null, 1.39]   // hairlines, decorative only
+];
+
+async function checkContrast() {
+  const check = 'contrast';
+
+  // The un-hashed original: fingerprint keeps it beside the hashed copy.
+  const variablesFile = cssFiles.find((f) => /(^|\/)variables\.css$/.test(rel(f)));
+  if (!variablesFile) {
+    error(check, 'css/variables.css is missing from dist/, so no ratio can be verified');
+    return;
+  }
+  const css = await readFile(variablesFile, 'utf8');
+
+  const tokens = new Map();
+  for (const match of stripCssComments(css).matchAll(/(--[a-z0-9-]+)\s*:\s*(#[0-9a-fA-F]{6})\b/g)) {
+    if (!tokens.has(match[1])) tokens.set(match[1], match[2]); // first definition is the closed set
+  }
+
+  const channel = (value) => {
+    const v = value / 255;
+    return v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  };
+  const luminance = (hex) => {
+    const n = parseInt(hex.slice(1), 16);
+    return 0.2126 * channel(n >> 16) + 0.7152 * channel((n >> 8) & 255) + 0.0722 * channel(n & 255);
+  };
+  const contrast = (a, b) => {
+    const [hi, lo] = [luminance(a), luminance(b)].sort((x, y) => y - x);
+    return (hi + 0.05) / (lo + 0.05);
+  };
+
+  for (const [fg, bg, floor, claimed] of CONTRAST_CLAIMS) {
+    if (!tokens.has(fg) || !tokens.has(bg)) {
+      // A renamed token must fail loud, or the gate silently certifies nothing.
+      error(check, `pair ${fg} on ${bg} cannot be measured: token missing from css/variables.css`);
+      continue;
+    }
+    const measured = contrast(tokens.get(fg), tokens.get(bg));
+    if (floor !== null && measured < floor) {
+      error(
+        check,
+        `${fg} on ${bg} measures ${measured.toFixed(2)}:1, below the ${floor}:1 floor its role requires`
+      );
+    }
+    if (Math.abs(measured - claimed) > 0.06) {
+      error(
+        check,
+        `${fg} on ${bg} measures ${measured.toFixed(2)}:1 but variables.css claims ${claimed}:1 — ` +
+          'recompute the published ratio or revert the value'
+      );
+    }
+  }
+}
+
+/* ---------- 11. the CSP matches what the pages load ----------
+   The policy in _headers drifted for months without anyone noticing: it kept
+   granting Google Fonts after the woff2 went self-hosted, and granted a
+   Cloudflare beacon no page ever loaded (direction.md §7.3 noted it; nothing
+   owned it). A grant nothing uses is attack surface held open for free, and a
+   load nothing grants is a resource the browser silently blocks in
+   production. Both directions are checked from the same line. */
+
+/** Grants that are deliberately dormant: wired end-to-end, waiting on a key.
+ *  Turnstile ships in the Worker and the contact island behind
+ *  TURNSTILE_REQUIRED=false; its host stays granted so flipping the flag is a
+ *  config change, not a headers deploy. */
+const CSP_DORMANT = new Set(['https://challenges.cloudflare.com']);
+
+async function checkCsp() {
+  const check = 'csp';
+
+  const headersFile = join(distDir, '_headers');
+  if (!existsSync(headersFile)) {
+    error(check, 'dist/_headers is missing, so no CSP ships at all');
+    return;
+  }
+  const cspLine = (await readFile(headersFile, 'utf8'))
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .find((line) => /^content-security-policy:/i.test(line));
+  if (!cspLine) {
+    error(check, '_headers has no Content-Security-Policy line');
+    return;
+  }
+
+  const directives = new Map();
+  for (const part of cspLine.replace(/^content-security-policy:/i, '').split(';')) {
+    const [name, ...sources] = part.trim().split(/\s+/);
+    if (name) directives.set(name, sources);
+  }
+
+  const originOf = (url) => {
+    try {
+      return new URL(url).origin;
+    } catch {
+      return null;
+    }
+  };
+  const allows = (directive, origin) => {
+    const sources = directives.get(directive) ?? directives.get('default-src') ?? [];
+    return (
+      sources.includes(origin) ||
+      sources.includes('*') ||
+      (sources.includes('https:') && origin.startsWith('https://')) ||
+      (sources.includes("'self'") && origin === SITE_ORIGIN)
+    );
+  };
+
+  /* Direction one: everything the built HTML loads must be granted. */
+  const TAG_DIRECTIVES = [
+    [/<script[^>]*\ssrc\s*=\s*"(https?:\/\/[^"]+)"/gi, 'script-src'],
+    [/<link[^>]*\srel\s*=\s*"stylesheet"[^>]*\shref\s*=\s*"(https?:\/\/[^"]+)"/gi, 'style-src'],
+    [/<iframe[^>]*\ssrc\s*=\s*"(https?:\/\/[^"]+)"/gi, 'frame-src'],
+    [/<img[^>]*\ssrc\s*=\s*"(https?:\/\/[^"]+)"/gi, 'img-src'],
+    [/<(?:video|audio|source)[^>]*\ssrc\s*=\s*"(https?:\/\/[^"]+)"/gi, 'media-src'],
+    [/<form[^>]*\saction\s*=\s*"(https?:\/\/[^"]+)"/gi, 'form-action']
+  ];
+  for (const file of htmlFiles) {
+    const html = stripHtmlComments(await readFile(file, 'utf8'));
+    for (const [pattern, directive] of TAG_DIRECTIVES) {
+      for (const match of html.matchAll(pattern)) {
+        const origin = originOf(match[1]);
+        if (origin && origin !== SITE_ORIGIN && !allows(directive, origin)) {
+          error(
+            check,
+            `${rel(file)} loads ${match[1].slice(0, 80)} but ${directive} does not allow ${origin} — the browser will block it`
+          );
+        }
+      }
+    }
+  }
+
+  /* Direction two: every granted host must appear somewhere in what ships.
+     The appearance test is a plain substring search across every text file in
+     dist/ — deliberately generous, because a fetch() target lives in JS, a
+     form fallback in a bundle, a noscript beacon in HTML. A host that fails
+     even this loose a test is a grant nothing uses. */
+  const grantedHosts = new Set();
+  for (const sources of directives.values()) {
+    for (const source of sources) {
+      if (/^https:\/\/[a-z0-9.-]+$/i.test(source)) grantedHosts.add(source);
+    }
+  }
+  const textFiles = allFiles.filter((f) => /\.(html|js|css|json|xml|txt|svg|webmanifest)$/i.test(f));
+  const shippedText = [];
+  for (const file of textFiles) shippedText.push(await readFile(file, 'utf8'));
+  const corpus = shippedText.join('\n');
+  for (const grant of grantedHosts) {
+    const host = grant.replace('https://', '');
+    if (host === new URL(SITE_ORIGIN).host || host === 'www.' + new URL(SITE_ORIGIN).host) continue;
+    if (CSP_DORMANT.has(grant)) continue;
+    if (!corpus.includes(host)) {
+      warn(check, `CSP grants ${grant} but no shipped file mentions ${host} — a permission nothing uses`);
+    }
+  }
+}
+
 /* ---------- report ---------- */
 
 await checkI18n();
@@ -963,6 +1150,8 @@ await checkAssets();
 await checkBudget();
 await checkStructuredData();
 await checkScriptsParse();
+await checkContrast();
+await checkCsp();
 
 const group = (items) => {
   const byCheck = new Map();
