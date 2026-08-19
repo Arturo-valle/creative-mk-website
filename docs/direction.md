@@ -58,6 +58,30 @@ the shell.
 
 ### 1.3 Release log
 
+**2026-08-18** — Pages deployment `f2e903ae`, account `2a432f7e…`, repo tag
+`phase-1-shipped` at `d618a34`. 62 of 339 files changed. Carries the atomic
+repaint onto the closed token set (§5.3 finally executed rather than
+documented), the token guard in `check-site.mjs`, `js/fitter.js`, and the
+retinted 404. `npm run verify` green before upload; every referenced asset on
+the live homepage resolves; 225 elements measured live with transitions
+suppressed, zero contrast failures.
+
+**The whoami rule paid for itself on this release.** The ambient
+`CLOUDFLARE_API_TOKEN` still resolved to `zyz.investments@gmail.com` /
+`6b110c77…`; deploying with it would have created `creative-mk-website` inside
+that account, silently, because Pages creates missing projects rather than
+failing. The owner supplied a correctly-scoped token and whoami confirmed
+`2a432f7e…` before a single byte was uploaded. Keep the check.
+
+`/es/` returned 404 in production before this deploy and 200 after — the whole
+Spanish tree had been sitting built in `dist/` and unpublished.
+
+Still open, owner-gated: **the zone cache was not purged** (the supplied token
+reads zones but returns `10000 Authentication error` on purge — no
+`Zone → Cache Purge` scope, exactly as §1.1 says), and **the token needs
+rotating** because it was pasted into a chat transcript.
+
+
 **2026-08-13** — first publish since 2026-06-11. 40 pages, 82 changed files.
 Carries the whole August-13 workstream: the deep service pages, the Spanish
 URL tree, the cross-page field handoff, the Act II emboss, per-page OG cards,

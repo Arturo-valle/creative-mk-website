@@ -11,11 +11,14 @@ sequences. When a later change contradicts something here, change this file in
 the same commit.
 
 > **Status 2026-08-18:**
-> - **Phase 0 — code done, deploy owner-gated.** The `--font-display` footgun
->   is fixed. The deploy did NOT run: `wrangler whoami` reports
->   `zyz.investments@gmail.com` / `6b110c77…`, i.e. the ambient token is the
->   wrong account exactly as §1 warns, and Pages would have created the project
->   there. Needs the owner's correctly-scoped token, passed inline.
+> - **Phase 0 — SHIPPED 2026-08-18.** The `--font-display` footgun is fixed and
+>   the site is live (Pages deployment `f2e903ae`, tag `phase-1-shipped`). The
+>   whoami check earned its place first: the ambient token resolved to
+>   `zyz.investments@gmail.com` / `6b110c77…`, and a deploy with it would have
+>   created this project inside a stranger's account. The owner then supplied a
+>   correctly-scoped token, confirmed as `2a432f7e…` before anything uploaded.
+>   **`/es/` now returns 200 — it had been 404 in production while the whole
+>   Spanish tree sat built in `dist/`.**
 > - **Phase 1 §2.2 — the atomic repaint is DONE and verified** (commit
 >   `41e8f04`): 180 hexes and 145 rgba tones onto the closed set, the three
 >   private token sets re-pointed, the contact island bridged, the 404
@@ -33,7 +36,18 @@ the same commit.
 > - **Next, in order:** the owner's Fit purchase (§2.1, blocking and the only
 >   thing holding §2.3's display voice); Phase 2 item 0 (type roles, and
 >   killing the remaining glassmorphism on `.hero__link` and the unscrolled
->   lang-switch); then the deploy, when a correctly-scoped token exists.
+>   lang-switch).
+>
+> **Open against this release, both owner-only:**
+> 1. **The zone cache was not purged.** The supplied token reads zones fine but
+>    the purge returns `10000 Authentication error` — it does not carry
+>    `Zone → Cache Purge`, exactly as §1.1 predicts. Purge zone
+>    `9c6d17208894937c1c029efaf2e3673e` from the dashboard. Fingerprinted
+>    filenames mean stale CSS cannot be served against new HTML, so the
+>    exposure is the 4-hour HTML TTL only, not a broken page.
+> 2. **Rotate the token.** It was pasted into a chat transcript, which is where
+>    the two tokens named in the August audit already are. One rotation closes
+>    all three.
 
 **The unit:** 1 plan-week ≈ 15–20 focused hours (evenings + one weekend day).
 Every estimate below is in these part-time weeks, and phases are **serialized
@@ -80,16 +94,16 @@ SOTM**, which still reaches the Feb-2027 annual — SOTM must be won Sept–Dec
 Production is behind the repo: `/es/` 404s live while `dist/` holds the full
 Spanish tree. Nothing in this plan exists for a jury until this is routine.
 
-- [ ] `npx wrangler whoami` — **read the account id** (`2a432f...`, not the
+- [x] `npx wrangler whoami` — **read the account id** (`2a432f...`, not the
       ambient token's `6b11...` — see `direction.md` §1 for the wrong-account
       incident). Pass the correct token inline for the one command.
-- [ ] `npm run verify` → `npx wrangler pages deploy dist
+- [x] `npm run verify` → `npx wrangler pages deploy dist
       --project-name=creative-mk-website --branch=main`
-- [ ] Purge the zone cache (dashboard, zone `9c6d1720...`) — deploy first,
+- [ ] **STILL OPEN** — purge the zone cache (dashboard, zone `9c6d1720...`) — deploy first,
       verify second, never probe before (direction.md §1.1).
-- [ ] Live checks: `/es/` renders, `/es/trabajo/` renders, CSS content-type
+- [x] Live checks: `/es/` renders, `/es/trabajo/` renders, CSS content-type
       correct, sitemap reachable.
-- [ ] One-line footgun fix, same deploy: `css/variables.css` declares
+- [x] One-line footgun fix, same deploy: `css/variables.css` declares
       `--font-display: 'Fit', …` in the new block and the legacy block
       **redefines it to Inter** ~34 lines later. Delete the legacy
       redefinition now so the face is wired the day it lands.
