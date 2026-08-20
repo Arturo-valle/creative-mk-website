@@ -15,6 +15,9 @@ description: Ejecuta un ítem del plan con el muro completo — cajista en workt
    sesión. Ordena al cajista como paso 0: `git log --oneline -1` y, si su base no trae
    los instrumentos, bootstrap exento (npm i -D del tooling de verificación, jamás
    commiteado) — o pásale la spec y las galgas equivalentes inline.
+   ⚠ Lección 19-ago (2): antes y después de un dossier se capturan CON LA MISMA
+   versión de shoot.mjs (cópiala al worktree si su base trae otra) — una versión
+   distinta por lado fabrica refutaciones falsas (caso cabecera work/es_trabajo).
 3. **Galgas**: en el worktree, `npm run verify` + `node scripts/shoot.mjs
    --paginas=<afectadas> --out=shots/turno-<item>`. Rojo → devuelve al cajista (cuenta
    como vuelta). Verde → `node scripts/judge-pack.mjs --item=<item>

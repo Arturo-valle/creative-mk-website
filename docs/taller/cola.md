@@ -26,8 +26,8 @@ http-server local (reemplazado por `scripts/serve.mjs`). Baseline re-sellado.
 
 | Ítem | Spec | Estado | Vueltas | Dossier |
 |---|---|---|---|---|
-| fase1.axe | Puerta G1 («axe pass both grounds»): 10 violaciones graves medidas 2026-08-19 — color-contrast en /, /es/, /work/, /es/trabajo/; link-in-text-block; nested-interactive ×6 en home; label crítico en contact. Detalle: docs/taller/axe-ultimo.json | en-turno (piloto) | 0 | — |
-| fase1.hotfix-visual | Acta 2026-08-19 H3–H5 + H6b: fantasma bilingüe del footer colisiona; hero móvil corta palabras a 360px; banner de consent tapa contenido (360px y también sobre el hero desktop de la LP); **3 vídeos de la LP sin `poster`** (caja negra en estado asentado/PRM); estado asentado PRM del hero home como mitigación de H1 hasta fase2.item1 | pendiente | 0 | — |
+| fase1.axe | Puerta G1 («axe pass both grounds»): las 10 violaciones graves del 19-ago | **registrado** — APROBADO por el Tribunal; rama `worktree-agent-aebed843f509a0ea4` (`eefb00a`) **lista para merge del dueño** | 1 | `dossiers/fase1.axe-v1/` |
+| fase1.hotfix-visual | Acta H3–H5 + H6b + hallazgos del Juez de Uso (19-ago): fantasma bilingüe del footer; **CTAs del hero recortados 43px a 360px** (medido: `.hero__actions` 383px en viewport 360; el h1 NO recorta — sustituye al «13px» de memoria); consent tapa el CTA del hero a 1280×800 y Aceptar/Rechazar caen en tab 94–96/97; consent tapa el FAB a 360; Esc del concierge suelta el foco a BODY (debe volver al FAB); hamburguesa 28×20 (<24px WCAG 2.5.8); 3 vídeos de la LP sin `poster`; hover del cuerpo del botón del acordeón muerto por especificidad (nota: fase2.item0 lo reordena de raíz); estado PRM del hero como mitigación de H1 | pendiente (SIGUIENTE tras el merge del piloto — misma superficie, no paralelizar) | 0 | — |
 | fase2.item0 | Plan §3.0 — tres voces tipográficas + muerte de glassmorphism/chips/sombras | pendiente | 0 | — |
 | fase2.item1 | §3.1 — coreografía de llegada (H1 asienta, nav se escribe, cruz estampa) | pendiente | 0 | — |
 | fase2.item2 | §3.2 — scribe-lines con `view()` one-shot | pendiente | 0 | — |
@@ -38,7 +38,7 @@ http-server local (reemplazado por `scripts/serve.mjs`). Baseline re-sellado.
 | fase2.item7 | §3.7 — borrado del cursor (lista completa en spec) | pendiente | 0 | — |
 | fase3.teatro | §4 — In Register (≤1,3s, timeboxed, cut #1) | bloqueado(fase2) | 0 | — |
 | fase4.s1–s4 | §5 — Pull a Proof por semanas; G4a 11-oct decide | bloqueado(fase3) | 0 | — |
-| valve.contacto | §2.3 — unificación visual de la isla de contacto | válvula (tardes sueltas) | 0 | — |
+| valve.contacto | §2.3 — unificación visual de la isla + hallazgos del Juez de Uso (19-ago): **[ALTO] la validación nativa enfoca un input requerido invisible de 1×1px con globo del navegador en inglés** (paso crítico del funnel — validación custom visible y localizada, o validar los mirrors); inputs a 15,68px (<16px → auto-zoom iOS); título EN sobre h1 ES; **no existe `/es/contacto/` (404 en producción verificado)** — todos los CTAs desde /es/ expulsan del español | válvula, prioridad subida | 0 | — |
 
 ## Fuera-de-octubre (no entran sin decisión del dueño contra la orden de cortes)
 

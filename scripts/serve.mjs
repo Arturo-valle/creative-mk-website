@@ -14,7 +14,8 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const DIST = path.join(ROOT, 'dist');
+const distArg = process.argv.find(a => a.startsWith('--dist='));
+const DIST = distArg ? path.resolve(ROOT, distArg.split('=')[1]) : path.join(ROOT, 'dist');
 const MIME = {
   '.html': 'text/html; charset=utf-8', '.css': 'text/css', '.js': 'text/javascript',
   '.mjs': 'text/javascript', '.json': 'application/json', '.svg': 'image/svg+xml',
@@ -29,6 +30,8 @@ http.createServer((req, res) => {
   const clean = decodeURIComponent((req.url || '/').split('?')[0]);
   let f = path.join(DIST, clean);
   if (clean.endsWith('/')) f = path.join(f, 'index.html');
+  // Convención de Cloudflare Pages: /contact sirve contact.html (paridad con producción)
+  if (!fs.existsSync(f) && fs.existsSync(f + '.html')) f = f + '.html';
   if (!fs.existsSync(f) || fs.statSync(f).isDirectory()) {
     const notFound = path.join(DIST, '404.html');
     res.writeHead(404, { 'content-type': 'text/html; charset=utf-8' });
