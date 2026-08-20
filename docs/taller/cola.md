@@ -18,15 +18,16 @@ con expediente y lo decide el dueño.
 
 **Registro vigente: 5,79** (acta 2026-08-19; reemplaza el 5,3 del 10-ago). Techo sin
 casos reales ≈7,3 — los dos casos no son opcionales para la banda 7,65.
-**Triaje abierto:** H6 (media vacía en capturas) — ¿real o artefacto lazy-load del shoot?
-Verificar en navegador con scroll antes de refutar a nadie por ello.
+**Triaje H6: CERRADO (19-ago)** — artefacto de instrumento, no bug: producción sirve
+`image/avif` correcto; fallaban el shoot sin scroll-prime (arreglado, v2) y el mime del
+http-server local (reemplazado por `scripts/serve.mjs`). Baseline re-sellado.
 
 ## Turnos
 
 | Ítem | Spec | Estado | Vueltas | Dossier |
 |---|---|---|---|---|
 | fase1.axe | Puerta G1 («axe pass both grounds»): 10 violaciones graves medidas 2026-08-19 — color-contrast en /, /es/, /work/, /es/trabajo/; link-in-text-block; nested-interactive ×6 en home; label crítico en contact. Detalle: docs/taller/axe-ultimo.json | en-turno (piloto) | 0 | — |
-| fase1.hotfix-visual | Acta 2026-08-19 H3–H5: fantasma bilingüe del footer colisiona; hero móvil corta palabras a 360px; banner de consent tapa contenido a 360px. (+H6 si el triaje lo confirma real; +estado asentado PRM del hero como mitigación de H1 hasta fase2.item1) | pendiente | 0 | — |
+| fase1.hotfix-visual | Acta 2026-08-19 H3–H5 + H6b: fantasma bilingüe del footer colisiona; hero móvil corta palabras a 360px; banner de consent tapa contenido (360px y también sobre el hero desktop de la LP); **3 vídeos de la LP sin `poster`** (caja negra en estado asentado/PRM); estado asentado PRM del hero home como mitigación de H1 hasta fase2.item1 | pendiente | 0 | — |
 | fase2.item0 | Plan §3.0 — tres voces tipográficas + muerte de glassmorphism/chips/sombras | pendiente | 0 | — |
 | fase2.item1 | §3.1 — coreografía de llegada (H1 asienta, nav se escribe, cruz estampa) | pendiente | 0 | — |
 | fase2.item2 | §3.2 — scribe-lines con `view()` one-shot | pendiente | 0 | — |

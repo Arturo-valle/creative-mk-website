@@ -95,9 +95,29 @@ function slugify(p) {
   return p.replace(/\.html$/, '').replace(/^\/|\/$/g, '').replace(/[\/]+/g, '_') || 'root';
 }
 
+// Scroll-prime: dispara lazy-load nativo e IntersectionObservers antes de una captura
+// full-page (artefacto H6 del acta 2026-08-19: media «vacía» que producción sí sirve).
+async function scrollPrime(page) {
+  await page.evaluate(async () => {
+    const paso = Math.max(400, Math.floor(innerHeight * 0.8));
+    for (let y = 0; y <= document.body.scrollHeight; y += paso) {
+      scrollTo(0, y); await new Promise(r => setTimeout(r, 90));
+    }
+    scrollTo(0, document.body.scrollHeight);
+    await new Promise(r => setTimeout(r, 250));
+    const imgs = [...document.images].filter(i => !i.complete);
+    await Promise.race([
+      Promise.all(imgs.map(i => new Promise(r => { i.addEventListener('load', r, { once: true }); i.addEventListener('error', r, { once: true }); }))),
+      new Promise(r => setTimeout(r, 4000)),
+    ]);
+    scrollTo(0, 0); await new Promise(r => setTimeout(r, 300));
+  }).catch(() => {});
+}
+
 async function settle(page, mode) {
   await page.waitForLoadState('networkidle', { timeout: 20000 }).catch(() => {});
   await page.evaluate(() => document.fonts ? document.fonts.ready : null).catch(() => {});
+  if (mode === 'prm') await scrollPrime(page);
   if (mode === 'motion') {
     await page.waitForFunction(
       () => document.documentElement.classList.contains('js-arrival-done')
