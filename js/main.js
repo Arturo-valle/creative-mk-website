@@ -51,7 +51,7 @@ function renderCapabilities() {
         <span class="accordion-index" aria-hidden="true">0${i + 1}</span>
         <span>
           <span class="accordion-kicker">${s.lead}</span>
-          <a class="accordion-title" href="/services/${SERVICE_SLUGS[i]}/">${s.title}</a>
+          <span class="accordion-title">${s.title}</span>
         </span>
         <span class="accordion-icon"></span>
       </button>
