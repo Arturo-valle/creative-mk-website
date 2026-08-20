@@ -11,6 +11,10 @@ description: Ejecuta un ítem del plan con el muro completo — cajista en workt
    SUPERFICIE AUTORIZADA (archivos) y las páginas afectadas. Marca `en-turno` en la cola.
 2. **Composición**: lanza el agente `cajista` con `isolation: worktree`, pegándole la
    spec completa + superficie + (si es 2.ª vuelta) las refutaciones anteriores.
+   ⚠ Lección 19-ago: el worktree puede nacer de un HEAD anterior a los commits de la
+   sesión. Ordena al cajista como paso 0: `git log --oneline -1` y, si su base no trae
+   los instrumentos, bootstrap exento (npm i -D del tooling de verificación, jamás
+   commiteado) — o pásale la spec y las galgas equivalentes inline.
 3. **Galgas**: en el worktree, `npm run verify` + `node scripts/shoot.mjs
    --paginas=<afectadas> --out=shots/turno-<item>`. Rojo → devuelve al cajista (cuenta
    como vuelta). Verde → `node scripts/judge-pack.mjs --item=<item>
