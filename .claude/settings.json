@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "deny": [
+      "Edit(scripts/check-site.mjs)",
+      "Write(scripts/check-site.mjs)",
+      "Edit(scripts/audit.mjs)",
+      "Write(scripts/audit.mjs)",
+      "Edit(docs/direction.md)",
+      "Write(docs/direction.md)",
+      "Edit(docs/awards-build-plan.md)",
+      "Write(docs/awards-build-plan.md)"
+    ]
+  }
+}

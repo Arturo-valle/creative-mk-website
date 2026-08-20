@@ -30,3 +30,7 @@ cloudflare/agent/.wrangler/
 # Logs
 *.log
 .audit.json
+
+# Taller de agentes — evidencia local, nunca al repo
+shots/
+dossiers/

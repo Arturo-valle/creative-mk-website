@@ -1,0 +1,106 @@
+{
+  "fecha": "2026-08-20T02:39:20.094Z",
+  "paginas": {
+    "/": {
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "nodos": 1,
+          "ayuda": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination"
+        },
+        {
+          "id": "link-in-text-block",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Links must be distinguishable without relying on color"
+        },
+        {
+          "id": "nested-interactive",
+          "impact": "serious",
+          "nodos": 6,
+          "ayuda": "Interactive controls must not be nested"
+        }
+      ],
+      "gravesCount": 3
+    },
+    "/es/": {
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "landmark-unique",
+          "impact": "moderate",
+          "nodos": 1,
+          "ayuda": "Landmarks should have a unique role or role/label/title (i.e. accessible name) combination"
+        },
+        {
+          "id": "nested-interactive",
+          "impact": "serious",
+          "nodos": 6,
+          "ayuda": "Interactive controls must not be nested"
+        }
+      ],
+      "gravesCount": 2
+    },
+    "/work/": {
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "link-in-text-block",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Links must be distinguishable without relying on color"
+        }
+      ],
+      "gravesCount": 2
+    },
+    "/es/trabajo/": {
+      "violaciones": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Elements must meet minimum color contrast ratio thresholds"
+        },
+        {
+          "id": "link-in-text-block",
+          "impact": "serious",
+          "nodos": 1,
+          "ayuda": "Links must be distinguishable without relying on color"
+        }
+      ],
+      "gravesCount": 2
+    },
+    "/contact.html": {
+      "violaciones": [
+        {
+          "id": "label",
+          "impact": "critical",
+          "nodos": 1,
+          "ayuda": "Form elements must have labels"
+        }
+      ],
+      "gravesCount": 1
+    },
+    "/lp/sitios-web/": {
+      "violaciones": [],
+      "gravesCount": 0
+    }
+  }
+}

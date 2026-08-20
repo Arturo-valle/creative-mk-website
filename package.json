@@ -14,7 +14,12 @@
     "audit:deps": "npm audit --audit-level=high",
     "audit": "node scripts/audit.mjs",
     "test:i18n": "node scripts/test-i18n-gate.mjs",
-    "measure:bilingual": "node scripts/measure-bilingual.mjs"
+    "measure:bilingual": "node scripts/measure-bilingual.mjs",
+    "shoot": "node scripts/shoot.mjs",
+    "diff:visual": "node scripts/visual-diff.mjs",
+    "axe": "node scripts/axe-pass.mjs",
+    "check:live": "node scripts/check-live.mjs",
+    "frame:cost": "node scripts/frame-cost.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
@@ -32,6 +37,10 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^3.1.6",
+    "@axe-core/playwright": "^4.13.0",
+    "pixelmatch": "^7.2.0",
+    "playwright": "^1.62.1",
+    "pngjs": "^7.0.0",
     "wrangler": "^4.97.0"
   }
 }
