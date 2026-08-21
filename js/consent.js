@@ -124,7 +124,10 @@
       '.mk-consent button{font:inherit;cursor:pointer;padding:.45em 1em;border-radius:0}',
       '.mk-consent__accept{background:var(--ink);color:var(--paper);border:1px solid var(--ink)}',
       '.mk-consent__decline{background:transparent;color:var(--ink);border:1px solid var(--rule-strong)}',
-      '.mk-consent a{color:var(--gold-aged)}'
+      /* Filete bajo el enlace en prosa: el oro envejecido queda a 2.99:1 del
+         cuerpo en tinta — a un centésimo del umbral 3:1 — así que el enlace se
+         distingue por subrayado, no por color (axe link-in-text-block). */
+      '.mk-consent a{color:var(--gold-aged);text-decoration:underline;text-underline-offset:3px}'
     ].join('');
     document.head.appendChild(style);
 

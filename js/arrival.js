@@ -54,7 +54,14 @@ function initArrival() {
     });
 
     tl.to('.header__rule', { scaleX: 1, duration: 0.45, ease: 'power2.out' }, 0);
-    tl.to('.hero__eyebrow', { opacity: 1, duration: 0.4, ease: 'none' }, 0.15);
+
+    /* Opacity is stamped, not tweened, on the eyebrow, lede and CTAs: a text
+       fade passes through alphas where ink and ground blend below 4.5:1, and
+       axe caught the CTA mid-tween at 1.2:1 (2026-08-19). An element at 0 is
+       skipped and at 1 it passes — there is no intermediate state to catch —
+       so the gate measures the same answer every run. The 20px rise still
+       carries the landing; only the fade became a stamp. */
+    tl.set('.hero__eyebrow', { opacity: 1 }, 0.15);
 
     /* The words resolve via CSS transitions; the timeline only conducts. */
     words.forEach(function (word, i) {
@@ -62,8 +69,9 @@ function initArrival() {
     });
 
     var tail = 0.25 + words.length * 0.08 + 0.15;
+    tl.set('.hero__lede', { opacity: 1 }, tail);
+    tl.set('.hero__actions', { opacity: 1 }, tail + 0.1);
     tl.to(['.hero__lede', '.hero__actions'], {
-      opacity: 1,
       y: 0,
       duration: 0.6,
       ease: 'power3.out',

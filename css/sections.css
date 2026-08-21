@@ -2213,9 +2213,11 @@ body.menu-open .header__menu-toggle span {
 
 .newscard:hover .newscard__title { color: var(--color-primary); }
 
-/* The accordion row title is a link now — it must not inherit button styling. */
-a.accordion-title { color: inherit; text-decoration: none; }
-a.accordion-title:hover { color: var(--gold-aged); }
+/* The accordion row title rides the toggle button again: a link inside a
+   <button> is nested interactive content (axe, serious ×6), and the row
+   already owns a real link — "See the service" in its panel. The title keeps
+   its gold hover so the affordance reads the same. */
+#capabilities-list .accordion-title:hover { color: var(--gold-aged); }
 
 /* The two published cases on the homepage: plates that navigate. They replaced
    an empty container that waited for a client signature. */
@@ -2383,12 +2385,15 @@ a.accordion-title:hover { color: var(--gold-aged); }
 .colophon__details[open] .colophon__mark-cross { transform: scale(0.42); }
 .colophon__details[open] .colophon__mark-dot { opacity: 1; }
 
+/* No opacity of its own: nested under the summary's 0.6 resting fade, a 0.75
+   here compounded to 0.45 — tinta efectiva #8B8882, 2.91:1 sobre papel (axe,
+   2026-08-19). At the summary's own 0.6 the blend is the same cut the label
+   already passes at: 4.59:1 on paper, 5.99:1 on the plate. */
 .colophon__hint {
   margin-left: auto;
   text-transform: none;
   letter-spacing: 0.02em;
   font-size: 12px;
-  opacity: 0.75;
 }
 
 .colophon__body { padding: var(--space-4) 0 var(--space-6); }

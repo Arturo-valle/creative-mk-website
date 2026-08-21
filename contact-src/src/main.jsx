@@ -63,6 +63,7 @@ const copy = {
     error: 'We could not send the request. Please try again or email us directly.',
     fallbackNotice: 'Cloudflare capture was unavailable, so the request was sent through the temporary fallback.',
     requiredHint: 'Required fields are marked with an asterisk.',
+    gotchaLabel: 'Leave this field empty',
     serviceOptions: [
       'Branding',
       'Websites',
@@ -130,6 +131,7 @@ const copy = {
     error: 'No pudimos enviar la solicitud. Inténtalo de nuevo o escríbenos directamente.',
     fallbackNotice: 'La captura en Cloudflare no estuvo disponible, así que enviamos la solicitud por el fallback temporal.',
     requiredHint: 'Los campos obligatorios están marcados con asterisco.',
+    gotchaLabel: 'Deja este campo vacío',
     serviceOptions: [
       'Branding',
       'Sitios Web',
@@ -614,7 +616,10 @@ function App() {
                   <input type="hidden" name="agent_brief_created_at" value={agentBrief.createdAt || ''} readOnly />
                 </>
               ) : null}
-              <input className="gotcha" type="text" name="_gotcha" tabIndex="-1" autoComplete="off" />
+              {/* Honeypot: un campo sin nombre es un fallo critical de axe
+                  (label). El aria-label bilingüe le dice la verdad al lector
+                  de pantalla que lo encuentre: no lo llenes. */}
+              <input className="gotcha" type="text" name="_gotcha" tabIndex="-1" autoComplete="off" aria-label={t.gotchaLabel} />
 
               {agentBrief ? (
                 <div className="agent-brief-note" role="status">
