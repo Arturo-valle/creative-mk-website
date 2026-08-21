@@ -141,6 +141,7 @@ async function main() {
   const outDir = path.resolve(ROOT, a.out || path.join('shots', sha));
   fs.mkdirSync(outDir, { recursive: true });
 
+  const LANG = (a.lang === 'es' || a.lang === 'en') ? a.lang : 'en';
   let pages = a.paginas ? String(a.paginas).split(',').map(s => s.trim()).filter(Boolean) : discoverDefaults();
   // Git Bash (MSYS) reescribe tokens tipo "/" como rutas de Windows: detecta y avisa.
   const mutiladas = pages.filter(p => /^[A-Za-z]:[\\/]/.test(p));
@@ -157,7 +158,7 @@ async function main() {
   const server = await serveDist();
   const origin = `http://127.0.0.1:${server.address().port}`;
   const browser = await chromium.launch();
-  const manifest = { commit: sha, fecha: new Date().toISOString(), origin: 'dist/', capturas: [] };
+  const manifest = { commit: sha, fecha: new Date().toISOString(), origin: 'dist/', lang: LANG, capturas: [] };
   const t0 = Date.now();
 
   for (const mode of ['prm', 'motion']) {
@@ -166,6 +167,13 @@ async function main() {
       reducedMotion: mode === 'prm' ? 'reduce' : 'no-preference',
       viewport: VIEWPORTS[2],
     });
+    // Determinismo de idioma. La isla de contacto (y el i18n del sitio) leen
+    // localStorage.creativeMkLang; sin fijarlo, /contact.html sale en el idioma
+    // que arrastre el contexto y un dossier puede comparar ES contra EN — pasó
+    // el 2026-08-20 y el Juez de Gusto lo cazó. --lang=es para el juego español.
+    await ctx.addInitScript((lang) => {
+      try { localStorage.setItem('creativeMkLang', lang); } catch {}
+    }, LANG);
     const page = await ctx.newPage();
     for (const vp of VIEWPORTS) {
       await page.setViewportSize({ width: vp.width, height: vp.height });
