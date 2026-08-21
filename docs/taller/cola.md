@@ -38,7 +38,7 @@ http-server local (reemplazado por `scripts/serve.mjs`). Baseline re-sellado.
 | fase2.item7 | §3.7 — borrado del cursor (lista completa en spec) | pendiente | 0 | — |
 | fase3.teatro | §4 — In Register (≤1,3s, timeboxed, cut #1) | bloqueado(fase2) | 0 | — |
 | fase4.s1–s4 | §5 — Pull a Proof por semanas; G4a 11-oct decide | bloqueado(fase3) | 0 | — |
-| valve.contacto | §2.3 — unificación visual de la isla + hallazgos del Juez de Uso (19-ago): **[ALTO] la validación nativa enfoca un input requerido invisible de 1×1px con globo del navegador en inglés** (paso crítico del funnel — validación custom visible y localizada, o validar los mirrors); inputs a 15,68px (<16px → auto-zoom iOS); título EN sobre h1 ES; **no existe `/es/contacto/` (404 en producción verificado)** — todos los CTAs desde /es/ expulsan del español | válvula, prioridad subida | 0 | — |
+| valve.contacto | **EN TURNO (20-ago, opción C del dueño)** — spec: docs/taller/spec-valve-contacto.md · unificación visual de la isla + hallazgos del Juez de Uso (19-ago): **[ALTO] la validación nativa enfoca un input requerido invisible de 1×1px con globo del navegador en inglés** (paso crítico del funnel — validación custom visible y localizada, o validar los mirrors); inputs a 15,68px (<16px → auto-zoom iOS); título EN sobre h1 ES; **no existe `/es/contacto/` (404 en producción verificado)** — todos los CTAs desde /es/ expulsan del español | válvula, prioridad subida | 0 | — |
 
 ## Fuera-de-octubre (no entran sin decisión del dueño contra la orden de cortes)
 
