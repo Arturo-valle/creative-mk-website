@@ -26,7 +26,7 @@ http-server local (reemplazado por `scripts/serve.mjs`). Baseline re-sellado.
 
 | Ítem | Spec | Estado | Vueltas | Dossier |
 |---|---|---|---|---|
-| fase1.axe | Puerta G1 («axe pass both grounds»): las 10 violaciones graves del 19-ago | **registrado** — APROBADO por el Tribunal; rama `worktree-agent-aebed843f509a0ea4` (`eefb00a`) **lista para merge del dueño** | 1 | `dossiers/fase1.axe-v1/` |
+| fase1.axe | Puerta G1 («axe pass both grounds»): las 10 violaciones graves del 19-ago | **registrado y fusionado** (`e377e33`, verificado 20-ago: axe limpio, verify verde, sin regresión visual). Solo falta el deploy del dueño | 1 | `dossiers/fase1.axe-v1/` |
 | fase1.hotfix-visual | Acta H3–H5 + H6b + hallazgos del Juez de Uso (19-ago): fantasma bilingüe del footer; **CTAs del hero recortados 43px a 360px** (medido: `.hero__actions` 383px en viewport 360; el h1 NO recorta — sustituye al «13px» de memoria); consent tapa el CTA del hero a 1280×800 y Aceptar/Rechazar caen en tab 94–96/97; consent tapa el FAB a 360; Esc del concierge suelta el foco a BODY (debe volver al FAB); hamburguesa 28×20 (<24px WCAG 2.5.8); 3 vídeos de la LP sin `poster`; hover del cuerpo del botón del acordeón muerto por especificidad (nota: fase2.item0 lo reordena de raíz); estado PRM del hero como mitigación de H1 | pendiente (SIGUIENTE tras el merge del piloto — misma superficie, no paralelizar) | 0 | — |
 | fase2.item0 | Plan §3.0 — tres voces tipográficas + muerte de glassmorphism/chips/sombras | pendiente | 0 | — |
 | fase2.item1 | §3.1 — coreografía de llegada (H1 asienta, nav se escribe, cruz estampa) | pendiente | 0 | — |
