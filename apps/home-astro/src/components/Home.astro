@@ -1,0 +1,75 @@
+---
+import {Picture, Image} from 'astro:assets';
+import '@fontsource-variable/space-grotesk';
+import '@fontsource-variable/inter';
+import '../styles/home.css';
+import {home, type Locale} from '../data/home';
+import print from '../assets/print-editorial.png';
+import digital from '../assets/digital-editorial.png';
+import logo from '../assets/logo.webp';
+import Video from './Video.astro';
+interface Props {lang:Locale}
+const {lang}=Astro.props;
+const t=home[lang];
+const es=lang==='es';
+const preview=import.meta.env.HOME_RELEASE !== 'production';
+const contact=es?'/contact.html?lang=es':'/contact.html';
+---
+<!doctype html>
+<html lang={lang}>
+ <head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{t.title}</title><meta name="description" content={t.description} />
+  {preview && <meta name="robots" content="noindex, nofollow, noarchive" />}<meta name="theme-color" content="#14120E" />
+  <link rel="canonical" href={`https://creativemk.net${es?'/es/':'/'}`} />
+  <link rel="alternate" hreflang="en" href="https://creativemk.net/" /><link rel="alternate" hreflang="es" href="https://creativemk.net/es/" />
+  <link rel="alternate" hreflang="x-default" href="https://creativemk.net/" />
+  <link rel="icon" href="/favicon.png" />
+  <meta property="og:title" content={t.title} /><meta property="og:description" content={t.description} /><meta property="og:type" content="website" />
+  <meta property="og:locale" content={es?'es_NI':'en_US'} />
+ </head>
+ <body>
+  <a class="skip-link" href="#main">{t.skip}</a>
+  {preview && <div class="preview-note">{t.preview}</div>}
+  <header class="site-header">
+   <a class="brand" href={es?'/es/':'/'} aria-label={es?'Creative MK — Inicio':'Creative MK — Home'}><Image src={logo} alt="Creative MK" width={210} densities={[1,2,3]} quality={95} loading="eager" /></a>
+   <nav class="languages" aria-label={es?'Idioma':'Language'}><a href="/es/" lang="es" hreflang="es" aria-current={es?'page':undefined}>ES</a><span aria-hidden="true">/</span><a href="/" lang="en" hreflang="en" aria-current={!es?'page':undefined}>EN</a></nav>
+   <a class="header-contact" href={contact}>{t.contact} <span aria-hidden="true">↗</span></a>
+  </header>
+  <main id="main">
+   <section class="hero" aria-labelledby="hero-title">
+    <video id="opening-video" class="hero-motion" data-portfolio-video controls muted loop playsinline preload="none" poster="/home-astro/media/opening.webp" width="1920" height="1080" aria-label={es?'Apertura: reel original de Creative MK':'Opening: original Creative MK reel'}><source src="/home-astro/media/opening.mp4" type="video/mp4" /><track kind="captions" src={`/home-astro/media/opening-${lang}.vtt`} srclang={lang} label={es?'Español':'English'} /><a href="/home-astro/media/opening.mp4">{es?'Abrir video de apertura':'Open opening video'}</a></video>
+    <div class="hero-shade"></div>
+    <div class="hero-copy"><p class="eyebrow">Creative MK — {es?'Estudio de diseño y tecnología':'Design & technology studio'}</p><h1 id="hero-title">{t.heroTop}<br/><span>{t.heroBottom}</span></h1><p class="hero-intro">{t.heroBody}</p><a class="hero-action" href="#work">{t.viewWork}<span class="circle-arrow" aria-hidden="true">↓</span></a><button hidden class="hero-play" data-hero-toggle data-play={es?"▶ Reproducir apertura":"▶ Play opening"} data-pause={es?"Ⅱ Pausar apertura":"Ⅱ Pause opening"} aria-controls="opening-video" aria-pressed="false">{es?"▶ Reproducir apertura":"▶ Play opening"}</button></div>
+   </section>
+   <section class="reel-section section-wrap" aria-labelledby="reel-title">
+    <div class="section-heading"><div><p class="eyebrow">{es?'Creative MK en movimiento':'Creative MK in motion'}</p><h2 id="reel-title">{es?'Una mirada\na lo que hacemos':'A glimpse\nof what we do'}</h2></div><p>{es?'Marca, contenido y experiencias digitales en una secuencia visual.':'Brand, content and digital experiences in one visual sequence.'}</p></div>
+    <Video caption="none" name="reel" title={es?'Reel original Creative MK':'Original Creative MK reel'} description={es?'Exploración audiovisual de marca, contenido y sistemas digitales. Material conceptual; las cifras y escenas ilustrativas no representan resultados de clientes.':'An audiovisual exploration of brand, content and digital systems. Conceptual material; illustrative figures and scenes are not evidence of client results.'} lang={lang} />
+   </section>
+   <section id="work" class="work section-wrap" aria-labelledby="work-title">
+    <div class="section-heading"><div><p class="eyebrow">{t.work}</p><h2 id="work-title">{t.workHeading}</h2></div><p>{t.workIntro}</p></div>
+    {t.cases.map((item,index)=>(
+     <article class:list={['case',index===1&&'case-intake']}>
+      <Video caption="title" name={`${index===0?'contour':'intake'}-${lang}`} title={index===0?(es?'El sitio, en movimiento':'The site in motion'):(es?'El agente, paso a paso':'The agent, step by step')} description={index===0?(es?'Grabación de la web propia: el campo de contornos responde al movimiento del cursor.':'Recording of our own website: the contour field responds to cursor movement.'):(es?'Interfaz real con una conversación ficticia y respuestas de ejemplo para mostrar el recorrido.':'Real interface with a fictional conversation and example replies to demonstrate the experience.')} lang={lang} />
+      <div class="case-info"><div><h3><a href={item.href}>{item.title}</a></h3><p class="case-category">{item.category}</p></div></div>
+     </article>
+    ))}
+   </section>
+   <section class="identity section-wrap" aria-labelledby="identity-title">
+    <div class="section-heading"><div><p class="eyebrow">{es?'Identidad aplicada':'Identity in use'}</p><h2 id="identity-title">{t.identityHeading}</h2></div><p>{t.identityBody}</p></div>
+    <div class="identity-grid">{['identity','billboard'].map((name,i)=><Video name={name} title={es?(i===0?'Identidad sobre papel':'Identidad en el espacio'):(i===0?'Identity on paper':'Identity in space')} description={es?'Mockup propio animado con movimiento de cámara; no es una filmación de una instalación real.':'In-house mockup animated with camera movement; not footage of a real installation.'} lang={lang} loop />)}</div>
+   </section>
+   <section class="editorial section-wrap" aria-labelledby="editorial-title">
+    <div class="section-heading"><h2 id="editorial-title">{t.editorialHeading}</h2></div>
+    <div class="editorial-grid">{[print,digital].map((src,i)=><figure><Picture src={src} widths={[480,800,1200,1536]} quality={90} sizes="(max-width: 700px) 92vw, 48vw" fallbackFormat="webp" formats={['webp']} alt={t.editorialAlts[i]} loading="lazy" /></figure>)}</div>
+   </section>
+   <section id="capabilities" class="capabilities section-wrap" aria-labelledby="capabilities-title">
+    <div class="section-heading"><div><p class="eyebrow">{t.capabilities}</p><h2 id="capabilities-title">{t.servicesHeading}</h2></div></div>
+    <div class="services-grid">{t.services.map(service=><a class="service" href={service.href}><h3>{service.title}<span aria-hidden="true">↗</span></h3><p>{service.description}</p></a>)}</div>
+   </section>
+   <section class="contact section-wrap" aria-labelledby="contact-title"><p class="eyebrow">{es?'El siguiente capítulo':'The next chapter'}</p><h2 id="contact-title">{t.contactHeading}</h2><div class="contact-bottom"><p>{t.contactBody}</p><a class="contact-action" href={contact}>{t.contactAction}<span aria-hidden="true">↗</span></a></div></section>
+  </main>
+  <footer class="site-footer section-wrap"><a href={es?'/es/':'/'} aria-label="Creative MK"><Image src={logo} alt="Creative MK" width={180} densities={[1,2,3]} quality={95} loading="lazy" /></a><p>{t.footer}</p><nav aria-label={es?'Información legal':'Legal information'}><a href="/privacidad/">{t.privacy}</a><a href="/terms/">{t.terms}</a></nav><span>© {new Date().getFullYear()} Creative MK</span></footer>
+  <script>import '../scripts/media';</script>
+ </body>
+</html>

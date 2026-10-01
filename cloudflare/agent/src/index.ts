@@ -2735,7 +2735,7 @@ async function maybeEnhanceWithBrowserRun(
     }
 
     const snapshot = (await response.json()) as BrowserRunSnapshotSuccessResponse;
-    if (!snapshot.success) {
+    if (!snapshot.success || typeof snapshot.result.content !== "string") {
       return { ...audit, rendered: { attempted: true, status: response.status, browserMs, screenshotCaptured: false } };
     }
 
@@ -2770,7 +2770,7 @@ async function maybeEnhanceWithBrowserRun(
         status: snapshot.meta.status,
         title: snapshot.meta.title,
         browserMs,
-        screenshotBytesApprox: snapshot.result.screenshot.length
+        screenshotBytesApprox: snapshot.result.screenshot?.length ?? 0
       }
     });
 

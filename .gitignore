@@ -34,3 +34,14 @@ cloudflare/agent/.wrangler/
 # Taller de agentes — evidencia local, nunca al repo
 shots/
 dossiers/
+
+.home-astro-preview/
+.home-releases/
+.home-media-masters/
+apps/home-astro/.astro/
+
+# Machine-specific release records and historical measurement output
+docs/home-astro/*.json
+docs/home-astro/publication.md
+# Rejected stock rendition, kept locally for history only
+apps/home-astro/public/home-astro/media/opening-mobile.*

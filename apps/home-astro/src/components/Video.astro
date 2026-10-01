@@ -1,0 +1,14 @@
+---
+interface Props {name:string; title:string; description:string; lang:'es'|'en'; loop?:boolean; caption?:"full"|"title"|"none"}
+const {name,title,description,lang,loop=false,caption="full"}=Astro.props;
+const base='/home-astro/media/';
+const dimensions=name==='reel'?[1920,1080]:['identity','billboard'].includes(name)?[1536,1024]:[2560,1600];
+---
+<figure class="video-piece">
+ <video class="portfolio-video" data-portfolio-video controls muted playsinline preload="none" loop={loop} poster={`${base}${name}.webp`} width={dimensions[0]} height={dimensions[1]} aria-label={title} aria-describedby={caption!=="none"?`description-${name}`:undefined}>
+  <source src={`${base}${name}.mp4`} type="video/mp4" />
+  <track kind="captions" src={`${base}${name}-${lang}.vtt`} srclang={lang} label={lang==='es'?'Español':'English'} />
+  <a href={`${base}${name}.mp4`}>{lang==='es'?'Abrir video':'Open video'}</a>
+ </video>
+ {caption!=="none" && <figcaption id={`description-${name}`}><strong>{title}</strong>{caption==="full" && <><span>{description}</span><a href={`${base}${name}.mp4`}>{lang==='es'?'Abrir video':'Open video'} ↗</a></>}</figcaption>}
+</figure>

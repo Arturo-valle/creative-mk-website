@@ -19,7 +19,13 @@
     "diff:visual": "node scripts/visual-diff.mjs",
     "axe": "node scripts/axe-pass.mjs",
     "check:live": "node scripts/check-live.mjs",
-    "frame:cost": "node scripts/frame-cost.mjs"
+    "frame:cost": "node scripts/frame-cost.mjs",
+    "build:home-astro": "npm run build && npm --prefix apps/home-astro run build && node scripts/combine-home-astro.mjs",
+    "preview:home-astro": "node scripts/preview-home-astro.mjs",
+    "test:home-astro": "node scripts/test-home-astro.mjs",
+    "record:home-videos": "node scripts/record-home-videos.mjs",
+    "build:home-videos": "node scripts/build-home-videos.mjs",
+    "test:home-videos": "node scripts/test-home-videos.mjs"
   },
   "dependencies": {
     "@vitejs/plugin-react": "^5.0.0",
